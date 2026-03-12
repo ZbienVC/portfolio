@@ -262,9 +262,9 @@ function HeroSection() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '$1B+', label: 'Capital Raises Supported' },
-            { num: '80%', label: 'Manual Work Automated' },
-            { num: '$1M+', label: 'Crypto Launches Advised' },
+            { num: '3', label: 'Products in Development' },
+            { num: '1', label: 'Live in Production' },
+            { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.num}</div>
