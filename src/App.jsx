@@ -205,7 +205,7 @@ function HeroSection() {
 
         {/* Bio */}
         <p style={{ fontSize: 18, color: '#6b7db3', lineHeight: 1.7, maxWidth: 580, margin: '0 auto 40px', fontWeight: 400 }}>
-          Finance background from <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg</span> & <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Investment Banking</span>, now building full-stack products at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>health tech</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>crypto</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>.
+          I don't just want to know how things work — I want to make them <span style={{ color: '#f0f4ff', fontWeight: 600 }}>work better</span>. Finance background from <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>data</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>product</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>.
         </p>
 
         {/* CTAs */}
@@ -245,41 +245,54 @@ function HeroSection() {
 function AboutSection() {
   return (
     <section id="about" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 48, alignItems: 'center' }}>
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <p className="section-label" style={{ marginBottom: 16 }}>About Me</p>
+        <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', maxWidth: 700, margin: '0 auto' }}>
+          I want to understand how things<br />
+          <span className="gradient-text">actually work.</span>
+        </h2>
+      </div>
+
+      {/* Quote callout */}
+      <div className="glass" style={{ borderRadius: 20, padding: '28px 36px', maxWidth: 780, margin: '0 auto 64px', borderLeft: '3px solid #10d9a0', position: 'relative' }}>
+        <div style={{ fontSize: 48, color: '#10d9a0', opacity: 0.15, position: 'absolute', top: 16, left: 20, fontFamily: 'Georgia, serif', lineHeight: 1 }}>"</div>
+        <p style={{ color: '#c4d0f5', fontSize: 18, lineHeight: 1.7, fontStyle: 'italic', fontWeight: 400, paddingLeft: 8 }}>
+          I naturally operate at the intersection of <span style={{ color: '#10d9a0', fontStyle: 'normal', fontWeight: 700 }}>data</span>, <span style={{ color: '#4f9deb', fontStyle: 'normal', fontWeight: 700 }}>creativity</span>, and <span style={{ color: '#8b5cf6', fontStyle: 'normal', fontWeight: 700 }}>strategy</span>. I'm at my best when I can take something complex or messy and turn it into something clearer, more usable, and more thoughtful.
+        </p>
+      </div>
+
+      {/* Two column bio + traits */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 48, alignItems: 'start' }}>
         <div>
-          <p className="section-label" style={{ marginBottom: 16 }}>About Me</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', marginBottom: 24 }}>
-            I build things<br />
-            <span className="gradient-text">people actually use.</span>
-          </h2>
-          <p style={{ color: '#6b7db3', lineHeight: 1.8, fontSize: 16, marginBottom: 20 }}>
-            I'm Zach — a Finance graduate from Rutgers (Dean's List, 3.58 GPA) who went from analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M–$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> to building full-stack software products from scratch.
+          <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
+            I'm Zach — a Finance graduate from <span style={{ color: '#f0f4ff', fontWeight: 600 }}>Rutgers</span> (Dean's List, 3.58 GPA) who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M–$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
           </p>
-          <p style={{ color: '#6b7db3', lineHeight: 1.8, fontSize: 16, marginBottom: 32 }}>
-            I bring an analytical, systems-minded approach to building — whether it's a nutrition coaching app or a real-time crypto intelligence dashboard. I work fast, ship faster, and care deeply about products that actually solve real problems.
+          <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
+            That curiosity has been with me since long before formal roles — buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.
+          </p>
+          <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 32 }}>
+            Outside of work: deeply into <span style={{ color: '#f0f4ff', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: '#f0f4ff', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: '#f0f4ff', fontWeight: 600 }}>snowboarding</span> — specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>
-              GitHub ↗
-            </a>
-            <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>
-              LinkedIn ↗
-            </a>
+            <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>LinkedIn ↗</a>
           </div>
         </div>
 
-        {/* Values cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {/* Traits */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {[
-            { emoji: '⚡', title: 'Ship Fast', desc: 'Ideas die in planning. I bias toward building and iterating in production.' },
-            { emoji: '🎯', title: 'User Obsessed', desc: 'Every feature earns its place. If users don\'t need it, it doesn\'t ship.' },
-            { emoji: '🔗', title: 'Full-Stack', desc: 'From database schema to pixel-perfect UI — I own the whole thing.' },
+            { emoji: '🔬', title: 'Systems Thinker', desc: 'I ask where data comes from, what it represents, and how confident we should be in it. Numbers should explain reality, not just look correct.' },
+            { emoji: '🏗️', title: 'Builder by Nature', desc: 'Long before formal roles — repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.' },
+            { emoji: '⚡', title: 'Impact Over Process', desc: 'I don\'t enjoy analysis that lives in isolation. Every insight should turn into a decision, a better experience, or a smarter system.' },
+            { emoji: '🎯', title: 'Precision & Iteration', desc: 'Drawn to the technical details. Snowboard geometry, ML model validation, product design — I care about why things work, not just that they do.' },
           ].map(v => (
-            <div key={v.title} className="glass glass-hover" style={{ borderRadius: 16, padding: '20px 24px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-              <span style={{ fontSize: 28, flexShrink: 0 }}>{v.emoji}</span>
+            <div key={v.title} className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+              <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>{v.emoji}</span>
               <div>
-                <div style={{ fontWeight: 800, fontSize: 16, color: '#f0f4ff', marginBottom: 4 }}>{v.title}</div>
-                <div style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.5 }}>{v.desc}</div>
+                <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>{v.title}</div>
+                <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>{v.desc}</div>
               </div>
             </div>
           ))}
