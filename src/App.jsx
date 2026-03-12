@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -70,51 +70,85 @@ const SKILLS = [
 
 const EXPERIENCE = [
   {
-    role: 'Data Analyst — IB / Surveillance',
+    role: 'Web3 Project Advisor',
+    company: 'Independent / Crypto Projects',
+    period: 'Dec 2024 \u2013 Present',
+    location: 'Remote',
+    color: '#f59e0b',
+    highlights: [
+      'Advise early-stage Web3 projects on token design, positioning, marketing strategy, and community growth',
+      'Guide go-to-market strategies and token launches reaching $1M+ market capitalization',
+      'Provide insights on crypto market dynamics, narrative positioning, and digital community engagement',
+    ],
+  },
+  {
+    role: 'Savings Analyst & Sales Engineer',
+    company: 'Grapevine',
+    period: 'Feb 2024 \u2013 Oct 2025',
+    location: 'New York, NY',
+    color: '#10d9a0',
+    highlights: [
+      'Built automated Excel reporting systems and Figma dashboards, reducing manual reporting by 80%+',
+      'Analyzed tens of thousands of product groups — generated 20–85% cost savings, ranging from tens of thousands to millions annually',
+      'Resolved 50+ weekly supply backorders; assisted with client onboarding, vendor integration, and system setup',
+    ],
+  },
+  {
+    role: 'Operations & Marketing Coordinator',
+    company: 'Reflect Medical & Cosmetic Center',
+    period: 'Jul 2023 \u2013 Present',
+    location: 'Hawthorne, NJ',
+    color: '#ec4899',
+    highlights: [
+      'Managed financial workflows in QuickBooks: transaction entry, reconciliation, expense tracking',
+      'Oversaw inventory procurement and vendor coordination for consistent medical supply availability',
+      'Designed marketing materials, social media assets, and promotional graphics using Canva',
+    ],
+  },
+  {
+    role: 'Financial Data Analyst — Surveillance & Threat Detection',
     company: 'Bloomberg LP',
-    period: 'Apr 2023 – Feb 2024',
+    period: 'Mar 2023 \u2013 Feb 2024',
     location: 'Remote',
     color: '#4f9deb',
     highlights: [
-      'Enhanced ML surveillance models by extracting and validating large financial datasets',
-      'Evaluated derivatives & trade activity: options, swaps, forwards',
-      'Improved model accuracy and target detection across diverse data sources',
+      'Analyzed large financial datasets to identify trends and support ML surveillance models',
+      'Evaluated derivatives activity — options, swaps, forwards — to validate structured financial data',
+      'Collaborated with senior analysts to improve AI-based trade surveillance and threat detection systems',
     ],
   },
   {
     role: 'Investment Banking Intern',
     company: 'Cambridge Wilkinson',
-    period: 'Feb 2022 – Feb 2023',
-    location: 'New York City',
+    period: 'Feb 2022 \u2013 Feb 2023',
+    location: 'New York, NY',
     color: '#8b5cf6',
     highlights: [
-      'Supported debt and equity capital raises ranging from $25M to $1B',
-      'Screened middle-market companies, built target lists with executive contacts',
-      'Presented financing opportunities to institutional investors',
+      'Researched middle-market companies to support debt and equity capital raises ($25M – $1B)',
+      'Built detailed target lists of executives and financial metrics for active deal sourcing',
+      'Supported investor presentations and discussions with institutional clients',
     ],
   },
   {
-    role: 'Savings Analyst & Sales Engineer',
-    company: 'Grapevine Financial',
-    period: 'Feb 2024 – Oct 2025',
-    location: 'New York City',
-    color: '#10d9a0',
+    role: 'IPO Markets Intern',
+    company: 'Prior2IPO Investments',
+    period: 'May 2021 \u2013 Aug 2021',
+    location: 'Sparta, NJ',
+    color: '#6366f1',
     highlights: [
-      'Built automated Excel systems reducing manual reporting by 80%+',
-      'Designed Figma dashboards highlighting 40%+ average cost savings',
-      'Analyzed tens of thousands of product groups, generating 20–85% client savings',
+      'Connected accredited investors with Pre-IPO investment funds and deal opportunities',
+      'Conducted outreach to prospective investors and gained exposure to private equity deal flow',
     ],
   },
   {
-    role: 'Web3 Advisor & KOL',
+    role: 'Computer Technician & Builder',
     company: 'Freelance',
-    period: '2022 – Present',
+    period: 'May 2019 \u2013 Aug 2024',
     location: 'Remote',
-    color: '#f59e0b',
+    color: '#64748b',
     highlights: [
-      'Advised early-stage Web3 projects on utility design, token launches & marketing',
-      'Multiple successful launches reaching $1M+ market capitalization',
-      'Strategic guidance on positioning, community growth, and go-to-market execution',
+      'Built and sold 50+ custom desktop computers through eBay',
+      'Diagnosed and repaired hardware/software issues; performed upgrades and performance optimization',
     ],
   },
 ];
