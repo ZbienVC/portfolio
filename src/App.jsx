@@ -20,6 +20,21 @@ const PROJECTS = [
     highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
   },
   {
+    id: 'dipper',
+    name: 'DipperAI',
+    tagline: 'AI Agent Builder Platform',
+    description: 'A subscription-based platform to build, customize, and deploy AI agents across Telegram, Discord, SMS, and the web. Multi-model support, no-code agent builder, built-in analytics.',
+    status: 'soon',
+    url: null,
+    github: 'https://github.com/ZbienVC/dipper-ai',
+    color: '#8b5cf6',
+    colorEnd: '#6366f1',
+    tagClass: 'tag-purple',
+    tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
+    emoji: '🤖',
+    highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
+  },
+  {
     id: 'splash',
     name: 'Splash Signal',
     tagline: 'Crypto Intelligence Dashboard',
@@ -41,12 +56,67 @@ const SKILLS = [
   { label: 'TypeScript', icon: '📘' },
   { label: 'Node.js', icon: '🟢' },
   { label: 'Tailwind CSS', icon: '🎨' },
-  { label: 'SQLite / SQL', icon: '🗄️' },
+  { label: 'SQL / SQLite', icon: '🗄️' },
   { label: 'REST & WebSockets', icon: '🔌' },
   { label: 'AI / LLM APIs', icon: '🤖' },
   { label: 'DeFi / Web3', icon: '🔗' },
+  { label: 'Python', icon: '🐍' },
+  { label: 'Figma', icon: '🎨' },
+  { label: 'Bloomberg Terminal', icon: '📊' },
   { label: 'Vercel / Railway', icon: '🚀' },
+  { label: 'Advanced Excel', icon: '📈' },
   { label: 'Git / GitHub', icon: '🐙' },
+];
+
+const EXPERIENCE = [
+  {
+    role: 'Data Analyst — IB / Surveillance',
+    company: 'Bloomberg LP',
+    period: 'Apr 2023 – Feb 2024',
+    location: 'Remote',
+    color: '#4f9deb',
+    highlights: [
+      'Enhanced ML surveillance models by extracting and validating large financial datasets',
+      'Evaluated derivatives & trade activity: options, swaps, forwards',
+      'Improved model accuracy and target detection across diverse data sources',
+    ],
+  },
+  {
+    role: 'Investment Banking Intern',
+    company: 'Cambridge Wilkinson',
+    period: 'Feb 2022 – Feb 2023',
+    location: 'New York City',
+    color: '#8b5cf6',
+    highlights: [
+      'Supported debt and equity capital raises ranging from $25M to $1B',
+      'Screened middle-market companies, built target lists with executive contacts',
+      'Presented financing opportunities to institutional investors',
+    ],
+  },
+  {
+    role: 'Savings Analyst & Sales Engineer',
+    company: 'Grapevine Financial',
+    period: 'Feb 2024 – Oct 2025',
+    location: 'New York City',
+    color: '#10d9a0',
+    highlights: [
+      'Built automated Excel systems reducing manual reporting by 80%+',
+      'Designed Figma dashboards highlighting 40%+ average cost savings',
+      'Analyzed tens of thousands of product groups, generating 20–85% client savings',
+    ],
+  },
+  {
+    role: 'Web3 Advisor & KOL',
+    company: 'Freelance',
+    period: '2022 – Present',
+    location: 'Remote',
+    color: '#f59e0b',
+    highlights: [
+      'Advised early-stage Web3 projects on utility design, token launches & marketing',
+      'Multiple successful launches reaching $1M+ market capitalization',
+      'Strategic guidance on positioning, community growth, and go-to-market execution',
+    ],
+  },
 ];
 
 // ── Components ─────────────────────────────────────────────────────────────────
@@ -73,7 +143,7 @@ function Nav({ active }) {
         <span style={{ fontWeight: 900, fontSize: '18px', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>ZB</span>
       </a>
       <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
-        {['About', 'Projects', 'Skills', 'Contact'].map(s => (
+        {['About', 'Projects', 'Experience', 'Skills', 'Contact'].map(s => (
           <a key={s} href={`#${s.toLowerCase()}`} className="nav-link">{s}</a>
         ))}
         <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: '8px 16px', fontSize: '13px' }}>
@@ -134,8 +204,8 @@ function HeroSection() {
         </div>
 
         {/* Bio */}
-        <p style={{ fontSize: 18, color: '#6b7db3', lineHeight: 1.7, maxWidth: 560, margin: '0 auto 40px', fontWeight: 400 }}>
-          I build products at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>health tech</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>crypto</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>. Turning ideas into live products, fast.
+        <p style={{ fontSize: 18, color: '#6b7db3', lineHeight: 1.7, maxWidth: 580, margin: '0 auto 40px', fontWeight: 400 }}>
+          Finance background from <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg</span> & <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Investment Banking</span>, now building full-stack products at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>health tech</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>crypto</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>.
         </p>
 
         {/* CTAs */}
@@ -143,17 +213,17 @@ function HeroSection() {
           <a href="#projects" className="btn-primary" style={{ fontSize: 15 }}>
             View My Work ↓
           </a>
-          <a href="#contact" className="btn-ghost" style={{ fontSize: 15 }}>
-            Get in Touch
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
+            Resume ↗
           </a>
         </div>
 
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '3+', label: 'Apps in Production' },
-            { num: '∞', label: 'Lines of Code' },
-            { num: '24/7', label: 'Building Mode' },
+            { num: '$1B+', label: 'Capital Raises Supported' },
+            { num: '80%', label: 'Manual Work Automated' },
+            { num: '$1M+', label: 'Crypto Launches Advised' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.num}</div>
@@ -183,10 +253,10 @@ function AboutSection() {
             <span className="gradient-text">people actually use.</span>
           </h2>
           <p style={{ color: '#6b7db3', lineHeight: 1.8, fontSize: 16, marginBottom: 20 }}>
-            I'm Zach — a builder obsessed with shipping real products. My focus is on health tech, DeFi analytics, and AI-powered tools. I believe the best software is simple, fast, and feels inevitable once you use it.
+            I'm Zach — a Finance graduate from Rutgers (Dean's List, 3.58 GPA) who went from analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M–$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> to building full-stack software products from scratch.
           </p>
           <p style={{ color: '#6b7db3', lineHeight: 1.8, fontSize: 16, marginBottom: 32 }}>
-            I work fast, think in systems, and care deeply about the user experience. Whether it's a nutrition app or a crypto dashboard, the goal is always the same: make something that works so well people can't stop using it.
+            I bring an analytical, systems-minded approach to building — whether it's a nutrition coaching app or a real-time crypto intelligence dashboard. I work fast, ship faster, and care deeply about products that actually solve real problems.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>
@@ -251,10 +321,19 @@ function ProjectCard({ project }) {
             </div>
           </div>
           {/* Status badge */}
-          <div style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 100, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: project.status === 'live' ? 'rgba(16,217,160,0.12)' : 'rgba(79,157,235,0.12)', color: project.status === 'live' ? '#10d9a0' : '#4f9deb', border: `1px solid ${project.status === 'live' ? 'rgba(16,217,160,0.25)' : 'rgba(79,157,235,0.25)'}`, display: 'flex', alignItems: 'center', gap: 5 }}>
-            <span style={{ width: 5, height: 5, borderRadius: '50%', background: project.status === 'live' ? '#10d9a0' : '#4f9deb', display: 'inline-block' }} />
-            {project.status === 'live' ? 'Live' : 'Building'}
-          </div>
+          {(() => {
+            const cfg = project.status === 'live'
+              ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
+              : project.status === 'soon'
+              ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Coming Soon' }
+              : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
+            return (
+              <div style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 100, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: cfg.color, display: 'inline-block' }} />
+                {cfg.label}
+              </div>
+            );
+          })()}
         </div>
       </div>
 
@@ -315,6 +394,69 @@ function ProjectsSection() {
             More projects coming soon — DipperAI and beyond
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function ExperienceSection() {
+  return (
+    <section id="experience" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <p className="section-label" style={{ marginBottom: 16 }}>Background</p>
+        <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
+          Where I've <span className="gradient-text">been</span>
+        </h2>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 780, margin: '0 auto' }}>
+        {EXPERIENCE.map((exp, i) => (
+          <div key={i} className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: `3px solid ${exp.color}`, display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, alignItems: 'start' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4, flexWrap: 'wrap' }}>
+                <span style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff' }}>{exp.role}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+                <span style={{ fontWeight: 700, fontSize: 14, color: exp.color }}>{exp.company}</span>
+                <span style={{ color: '#2a3255', fontSize: 12 }}>·</span>
+                <span style={{ color: '#4a5580', fontSize: 12 }}>{exp.location}</span>
+              </div>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {exp.highlights.map((h, j) => (
+                  <li key={j} style={{ display: 'flex', gap: 8, fontSize: 13, color: '#6b7db3', lineHeight: 1.5 }}>
+                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div style={{ flexShrink: 0, textAlign: 'right' }}>
+              <span style={{ fontSize: 12, color: '#4a5580', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Education */}
+      <div style={{ maxWidth: 780, margin: '24px auto 0' }}>
+        <div className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 36 }}>🎓</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance — Business Analytics Concentration</div>
+            <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Rutgers University, New Brunswick</div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>Dean's List</span>
+              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>GPA 3.58</span>
+              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>SQL Cert — UC Davis</span>
+            </div>
+          </div>
+          <div style={{ color: '#4a5580', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>Dec 2022</div>
+        </div>
+      </div>
+
+      {/* Resume CTA */}
+      <div style={{ textAlign: 'center', marginTop: 40 }}>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 15 }}>
+          Download Full Resume ↗
+        </a>
       </div>
     </section>
   );
@@ -397,6 +539,7 @@ export default function App() {
       <HeroSection />
       <AboutSection />
       <ProjectsSection />
+      <ExperienceSection />
       <SkillsSection />
       <ContactSection />
     </div>
