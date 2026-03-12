@@ -275,9 +275,9 @@ function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 11, color: '#4a5580', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600 }}>Scroll</span>
+      <div style={{ position: 'absolute', bottom: 32, right: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
         <div style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, #4a5580, transparent)' }} />
+        <span style={{ fontSize: 10, color: '#4a5580', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600, writingMode: 'vertical-rl' }}>Scroll</span>
       </div>
     </section>
   );
