@@ -337,20 +337,74 @@ function AboutSection() {
 
         {/* Traits */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {[
-            { emoji: '🔬', title: 'Systems Thinker', desc: 'I ask where data comes from, what it represents, and how confident we should be in it. Numbers should explain reality, not just look correct.' },
-            { emoji: '🏗️', title: 'Builder by Nature', desc: 'Long before formal roles — repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.' },
-            { emoji: '⚡', title: 'Impact Over Process', desc: 'I don\'t enjoy analysis that lives in isolation. Every insight should turn into a decision, a better experience, or a smarter system.' },
-            { emoji: '🎯', title: 'Precision & Iteration', desc: 'Drawn to the technical details. Snowboard geometry, ML model validation, product design — I care about why things work, not just that they do.' },
-          ].map(v => (
-            <div key={v.title} className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-              <span style={{ fontSize: 24, flexShrink: 0, marginTop: 2 }}>{v.emoji}</span>
-              <div>
-                <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>{v.title}</div>
-                <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>{v.desc}</div>
-              </div>
+          {/* Systems Thinker — pulsing network nodes */}
+          <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(16,217,160,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'glowPulse 3s ease-in-out infinite' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="3" fill="#10d9a0" style={{ animation: 'iconPulse 2s ease-in-out infinite' }} />
+                <circle cx="4" cy="5" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.3s' }} />
+                <circle cx="20" cy="5" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.6s' }} />
+                <circle cx="4" cy="19" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.9s' }} />
+                <circle cx="20" cy="19" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 1.2s' }} />
+                <line x1="9" y1="10.5" x2="6" y2="6.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
+                <line x1="15" y1="10.5" x2="18" y2="6.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
+                <line x1="9" y1="13.5" x2="6" y2="17.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
+                <line x1="15" y1="13.5" x2="18" y2="17.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
+              </svg>
             </div>
-          ))}
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Systems Thinker</div>
+              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>I ask where data comes from, what it represents, and how confident we should be in it. Numbers should explain reality, not just look correct.</div>
+            </div>
+          </div>
+
+          {/* Builder by Nature — blinking code cursor */}
+          <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(79,157,235,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <polyline points="8,6 3,12 8,18" stroke="#4f9deb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <polyline points="16,6 21,12 16,18" stroke="#4f9deb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="12" y1="4" x2="10.5" y2="20" stroke="#4f9deb" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <rect x="13" y="10" width="2" height="5" rx="1" fill="#4f9deb" style={{ animation: 'iconPulse 1s step-end infinite' }} />
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Builder by Nature</div>
+              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Long before formal roles — repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.</div>
+            </div>
+          </div>
+
+          {/* Impact Over Process — flashing bolt */}
+          <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ animation: 'iconBolt 3s ease-in-out infinite' }}>
+                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="#f59e0b" />
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Impact Over Process</div>
+              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>I don't enjoy analysis that lives in isolation. Every insight should turn into a decision, a better experience, or a smarter system.</div>
+            </div>
+          </div>
+
+          {/* Precision & Iteration — spinning target ring */}
+          <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(139,92,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="#8b5cf6" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.4" style={{ transformOrigin: 'center', animation: 'iconSpin 8s linear infinite' }}/>
+                <circle cx="12" cy="12" r="6" stroke="#8b5cf6" strokeWidth="1.5" opacity="0.7"/>
+                <circle cx="12" cy="12" r="2.5" fill="#8b5cf6"/>
+                <line x1="12" y1="2" x2="12" y2="5" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <line x1="12" y1="19" x2="12" y2="22" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <line x1="2" y1="12" x2="5" y2="12" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <line x1="19" y1="12" x2="22" y2="12" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Precision & Iteration</div>
+              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Drawn to the technical details. Snowboard geometry, ML model validation, product design — I care about why things work, not just that they do.</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

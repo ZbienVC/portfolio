@@ -174,3 +174,30 @@ body {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
+
+/* Trait icon animations */
+@keyframes iconPulse {
+  0%,100% { opacity:1; transform: scale(1); }
+  50% { opacity:0.6; transform: scale(0.92); }
+}
+@keyframes iconSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes iconBolt {
+  0%,90%,100% { opacity:1; filter: drop-shadow(0 0 4px #f59e0b); }
+  95% { opacity:0.3; filter: drop-shadow(0 0 12px #f59e0b); }
+}
+@keyframes iconDraw {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes iconOrbit {
+  from { transform: rotate(0deg) translateX(14px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(14px) rotate(-360deg); }
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 12px rgba(16,217,160,0.2); }
+  50% { box-shadow: 0 0 24px rgba(16,217,160,0.5); }
+}
+
