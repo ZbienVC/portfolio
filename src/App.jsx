@@ -218,6 +218,13 @@ function HeroSection() {
       <div style={{ position: 'absolute', top: '40%', right: '20%', width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
+        {/* Headshot avatar */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb, #8b5cf6)', padding: 3, margin: '0 auto', boxShadow: '0 0 40px rgba(16,217,160,0.2)' }}>
+            <img src="/headshot.jpg" alt="Zach Bienstock" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+          </div>
+        </div>
+
         {/* Badge */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(16,217,160,0.08)', border: '1px solid rgba(16,217,160,0.2)', borderRadius: 100, padding: '6px 16px', marginBottom: 32, fontSize: 13, color: '#10d9a0', fontWeight: 600 }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10d9a0', display: 'inline-block', animation: 'pulse 2s infinite' }} />
@@ -299,8 +306,22 @@ function AboutSection() {
       {/* Two column bio + traits */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 48, alignItems: 'start' }}>
         <div>
+          {/* Headshot */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 28 }}>
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+              <div style={{ width: 88, height: 88, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb, #8b5cf6)', padding: 3 }}>
+                <img src="/headshot.jpg" alt="Zach Bienstock" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
+              </div>
+              <div style={{ position: 'absolute', bottom: 2, right: 2, width: 16, height: 16, borderRadius: '50%', background: '#10d9a0', border: '2px solid #040810' }} />
+            </div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 18, color: '#f0f4ff' }}>Zach Bienstock</div>
+              <div style={{ color: '#10d9a0', fontSize: 13, fontWeight: 600 }}>Builder · Analyst · Developer</div>
+              <div style={{ color: '#4a5580', fontSize: 12, marginTop: 2 }}>Hawthorne, NJ</div>
+            </div>
+          </div>
           <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
-            I'm Zach — a Finance graduate from <span style={{ color: '#f0f4ff', fontWeight: 600 }}>Rutgers</span> (Dean's List, 3.58 GPA) who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M–$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
+            Finance graduate from <span style={{ color: '#f0f4ff', fontWeight: 600 }}>Rutgers</span> (Dean's List, 3.58 GPA) who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M–$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
           </p>
           <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
             That curiosity has been with me since long before formal roles — buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.
