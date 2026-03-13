@@ -49,6 +49,21 @@ const PROJECTS = [
     emoji: '📡',
     highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale wallet tracking', 'Multi-DEX analytics'],
   },
+  {
+    id: 'careeva',
+    name: 'Careeva',
+    tagline: 'AI Job Search & Application Assistant',
+    description: 'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline — powered by multi-model AI.',
+    status: 'soon',
+    url: 'https://careeva-production.up.railway.app',
+    github: 'https://github.com/ZbienVC/careeva',
+    color: '#0ea5e9',
+    colorEnd: '#0284c7',
+    tagClass: 'tag-cyan',
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],
+    emoji: '💼',
+    highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
+  },
 ];
 
 const SKILLS = [
