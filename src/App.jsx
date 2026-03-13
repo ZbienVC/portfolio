@@ -480,15 +480,15 @@ function ProjectCard({ project }) {
       <div style={{ height: 4, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
 
       {/* Header */}
-      <div style={{ padding: '28px 28px 20px', background: `linear-gradient(135deg, ${project.color}0a, ${project.colorEnd}06)` }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, boxShadow: `0 8px 20px ${project.color}33` }}>
+      <div className="card-header" style={{ padding: '28px 28px 20px', background: `linear-gradient(135deg, ${project.color}0a, ${project.colorEnd}06)` }}>
+        <div className="card-header-content" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
+            <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0 }}>
               {project.emoji}
             </div>
-            <div>
-              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', marginBottom: 2 }}>{project.name}</h3>
-              <p style={{ color: '#6b7db3', fontSize: 13, fontWeight: 500 }}>{project.tagline}</p>
+            <div style={{ minWidth: 0 }}>
+              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', marginBottom: 2, wordBreak: 'break-word' }}>{project.name}</h3>
+              <p style={{ color: '#6b7db3', fontSize: 13, fontWeight: 500, wordBreak: 'break-word' }}>{project.tagline}</p>
             </div>
           </div>
           {/* Status badge */}
@@ -499,7 +499,7 @@ function ProjectCard({ project }) {
               ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Coming Soon' }
               : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
             return (
-              <div style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 100, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div className="status-badge" style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 100, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
                 <span style={{ width: 5, height: 5, borderRadius: '50%', background: cfg.color, display: 'inline-block' }} />
                 {cfg.label}
               </div>
@@ -509,7 +509,7 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Body */}
-      <div style={{ padding: '0 28px 28px' }}>
+      <div className="card-body" style={{ padding: '0 28px 28px' }}>
         <p style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>{project.description}</p>
 
         {/* Highlights */}

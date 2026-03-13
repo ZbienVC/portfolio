@@ -254,11 +254,59 @@ body {
     overflow: hidden !important;
   }
 
-  /* Project cards - reduce padding on mobile */
+  /* Project cards - aggressive padding reduction */
   .glass {
-    padding: 20px 16px !important;
+    padding: 0 !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* Card header mobile */
+  .card-header {
+    padding: 16px 12px 12px !important;
+  }
+
+  .card-header-content {
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  .card-header-content > div:first-child {
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .card-header h3 {
+    font-size: 18px !important;
+  }
+
+  .card-header p {
+    font-size: 12px !important;
+  }
+
+  /* Card body mobile */
+  .card-body {
+    padding: 12px 12px 12px !important;
+  }
+
+  /* Reduce description text on mobile */
+  .glass p {
+    font-size: 12px !important;
+  }
+
+  /* Stack buttons on mobile */
+  .glass a {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  /* Status badge mobile */
+  .status-badge {
+    font-size: 9px !important;
+    padding: 2px 8px !important;
+    white-space: nowrap !important;
   }
 }
 
