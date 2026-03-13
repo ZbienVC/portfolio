@@ -277,8 +277,8 @@ function HeroSection() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '3', label: 'Products in Development' },
-            { num: '1', label: 'Live in Production' },
+            { num: '2', label: 'Products in Development' },
+            { num: '2', label: 'Live in Production' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
