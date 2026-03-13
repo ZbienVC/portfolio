@@ -172,11 +172,15 @@ const EXPERIENCE = [
 
 function Nav({ active }) {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const navLinks = ['About', 'Projects', 'Experience', 'Skills', 'Life', 'Contact'];
 
   return (
     <nav style={{
@@ -188,17 +192,47 @@ function Nav({ active }) {
       transition: 'all 0.3s ease',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     }}>
-      <a href="#hero" style={{ textDecoration: 'none' }}>
+      <a href="#hero" style={{ textDecoration: 'none', flexShrink: 0 }}>
         <span style={{ fontWeight: 900, fontSize: '18px', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>ZB</span>
       </a>
-      <div style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
-        {['About', 'Projects', 'Experience', 'Skills', 'Life', 'Contact'].map(s => (
+      
+      {/* Desktop Nav */}
+      <div className="nav-desktop" style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
+        {navLinks.map(s => (
           <a key={s} href={`#${s.toLowerCase()}`} className="nav-link">{s}</a>
         ))}
         <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: '8px 16px', fontSize: '13px' }}>
           GitHub ↗
         </a>
       </div>
+
+      {/* Mobile Hamburger */}
+      <button 
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        style={{
+          background: 'none', border: 'none', color: '#10d9a0', fontSize: '24px', cursor: 'pointer', padding: 0
+        }}
+        className="mobile-menu-btn"
+      >
+        {mobileMenuOpen ? '✕' : '☰'}
+      </button>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu" style={{
+          position: 'absolute', top: '100%', left: 0, right: 0,
+          background: 'rgba(4,8,16,0.95)', backdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          padding: '16px', flexDirection: 'column', gap: '12px'
+        }}>
+          {navLinks.map(s => (
+            <a key={s} href={`#${s.toLowerCase()}`} className="nav-link" onClick={() => setMobileMenuOpen(false)} style={{ padding: '12px 0', fontSize: '14px' }}>{s}</a>
+          ))}
+          <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: '12px 0', fontSize: '14px', justifyContent: 'flex-start' }}>
+            GitHub ↗
+          </a>
+        </div>
+      )}
     </nav>
   );
 }

@@ -201,3 +201,26 @@ body {
   50% { box-shadow: 0 0 24px rgba(16,217,160,0.5); }
 }
 
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none !important;
+  }
+
+  .mobile-menu-btn {
+    display: block !important;
+  }
+
+  .mobile-menu {
+    display: flex !important;
+  }
+
+  .nav-link {
+    font-size: 16px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+
