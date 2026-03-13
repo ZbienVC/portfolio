@@ -358,13 +358,68 @@ body {
 
   /* Trait cards - increase padding around icons */
   .glass-hover {
-    padding: 20px 24px !important;
+    padding: 22px 24px !important;
     gap: 18px !important;
+    margin-bottom: 12px !important;
   }
 
   .glass-hover > div:first-child {
     width: 48px !important;
     height: 48px !important;
+  }
+
+  /* Experience cards - increase padding */
+  #experience .glass {
+    padding: 24px 24px !important;
+    margin-bottom: 12px !important;
+  }
+
+  #experience h3 {
+    font-size: 17px !important;
+    margin-bottom: 8px !important;
+  }
+
+  #experience p {
+    margin-bottom: 12px !important;
+    font-size: 13px !important;
+  }
+
+  #experience ul {
+    margin-bottom: 12px !important;
+  }
+
+  #experience li {
+    margin-bottom: 8px !important;
+    font-size: 13px !important;
+  }
+
+  /* Skills section spacing */
+  #skills .glass-hover {
+    padding: 16px 18px !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Contact buttons spacing */
+  #contact a {
+    padding: 16px 20px !important;
+    margin-bottom: 8px !important;
+    font-size: 14px !important;
+  }
+
+  /* General card text breathing room */
+  .glass p {
+    margin-bottom: 16px !important;
+    line-height: 1.6 !important;
+  }
+
+  .glass h3 {
+    margin-bottom: 10px !important;
+  }
+
+  /* Improve all glass card padding */
+  .glass {
+    padding: 24px !important;
+    border-radius: 16px !important;
   }
 }
 
