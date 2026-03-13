@@ -236,6 +236,16 @@ body {
     padding-top: 0;
   }
 
+  /* Force single column grid on mobile */
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduce gap on mobile */
+  .projects-grid {
+    gap: 16px !important;
+  }
+
   /* Project cards - reduce padding on mobile */
   .glass {
     padding: 20px 16px !important;

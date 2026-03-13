@@ -547,14 +547,14 @@ function ProjectCard({ project }) {
 function ProjectsSection() {
   return (
     <section id="projects" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', width: '100%' }}>
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
+        <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
           {PROJECTS.map(p => <ProjectCard key={p.id} project={p} />)}
         </div>
 
