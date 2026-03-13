@@ -554,7 +554,7 @@ function ProjectsSection() {
             Projects <span className="gradient-text">in the wild</span>
           </h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
           {PROJECTS.map(p => <ProjectCard key={p.id} project={p} />)}
         </div>
 

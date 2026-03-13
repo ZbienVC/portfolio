@@ -235,5 +235,15 @@ body {
     overflow-x: hidden;
     padding-top: 0;
   }
+
+  /* Project cards - reduce padding on mobile */
+  .glass {
+    padding: 20px 16px !important;
+  }
+
+  /* Reduce section padding on mobile */
+  section {
+    padding: 60px 16px !important;
+  }
 }
 
