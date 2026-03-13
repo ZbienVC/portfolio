@@ -210,7 +210,7 @@ function Nav({ active }) {
       <button 
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         style={{
-          background: 'none', border: 'none', color: '#10d9a0', fontSize: '24px', cursor: 'pointer', padding: 0
+          background: 'none', border: 'none', color: '#10d9a0', fontSize: '24px', cursor: 'pointer', padding: '0 8px'
         }}
         className="mobile-menu-btn"
       >
