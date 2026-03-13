@@ -258,6 +258,7 @@ body {
   .glass {
     padding: 0 !important;
     width: 100% !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
   }
@@ -265,17 +266,23 @@ body {
   /* Card header mobile */
   .card-header {
     padding: 16px 12px 12px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .card-header-content {
     flex-direction: column !important;
     justify-content: flex-start !important;
+    overflow: hidden !important;
+    width: 100% !important;
   }
 
   .card-header-content > div:first-child {
     width: 100% !important;
     flex-direction: column !important;
     align-items: flex-start !important;
+    overflow: hidden !important;
   }
 
   .card-header h3 {
@@ -294,6 +301,22 @@ body {
   /* Reduce description text on mobile */
   .glass p {
     font-size: 12px !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    width: 100% !important;
+  }
+
+  /* Force highlights to fit */
+  .card-body > div:nth-child(2) {
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+
+  /* Ensure all divs within card respect width */
+  .card-body > * {
+    width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   /* Stack buttons on mobile */
@@ -307,6 +330,33 @@ body {
     font-size: 9px !important;
     padding: 2px 8px !important;
     white-space: nowrap !important;
+  }
+
+  /* Tags overflow fix */
+  .card-body > div {
+    overflow: hidden !important;
+  }
+
+  /* Force tags to wrap on mobile */
+  .tag {
+    font-size: 11px !important;
+    padding: 2px 6px !important;
+    max-width: 100% !important;
+    word-break: break-word !important;
+  }
+
+  /* Links at bottom of card */
+  .card-body > div:last-child {
+    display: flex !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .card-body a {
+    font-size: 12px !important;
+    padding: 10px 16px !important;
+    flex: 1 1 auto !important;
+    min-width: 90px !important;
   }
 }
 
