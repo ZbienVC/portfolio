@@ -355,5 +355,16 @@ body {
     flex: 1 1 auto !important;
     min-width: 90px !important;
   }
+
+  /* Trait cards - increase padding around icons */
+  .glass-hover {
+    padding: 20px 24px !important;
+    gap: 18px !important;
+  }
+
+  .glass-hover > div:first-child {
+    width: 48px !important;
+    height: 48px !important;
+  }
 }
 
