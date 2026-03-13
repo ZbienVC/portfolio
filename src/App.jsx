@@ -303,7 +303,7 @@ function HeroSection() {
           <a href="#projects" className="btn-primary" style={{ fontSize: 15 }}>
             View My Work ↓
           </a>
-          <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
+          <a href="/Zachary_Bienstock_Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
             Resume ↗
           </a>
         </div>
