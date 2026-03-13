@@ -214,6 +214,13 @@ body {
   display: none !important;
 }
 
+/* Force overflow hidden on body to prevent horizontal scroll */
+body {
+  overflow-x: hidden !important;
+  width: 100%;
+  max-width: 100vw;
+}
+
 @media (max-width: 768px) {
   .nav-desktop {
     display: none !important;
@@ -234,26 +241,24 @@ body {
   body {
     overflow-x: hidden;
     padding-top: 0;
+    width: 100%;
+    max-width: 100vw;
   }
 
   /* Force single column grid on mobile */
   .projects-grid {
     grid-template-columns: 1fr !important;
-  }
-
-  /* Reduce gap on mobile */
-  .projects-grid {
     gap: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
   }
 
   /* Project cards - reduce padding on mobile */
   .glass {
     padding: 20px 16px !important;
-  }
-
-  /* Reduce section padding on mobile */
-  section {
-    padding: 60px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 }
 
