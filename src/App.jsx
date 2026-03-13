@@ -260,7 +260,7 @@ function HeroSection() {
   }, [typed, isDeleting, titleIdx]);
 
   return (
-    <section id="hero" className="mesh-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px 40px', textAlign: 'center', position: 'relative' }}>
+    <section id="hero" className="mesh-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 40px', textAlign: 'center', position: 'relative', marginTop: 0 }}>
       {/* Floating orbs */}
       <div style={{ position: 'absolute', top: '15%', left: '10%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,217,160,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '20%', right: '8%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,157,235,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
