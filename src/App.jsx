@@ -478,20 +478,21 @@ function AboutSection() {
 
 function ProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
-  const [flipped, setFlipped] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div
-      className="glass project-card-3d"
-      onClick={() => setFlipped(!flipped)}
+      className="glass project-card"
+      onClick={() => setExpanded(!expanded)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 24, overflow: 'hidden', cursor: 'default',
-        transform: hovered ? 'translateY(-8px)' : 'translateY(0)',
-        boxShadow: hovered ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
+        borderRadius: 24, overflow: 'hidden', cursor: 'pointer',
+        transform: hovered && !expanded ? 'translateY(-8px)' : 'translateY(0)',
+        boxShadow: hovered || expanded ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
         transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
-        borderColor: hovered ? `${project.color}22` : 'rgba(255,255,255,0.06)',
+        borderColor: hovered || expanded ? `${project.color}22` : 'rgba(255,255,255,0.06)',
+        maxHeight: expanded ? '1000px' : 'auto',
       }}
     >
       {/* Top accent bar */}
@@ -549,15 +550,60 @@ function ProjectCard({ project }) {
         {/* Links */}
         <div style={{ display: 'flex', gap: 10 }}>
           {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 13, padding: '10px 20px', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 4px 15px ${project.color}30` }}>
+            <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 13, padding: '10px 20px', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 4px 15px ${project.color}30` }} onClick={(e) => e.stopPropagation()}>
               Visit Site ↗
             </a>
           )}
-          <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 13, padding: '10px 20px' }}>
+          <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 13, padding: '10px 20px' }} onClick={(e) => e.stopPropagation()}>
             GitHub ↗
           </a>
         </div>
+
+        {/* Expand indicator */}
+        <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: 'pointer' }}>
+          {expanded ? '▲ Collapse' : '▼ Click to expand'}
+        </div>
       </div>
+
+      {/* Expanded details */}
+      {expanded && (
+        <div style={{ padding: '0 28px 28px', background: `linear-gradient(135deg, ${project.color}05, ${project.colorEnd}05)`, borderTop: `1px solid ${project.color}20` }}>
+          {/* Tech Stack */}
+          <div style={{ marginBottom: 24 }}>
+            <h4 style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 700, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ color: project.color }}>⚙️</span> Tech Stack
+            </h4>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {project.tags.map(t => (
+                <span key={t} style={{ padding: '4px 10px', background: `${project.color}20`, color: project.color, borderRadius: 6, fontSize: 11, fontWeight: 600, border: `1px solid ${project.color}40` }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Key metrics */}
+          <div style={{ marginBottom: 24 }}>
+            <h4 style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 700, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ color: project.color }}>📊</span> Key Features
+            </h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {project.highlights.slice(0, 4).map((h, i) => (
+                <div key={i} style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 12, color: '#c4d0f5', border: `1px solid rgba(255,255,255,0.05)` }}>
+                  ✓ {h}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Status */}
+          <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 12, color: '#6b7db3', border: `1px solid ${project.color}20`, textAlign: 'center' }}>
+            <span style={{ color: project.status === 'live' ? '#10d9a0' : project.status === 'soon' ? '#8b5cf6' : '#4f9deb', fontWeight: 700 }}>
+              {project.status === 'live' ? '🟢 Live' : project.status === 'soon' ? '🟣 Coming Soon' : '🔵 Building'}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
