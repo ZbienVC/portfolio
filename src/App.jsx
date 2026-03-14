@@ -1011,44 +1011,9 @@ function ContactSection() {
 
 // ── App ────────────────────────────────────────────────────────────────────────
 
-function CursorGlow() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        left: position.x,
-        top: position.y,
-        width: 40,
-        height: 40,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(16,217,160,0.3) 0%, transparent 70%)',
-        pointerEvents: 'none',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 9999,
-        boxShadow: '0 0 20px rgba(16,217,160,0.2)',
-        mixBlendMode: 'screen',
-      }}
-    />
-  );
-}
-
 export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#040810' }}>
-      <CursorGlow />
       <Nav />
       <HeroSection />
       <AboutSection />
