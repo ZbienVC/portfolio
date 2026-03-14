@@ -1073,9 +1073,41 @@ function ContactSection() {
 
 // ── App ────────────────────────────────────────────────────────────────────────
 
+function ScrollProgressBar() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = (window.scrollY / scrollHeight) * 100;
+      setProgress(scrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        height: 3,
+        background: 'linear-gradient(90deg, #10d9a0, #4f9deb, #8b5cf6)',
+        width: `${progress}%`,
+        zIndex: 10000,
+        transition: 'width 0.1s ease',
+        boxShadow: '0 0 10px rgba(16,217,160,0.4)',
+      }}
+    />
+  );
+}
+
 export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#040810' }}>
+      <ScrollProgressBar />
       <Nav />
       <HeroSection />
       <AboutSection />
