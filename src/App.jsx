@@ -172,10 +172,24 @@ const EXPERIENCE = [
 
 function Nav({ active }) {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastScrollRef = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      const currentScroll = window.scrollY;
+      setScrolled(currentScroll > 40);
+      
+      // Hide nav when scrolling down, show when scrolling up
+      if (currentScroll > lastScrollRef.current + 10) {
+        setHidden(true); // scrolling down
+      } else if (currentScroll < lastScrollRef.current - 10) {
+        setHidden(false); // scrolling up
+      }
+      lastScrollRef.current = currentScroll;
+    };
+    
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -191,6 +205,8 @@ function Nav({ active }) {
       borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
       transition: 'all 0.3s ease',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+      opacity: hidden ? 0 : 1,
     }}>
       <a href="#hero" style={{ textDecoration: 'none', flexShrink: 0 }}>
         <span style={{ fontWeight: 900, fontSize: '18px', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>ZB</span>
