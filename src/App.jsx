@@ -773,8 +773,26 @@ function LifeSection() {
 }
 
 function SkillsSection() {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="skills" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
+    <section id="skills" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }} ref={ref}>
       <div style={{ textAlign: 'center', marginBottom: 64 }}>
         <p className="section-label" style={{ marginBottom: 16 }}>Tech Stack</p>
         <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
@@ -782,8 +800,23 @@ function SkillsSection() {
         </h2>
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
-        {SKILLS.map(s => (
-          <div key={s.label} className="glass glass-hover" style={{ padding: '14px 22px', borderRadius: 14, display: 'flex', alignItems: 'center', gap: 10, cursor: 'default' }}>
+        {SKILLS.map((s, i) => (
+          <div 
+            key={s.label} 
+            className={`glass glass-hover skill-card ${visible ? 'skill-animate' : ''}`}
+            style={{ 
+              padding: '14px 22px', 
+              borderRadius: 14, 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 10, 
+              cursor: 'default',
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
+              transition: `all 0.5s ease ${i * 50}ms`,
+              background: `linear-gradient(135deg, rgba(16,217,160,0.05), rgba(79,157,235,0.05))`,
+            }}
+          >
             <span style={{ fontSize: 20 }}>{s.icon}</span>
             <span style={{ fontWeight: 600, fontSize: 14, color: '#c4d0f5' }}>{s.label}</span>
           </div>
@@ -842,9 +875,84 @@ function ContactSection() {
 
 // ── App ────────────────────────────────────────────────────────────────────────
 
+function CursorGlow() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState([]);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleClick = (e) => {
+      // Create particle burst on click
+      const newParticles = Array.from({ length: 8 }).map((_, i) => ({
+        id: Math.random(),
+        x: e.clientX,
+        y: e.clientY,
+        angle: (i / 8) * Math.PI * 2,
+      }));
+      setParticles(p => [...p, ...newParticles]);
+      setTimeout(() => setParticles(p => p.filter(pa => !newParticles.find(np => np.id === pa.id))), 600);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('click', handleClick);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  return (
+    <>
+      {/* Cursor glow */}
+      <div
+        style={{
+          position: 'fixed',
+          left: position.x,
+          top: position.y,
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(16,217,160,0.3) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 9999,
+          boxShadow: '0 0 20px rgba(16,217,160,0.2)',
+          mixBlendMode: 'screen',
+        }}
+      />
+      
+      {/* Particles on click */}
+      {particles.map(p => (
+        <div
+          key={p.id}
+          style={{
+            position: 'fixed',
+            left: p.x,
+            top: p.y,
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            background: '#10d9a0',
+            pointerEvents: 'none',
+            zIndex: 9998,
+            opacity: 1,
+            animation: `particleBurst 0.6s ease-out forwards`,
+            '--tx': `${Math.cos(p.angle) * 80}px`,
+            '--ty': `${Math.sin(p.angle) * 80}px`,
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
 export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#040810' }}>
+      <CursorGlow />
       <Nav />
       <HeroSection />
       <AboutSection />
