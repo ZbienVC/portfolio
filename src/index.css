@@ -201,17 +201,7 @@ body {
   50% { box-shadow: 0 0 24px rgba(16,217,160,0.5); }
 }
 
-/* Particle burst animation */
-@keyframes particleBurst {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) translate(0, 0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0);
-  }
-}
+
 
 /* Glitch effect for links */
 @keyframes glitch {

@@ -1013,75 +1013,35 @@ function ContactSection() {
 
 function CursorGlow() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState([]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
-    const handleClick = (e) => {
-      // Create particle burst on click
-      const newParticles = Array.from({ length: 8 }).map((_, i) => ({
-        id: Math.random(),
-        x: e.clientX,
-        y: e.clientY,
-        angle: (i / 8) * Math.PI * 2,
-      }));
-      setParticles(p => [...p, ...newParticles]);
-      setTimeout(() => setParticles(p => p.filter(pa => !newParticles.find(np => np.id === pa.id))), 600);
-    };
-
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('click', handleClick);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('click', handleClick);
     };
   }, []);
 
   return (
-    <>
-      {/* Cursor glow */}
-      <div
-        style={{
-          position: 'fixed',
-          left: position.x,
-          top: position.y,
-          width: 40,
-          height: 40,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(16,217,160,0.3) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 9999,
-          boxShadow: '0 0 20px rgba(16,217,160,0.2)',
-          mixBlendMode: 'screen',
-        }}
-      />
-      
-      {/* Particles on click */}
-      {particles.map(p => (
-        <div
-          key={p.id}
-          style={{
-            position: 'fixed',
-            left: p.x,
-            top: p.y,
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            background: '#10d9a0',
-            pointerEvents: 'none',
-            zIndex: 9998,
-            opacity: 1,
-            animation: `particleBurst 0.6s ease-out forwards`,
-            '--tx': `${Math.cos(p.angle) * 80}px`,
-            '--ty': `${Math.sin(p.angle) * 80}px`,
-          }}
-        />
-      ))}
-    </>
+    <div
+      style={{
+        position: 'fixed',
+        left: position.x,
+        top: position.y,
+        width: 40,
+        height: 40,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(16,217,160,0.3) 0%, transparent 70%)',
+        pointerEvents: 'none',
+        transform: 'translate(-50%, -50%)',
+        zIndex: 9999,
+        boxShadow: '0 0 20px rgba(16,217,160,0.2)',
+        mixBlendMode: 'screen',
+      }}
+    />
   );
 }
 
