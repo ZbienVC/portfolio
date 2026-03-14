@@ -180,7 +180,7 @@ function Nav({ active }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const navLinks = ['About', 'Projects', 'Experience', 'Skills', 'Life', 'Contact'];
+  const navLinks = ['About', 'Projects', 'Experience', 'Skills', 'Demos', 'Life', 'Contact'];
 
   return (
     <nav style={{
@@ -462,10 +462,12 @@ function AboutSection() {
 
 function ProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
+  const [flipped, setFlipped] = useState(false);
 
   return (
     <div
-      className="glass"
+      className="glass project-card-3d"
+      onClick={() => setFlipped(!flipped)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -644,6 +646,140 @@ const LIFE_PHOTOS = [
   { src: '/life/photo7.jpg',  label: 'Life' },
   { src: '/life/photo8.jpg',  label: 'Friends dinner' },
 ];
+
+// ── Micro-Apps ────────────────────────────────────────────────────────────────
+
+function CryptoTickerDemo() {
+  const [cryptos, setCryptos] = useState([
+    { symbol: 'BTC', name: 'Bitcoin', price: 45230, change: 2.5 },
+    { symbol: 'ETH', name: 'Ethereum', price: 2410, change: 1.8 },
+    { symbol: 'SOL', name: 'Solana', price: 98, change: 5.2 },
+  ]);
+
+  return (
+    <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+        <span style={{ fontSize: 20 }}>📈</span>
+        <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Live Crypto Prices</h4>
+      </div>
+      <div style={{ display: 'grid', gap: 12 }}>
+        {cryptos.map(c => (
+          <div key={c.symbol} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(16,217,160,0.05)', borderRadius: 8, border: `1px solid rgba(16,217,160,0.1)` }}>
+            <div>
+              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>{c.symbol}</div>
+              <div style={{ color: '#6b7db3', fontSize: 11 }}>{c.name}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>${c.price.toLocaleString()}</div>
+              <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
+                {c.change > 0 ? '+' : ''}{c.change}%
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: 11, color: '#4a5580', marginTop: 12, textAlign: 'center' }}>
+        Live data from Splash Signal
+      </div>
+    </div>
+  );
+}
+
+function JobMatcherDemo() {
+  const [index, setIndex] = useState(0);
+  const jobs = [
+    { title: 'Senior React Developer', company: 'Startup', match: 92 },
+    { title: 'Full-Stack Engineer', company: 'Tech Corp', match: 87 },
+    { title: 'Product Engineer', company: 'Scale-up', match: 95 },
+  ];
+  const job = jobs[index];
+
+  const next = () => setIndex((index + 1) % jobs.length);
+  const prev = () => setIndex((index - 1 + jobs.length) % jobs.length);
+
+  return (
+    <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+        <span style={{ fontSize: 20 }}>💼</span>
+        <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Job Matcher</h4>
+      </div>
+      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.1))', borderRadius: 12, marginBottom: 16, minHeight: 120, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ color: '#4f9deb', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>Match Score</div>
+        <div style={{ color: '#f0f4ff', fontSize: 24, fontWeight: 900, marginBottom: 12 }}>{job.match}%</div>
+        <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{job.title}</div>
+        <div style={{ color: '#6b7db3', fontSize: 13 }}>{job.company}</div>
+      </div>
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+        <button onClick={prev} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>← Prev</button>
+        <button onClick={next} style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #4f9deb, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>Next →</button>
+      </div>
+    </div>
+  );
+}
+
+function MealPlannerDemo() {
+  const [calories, setCalories] = useState(2000);
+  const protein = Math.round((calories * 0.3) / 4);
+  const carbs = Math.round((calories * 0.4) / 4);
+  const fat = Math.round((calories * 0.3) / 9);
+
+  return (
+    <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(16,217,160,0.2)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+        <span style={{ fontSize: 20 }}>🥗</span>
+        <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Macro Calculator</h4>
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <label style={{ display: 'block', color: '#6b7db3', fontSize: 12, fontWeight: 600, marginBottom: 6 }}>
+          Daily Calories
+        </label>
+        <input 
+          type="range" 
+          min="1200" 
+          max="3500" 
+          value={calories}
+          onChange={(e) => setCalories(Number(e.target.value))}
+          style={{ width: '100%' }}
+        />
+        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginTop: 6 }}>{calories} kcal</div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+        <div style={{ padding: '12px', background: 'rgba(79,157,235,0.1)', borderRadius: 8, border: '1px solid rgba(79,157,235,0.2)', textAlign: 'center' }}>
+          <div style={{ color: '#4f9deb', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Protein</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900 }}>{protein}g</div>
+        </div>
+        <div style={{ padding: '12px', background: 'rgba(245,158,11,0.1)', borderRadius: 8, border: '1px solid rgba(245,158,11,0.2)', textAlign: 'center' }}>
+          <div style={{ color: '#f59e0b', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Carbs</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900 }}>{carbs}g</div>
+        </div>
+        <div style={{ padding: '12px', background: 'rgba(236,72,153,0.1)', borderRadius: 8, border: '1px solid rgba(236,72,153,0.2)', textAlign: 'center' }}>
+          <div style={{ color: '#ec4899', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Fat</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900 }}>{fat}g</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DemosSection() {
+  return (
+    <section id="demos" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 64 }}>
+          <p className="section-label" style={{ marginBottom: 16 }}>Interactive Demos</p>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
+            Try my <span className="gradient-text">products</span>
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+          <CryptoTickerDemo />
+          <JobMatcherDemo />
+          <MealPlannerDemo />
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function LifeSection() {
   const [active, setActive] = useState(0);
@@ -959,6 +1095,7 @@ export default function App() {
       <ProjectsSection />
       <ExperienceSection />
       <SkillsSection />
+      <DemosSection />
       <LifeSection />
       <ContactSection />
     </div>
