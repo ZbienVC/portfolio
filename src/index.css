@@ -203,15 +203,6 @@ body {
 
 
 
-/* Glitch effect for links */
-@keyframes glitch {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-}
-
 /* Skill card animation */
 @keyframes skillReveal {
   from {
@@ -222,15 +213,6 @@ body {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-/* Glitch effect on hover for links */
-a {
-  position: relative;
-}
-
-a:hover {
-  animation: glitch 0.3s ease;
 }
 
 /* Mobile Responsive */
