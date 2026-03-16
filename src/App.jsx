@@ -523,7 +523,6 @@ function ProjectCard({ project }) {
       >
         {/* FRONT: Project Card */}
         <div
-          onClick={(e) => e.stopPropagation()}
           style={{
             opacity: flipped ? 0 : 1,
             transform: flipped ? 'translateX(-20px)' : 'translateX(0)',
