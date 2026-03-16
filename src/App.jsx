@@ -594,8 +594,8 @@ function ProjectCard({ project }) {
           </a>
         </div>
 
-        {/* Flip button */}
-        {!expanded && hasDemo && (
+        {/* Flip button - FRONT SIDE */}
+        {!expanded && hasDemo && !flipped && (
           <button
             onClick={handleFlipClick}
             style={{
@@ -620,7 +620,7 @@ function ProjectCard({ project }) {
               e.target.style.borderColor = `${project.color}40`;
             }}
           >
-            {flipped ? '← Back' : 'Try →'}
+            Try →
           </button>
         )}
         </div>
@@ -646,9 +646,36 @@ function ProjectCard({ project }) {
               justifyContent: 'center',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
-              <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
+                <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
+              </div>
+              <button
+                onClick={handleFlipClick}
+                style={{
+                  padding: '6px 12px',
+                  background: 'transparent',
+                  border: `1px solid ${project.color}40`,
+                  borderRadius: 6,
+                  color: project.color,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = `${project.color}15`;
+                  e.target.style.borderColor = `${project.color}60`;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'transparent';
+                  e.target.style.borderColor = `${project.color}40`;
+                }}
+              >
+                ← Back
+              </button>
             </div>
             {projectDemos[project.id]}
           </div>
