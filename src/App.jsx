@@ -597,6 +597,7 @@ function ProjectCard({ project }) {
           </div>
         )}
         </div>
+        </div>
 
         {/* BACK: Interactive Demo */}
         {hasDemo && (
