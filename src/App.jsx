@@ -506,7 +506,7 @@ function ProjectCard({ project }) {
         boxShadow: hovered || expanded || flipped ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
         transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
         borderColor: hovered || expanded || flipped ? `${project.color}22` : 'rgba(255,255,255,0.06)',
-        maxHeight: expanded && !flipped ? '1000px' : flipped ? '400px' : 'auto',
+        maxHeight: expanded ? '1200px' : 'none',
         perspective: '1000px',
       }}
     >
