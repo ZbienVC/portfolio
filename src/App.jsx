@@ -564,7 +564,7 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Body */}
-      <div className="card-body" onClick={(e) => e.stopPropagation()} style={{ padding: '0 28px 28px' }}>
+      <div className="card-body" onClick={(e) => { if (hasDemo) e.stopPropagation(); }} style={{ padding: '0 28px 28px' }}>
         <p style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>{project.description}</p>
 
         {/* Highlights */}
