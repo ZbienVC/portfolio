@@ -480,22 +480,47 @@ function AboutSection() {
 function ProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+
+  const projectDemos = {
+    splash: <CryptoTickerDemo />,
+    careeva: <JobMatcherDemo />,
+    plato: <MealPlannerDemo />,
+  };
+
+  const hasDemo = projectDemos[project.id];
 
   return (
     <div
       className="glass project-card"
-      onClick={() => setExpanded(!expanded)}
+      onClick={() => {
+        if (flipped && hasDemo) setFlipped(false);
+        else if (hasDemo) setFlipped(true);
+        else setExpanded(!expanded);
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 24, overflow: 'hidden', cursor: 'pointer',
-        transform: hovered && !expanded ? 'translateY(-8px)' : 'translateY(0)',
-        boxShadow: hovered || expanded ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
+        borderRadius: 24, overflow: 'hidden', cursor: hasDemo ? 'pointer' : 'default',
+        transform: hovered && !flipped && !expanded ? 'translateY(-8px)' : 'translateY(0)',
+        boxShadow: hovered || expanded || flipped ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
         transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
-        borderColor: hovered || expanded ? `${project.color}22` : 'rgba(255,255,255,0.06)',
-        maxHeight: expanded ? '1000px' : 'auto',
+        borderColor: hovered || expanded || flipped ? `${project.color}22` : 'rgba(255,255,255,0.06)',
+        maxHeight: expanded && !flipped ? '1000px' : flipped ? '400px' : 'auto',
+        perspective: '1000px',
       }}
     >
+      {/* Flip container */}
+      <div
+        style={{
+          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transition: 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+          transformStyle: 'preserve-3d',
+          width: '100%',
+        }}
+      >
+        {/* FRONT: Project Card */}
+        <div style={{ backfaceVisibility: 'hidden' }}>
       {/* Top accent bar */}
       <div style={{ height: 4, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
 
@@ -561,20 +586,21 @@ function ProjectCard({ project }) {
         </div>
 
         {/* Flip indicator */}
-        <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: 'pointer' }}>
-          {expanded ? '▲ Collapse' : flipped ? '← Back to project' : '✨ Flip to try →'}
+        <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: hasDemo ? 'pointer' : 'default' }}>
+          {expanded ? '▲ Collapse' : hasDemo ? (flipped ? '← Back to project' : '✨ Flip to try →') : ''}
         </div>
         </div>
 
         {/* BACK: Interactive Demo */}
-        <div style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', padding: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
-            <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
+        {hasDemo && (
+          <div style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', padding: 24, minHeight: '350px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
+              <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
+            </div>
+            {projectDemos[project.id]}
           </div>
-          {projectDemos[project.id]}
-        </div>
-
+        )}
         </div>
       </div>
 
