@@ -48,6 +48,7 @@ const PROJECTS = [
     tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'SQLite'],
     emoji: '📡',
     highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale wallet tracking', 'Multi-DEX analytics'],
+    demoId: 'splash',
   },
   {
     id: 'careeva',
@@ -559,14 +560,26 @@ function ProjectCard({ project }) {
           </a>
         </div>
 
-        {/* Expand indicator */}
+        {/* Flip indicator */}
         <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: 'pointer' }}>
-          {expanded ? '▲ Collapse' : '▼ Click to expand'}
+          {expanded ? '▲ Collapse' : flipped ? '← Back to project' : '✨ Flip to try →'}
+        </div>
+        </div>
+
+        {/* BACK: Interactive Demo */}
+        <div style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', padding: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
+            <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
+          </div>
+          {projectDemos[project.id]}
+        </div>
+
         </div>
       </div>
 
-      {/* Expanded details */}
-      {expanded && (
+      {/* Expanded details (only on front) */}
+      {expanded && !flipped && (
         <div style={{ padding: '0 28px 28px', background: `linear-gradient(135deg, ${project.color}05, ${project.colorEnd}05)`, borderTop: `1px solid ${project.color}20` }}>
           {/* Tech Stack */}
           <div style={{ marginBottom: 24 }}>
