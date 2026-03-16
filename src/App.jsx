@@ -717,57 +717,89 @@ function CryptoTickerDemo() {
     { symbol: 'ETH', name: 'Ethereum', price: 0, change: 0, loading: true },
     { symbol: 'SOL', name: 'Solana', price: 0, change: 0, loading: true },
   ]);
+  const [highlighted, setHighlighted] = useState(null);
+
+  const fetchPrices = async () => {
+    try {
+      const response = await fetch(
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
+      );
+      const data = await response.json();
+      
+      setCryptos([
+        { 
+          symbol: 'BTC', 
+          name: 'Bitcoin', 
+          price: data.bitcoin?.usd || 0,
+          change: Math.round((data.bitcoin?.usd_24h_change || 0) * 100) / 100,
+          loading: false 
+        },
+        { 
+          symbol: 'ETH', 
+          name: 'Ethereum', 
+          price: data.ethereum?.usd || 0,
+          change: Math.round((data.ethereum?.usd_24h_change || 0) * 100) / 100,
+          loading: false 
+        },
+        { 
+          symbol: 'SOL', 
+          name: 'Solana', 
+          price: data.solana?.usd || 0,
+          change: Math.round((data.solana?.usd_24h_change || 0) * 100) / 100,
+          loading: false 
+        },
+      ]);
+    } catch (error) {
+      console.error('Failed to fetch crypto prices:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const response = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
-        );
-        const data = await response.json();
-        
-        setCryptos([
-          { 
-            symbol: 'BTC', 
-            name: 'Bitcoin', 
-            price: data.bitcoin?.usd || 0,
-            change: Math.round((data.bitcoin?.usd_24h_change || 0) * 100) / 100,
-            loading: false 
-          },
-          { 
-            symbol: 'ETH', 
-            name: 'Ethereum', 
-            price: data.ethereum?.usd || 0,
-            change: Math.round((data.ethereum?.usd_24h_change || 0) * 100) / 100,
-            loading: false 
-          },
-          { 
-            symbol: 'SOL', 
-            name: 'Solana', 
-            price: data.solana?.usd || 0,
-            change: Math.round((data.solana?.usd_24h_change || 0) * 100) / 100,
-            loading: false 
-          },
-        ]);
-      } catch (error) {
-        console.error('Failed to fetch crypto prices:', error);
-      }
-    };
-
     fetchPrices();
-    const interval = setInterval(fetchPrices, 60000); // Update every 60 seconds
+    const interval = setInterval(fetchPrices, 60000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-        <span style={{ fontSize: 20 }}>📈</span>
-        <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Live Crypto Prices</h4>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 20 }}>📈</span>
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Live Crypto</h4>
+        </div>
+        <button
+          onClick={() => { setHighlighted(null); fetchPrices(); }}
+          style={{
+            padding: '4px 12px',
+            background: 'rgba(16,217,160,0.2)',
+            color: '#10d9a0',
+            border: '1px solid rgba(16,217,160,0.3)',
+            borderRadius: 6,
+            fontSize: 11,
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          🔄 Refresh
+        </button>
       </div>
       <div style={{ display: 'grid', gap: 12 }}>
         {cryptos.map(c => (
-          <div key={c.symbol} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(16,217,160,0.05)', borderRadius: 8, border: `1px solid rgba(16,217,160,0.1)` }}>
+          <div
+            key={c.symbol}
+            onClick={() => setHighlighted(c.symbol)}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '12px',
+              background: highlighted === c.symbol ? 'rgba(16,217,160,0.15)' : 'rgba(16,217,160,0.05)',
+              borderRadius: 8,
+              border: `1px solid ${highlighted === c.symbol ? 'rgba(16,217,160,0.4)' : 'rgba(16,217,160,0.1)'}`,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
             <div>
               <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>{c.symbol}</div>
               <div style={{ color: '#6b7db3', fontSize: 11 }}>{c.name}</div>
@@ -783,8 +815,8 @@ function CryptoTickerDemo() {
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 11, color: '#4a5580', marginTop: 12, textAlign: 'center' }}>
-        Live data from CoinGecko (updated every 60 seconds)
+      <div style={{ fontSize: 10, color: '#4a5580', marginTop: 12, textAlign: 'center' }}>
+        Click to highlight • Tap refresh for live prices
       </div>
     </div>
   );
@@ -792,31 +824,45 @@ function CryptoTickerDemo() {
 
 function JobMatcherDemo() {
   const [index, setIndex] = useState(0);
+  const [liked, setLiked] = useState(new Set());
   const jobs = [
-    { title: 'Senior React Developer', company: 'Startup', match: 92 },
-    { title: 'Full-Stack Engineer', company: 'Tech Corp', match: 87 },
-    { title: 'Product Engineer', company: 'Scale-up', match: 95 },
+    { title: 'Senior React Developer', company: 'Startup', match: 92, role: 'Frontend' },
+    { title: 'Full-Stack Engineer', company: 'Tech Corp', match: 87, role: 'Full-Stack' },
+    { title: 'Product Engineer', company: 'Scale-up', match: 95, role: 'Full-Stack' },
   ];
   const job = jobs[index];
+  const isLiked = liked.has(index);
 
   const next = () => setIndex((index + 1) % jobs.length);
   const prev = () => setIndex((index - 1 + jobs.length) % jobs.length);
+  const toggleLike = () => {
+    const newLiked = new Set(liked);
+    if (newLiked.has(index)) newLiked.delete(index);
+    else newLiked.add(index);
+    setLiked(newLiked);
+  };
 
   return (
     <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-        <span style={{ fontSize: 20 }}>💼</span>
-        <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Job Matcher</h4>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 20 }}>💼</span>
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Job Matcher</h4>
+        </div>
+        <span style={{ fontSize: 12, color: '#6b7db3' }}>{index + 1}/3</span>
       </div>
-      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.1))', borderRadius: 12, marginBottom: 16, minHeight: 120, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ color: '#4f9deb', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>Match Score</div>
-        <div style={{ color: '#f0f4ff', fontSize: 24, fontWeight: 900, marginBottom: 12 }}>{job.match}%</div>
-        <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{job.title}</div>
-        <div style={{ color: '#6b7db3', fontSize: 13 }}>{job.company}</div>
+      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.1))', borderRadius: 12, marginBottom: 16, minHeight: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ color: '#4f9deb', fontSize: 11, fontWeight: 600, marginBottom: 2 }}>{job.role}</div>
+        <div style={{ color: '#f0f4ff', fontSize: 24, fontWeight: 900, marginBottom: 10 }}>{job.match}%</div>
+        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginBottom: 3 }}>{job.title}</div>
+        <div style={{ color: '#6b7db3', fontSize: 12 }}>{job.company}</div>
       </div>
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-        <button onClick={prev} style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>← Prev</button>
-        <button onClick={next} style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #4f9deb, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>Next →</button>
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'center' }}>
+        <button onClick={prev} style={{ padding: '7px 12px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: '#f0f4ff', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>←</button>
+        <button onClick={toggleLike} style={{ padding: '7px 12px', background: isLiked ? 'rgba(255,107,107,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(255,107,107,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 6, color: isLiked ? '#ff6b6b' : '#6b7db3', cursor: 'pointer', fontSize: 14 }}>
+          {isLiked ? '❤️' : '🤍'}
+        </button>
+        <button onClick={next} style={{ padding: '7px 12px', background: 'linear-gradient(135deg, #4f9deb, #6366f1)', border: 'none', borderRadius: 6, color: '#fff', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>→</button>
       </div>
     </div>
   );
@@ -824,9 +870,18 @@ function JobMatcherDemo() {
 
 function MealPlannerDemo() {
   const [calories, setCalories] = useState(2000);
-  const protein = Math.round((calories * 0.3) / 4);
-  const carbs = Math.round((calories * 0.4) / 4);
-  const fat = Math.round((calories * 0.3) / 9);
+  const [preset, setPreset] = useState('balanced');
+  
+  const presets = {
+    balanced: { p: 0.3, c: 0.4, f: 0.3 },
+    lowcarb: { p: 0.4, c: 0.2, f: 0.4 },
+    highprotein: { p: 0.45, c: 0.35, f: 0.2 },
+  };
+  
+  const { p, c, f } = presets[preset];
+  const protein = Math.round((calories * p) / 4);
+  const carbs = Math.round((calories * c) / 4);
+  const fat = Math.round((calories * f) / 9);
 
   return (
     <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(16,217,160,0.2)' }}>
@@ -834,9 +889,33 @@ function MealPlannerDemo() {
         <span style={{ fontSize: 20 }}>🥗</span>
         <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Macro Calculator</h4>
       </div>
-      <div style={{ marginBottom: 16 }}>
-        <label style={{ display: 'block', color: '#6b7db3', fontSize: 12, fontWeight: 600, marginBottom: 6 }}>
-          Daily Calories
+      
+      <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+        {['balanced', 'lowcarb', 'highprotein'].map(p => (
+          <button
+            key={p}
+            onClick={() => setPreset(p)}
+            style={{
+              flex: 1,
+              padding: '6px 8px',
+              background: preset === p ? 'rgba(16,217,160,0.2)' : 'rgba(255,255,255,0.05)',
+              color: preset === p ? '#10d9a0' : '#6b7db3',
+              border: preset === p ? '1px solid rgba(16,217,160,0.3)' : '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 6,
+              fontSize: 10,
+              fontWeight: 600,
+              cursor: 'pointer',
+              textTransform: 'capitalize',
+            }}
+          >
+            {p === 'highprotein' ? 'HP' : p.slice(0, 3).toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label style={{ display: 'block', color: '#6b7db3', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>
+          Calories: {calories} kcal
         </label>
         <input 
           type="range" 
@@ -844,22 +923,25 @@ function MealPlannerDemo() {
           max="3500" 
           value={calories}
           onChange={(e) => setCalories(Number(e.target.value))}
-          style={{ width: '100%' }}
+          style={{ width: '100%', height: '4px' }}
         />
-        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginTop: 6 }}>{calories} kcal</div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-        <div style={{ padding: '12px', background: 'rgba(79,157,235,0.1)', borderRadius: 8, border: '1px solid rgba(79,157,235,0.2)', textAlign: 'center' }}>
-          <div style={{ color: '#4f9deb', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Protein</div>
-          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900 }}>{protein}g</div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+        <div style={{ padding: '10px', background: 'rgba(79,157,235,0.1)', borderRadius: 6, border: '1px solid rgba(79,157,235,0.2)', textAlign: 'center' }}>
+          <div style={{ color: '#4f9deb', fontSize: 10, fontWeight: 600, marginBottom: 3 }}>Protein</div>
+          <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 900 }}>{protein}g</div>
+          <div style={{ fontSize: 9, color: '#4f9deb', marginTop: 2 }}>{Math.round(p * 100)}%</div>
         </div>
-        <div style={{ padding: '12px', background: 'rgba(245,158,11,0.1)', borderRadius: 8, border: '1px solid rgba(245,158,11,0.2)', textAlign: 'center' }}>
-          <div style={{ color: '#f59e0b', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Carbs</div>
-          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900 }}>{carbs}g</div>
+        <div style={{ padding: '10px', background: 'rgba(245,158,11,0.1)', borderRadius: 6, border: '1px solid rgba(245,158,11,0.2)', textAlign: 'center' }}>
+          <div style={{ color: '#f59e0b', fontSize: 10, fontWeight: 600, marginBottom: 3 }}>Carbs</div>
+          <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 900 }}>{carbs}g</div>
+          <div style={{ fontSize: 9, color: '#f59e0b', marginTop: 2 }}>{Math.round(c * 100)}%</div>
         </div>
-        <div style={{ padding: '12px', background: 'rgba(236,72,153,0.1)', borderRadius: 8, border: '1px solid rgba(236,72,153,0.2)', textAlign: 'center' }}>
-          <div style={{ color: '#ec4899', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Fat</div>
-          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900 }}>{fat}g</div>
+        <div style={{ padding: '10px', background: 'rgba(236,72,153,0.1)', borderRadius: 6, border: '1px solid rgba(236,72,153,0.2)', textAlign: 'center' }}>
+          <div style={{ color: '#ec4899', fontSize: 10, fontWeight: 600, marginBottom: 3 }}>Fat</div>
+          <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 900 }}>{fat}g</div>
+          <div style={{ fontSize: 9, color: '#ec4899', marginTop: 2 }}>{Math.round(f * 100)}%</div>
         </div>
       </div>
     </div>
