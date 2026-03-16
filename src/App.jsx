@@ -713,10 +713,51 @@ const LIFE_PHOTOS = [
 
 function CryptoTickerDemo() {
   const [cryptos, setCryptos] = useState([
-    { symbol: 'BTC', name: 'Bitcoin', price: 45230, change: 2.5 },
-    { symbol: 'ETH', name: 'Ethereum', price: 2410, change: 1.8 },
-    { symbol: 'SOL', name: 'Solana', price: 98, change: 5.2 },
+    { symbol: 'BTC', name: 'Bitcoin', price: 0, change: 0, loading: true },
+    { symbol: 'ETH', name: 'Ethereum', price: 0, change: 0, loading: true },
+    { symbol: 'SOL', name: 'Solana', price: 0, change: 0, loading: true },
   ]);
+
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
+        );
+        const data = await response.json();
+        
+        setCryptos([
+          { 
+            symbol: 'BTC', 
+            name: 'Bitcoin', 
+            price: data.bitcoin?.usd || 0,
+            change: Math.round((data.bitcoin?.usd_24h_change || 0) * 100) / 100,
+            loading: false 
+          },
+          { 
+            symbol: 'ETH', 
+            name: 'Ethereum', 
+            price: data.ethereum?.usd || 0,
+            change: Math.round((data.ethereum?.usd_24h_change || 0) * 100) / 100,
+            loading: false 
+          },
+          { 
+            symbol: 'SOL', 
+            name: 'Solana', 
+            price: data.solana?.usd || 0,
+            change: Math.round((data.solana?.usd_24h_change || 0) * 100) / 100,
+            loading: false 
+          },
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch crypto prices:', error);
+      }
+    };
+
+    fetchPrices();
+    const interval = setInterval(fetchPrices, 60000); // Update every 60 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
@@ -732,7 +773,9 @@ function CryptoTickerDemo() {
               <div style={{ color: '#6b7db3', fontSize: 11 }}>{c.name}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>${c.price.toLocaleString()}</div>
+              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>
+                {c.loading ? '...' : `$${c.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+              </div>
               <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
                 {c.change > 0 ? '+' : ''}{c.change}%
               </div>
@@ -741,7 +784,7 @@ function CryptoTickerDemo() {
         ))}
       </div>
       <div style={{ fontSize: 11, color: '#4a5580', marginTop: 12, textAlign: 'center' }}>
-        Live data from Splash Signal
+        Live data from CoinGecko (updated every 60 seconds)
       </div>
     </div>
   );
