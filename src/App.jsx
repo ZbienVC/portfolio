@@ -490,18 +490,22 @@ function ProjectCard({ project }) {
 
   const hasDemo = projectDemos[project.id];
 
+  const handleFlipClick = (e) => {
+    e.stopPropagation();
+    if (flipped) setFlipped(false);
+    else setFlipped(true);
+  };
+
   return (
     <div
       className="glass project-card"
       onClick={() => {
-        if (flipped && hasDemo) setFlipped(false);
-        else if (hasDemo) setFlipped(true);
-        else setExpanded(!expanded);
+        if (!hasDemo && !flipped) setExpanded(!expanded);
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 24, overflow: 'hidden', cursor: hasDemo ? 'pointer' : 'default',
+        borderRadius: 24, overflow: 'hidden', cursor: !flipped && !hasDemo ? 'pointer' : 'default',
         transform: hovered && !flipped && !expanded ? 'translateY(-8px)' : 'translateY(0)',
         boxShadow: hovered || expanded || flipped ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
         transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
@@ -519,6 +523,7 @@ function ProjectCard({ project }) {
       >
         {/* FRONT: Project Card */}
         <div
+          onClick={(e) => e.stopPropagation()}
           style={{
             opacity: flipped ? 0 : 1,
             transform: flipped ? 'translateX(-20px)' : 'translateX(0)',
@@ -559,7 +564,7 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Body */}
-      <div className="card-body" style={{ padding: '0 28px 28px' }}>
+      <div className="card-body" onClick={(e) => e.stopPropagation()} style={{ padding: '0 28px 28px' }}>
         <p style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>{project.description}</p>
 
         {/* Highlights */}
@@ -590,11 +595,34 @@ function ProjectCard({ project }) {
           </a>
         </div>
 
-        {/* Flip indicator */}
+        {/* Flip button */}
         {!expanded && hasDemo && (
-          <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: 'pointer' }}>
+          <button
+            onClick={handleFlipClick}
+            style={{
+              display: 'block',
+              margin: '16px auto 0',
+              padding: '8px 16px',
+              background: 'transparent',
+              border: `1px solid ${project.color}40`,
+              borderRadius: 8,
+              color: project.color,
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = `${project.color}15`;
+              e.target.style.borderColor = `${project.color}60`;
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'transparent';
+              e.target.style.borderColor = `${project.color}40`;
+            }}
+          >
             {flipped ? '← Back' : 'Try →'}
-          </div>
+          </button>
         )}
         </div>
         </div>
@@ -602,6 +630,7 @@ function ProjectCard({ project }) {
         {/* BACK: Interactive Demo */}
         {hasDemo && (
           <div
+            onClick={(e) => e.stopPropagation()}
             style={{
               position: 'absolute',
               top: 0,
