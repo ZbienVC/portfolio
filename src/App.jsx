@@ -718,8 +718,10 @@ function CryptoTickerDemo() {
     { symbol: 'SOL', name: 'Solana', price: 0, change: 0, loading: true },
   ]);
   const [highlighted, setHighlighted] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchPrices = async () => {
+    setRefreshing(true);
     try {
       const response = await fetch(
         'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
@@ -751,6 +753,8 @@ function CryptoTickerDemo() {
       ]);
     } catch (error) {
       console.error('Failed to fetch crypto prices:', error);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -761,29 +765,33 @@ function CryptoTickerDemo() {
   }, []);
 
   return (
-    <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
+    <div style={{ background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.25)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 20 }}>📈</span>
-          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Live Crypto</h4>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #4f9deb, #10d9a0)', boxShadow: '0 0 12px rgba(79,157,235,0.5)' }} />
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Price Feed</h4>
         </div>
         <button
           onClick={() => { setHighlighted(null); fetchPrices(); }}
+          disabled={refreshing}
           style={{
-            padding: '4px 12px',
-            background: 'rgba(16,217,160,0.2)',
-            color: '#10d9a0',
-            border: '1px solid rgba(16,217,160,0.3)',
+            padding: '6px 14px',
+            background: refreshing ? 'rgba(79,157,235,0.1)' : 'rgba(79,157,235,0.2)',
+            color: refreshing ? '#4f9deb' : '#4f9deb',
+            border: '1px solid rgba(79,157,235,0.3)',
             borderRadius: 6,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 600,
-            cursor: 'pointer',
+            cursor: refreshing ? 'not-allowed' : 'pointer',
+            transition: 'all 0.2s',
+            opacity: refreshing ? 0.6 : 1,
+            animation: refreshing ? 'spin 1s linear infinite' : 'none',
           }}
         >
-          🔄 Refresh
+          ↻ {refreshing ? 'Updating' : 'Refresh'}
         </button>
       </div>
-      <div style={{ display: 'grid', gap: 12 }}>
+      <div style={{ display: 'grid', gap: 10 }}>
         {cryptos.map(c => (
           <div
             key={c.symbol}
@@ -792,10 +800,10 @@ function CryptoTickerDemo() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              padding: '12px',
-              background: highlighted === c.symbol ? 'rgba(16,217,160,0.15)' : 'rgba(16,217,160,0.05)',
-              borderRadius: 8,
-              border: `1px solid ${highlighted === c.symbol ? 'rgba(16,217,160,0.4)' : 'rgba(16,217,160,0.1)'}`,
+              padding: '14px',
+              background: highlighted === c.symbol ? 'rgba(79,157,235,0.15)' : 'rgba(255,255,255,0.02)',
+              borderRadius: 10,
+              border: `1px solid ${highlighted === c.symbol ? 'rgba(79,157,235,0.4)' : 'rgba(79,157,235,0.1)'}`,
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
@@ -809,15 +817,18 @@ function CryptoTickerDemo() {
                 {c.loading ? '...' : `$${c.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
               </div>
               <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
-                {c.change > 0 ? '+' : ''}{c.change}%
+                {c.change > 0 ? '▲' : '▼'} {Math.abs(c.change)}%
               </div>
             </div>
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 10, color: '#4a5580', marginTop: 12, textAlign: 'center' }}>
-        Click to highlight • Tap refresh for live prices
-      </div>
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -826,9 +837,9 @@ function JobMatcherDemo() {
   const [index, setIndex] = useState(0);
   const [liked, setLiked] = useState(new Set());
   const jobs = [
-    { title: 'Senior React Developer', company: 'Startup', match: 92, role: 'Frontend' },
-    { title: 'Full-Stack Engineer', company: 'Tech Corp', match: 87, role: 'Full-Stack' },
-    { title: 'Product Engineer', company: 'Scale-up', match: 95, role: 'Full-Stack' },
+    { title: 'Senior React Developer', company: 'TechStart Inc', match: 92, role: 'Frontend' },
+    { title: 'Full-Stack Engineer', company: 'Scale Corp', match: 87, role: 'Full-Stack' },
+    { title: 'Product Engineer', company: 'Growth Labs', match: 95, role: 'Full-Stack' },
   ];
   const job = jobs[index];
   const isLiked = liked.has(index);
@@ -843,26 +854,26 @@ function JobMatcherDemo() {
   };
 
   return (
-    <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.2)' }}>
+    <div style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(79,157,235,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(139,92,246,0.25)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 20 }}>💼</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #8b5cf6, #4f9deb)', boxShadow: '0 0 12px rgba(139,92,246,0.5)' }} />
           <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Job Matcher</h4>
         </div>
-        <span style={{ fontSize: 12, color: '#6b7db3' }}>{index + 1}/3</span>
+        <span style={{ fontSize: 12, color: '#6b7db3', background: 'rgba(139,92,246,0.1)', padding: '4px 10px', borderRadius: 6 }}>{index + 1}/3</span>
       </div>
-      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.1))', borderRadius: 12, marginBottom: 16, minHeight: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div style={{ color: '#4f9deb', fontSize: 11, fontWeight: 600, marginBottom: 2 }}>{job.role}</div>
-        <div style={{ color: '#f0f4ff', fontSize: 24, fontWeight: 900, marginBottom: 10 }}>{job.match}%</div>
-        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginBottom: 3 }}>{job.title}</div>
+      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(79,157,235,0.05))', borderRadius: 12, marginBottom: 16, minHeight: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid rgba(139,92,246,0.2)' }}>
+        <div style={{ color: '#8b5cf6', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', marginBottom: 4 }}>{job.role}</div>
+        <div style={{ color: '#f0f4ff', fontSize: 28, fontWeight: 900, marginBottom: 12 }}>{job.match}%</div>
+        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{job.title}</div>
         <div style={{ color: '#6b7db3', fontSize: 12 }}>{job.company}</div>
       </div>
-      <div style={{ display: 'flex', gap: 6, justifyContent: 'center' }}>
-        <button onClick={prev} style={{ padding: '7px 12px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, color: '#f0f4ff', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>←</button>
-        <button onClick={toggleLike} style={{ padding: '7px 12px', background: isLiked ? 'rgba(255,107,107,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(255,107,107,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 6, color: isLiked ? '#ff6b6b' : '#6b7db3', cursor: 'pointer', fontSize: 14 }}>
-          {isLiked ? '❤️' : '🤍'}
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>← Prev</button>
+        <button onClick={toggleLike} style={{ padding: '8px 16px', background: isLiked ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(236,72,153,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, color: isLiked ? '#ec4899' : '#6b7db3', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
+          {isLiked ? '★ Saved' : '☆ Save'}
         </button>
-        <button onClick={next} style={{ padding: '7px 12px', background: 'linear-gradient(135deg, #4f9deb, #6366f1)', border: 'none', borderRadius: 6, color: '#fff', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}>→</button>
+        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next →</button>
       </div>
     </div>
   );
@@ -873,9 +884,9 @@ function MealPlannerDemo() {
   const [preset, setPreset] = useState('balanced');
   
   const presets = {
-    balanced: { p: 0.3, c: 0.4, f: 0.3 },
-    lowcarb: { p: 0.4, c: 0.2, f: 0.4 },
-    highprotein: { p: 0.45, c: 0.35, f: 0.2 },
+    balanced: { p: 0.3, c: 0.4, f: 0.3, name: 'Balanced' },
+    lowcarb: { p: 0.4, c: 0.2, f: 0.4, name: 'Low-Carb' },
+    highprotein: { p: 0.45, c: 0.35, f: 0.2, name: 'High-Protein' },
   };
   
   const { p, c, f } = presets[preset];
@@ -884,64 +895,68 @@ function MealPlannerDemo() {
   const fat = Math.round((calories * f) / 9);
 
   return (
-    <div style={{ background: 'rgba(15,22,41,0.7)', borderRadius: 16, padding: '20px', border: '1px solid rgba(16,217,160,0.2)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-        <span style={{ fontSize: 20 }}>🥗</span>
-        <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Macro Calculator</h4>
+    <div style={{ background: 'linear-gradient(135deg, rgba(16,217,160,0.1), rgba(79,157,235,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(16,217,160,0.25)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', boxShadow: '0 0 12px rgba(16,217,160,0.5)' }} />
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Macro Calculator</h4>
+        </div>
+        <span style={{ fontSize: 11, color: '#6b7db3', background: 'rgba(16,217,160,0.1)', padding: '4px 10px', borderRadius: 6 }}>{presets[preset].name}</span>
       </div>
       
-      <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-        {['balanced', 'lowcarb', 'highprotein'].map(p => (
+      <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+        {Object.keys(presets).map(p => (
           <button
             key={p}
             onClick={() => setPreset(p)}
             style={{
               flex: 1,
-              padding: '6px 8px',
-              background: preset === p ? 'rgba(16,217,160,0.2)' : 'rgba(255,255,255,0.05)',
+              padding: '8px 10px',
+              background: preset === p ? 'linear-gradient(135deg, #10d9a0, rgba(16,217,160,0.3))' : 'rgba(255,255,255,0.05)',
               color: preset === p ? '#10d9a0' : '#6b7db3',
-              border: preset === p ? '1px solid rgba(16,217,160,0.3)' : '1px solid rgba(255,255,255,0.1)',
-              borderRadius: 6,
-              fontSize: 10,
+              border: preset === p ? '1px solid rgba(16,217,160,0.4)' : '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 8,
+              fontSize: 11,
               fontWeight: 600,
               cursor: 'pointer',
-              textTransform: 'capitalize',
+              transition: 'all 0.2s',
             }}
           >
-            {p === 'highprotein' ? 'HP' : p.slice(0, 3).toUpperCase()}
+            {presets[p].name}
           </button>
         ))}
       </div>
 
-      <div style={{ marginBottom: 12 }}>
-        <label style={{ display: 'block', color: '#6b7db3', fontSize: 11, fontWeight: 600, marginBottom: 4 }}>
-          Calories: {calories} kcal
-        </label>
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+          <label style={{ color: '#6b7db3', fontSize: 11, fontWeight: 600 }}>Daily Target</label>
+          <span style={{ color: '#f0f4ff', fontSize: 12, fontWeight: 700 }}>{calories} kcal</span>
+        </div>
         <input 
           type="range" 
           min="1200" 
           max="3500" 
           value={calories}
           onChange={(e) => setCalories(Number(e.target.value))}
-          style={{ width: '100%', height: '4px' }}
+          style={{ width: '100%', height: '6px', borderRadius: '3px', background: 'linear-gradient(to right, #4f9deb, #10d9a0)', cursor: 'pointer' }}
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-        <div style={{ padding: '10px', background: 'rgba(79,157,235,0.1)', borderRadius: 6, border: '1px solid rgba(79,157,235,0.2)', textAlign: 'center' }}>
-          <div style={{ color: '#4f9deb', fontSize: 10, fontWeight: 600, marginBottom: 3 }}>Protein</div>
-          <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 900 }}>{protein}g</div>
-          <div style={{ fontSize: 9, color: '#4f9deb', marginTop: 2 }}>{Math.round(p * 100)}%</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(79,157,235,0.15), rgba(79,157,235,0.05))', borderRadius: 10, border: '1px solid rgba(79,157,235,0.25)', textAlign: 'center' }}>
+          <div style={{ color: '#4f9deb', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Protein</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{protein}g</div>
+          <div style={{ fontSize: 10, color: '#4f9deb' }}>{Math.round(p * 100)}%</div>
         </div>
-        <div style={{ padding: '10px', background: 'rgba(245,158,11,0.1)', borderRadius: 6, border: '1px solid rgba(245,158,11,0.2)', textAlign: 'center' }}>
-          <div style={{ color: '#f59e0b', fontSize: 10, fontWeight: 600, marginBottom: 3 }}>Carbs</div>
-          <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 900 }}>{carbs}g</div>
-          <div style={{ fontSize: 9, color: '#f59e0b', marginTop: 2 }}>{Math.round(c * 100)}%</div>
+        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05))', borderRadius: 10, border: '1px solid rgba(245,158,11,0.25)', textAlign: 'center' }}>
+          <div style={{ color: '#f59e0b', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Carbs</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{carbs}g</div>
+          <div style={{ fontSize: 10, color: '#f59e0b' }}>{Math.round(c * 100)}%</div>
         </div>
-        <div style={{ padding: '10px', background: 'rgba(236,72,153,0.1)', borderRadius: 6, border: '1px solid rgba(236,72,153,0.2)', textAlign: 'center' }}>
-          <div style={{ color: '#ec4899', fontSize: 10, fontWeight: 600, marginBottom: 3 }}>Fat</div>
-          <div style={{ color: '#f0f4ff', fontSize: 15, fontWeight: 900 }}>{fat}g</div>
-          <div style={{ fontSize: 9, color: '#ec4899', marginTop: 2 }}>{Math.round(f * 100)}%</div>
+        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05))', borderRadius: 10, border: '1px solid rgba(236,72,153,0.25)', textAlign: 'center' }}>
+          <div style={{ color: '#ec4899', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Fat</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{fat}g</div>
+          <div style={{ fontSize: 10, color: '#ec4899' }}>{Math.round(f * 100)}%</div>
         </div>
       </div>
     </div>
