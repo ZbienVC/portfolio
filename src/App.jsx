@@ -513,14 +513,19 @@ function ProjectCard({ project }) {
       {/* Flip container */}
       <div
         style={{
-          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          transition: 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-          transformStyle: 'preserve-3d',
+          position: 'relative',
           width: '100%',
         }}
       >
         {/* FRONT: Project Card */}
-        <div style={{ backfaceVisibility: 'hidden' }}>
+        <div
+          style={{
+            opacity: flipped ? 0 : 1,
+            transform: flipped ? 'translateX(-20px)' : 'translateX(0)',
+            transition: 'all 0.4s ease-in-out',
+            pointerEvents: flipped ? 'none' : 'auto',
+          }}
+        >
       {/* Top accent bar */}
       <div style={{ height: 4, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
 
@@ -586,14 +591,32 @@ function ProjectCard({ project }) {
         </div>
 
         {/* Flip indicator */}
-        <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: hasDemo ? 'pointer' : 'default' }}>
-          {expanded ? '▲ Collapse' : hasDemo ? (flipped ? '← Back to project' : '✨ Flip to try →') : ''}
-        </div>
+        {!expanded && hasDemo && (
+          <div style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: project.color, fontWeight: 600, cursor: 'pointer' }}>
+            {flipped ? '← Back' : 'Try →'}
+          </div>
+        )}
         </div>
 
         {/* BACK: Interactive Demo */}
         {hasDemo && (
-          <div style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', padding: 24, minHeight: '350px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              opacity: flipped ? 1 : 0,
+              transform: flipped ? 'translateX(0)' : 'translateX(20px)',
+              transition: 'all 0.4s ease-in-out',
+              pointerEvents: flipped ? 'auto' : 'none',
+              padding: 24,
+              minHeight: '350px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
               <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
@@ -601,7 +624,6 @@ function ProjectCard({ project }) {
             {projectDemos[project.id]}
           </div>
         )}
-        </div>
       </div>
 
       {/* Expanded details (only on front) */}
@@ -1002,26 +1024,6 @@ function MealPlannerDemo() {
   );
 }
 
-function DemosSection() {
-  return (
-    <section id="demos" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <p className="section-label" style={{ marginBottom: 16 }}>Interactive Demos</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
-            Try my <span className="gradient-text">products</span>
-          </h2>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
-          <CryptoTickerDemo />
-          <JobMatcherDemo />
-          <MealPlannerDemo />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function LifeSection() {
   const [active, setActive] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -1293,7 +1295,6 @@ export default function App() {
       <ProjectsSection />
       <ExperienceSection />
       <SkillsSection />
-      <DemosSection />
       <LifeSection />
       <ContactSection />
     </div>
