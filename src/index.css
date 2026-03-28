@@ -233,8 +233,7 @@ body {
     gap: 16px !important;
   }
 
-  .glass {
-    padding: 0 !important;
+  .compact-project-card {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
@@ -242,8 +241,8 @@ body {
   }
 
   .compact-project-inner,
-  .card-header,
-  .card-body {
+  .compact-project-card .card-header,
+  .compact-project-card .card-body {
     padding-left: 18px !important;
     padding-right: 18px !important;
   }
