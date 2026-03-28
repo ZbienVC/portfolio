@@ -298,4 +298,31 @@ body {
     line-height: 1.48 !important;
     color: #7f92c2 !important;
   }
+
+  #experience .glass {
+    padding: 18px 18px !important;
+    border-radius: 16px !important;
+    gap: 12px !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  #experience .glass > div:last-child {
+    text-align: left !important;
+    order: -1;
+    margin-bottom: 2px;
+  }
+
+  #experience .glass span[style*="font-weight: 800"] {
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+  }
+
+  #experience .glass ul {
+    gap: 5px !important;
+  }
+
+  #experience .glass li {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
 }

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -101,18 +101,6 @@ const SKILLS = [
 
 const EXPERIENCE = [
   {
-    role: 'Web3 Project Advisor',
-    company: 'Independent / Crypto Projects',
-    period: 'Dec 2024 \u2013 Present',
-    location: 'Remote',
-    color: '#f59e0b',
-    highlights: [
-      'Advise early-stage Web3 projects on token design, positioning, marketing strategy, and community growth',
-      'Guide go-to-market strategies and token launches reaching $1M+ market capitalization',
-      'Provide insights on crypto market dynamics, narrative positioning, and digital community engagement',
-    ],
-  },
-  {
     role: 'Savings Analyst & Sales Engineer',
     company: 'Grapevine',
     period: 'Feb 2024 \u2013 Oct 2025',
@@ -170,16 +158,27 @@ const EXPERIENCE = [
       'Connected accredited investors with Pre-IPO investment funds and deal opportunities',
       'Conducted outreach to prospective investors and gained exposure to private equity deal flow',
     ],
-  },
-  {
+  },  {
     role: 'Computer Technician & Builder',
     company: 'Freelance',
-    period: 'May 2019 \u2013 Aug 2024',
+    period: 'May 2019 – Aug 2024',
     location: 'Remote',
     color: '#64748b',
     highlights: [
       'Built and sold 50+ custom desktop computers through eBay',
       'Diagnosed and repaired hardware/software issues; performed upgrades and performance optimization',
+    ],
+  },
+  {
+    role: 'Web3 Project Advisor',
+    company: 'Independent / Crypto Projects',
+    period: 'Dec 2024 – Present',
+    location: 'Remote',
+    color: '#f59e0b',
+    highlights: [
+      'Advise early-stage Web3 projects on token design, positioning, marketing strategy, and community growth',
+      'Guide go-to-market strategies and token launches reaching + market capitalization',
+      'Provide insights on crypto market dynamics, narrative positioning, and digital community engagement',
     ],
   },
 ];
@@ -1282,3 +1281,4 @@ export default function App() {
     </div>
   );
 }
+
