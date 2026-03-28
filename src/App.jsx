@@ -24,8 +24,8 @@ const PROJECTS = [
     name: 'DipperAI',
     tagline: 'AI Agent Builder Platform',
     description: 'A subscription-based platform to build, customize, and deploy AI agents across Telegram, Discord, SMS, and the web. Multi-model support, no-code agent builder, built-in analytics.',
-    status: 'soon',
-    url: null,
+    status: 'live',
+    url: 'https://dipper-ai-production.up.railway.app',
     github: 'https://github.com/ZbienVC/dipper-ai',
     color: '#8b5cf6',
     colorEnd: '#6366f1',
@@ -360,7 +360,7 @@ function HeroSection() {
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
             { num: '2', label: 'Products in Development' },
-            { num: '4', label: 'Live in Production' },
+            { num: '5', label: 'Live in Production' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
@@ -1298,4 +1298,7 @@ export default function App() {
     </div>
   );
 }
+
+
+
 
