@@ -80,6 +80,21 @@ const PROJECTS = [
     emoji: '✨',
     highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
   },
+  {
+    id: 'omo',
+    name: '$OMO',
+    tagline: 'Memecoin Landing Page — The Last White Giraffe',
+    description: 'A fully custom memecoin landing site for $OMO — the last white giraffe on earth. Emotional storytelling, Tarangire/Tanzania aesthetic, live DexScreener chart embed, real Omo photography, and Web3 CTAs.',
+    status: 'live',
+    url: 'https://omogiraffe.fun',
+    github: 'https://github.com/ZbienVC/omo-token',
+    color: '#D4943A',
+    colorEnd: '#C0562A',
+    tagClass: '',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
+    emoji: '🦒',
+    highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
+  },
 ];
 
 const SKILLS = [
@@ -345,7 +360,7 @@ function HeroSection() {
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
             { num: '2', label: 'Products in Development' },
-            { num: '3', label: 'Live in Production' },
+            { num: '4', label: 'Live in Production' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
