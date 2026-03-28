@@ -494,7 +494,6 @@ function AboutSection() {
 
 function ProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const [flipped, setFlipped] = useState(false);
 
   const projectDemos = {
@@ -507,161 +506,120 @@ function ProjectCard({ project }) {
 
   const handleFlipClick = (e) => {
     e.stopPropagation();
-    if (flipped) setFlipped(false);
-    else setFlipped(true);
+    setFlipped((v) => !v);
   };
+
+  const statusCfg = project.status === 'live'
+    ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
+    : project.status === 'soon'
+    ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Coming Soon' }
+    : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
 
   return (
     <div
-      className="glass project-card"
-      onClick={() => {
-        if (!hasDemo && !flipped) setExpanded(!expanded);
-      }}
+      className="glass project-card compact-project-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 24, overflow: 'hidden', cursor: !flipped && !hasDemo ? 'pointer' : 'default',
-        transform: hovered && !flipped && !expanded ? 'translateY(-8px)' : 'translateY(0)',
-        boxShadow: hovered || expanded || flipped ? `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
-        transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
-        borderColor: hovered || expanded || flipped ? `${project.color}22` : 'rgba(255,255,255,0.06)',
-        maxHeight: expanded ? '1200px' : 'none',
+        borderRadius: 22,
+        overflow: 'hidden',
+        transition: 'all 0.32s cubic-bezier(0.4,0,0.2,1)',
+        transform: hovered && !flipped ? 'translateY(-6px)' : 'translateY(0)',
+        boxShadow: hovered || flipped ? `0 20px 48px rgba(0,0,0,0.34), 0 0 0 1px ${project.color}22` : '0 4px 20px rgba(0,0,0,0.2)',
+        borderColor: hovered || flipped ? `${project.color}22` : 'rgba(255,255,255,0.06)',
         perspective: '1000px',
       }}
     >
-      {/* Flip container */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-        }}
-      >
-        {/* FRONT: Project Card */}
+      <div style={{ position: 'relative', width: '100%' }}>
         <div
           style={{
             opacity: flipped ? 0 : 1,
-            transform: flipped ? 'translateX(-20px)' : 'translateX(0)',
-            transition: 'all 0.4s ease-in-out',
+            transform: flipped ? 'translateX(-16px)' : 'translateX(0)',
+            transition: 'all 0.32s ease-in-out',
             pointerEvents: flipped ? 'none' : 'auto',
           }}
         >
-      {/* Top accent bar */}
-      <div style={{ height: 4, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
+          <div style={{ height: 3, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
 
-      {/* Header */}
-      <div className="card-header" style={{ padding: '28px 28px 20px', background: `linear-gradient(135deg, ${project.color}0a, ${project.colorEnd}06)` }}>
-        <div className="card-header-content" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, minWidth: 0 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0 }}>
-              {project.emoji}
+          <div className="compact-project-inner" style={{ padding: '22px 22px 20px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14, marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, minWidth: 0, flex: 1 }}>
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0 }}>
+                  {project.emoji}
+                </div>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
+                    <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', lineHeight: 1.05, margin: 0 }}>{project.name}</h3>
+                    <div className="status-badge" style={{ flexShrink: 0, padding: '4px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
+                      {statusCfg.label}
+                    </div>
+                  </div>
+                  <p style={{ color: '#8b9cc8', fontSize: 13, fontWeight: 600, lineHeight: 1.45 }}>{project.tagline}</p>
+                </div>
+              </div>
             </div>
-            <div style={{ minWidth: 0 }}>
-              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', marginBottom: 2, wordBreak: 'break-word' }}>{project.name}</h3>
-              <p style={{ color: '#6b7db3', fontSize: 13, fontWeight: 500, wordBreak: 'break-word' }}>{project.tagline}</p>
+
+            <p style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.65, marginBottom: 14 }}>
+              {project.description}
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 14 }}>
+              {project.highlights.slice(0, 4).map((h) => (
+                <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: '#9fb0d9', lineHeight: 1.45 }}>
+                  <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>→</span>
+                  <span>{h}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
+              {project.tags.slice(0, 4).map(t => (
+                <span key={t} className={`tag ${project.tagClass}`} style={{ background: `${project.color}12`, color: project.color, borderColor: `${project.color}25` }}>{t}</span>
+              ))}
+              {project.tags.length > 4 && (
+                <span className="tag" style={{ background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', borderColor: 'rgba(255,255,255,0.1)' }}>+{project.tags.length - 4}</span>
+              )}
+            </div>
+
+            <div className="compact-project-actions" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              {project.url && (
+                <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn-primary compact-btn" style={{ fontSize: 13, padding: '10px 16px', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 4px 15px ${project.color}30` }} onClick={(e) => e.stopPropagation()}>
+                  Visit ↗
+                </a>
+              )}
+              <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-ghost compact-btn" style={{ fontSize: 13, padding: '10px 16px' }} onClick={(e) => e.stopPropagation()}>
+                GitHub ↗
+              </a>
+              {hasDemo && (
+                <button
+                  onClick={handleFlipClick}
+                  className="btn-ghost compact-btn"
+                  style={{ fontSize: 13, padding: '10px 16px', borderColor: `${project.color}30`, color: project.color }}
+                >
+                  Try →
+                </button>
+              )}
             </div>
           </div>
-          {/* Status badge */}
-          {(() => {
-            const cfg = project.status === 'live'
-              ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
-              : project.status === 'soon'
-              ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Coming Soon' }
-              : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
-            return (
-              <div className="status-badge" style={{ flexShrink: 0, padding: '4px 12px', borderRadius: 100, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: cfg.color, display: 'inline-block' }} />
-                {cfg.label}
-              </div>
-            );
-          })()}
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="card-body" onClick={(e) => { if (hasDemo) e.stopPropagation(); }} style={{ padding: '0 28px 28px' }}>
-        <p style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.7, marginBottom: 20 }}>{project.description}</p>
-
-        {/* Highlights */}
-        <div style={{ marginBottom: 20 }}>
-          {project.highlights.map(h => (
-            <div key={h} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 13, color: '#8b9cc8' }}>
-              <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>→</span> {h}
-            </div>
-          ))}
         </div>
 
-        {/* Tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 24 }}>
-          {project.tags.map(t => (
-            <span key={t} className={`tag ${project.tagClass}`} style={{ background: `${project.color}12`, color: project.color, borderColor: `${project.color}25` }}>{t}</span>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div style={{ display: 'flex', gap: 10 }}>
-          {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 13, padding: '10px 20px', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 4px 15px ${project.color}30` }} onClick={(e) => e.stopPropagation()}>
-              Visit Site ↗
-            </a>
-          )}
-          <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 13, padding: '10px 20px' }} onClick={(e) => e.stopPropagation()}>
-            GitHub ↗
-          </a>
-        </div>
-
-        {/* Flip button - FRONT SIDE */}
-        {!expanded && hasDemo && !flipped && (
-          <button
-            onClick={handleFlipClick}
-            style={{
-              display: 'block',
-              margin: '16px auto 0',
-              padding: '8px 16px',
-              background: 'transparent',
-              border: `1px solid ${project.color}40`,
-              borderRadius: 8,
-              color: project.color,
-              fontSize: 12,
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = `${project.color}15`;
-              e.target.style.borderColor = `${project.color}60`;
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'transparent';
-              e.target.style.borderColor = `${project.color}40`;
-            }}
-          >
-            Try →
-          </button>
-        )}
-        </div>
-        </div>
-
-        {/* BACK: Interactive Demo */}
         {hasDemo && (
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
+              inset: 0,
               opacity: flipped ? 1 : 0,
               transform: flipped ? 'translateX(0)' : 'translateX(20px)',
-              transition: 'all 0.4s ease-in-out',
+              transition: 'all 0.32s ease-in-out',
               pointerEvents: flipped ? 'auto' : 'none',
-              padding: 24,
-              minHeight: '350px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
+              padding: 20,
+              background: 'rgba(8,12,24,0.96)',
+              backdropFilter: 'blur(16px)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
                 <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
@@ -672,21 +630,11 @@ function ProjectCard({ project }) {
                   padding: '6px 12px',
                   background: 'transparent',
                   border: `1px solid ${project.color}40`,
-                  borderRadius: 6,
+                  borderRadius: 8,
                   color: project.color,
                   fontSize: 11,
                   fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  whiteSpace: 'nowrap',
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = `${project.color}15`;
-                  e.target.style.borderColor = `${project.color}60`;
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = 'transparent';
-                  e.target.style.borderColor = `${project.color}40`;
                 }}
               >
                 ← Back
@@ -696,61 +644,24 @@ function ProjectCard({ project }) {
           </div>
         )}
       </div>
-
-      {/* Expanded details (only on front) */}
-      {expanded && !flipped && (
-        <div style={{ padding: '0 28px 28px', background: `linear-gradient(135deg, ${project.color}05, ${project.colorEnd}05)`, borderTop: `1px solid ${project.color}20` }}>
-          {/* Tech Stack */}
-          <div style={{ marginBottom: 24 }}>
-            <h4 style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 700, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: project.color }}>⚙️</span> Tech Stack
-            </h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {project.tags.map(t => (
-                <span key={t} style={{ padding: '4px 10px', background: `${project.color}20`, color: project.color, borderRadius: 6, fontSize: 11, fontWeight: 600, border: `1px solid ${project.color}40` }}>
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Key metrics */}
-          <div style={{ marginBottom: 24 }}>
-            <h4 style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 700, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: project.color }}>📊</span> Key Features
-            </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              {project.highlights.slice(0, 4).map((h, i) => (
-                <div key={i} style={{ padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 12, color: '#c4d0f5', border: `1px solid rgba(255,255,255,0.05)` }}>
-                  ✓ {h}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Status */}
-          <div style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: 8, fontSize: 12, color: '#6b7db3', border: `1px solid ${project.color}20`, textAlign: 'center' }}>
-            <span style={{ color: project.status === 'live' ? '#10d9a0' : project.status === 'soon' ? '#8b5cf6' : '#4f9deb', fontWeight: 700 }}>
-              {project.status === 'live' ? '🟢 Live' : project.status === 'soon' ? '🟣 Coming Soon' : '🔵 Building'}
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 function ProjectsSection() {
   return (
-    <section id="projects" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', width: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
+    <section id="projects" style={{ padding: '88px 24px', background: 'rgba(15,22,41,0.3)' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: 52 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 12 }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
+          <p style={{ color: '#6b7db3', fontSize: 15, maxWidth: 620, margin: '0 auto', lineHeight: 1.7 }}>
+            A denser overview of live products and active builds — easier to scan now, easier to scale as more ships.
+          </p>
         </div>
-        <div className="projects-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24 }}>
+        <div className="projects-grid compact-projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 18 }}>
           {PROJECTS.map(p => <ProjectCard key={p.id} project={p} />)}
         </div>
 
