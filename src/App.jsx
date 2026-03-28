@@ -158,7 +158,8 @@ const EXPERIENCE = [
       'Connected accredited investors with Pre-IPO investment funds and deal opportunities',
       'Conducted outreach to prospective investors and gained exposure to private equity deal flow',
     ],
-  },  {
+  },
+  {
     role: 'Computer Technician & Builder',
     company: 'Freelance',
     period: 'May 2019 – Aug 2024',
@@ -259,8 +260,9 @@ function Nav({ active }) {
           {navLinks.map(s => (
             <a key={s} href={`#${s.toLowerCase()}`} className="nav-link" onClick={() => setMobileMenuOpen(false)} style={{ padding: '12px 0', fontSize: '14px' }}>{s}</a>
           ))}
-          <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: '12px 0', fontSize: '14px', justifyContent: 'flex-start' }}>
-            GitHub ↗
+          <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="mobile-github-link btn-ghost" style={{ padding: '10px 14px', fontSize: '13px', justifyContent: 'space-between', borderRadius: 12 }}>
+            <span>GitHub</span>
+            <span aria-hidden="true">↗</span>
           </a>
         </div>
       )}
