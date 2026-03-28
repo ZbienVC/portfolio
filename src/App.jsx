@@ -65,6 +65,21 @@ const PROJECTS = [
     emoji: '💼',
     highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
   },
+  {
+    id: 'reflect',
+    name: 'Reflect Medical',
+    tagline: 'Premium Aesthetic Medical Practice Website',
+    description: 'A premium medical SaaS-style website and patient experience for Reflect Medical & Cosmetic Center with memberships, treatment catalog, booking flows, Beauty Bank, referrals, and polished conversion-focused UX.',
+    status: 'live',
+    url: 'https://reflect-medical.web.app',
+    github: 'https://github.com/ZbienVC/reflect-medical-premium',
+    color: '#b57edc',
+    colorEnd: '#8b5cf6',
+    tagClass: 'tag-purple',
+    tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],
+    emoji: '✨',
+    highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
+  },
 ];
 
 const SKILLS = [
@@ -329,7 +344,7 @@ function HeroSection() {
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
             { num: '2', label: 'Products in Development' },
-            { num: '2', label: 'Live in Production' },
+            { num: '3', label: 'Live in Production' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
