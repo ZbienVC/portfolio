@@ -95,6 +95,21 @@ const PROJECTS = [
     emoji: '🦒',
     highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
   },
+  {
+    id: 'clawback',
+    name: 'CLAWBACK',
+    tagline: 'Punishment-First Solana Memecoin Launchpad',
+    description: 'Punishment-first Solana memecoin launchpad. Progressive sell taxes fund the community treasury. No dev allocation. Auto-graduation to Raydium. Community governance from block one.',
+    status: 'soon',
+    url: 'https://launchpad-app.vercel.app',
+    github: 'https://github.com/ZbienVC/launchpad',
+    color: '#f97316',
+    colorEnd: '#dc2626',
+    tagClass: '',
+    tags: ['Solana', 'DeFi', 'Web3', 'Rust', 'Anchor'],
+    emoji: '🦀',
+    highlights: ['Progressive sell tax treasury', 'No dev allocation', 'Auto-graduation to Raydium', 'Community governance from block one'],
+  },
 ];
 
 const SKILLS = [
