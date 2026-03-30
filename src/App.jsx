@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -55,7 +55,7 @@ const PROJECTS = [
     name: 'Careeva',
     tagline: 'AI Job Search & Application Assistant',
     description: 'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline — powered by multi-model AI.',
-    status: 'soon',
+    status: 'live',
     url: 'https://careeva-production.up.railway.app',
     github: 'https://github.com/ZbienVC/careeva',
     color: '#0ea5e9',
@@ -100,8 +100,8 @@ const PROJECTS = [
     name: 'CLAWBACK',
     tagline: 'Punishment-First Solana Memecoin Launchpad',
     description: 'Punishment-first Solana memecoin launchpad. Progressive sell taxes fund the community treasury. No dev allocation. Auto-graduation to Raydium. Community governance from block one.',
-    status: 'soon',
-    url: 'https://launchpad-app.vercel.app',
+    status: 'live',
+    url: 'https://launchpad-self-chi.vercel.app',
     github: 'https://github.com/ZbienVC/launchpad',
     color: '#f97316',
     colorEnd: '#dc2626',
