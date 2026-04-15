@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -10,7 +10,7 @@ const PROJECTS = [
     tagline: 'AI-Powered Meal Planning & Nutrition',
     description: 'A full-stack nutrition coaching app that generates personalized meal plans, tracks macros, features a restaurant menu browser, recipe book, and AI-assisted food logging.',
     status: 'live',
-    url: 'https://eatplato.app',
+    url: 'https://plato-beta.vercel.app',
     github: 'https://github.com/ZbienVC/plato',
     color: '#10d9a0',
     colorEnd: '#059669',
@@ -116,13 +116,28 @@ const PROJECTS = [
     description: 'Punishment-first Solana memecoin launchpad. Progressive sell taxes fund the community treasury. No dev allocation. Auto-graduation to Raydium. Community governance from block one.',
     status: 'live',
     url: 'https://launchpad-self-chi.vercel.app',
-    github: 'https://github.com/ZbienVC/launchpad',
+    github: null,
     color: '#f97316',
     colorEnd: '#dc2626',
     tagClass: '',
     tags: ['Solana', 'DeFi', 'Web3', 'Rust', 'Anchor'],
     emoji: '🦀',
     highlights: ['Progressive sell tax treasury', 'No dev allocation', 'Auto-graduation to Raydium', 'Community governance from block one'],
+  },
+  {
+    id: 'palmbeach',
+    name: 'Palm Beach Guide',
+    tagline: 'Premium Local Area Guide',
+    description: 'A beautifully designed local guide for a Palm Beach rental property — curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
+    status: 'live',
+    url: 'https://palm-beach-guide.vercel.app',
+    github: 'https://github.com/ZbienVC/palm-beach-guide',
+    color: '#06b6d4',
+    colorEnd: '#0284c7',
+    tagClass: 'tag-cyan',
+    tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],
+    emoji: 'palm_tree',
+    highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
   },
 ];
 
