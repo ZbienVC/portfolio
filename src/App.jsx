@@ -374,7 +374,7 @@ function HeroSection() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '0', label: 'Products in Development' },
+            { num: '2', label: 'Products in Development' },
             { num: '8', label: 'Live in Production' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
