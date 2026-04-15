@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -10,7 +10,7 @@ const PROJECTS = [
     tagline: 'AI-Powered Meal Planning & Nutrition',
     description: 'A full-stack nutrition coaching app that generates personalized meal plans, tracks macros, features a restaurant menu browser, recipe book, and AI-assisted food logging.',
     status: 'live',
-    url: 'https://plato-beta.vercel.app',
+    url: 'https://eatplato.app',
     github: 'https://github.com/ZbienVC/plato',
     color: '#10d9a0',
     colorEnd: '#059669',
