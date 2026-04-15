@@ -38,7 +38,7 @@ const PROJECTS = [
     id: 'splash',
     name: 'Splash Signal',
     tagline: 'Crypto Intelligence Dashboard',
-    description: 'A real-time crypto alpha-hunting dashboard with live token feeds, risk scoring, whale tracking, narrative intelligence, and DeFi analytics — powered by on-chain data.',
+    description: 'A real-time crypto alpha-hunting dashboard with live token feeds, risk scoring, whale tracking, narrative intelligence, and DeFi analytics - powered by on-chain data.',
     status: 'live',
     url: 'https://splash-signal-production.up.railway.app',
     github: 'https://github.com/ZbienVC/splash-signal',
@@ -54,7 +54,7 @@ const PROJECTS = [
     id: 'careeva',
     name: 'Careeva',
     tagline: 'AI Job Search & Application Assistant',
-    description: 'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline — powered by multi-model AI.',
+    description: 'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline - powered by multi-model AI.',
     status: 'live',
     url: 'https://careeva-production.up.railway.app',
     github: 'https://github.com/ZbienVC/careeva',
@@ -83,8 +83,8 @@ const PROJECTS = [
   {
     id: 'omo',
     name: '$OMO',
-    tagline: 'Memecoin Landing Page — The Last White Giraffe',
-    description: 'A fully custom memecoin landing site for $OMO — the last white giraffe on earth. Emotional storytelling, Tarangire/Tanzania aesthetic, live DexScreener chart embed, real Omo photography, and Web3 CTAs.',
+    tagline: 'Memecoin Landing Page - The Last White Giraffe',
+    description: 'A fully custom memecoin landing site for $OMO - the last white giraffe on earth. Emotional storytelling, Tarangire/Tanzania aesthetic, live DexScreener chart embed, real Omo photography, and Web3 CTAs.',
     status: 'live',
     url: 'https://omogiraffe.fun',
     github: 'https://github.com/ZbienVC/omo-token',
@@ -99,7 +99,7 @@ const PROJECTS = [
     id: 'staywestpalm',
     name: 'Stay West Palm',
     tagline: 'West Palm Beach Vacation Rental Guide',
-    description: 'A beautifully designed local guide for a Palm Beach rental property — curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
+    description: 'A beautifully designed local guide for a Palm Beach rental property - curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
     status: 'live',
     url: 'https://www.staywestpalm.now',
     github: null,
@@ -138,7 +138,7 @@ const EXPERIENCE = [
     color: '#10d9a0',
     highlights: [
       'Built automated Excel reporting systems and Figma dashboards, reducing manual reporting by 80%+',
-      'Analyzed tens of thousands of product groups — generated 20–85% cost savings, ranging from tens of thousands to millions annually',
+      'Analyzed tens of thousands of product groups - generated 20-85% cost savings, ranging from tens of thousands to millions annually',
       'Resolved 50+ weekly supply backorders; assisted with client onboarding, vendor integration, and system setup',
     ],
   },
@@ -155,14 +155,14 @@ const EXPERIENCE = [
     ],
   },
   {
-    role: 'Financial Data Analyst — Surveillance & Threat Detection',
+    role: 'Financial Data Analyst - Surveillance & Threat Detection',
     company: 'Bloomberg LP',
     period: 'Mar 2023 \u2013 Feb 2024',
     location: 'Remote',
     color: '#4f9deb',
     highlights: [
       'Analyzed large financial datasets to identify trends and support ML surveillance models',
-      'Evaluated derivatives activity — options, swaps, forwards — to validate structured financial data',
+      'Evaluated derivatives activity - options, swaps, forwards - to validate structured financial data',
       'Collaborated with senior analysts to improve AI-based trade surveillance and threat detection systems',
     ],
   },
@@ -173,7 +173,7 @@ const EXPERIENCE = [
     location: 'New York, NY',
     color: '#8b5cf6',
     highlights: [
-      'Researched middle-market companies to support debt and equity capital raises ($25M – $1B)',
+      'Researched middle-market companies to support debt and equity capital raises ($25M - $1B)',
       'Built detailed target lists of executives and financial metrics for active deal sourcing',
       'Supported investor presentations and discussions with institutional clients',
     ],
@@ -192,7 +192,7 @@ const EXPERIENCE = [
   {
     role: 'Computer Technician & Builder',
     company: 'Freelance',
-    period: 'May 2019 – Aug 2024',
+    period: 'May 2019 - Aug 2024',
     location: 'Remote',
     color: '#64748b',
     highlights: [
@@ -203,7 +203,7 @@ const EXPERIENCE = [
   {
     role: 'Web3 Project Advisor',
     company: 'Independent / Crypto Projects',
-    period: 'Dec 2024 – Present',
+    period: 'Dec 2024 - Present',
     location: 'Remote',
     color: '#f59e0b',
     highlights: [
@@ -226,7 +226,7 @@ function Nav({ active }) {
     const onScroll = () => {
       const currentScroll = window.scrollY;
       setScrolled(currentScroll > 40);
-      
+
       // Hide nav when scrolling down, show when scrolling up
       if (currentScroll > lastScrollRef.current + 10) {
         setHidden(true); // scrolling down
@@ -235,7 +235,7 @@ function Nav({ active }) {
       }
       lastScrollRef.current = currentScroll;
     };
-    
+
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -257,7 +257,7 @@ function Nav({ active }) {
       <a href="#hero" style={{ textDecoration: 'none', flexShrink: 0 }}>
         <span style={{ fontWeight: 900, fontSize: '18px', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>ZB</span>
       </a>
-      
+
       {/* Desktop Nav */}
       <div className="nav-desktop" style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
         {navLinks.map(s => (
@@ -269,7 +269,7 @@ function Nav({ active }) {
       </div>
 
       {/* Mobile Hamburger */}
-      <button 
+      <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         style={{
           background: 'none', border: 'none', color: '#10d9a0', fontSize: '24px', cursor: 'pointer', padding: '0 8px'
@@ -358,7 +358,7 @@ function HeroSection() {
 
         {/* Bio */}
         <p style={{ fontSize: 18, color: '#6b7db3', lineHeight: 1.7, maxWidth: 580, margin: '0 auto 40px', fontWeight: 400 }}>
-          I don't just want to know how things work — I want to make them <span style={{ color: '#f0f4ff', fontWeight: 600 }}>work better</span>. Finance background from <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>data</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>product</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>.
+          I don't just want to know how things work - I want to make them <span style={{ color: '#f0f4ff', fontWeight: 600 }}>work better</span>. Finance background from <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>data</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>product</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>.
         </p>
 
         {/* CTAs */}
@@ -433,13 +433,13 @@ function AboutSection() {
             </div>
           </div>
           <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
-            Finance graduate from <span style={{ color: '#f0f4ff', fontWeight: 600 }}>Rutgers</span> who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M–$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
+            Finance graduate from <span style={{ color: '#f0f4ff', fontWeight: 600 }}>Rutgers</span> who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M-$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
           </p>
           <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
-            That curiosity has been with me since long before formal roles — buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.
+            That curiosity has been with me since long before formal roles - buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.
           </p>
           <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 32 }}>
-            Outside of work: deeply into <span style={{ color: '#f0f4ff', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: '#f0f4ff', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: '#f0f4ff', fontWeight: 600 }}>snowboarding</span> — specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
+            Outside of work: deeply into <span style={{ color: '#f0f4ff', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: '#f0f4ff', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: '#f0f4ff', fontWeight: 600 }}>snowboarding</span> - specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub ↗</a>
@@ -449,7 +449,7 @@ function AboutSection() {
 
         {/* Traits */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {/* Systems Thinker — pulsing network nodes */}
+          {/* Systems Thinker - pulsing network nodes */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
             <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(16,217,160,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'glowPulse 3s ease-in-out infinite' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -470,7 +470,7 @@ function AboutSection() {
             </div>
           </div>
 
-          {/* Builder by Nature — blinking code cursor */}
+          {/* Builder by Nature - blinking code cursor */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
             <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(79,157,235,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -482,11 +482,11 @@ function AboutSection() {
             </div>
             <div>
               <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Builder by Nature</div>
-              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Long before formal roles — repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.</div>
+              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Long before formal roles - repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.</div>
             </div>
           </div>
 
-          {/* Impact Over Process — flashing bolt */}
+          {/* Impact Over Process - flashing bolt */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
             <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ animation: 'iconBolt 3s ease-in-out infinite' }}>
@@ -499,7 +499,7 @@ function AboutSection() {
             </div>
           </div>
 
-          {/* Precision & Iteration — spinning target ring */}
+          {/* Precision & Iteration - spinning target ring */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
             <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(139,92,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -514,7 +514,7 @@ function AboutSection() {
             </div>
             <div>
               <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Precision & Iteration</div>
-              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Drawn to the technical details. Snowboard geometry, ML model validation, product design — I care about why things work, not just that they do.</div>
+              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Drawn to the technical details. Snowboard geometry, ML model validation, product design - I care about why things work, not just that they do.</div>
             </div>
           </div>
         </div>
@@ -679,26 +679,157 @@ function ProjectCard({ project }) {
   );
 }
 
-function ProjectsSection() {
+function ProjectCarouselCard({ project, position }) {
+  // position: 0 = center, -1/1 = sides, -2/2 = far sides
+  const isCenter = position === 0;
+  const isSide = Math.abs(position) === 1;
+
+  const statusCfg = project.status === 'live'
+    ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
+    : project.status === 'soon'
+    ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Soon' }
+    : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
+
   return (
-    <section id="projects" style={{ padding: '88px 24px', background: 'rgba(15,22,41,0.3)' }}>
-      <div style={{ maxWidth: 1180, margin: '0 auto', width: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+    <div style={{
+      width: 300,
+      flexShrink: 0,
+      borderRadius: 20,
+      overflow: 'hidden',
+      background: 'rgba(255,255,255,0.04)',
+      border: `1px solid ${isCenter ? project.color + '30' : 'rgba(255,255,255,0.08)'}`,
+      transform: isCenter ? 'scale(1.04)' : isSide ? 'scale(0.96)' : 'scale(0.88)',
+      opacity: isCenter ? 1 : isSide ? 0.72 : 0.4,
+      transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
+      boxShadow: isCenter ? `0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}20` : 'none',
+      pointerEvents: isCenter ? 'auto' : 'none',
+    }}>
+      {/* Gradient bar */}
+      <div style={{ height: 3, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
+      <div style={{ padding: '18px 20px' }}>
+        {/* Emoji + Name + Status */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+          <span style={{ fontSize: 28, lineHeight: 1 }}>{project.emoji}</span>
+          <span style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', flex: 1 }}>{project.name}</span>
+          <div style={{ padding: '3px 8px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+            <span style={{ width: 4, height: 4, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
+            {statusCfg.label}
+          </div>
+        </div>
+        {/* Tagline */}
+        <p style={{ color: '#8b9cc8', fontSize: 13, lineHeight: 1.5, marginBottom: 12 }}>{project.tagline}</p>
+        {/* Tags */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 14 }}>
+          {project.tags.slice(0, 3).map(t => (
+            <span key={t} style={{ padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}>{t}</span>
+          ))}
+          {project.tags.length > 3 && (
+            <span style={{ padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 3}</span>
+          )}
+        </div>
+        {/* Action buttons */}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {project.url && (
+            <a href={project.url} target="_blank" rel="noopener noreferrer" style={{ padding: '8px 14px', borderRadius: 10, fontSize: 12, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              View Live ↗
+            </a>
+          )}
+          {project.github && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer" style={{ padding: '8px 12px', borderRadius: 10, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}>
+              GitHub
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectsSection() {
+  const [current, setCurrent] = useState(0);
+  const [dragStart, setDragStart] = useState(0);
+  const total = PROJECTS.length;
+
+  const prev = () => setCurrent(c => (c - 1 + total) % total);
+  const next = () => setCurrent(c => (c + 1) % total);
+
+  const onTouchStart = (e) => setDragStart(e.touches[0].clientX);
+  const onTouchEnd = (e) => {
+    const diff = dragStart - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+  };
+
+  // Build visible slots: positions -2, -1, 0, 1, 2 mapped to project indices
+  const slots = [-2, -1, 0, 1, 2];
+  const visibleCards = slots.map(offset => ({
+    project: PROJECTS[(current + offset + total) % total],
+    position: offset,
+  }));
+
+  return (
+    <section id="projects" style={{ padding: '88px 24px 72px', background: 'rgba(15,22,41,0.3)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 12 }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
-          <p style={{ color: '#6b7db3', fontSize: 15, maxWidth: 620, margin: '0 auto', lineHeight: 1.7 }}>
-            A denser overview of live products and active builds — easier to scan now, easier to scale as more ships.
+          <p style={{ color: '#6b7db3', fontSize: 15, maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
+            {current + 1} of {total} — swipe or use arrows to explore
           </p>
         </div>
-        <div className="projects-grid compact-projects-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 18 }}>
-          {PROJECTS.map(p => <ProjectCard key={p.id} project={p} />)}
+
+        {/* Carousel wrapper */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {/* Prev arrow */}
+          <button onClick={prev} style={{ position: 'absolute', left: 0, zIndex: 20, width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#f0f4ff', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', flexShrink: 0 }}
+            onMouseEnter={e => e.currentTarget.style.background='rgba(16,217,160,0.15)'}
+            onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.06)'}
+          >‹</button>
+
+          {/* Cards track */}
+          <div
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '100%', padding: '16px 60px' }}
+          >
+            {/* Mobile: show only center card */}
+            <style>{`
+              @media (max-width: 700px) {
+                .carousel-side-card { display: none !important; }
+              }
+              @media (min-width: 701px) and (max-width: 1050px) {
+                .carousel-far-card { display: none !important; }
+              }
+            `}</style>
+            {visibleCards.map(({ project, position }) => (
+              <div
+                key={`${position}-${project.id}`}
+                className={Math.abs(position) === 2 ? 'carousel-far-card carousel-side-card' : Math.abs(position) === 1 ? 'carousel-side-card' : ''}
+              >
+                <ProjectCarouselCard project={project} position={position} />
+              </div>
+            ))}
+          </div>
+
+          {/* Next arrow */}
+          <button onClick={next} style={{ position: 'absolute', right: 0, zIndex: 20, width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#f0f4ff', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', flexShrink: 0 }}
+            onMouseEnter={e => e.currentTarget.style.background='rgba(16,217,160,0.15)'}
+            onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.06)'}
+          >›</button>
+        </div>
+
+        {/* Dot indicators */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 24 }}>
+          {PROJECTS.map((_, i) => (
+            <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 4, background: i === current ? '#10d9a0' : 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
+          ))}
         </div>
 
         {/* More coming */}
-        <div style={{ textAlign: 'center', marginTop: 48 }}>
-          <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '14px 28px', borderRadius: 100, fontSize: 14, color: '#6b7db3' }}>
+        <div style={{ textAlign: 'center', marginTop: 32 }}>
+          <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 100, fontSize: 13, color: '#6b7db3' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             More projects shipping soon
           </div>
@@ -749,10 +880,10 @@ function ExperienceSection() {
         <div className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 36 }}>🎓</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance — Business Analytics Concentration</div>
+            <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance - Business Analytics Concentration</div>
             <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Rutgers University, New Brunswick</div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>SQL Cert — UC Davis</span>
+              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>SQL Cert - UC Davis</span>
             </div>
           </div>
           <div style={{ color: '#4a5580', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>Dec 2022</div>
@@ -801,28 +932,28 @@ function CryptoTickerDemo() {
         'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
       );
       const data = await response.json();
-      
+
       setCryptos([
-        { 
-          symbol: 'BTC', 
-          name: 'Bitcoin', 
+        {
+          symbol: 'BTC',
+          name: 'Bitcoin',
           price: data.bitcoin?.usd || 0,
           change: Math.round((data.bitcoin?.usd_24h_change || 0) * 100) / 100,
-          loading: false 
+          loading: false
         },
-        { 
-          symbol: 'ETH', 
-          name: 'Ethereum', 
+        {
+          symbol: 'ETH',
+          name: 'Ethereum',
           price: data.ethereum?.usd || 0,
           change: Math.round((data.ethereum?.usd_24h_change || 0) * 100) / 100,
-          loading: false 
+          loading: false
         },
-        { 
-          symbol: 'SOL', 
-          name: 'Solana', 
+        {
+          symbol: 'SOL',
+          name: 'Solana',
           price: data.solana?.usd || 0,
           change: Math.round((data.solana?.usd_24h_change || 0) * 100) / 100,
-          loading: false 
+          loading: false
         },
       ]);
     } catch (error) {
@@ -956,13 +1087,13 @@ function JobMatcherDemo() {
 function MealPlannerDemo() {
   const [calories, setCalories] = useState(2000);
   const [preset, setPreset] = useState('balanced');
-  
+
   const presets = {
     balanced: { p: 0.3, c: 0.4, f: 0.3, name: 'Balanced' },
     lowcarb: { p: 0.4, c: 0.2, f: 0.4, name: 'Low-Carb' },
     highprotein: { p: 0.45, c: 0.35, f: 0.2, name: 'High-Protein' },
   };
-  
+
   const { p, c, f } = presets[preset];
   const protein = Math.round((calories * p) / 4);
   const carbs = Math.round((calories * c) / 4);
@@ -977,7 +1108,7 @@ function MealPlannerDemo() {
         </div>
         <span style={{ fontSize: 11, color: '#6b7db3', background: 'rgba(16,217,160,0.1)', padding: '4px 10px', borderRadius: 6 }}>{presets[preset].name}</span>
       </div>
-      
+
       <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
         {Object.keys(presets).map(p => (
           <button
@@ -1006,10 +1137,10 @@ function MealPlannerDemo() {
           <label style={{ color: '#6b7db3', fontSize: 11, fontWeight: 600 }}>Daily Target</label>
           <span style={{ color: '#f0f4ff', fontSize: 12, fontWeight: 700 }}>{calories} kcal</span>
         </div>
-        <input 
-          type="range" 
-          min="1200" 
-          max="3500" 
+        <input
+          type="range"
+          min="1200"
+          max="3500"
           value={calories}
           onChange={(e) => setCalories(Number(e.target.value))}
           style={{ width: '100%', height: '6px', borderRadius: '3px', background: 'linear-gradient(to right, #4f9deb, #10d9a0)', cursor: 'pointer' }}
@@ -1178,7 +1309,7 @@ function SkillsSection() {
       },
       { threshold: 0.1 }
     );
-    
+
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
@@ -1193,15 +1324,15 @@ function SkillsSection() {
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
         {SKILLS.map((s, i) => (
-          <div 
-            key={s.label} 
+          <div
+            key={s.label}
             className={`glass glass-hover skill-card ${visible ? 'skill-animate' : ''}`}
-            style={{ 
-              padding: '14px 22px', 
-              borderRadius: 14, 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 10, 
+            style={{
+              padding: '14px 22px',
+              borderRadius: 14,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
               cursor: 'default',
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
@@ -1237,7 +1368,7 @@ function ContactSection() {
           <span className="gradient-text">together.</span>
         </h2>
         <p style={{ color: '#6b7db3', fontSize: 16, lineHeight: 1.7, marginBottom: 48 }}>
-          Open to interesting opportunities, collabs, and conversations. Whether you have a project idea or just want to connect — reach out.
+          Open to interesting opportunities, collabs, and conversations. Whether you have a project idea or just want to connect - reach out.
         </p>
 
         {/* Social links */}
