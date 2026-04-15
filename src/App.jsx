@@ -97,35 +97,6 @@ const PROJECTS = [
   },
   {
     id: 'palmbeach',
-    name: 'Stay West Palm',
-    tagline: 'Premium Mobile-First Guest Guide',
-    description: 'A beautifully designed mobile-first local guide for a luxury rental property in West Palm Beach. Real restaurant photos, curated host picks, explore sections, neighborhood intel, and property info — all in a polished PWA-style web app.',
-    status: 'live',
-    url: 'https://www.staywestpalm.now',
-    github: 'https://github.com/ZbienVC/palm-beach-guide',
-    color: '#0891b2',
-    colorEnd: '#155e6a',
-    tagClass: 'tag-blue',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Vercel', 'Mobile-First'],
-    emoji: '🌴',
-    highlights: ['Curated restaurant & activity guides', 'Host Picks with real photos', 'Property info, WiFi, checkout', 'Deployed on custom domain'],
-  },  {
-    id: 'clawback',
-    name: 'CLAWBACK',
-    tagline: 'Punishment-First Solana Memecoin Launchpad',
-    description: 'Punishment-first Solana memecoin launchpad. Progressive sell taxes fund the community treasury. No dev allocation. Auto-graduation to Raydium. Community governance from block one.',
-    status: 'live',
-    url: 'https://launchpad-self-chi.vercel.app',
-    github: null,
-    color: '#f97316',
-    colorEnd: '#dc2626',
-    tagClass: '',
-    tags: ['Solana', 'DeFi', 'Web3', 'Rust', 'Anchor'],
-    emoji: '🦀',
-    highlights: ['Progressive sell tax treasury', 'No dev allocation', 'Auto-graduation to Raydium', 'Community governance from block one'],
-  },
-  {
-    id: 'palmbeach',
     name: 'Palm Beach Guide',
     tagline: 'Premium Local Area Guide',
     description: 'A beautifully designed local guide for a Palm Beach rental property — curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
@@ -729,7 +700,7 @@ function ProjectsSection() {
         <div style={{ textAlign: 'center', marginTop: 48 }}>
           <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '14px 28px', borderRadius: 100, fontSize: 14, color: '#6b7db3' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-            More projects coming soon — DipperAI and beyond
+            More projects shipping soon
           </div>
         </div>
       </div>
