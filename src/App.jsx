@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -680,9 +680,10 @@ function ProjectCard({ project }) {
 }
 
 function ProjectCarouselCard({ project, position }) {
-  // position: 0 = center, -1/1 = sides, -2/2 = far sides
-  const isCenter = position === 0;
-  const isSide = Math.abs(position) === 1;
+  const [hovered, setHovered] = useState(false);
+  const isCenter = position === 'center';
+  const isLeft = position === 'left';
+  const isRight = position === 'right';
 
   const statusCfg = project.status === 'live'
     ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
@@ -690,54 +691,60 @@ function ProjectCarouselCard({ project, position }) {
     ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Soon' }
     : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
 
+  const sideExtra = (isLeft || isRight) ? { transform: 'scale(0.92)', opacity: 0.65, filter: 'blur(1px)', pointerEvents: 'none' } : {};
+  const hoverExtra = isCenter && hovered ? { transform: 'translateY(-4px)', border: `1px solid ${project.color}55`, boxShadow: `0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px ${project.color}25` } : {};
+
   return (
-    <div style={{
-      width: 300,
-      flexShrink: 0,
-      borderRadius: 20,
-      overflow: 'hidden',
-      background: 'rgba(255,255,255,0.04)',
-      border: `1px solid ${isCenter ? project.color + '30' : 'rgba(255,255,255,0.08)'}`,
-      transform: isCenter ? 'scale(1.04)' : isSide ? 'scale(0.96)' : 'scale(0.88)',
-      opacity: isCenter ? 1 : isSide ? 0.72 : 0.4,
-      transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
-      boxShadow: isCenter ? `0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}20` : 'none',
-      pointerEvents: isCenter ? 'auto' : 'none',
-    }}>
-      {/* Gradient bar */}
-      <div style={{ height: 3, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
-      <div style={{ padding: '18px 20px' }}>
-        {/* Emoji + Name + Status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-          <span style={{ fontSize: 28, lineHeight: 1 }}>{project.emoji}</span>
-          <span style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', flex: 1 }}>{project.name}</span>
-          <div style={{ padding: '3px 8px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-            <span style={{ width: 4, height: 4, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
+    <div
+      onMouseEnter={() => isCenter && setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        width: 340,
+        flexShrink: 0,
+        borderRadius: 20,
+        overflow: 'hidden',
+        background: 'rgba(255,255,255,0.04)',
+        backdropFilter: 'blur(12px)',
+        border: `1px solid ${isCenter ? project.color + '30' : 'rgba(255,255,255,0.08)'}`,
+        transition: 'all 0.35s cubic-bezier(0.4,0,0.2,1)',
+        boxShadow: isCenter ? `0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px ${project.color}20` : 'none',
+        ...sideExtra,
+        ...hoverExtra,
+      }}
+    >
+      <div style={{ height: 2, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
+      <div style={{ padding: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+          <span style={{ fontSize: 26, lineHeight: 1 }}>{project.emoji}</span>
+          <span style={{ fontWeight: 800, fontSize: 18, color: '#f0f4ff', flex: 1 }}>{project.name}</span>
+          <div style={{ padding: '3px 9px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
             {statusCfg.label}
           </div>
         </div>
-        {/* Tagline */}
-        <p style={{ color: '#8b9cc8', fontSize: 13, lineHeight: 1.5, marginBottom: 12 }}>{project.tagline}</p>
-        {/* Tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 14 }}>
-          {project.tags.slice(0, 3).map(t => (
-            <span key={t} style={{ padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}>{t}</span>
+        <p style={{ color: '#8b9cc8', fontSize: 13, fontWeight: 500, lineHeight: 1.45, marginBottom: 14 }}>{project.tagline}</p>
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: 14 }} />
+        <p style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.65, marginBottom: 16, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {project.description}
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 18 }}>
+          {project.tags.slice(0, 4).map(t => (
+            <span key={t} style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}>{t}</span>
           ))}
-          {project.tags.length > 3 && (
-            <span style={{ padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 3}</span>
+          {project.tags.length > 4 && (
+            <span style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 4}</span>
           )}
         </div>
-        {/* Action buttons */}
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer" style={{ padding: '8px 14px', borderRadius: 10, fontSize: 12, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              View Live ↗
-            </a>
+            <a href={project.url} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}
+            >View Live ↗</a>
           )}
           {project.github && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer" style={{ padding: '8px 12px', borderRadius: 10, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}>
-              GitHub
-            </a>
+            <a href={project.github} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}
+            >GitHub ↗</a>
           )}
         </div>
       </div>
@@ -747,88 +754,92 @@ function ProjectCarouselCard({ project, position }) {
 
 function ProjectsSection() {
   const [current, setCurrent] = useState(0);
-  const [dragStart, setDragStart] = useState(0);
-  const total = PROJECTS.length;
+  const touchStart = useRef(0);
+  const N = PROJECTS.length;
 
-  const prev = () => setCurrent(c => (c - 1 + total) % total);
-  const next = () => setCurrent(c => (c + 1) % total);
+  const prev = () => setCurrent(c => (c - 1 + N) % N);
+  const next = () => setCurrent(c => (c + 1) % N);
+  const getProject = (offset) => PROJECTS[(current + offset + N) % N];
 
-  const onTouchStart = (e) => setDragStart(e.touches[0].clientX);
+  const onTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
   const onTouchEnd = (e) => {
-    const diff = dragStart - e.changedTouches[0].clientX;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
   };
 
-  // Build visible slots: positions -2, -1, 0, 1, 2 mapped to project indices
-  const slots = [-2, -1, 0, 1, 2];
-  const visibleCards = slots.map(offset => ({
-    project: PROJECTS[(current + offset + total) % total],
-    position: offset,
-  }));
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [current]);
+
+  const centerProject = getProject(0);
 
   return (
     <section id="projects" style={{ padding: '88px 24px 72px', background: 'rgba(15,22,41,0.3)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        {/* Header */}
+      <style>{`
+        @media (max-width: 768px) {
+          .carousel-side-card { display: none !important; }
+          .carousel-center-card { width: 100% !important; max-width: 100% !important; }
+          .carousel-center-card > div { width: 100% !important; }
+        }
+      `}</style>
+      <div style={{ maxWidth: 1160, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 12 }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
-          <p style={{ color: '#6b7db3', fontSize: 15, maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
-            {current + 1} of {total} — swipe or use arrows to explore
+          <p style={{ color: '#4a5580', fontSize: 14, fontFamily: "'JetBrains Mono', monospace" }}>
+            {current + 1} / {N}
           </p>
         </div>
 
-        {/* Carousel wrapper */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {/* Prev arrow */}
-          <button onClick={prev} style={{ position: 'absolute', left: 0, zIndex: 20, width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#f0f4ff', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', flexShrink: 0 }}
-            onMouseEnter={e => e.currentTarget.style.background='rgba(16,217,160,0.15)'}
-            onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.06)'}
-          >‹</button>
-
-          {/* Cards track */}
-          <div
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-            style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', width: '100%', padding: '16px 60px' }}
-          >
-            {/* Mobile: show only center card */}
-            <style>{`
-              @media (max-width: 700px) {
-                .carousel-side-card { display: none !important; }
-              }
-              @media (min-width: 701px) and (max-width: 1050px) {
-                .carousel-far-card { display: none !important; }
-              }
-            `}</style>
-            {visibleCards.map(({ project, position }) => (
-              <div
-                key={`${position}-${project.id}`}
-                className={Math.abs(position) === 2 ? 'carousel-far-card carousel-side-card' : Math.abs(position) === 1 ? 'carousel-side-card' : ''}
-              >
-                <ProjectCarouselCard project={project} position={position} />
-              </div>
-            ))}
+        <div
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', padding: '12px 0' }}
+        >
+          <div className="carousel-side-card">
+            <ProjectCarouselCard project={getProject(-1)} position="left" />
           </div>
-
-          {/* Next arrow */}
-          <button onClick={next} style={{ position: 'absolute', right: 0, zIndex: 20, width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#f0f4ff', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', flexShrink: 0 }}
-            onMouseEnter={e => e.currentTarget.style.background='rgba(16,217,160,0.15)'}
-            onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.06)'}
-          >›</button>
+          <div className="carousel-center-card">
+            <ProjectCarouselCard project={getProject(0)} position="center" />
+          </div>
+          <div className="carousel-side-card">
+            <ProjectCarouselCard project={getProject(1)} position="right" />
+          </div>
         </div>
 
-        {/* Dot indicators */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 32 }}>
+          <button
+            onClick={prev}
+            style={{ background: 'none', border: 'none', color: '#4a5580', cursor: 'pointer', fontSize: 24, padding: '6px 12px', borderRadius: 8, transition: 'color 0.2s', lineHeight: 1 }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f0f4ff'}
+            onMouseLeave={e => e.currentTarget.style.color = '#4a5580'}
+          >&#8249;</button>
+
           {PROJECTS.map((_, i) => (
-            <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 4, background: i === current ? '#10d9a0' : 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
+            <button key={i} onClick={() => setCurrent(i)} style={{
+              width: i === current ? 24 : 6, height: 6,
+              borderRadius: 3, border: 'none', cursor: 'pointer',
+              background: i === current ? centerProject.color : 'rgba(255,255,255,0.15)',
+              transition: 'all 0.3s ease', padding: 0,
+            }} />
           ))}
+
+          <button
+            onClick={next}
+            style={{ background: 'none', border: 'none', color: '#4a5580', cursor: 'pointer', fontSize: 24, padding: '6px 12px', borderRadius: 8, transition: 'color 0.2s', lineHeight: 1 }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f0f4ff'}
+            onMouseLeave={e => e.currentTarget.style.color = '#4a5580'}
+          >&#8250;</button>
         </div>
 
-        {/* More coming */}
-        <div style={{ textAlign: 'center', marginTop: 32 }}>
+        <div style={{ textAlign: 'center', marginTop: 28 }}>
           <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 100, fontSize: 13, color: '#6b7db3' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             More projects shipping soon
@@ -838,7 +849,6 @@ function ProjectsSection() {
     </section>
   );
 }
-
 function ExperienceSection() {
   return (
     <section id="experience" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
