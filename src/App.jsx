@@ -1,4 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
+
+  {
+    id: 'wayfound',
+    name: 'WayFound',
+    tagline: 'AI-Powered Travel Concierge',
+    description: 'Describe your trip in plain language and get scored, ranked hotel results instantly. Claude parses your preferences, Amadeus pulls live inventory, Stripe handles checkout — from prompt to booked in under 60 seconds.',
+    status: 'live',
+    url: 'https://wayfound.vercel.app',
+    github: 'https://github.com/ZbienVC/wayfound',
+    color: '#c9a84c',
+    colorEnd: '#e8c96a',
+    tagClass: '',
+    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
+    emoji: '✈️',
+    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
+  },
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
