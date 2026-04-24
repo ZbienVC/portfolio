@@ -88,7 +88,7 @@ const PROJECTS = [
     tagline: 'Premium Aesthetic Medical Practice Website',
     description: 'A premium medical SaaS-style website and patient experience for Reflect Medical & Cosmetic Center with memberships, treatment catalog, booking flows, Beauty Bank, referrals, and polished conversion-focused UX.',
     status: 'live',
-    url: 'https://reflect-medical.web.app',
+    url: 'https://reflect-medical.vercel.app',
     github: 'https://github.com/ZbienVC/reflect-medical-premium',
     color: '#b57edc',
     colorEnd: '#8b5cf6',
