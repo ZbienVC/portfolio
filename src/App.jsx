@@ -126,6 +126,21 @@ const PROJECTS = [
     highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
   },
   {
+    id: 'pepelien',
+    name: '$PEPELIEN',
+    tagline: 'Elon. Pepe. Alien. On Solana.',
+    description: 'A fully custom memecoin website for $PEPELIEN on Solana. Space/alien theme, Orbitron font, matrix rain + particle burst effects, Gigachad meme vault, live DexScreener chart, and full Web3 CTAs.',
+    status: 'live',
+    url: 'https://pepelien.com',
+    github: 'https://github.com/ZbienVC/pepelien',
+    color: '#39FF14',
+    colorEnd: '#4CAF50',
+    tagClass: '',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],
+    emoji: '👽',
+    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
+  },
+  {
     id: 'staywestpalm',
     name: 'Stay West Palm',
     tagline: 'West Palm Beach Vacation Rental Guide',
@@ -404,7 +419,7 @@ function HeroSection() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '9', label: 'Live in Production' },
+            { num: '10', label: 'Live in Production' },
             { num: '3+', label: 'Currently Building' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
@@ -786,7 +801,7 @@ function ProjectsSection() {
   const CATS = {
     all: PROJECTS,
     ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound'].includes(p.id)),
-    crypto: PROJECTS.filter(p => ['splash','gigaton','omo'].includes(p.id)),
+    crypto: PROJECTS.filter(p => ['splash','gigaton','omo','pepelien'].includes(p.id)),
     web: PROJECTS.filter(p => ['staywestpalm','reflect','omo','gigaton'].includes(p.id)),
   };
   const TABS = [
