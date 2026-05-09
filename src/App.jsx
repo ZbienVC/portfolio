@@ -792,12 +792,12 @@ const CATEGORIZED_PROJECTS = {
   crypto: PROJECTS.filter(p => ['splash', 'gigaton', 'omo', 'staywestpalm'].includes(p.id)),
   web: PROJECTS.filter(p => ['staywestpalm', 'reflect'].includes(p.id)),
 };
-
 const CATEGORIES = [
-  { id: 'all',    label: 'All Projects',  icon: '⚡', count: PROJECTS.length },
-  { id: 'ai',     label: 'AI & Products', icon: '🤖', count: CATEGORIZED_PROJECTS.ai.length },
-  { id: 'crypto', label: 'Crypto & Web3', icon: '📡', count: CATEGORIZED_PROJECTS.crypto.length },
-  { id: 'web',    label: 'Web & Sites',   icon: '🌐', count: CATEGORIZED_PROJECTS.web.length },
+
+  { id: 'all',    label: 'All Projects',  icon: 'All',    count: PROJECTS.length },
+  { id: 'ai',     label: 'AI & Products', icon: 'AI',     count: CATEGORIZED_PROJECTS.ai.length },
+  { id: 'crypto', label: 'Crypto & Web3', icon: 'Crypto', count: CATEGORIZED_PROJECTS.crypto.length },
+  { id: 'web',    label: 'Web & Sites',   icon: 'Web',    count: CATEGORIZED_PROJECTS.web.length },
 ];
 
 // Featured = first 2 in category, compact = rest
