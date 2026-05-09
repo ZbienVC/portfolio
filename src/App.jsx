@@ -801,7 +801,7 @@ function ProjectsSection() {
   const CATS = {
     all: PROJECTS,
     ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound'].includes(p.id)),
-    crypto: PROJECTS.filter(p => ['splash','gigaton','omo','pepelien'].includes(p.id)),
+    crypto: PROJECTS.filter(p => ['splash','pepelien','omo','gigaton'].includes(p.id)),
     web: PROJECTS.filter(p => ['staywestpalm','reflect','omo','gigaton'].includes(p.id)),
   };
   const TABS = [
