@@ -1182,6 +1182,17 @@ function ExperienceSection() {
   );
 }
 
+const LIFE_PHOTOS = [
+  { src: '/life/photo1.jpeg', label: 'Living life' },
+  { src: '/life/photo2.jpg',  label: 'Moments' },
+  { src: '/life/photo3.jpeg', label: 'Adventures' },
+  { src: '/life/photo4.jpeg', label: 'Vibes' },
+  { src: '/life/photo5.jpeg', label: 'Good times' },
+  { src: '/life/photo6.jpeg', label: 'The journey' },
+  { src: '/life/photo7.jpg',  label: 'Life' },
+  { src: '/life/photo8.jpg',  label: 'Friends dinner' },
+];
+
 function LifeSection() {
   const [active, setActive] = useState(0);
   const [dragging, setDragging] = useState(false);
