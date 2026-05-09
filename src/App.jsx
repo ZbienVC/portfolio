@@ -1,7 +1,7 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
-// â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Data ──────────────────────────────────────────────────────────────────────
 
 const PROJECTS = [
   {
@@ -16,7 +16,7 @@ const PROJECTS = [
     colorEnd: '#059669',
     tagClass: '',
     tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],
-    emoji: 'ðŸ¥—',
+    emoji: '🥗',
     highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
   },
   {
@@ -31,7 +31,7 @@ const PROJECTS = [
     colorEnd: '#6366f1',
     tagClass: 'tag-purple',
     tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
-    emoji: 'ðŸ¤–',
+    emoji: '🤖',
     highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
   },
   {
@@ -46,7 +46,7 @@ const PROJECTS = [
     colorEnd: '#6366f1',
     tagClass: 'tag-blue',
     tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'SQLite'],
-    emoji: 'ðŸ“¡',
+    emoji: '📡',
     highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale wallet tracking', 'Multi-DEX analytics'],
     demoId: 'splash',
   },
@@ -62,7 +62,7 @@ const PROJECTS = [
     colorEnd: '#0284c7',
     tagClass: 'tag-cyan',
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],
-    emoji: 'ðŸ’¼',
+    emoji: '💼',
     highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
   },
   {
@@ -77,7 +77,7 @@ const PROJECTS = [
     colorEnd: '#8b5cf6',
     tagClass: 'tag-purple',
     tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],
-    emoji: 'âœ¨',
+    emoji: '✨',
     highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
   },
   {
@@ -92,13 +92,13 @@ const PROJECTS = [
     colorEnd: '#C0562A',
     tagClass: '',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
-    emoji: 'ðŸ¦’',
+    emoji: '🦒',
     highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
   },
   {
     id: 'gigaton',
     name: '$GIGATON',
-    tagline: 'Gigachad on TON â€” Memecoin Website',
+    tagline: 'Gigachad on TON — Memecoin Website',
     description: 'A fully custom memecoin landing site for $GIGATON on the TON blockchain. TON-blue design, Gigachad meme gallery, live DexScreener chart, scrolling ticker, and tokenomics.',
     status: 'live',
     url: 'https://gigaton.pro',
@@ -107,7 +107,7 @@ const PROJECTS = [
     colorEnd: '#005F8F',
     tagClass: 'tag-blue',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
-    emoji: 'ðŸ”·',
+    emoji: '🔷',
     highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
   },
   {
@@ -122,7 +122,7 @@ const PROJECTS = [
     colorEnd: '#e8c96a',
     tagClass: '',
     tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
-    emoji: 'âœˆï¸',
+    emoji: '✈️',
     highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
   },
   {
@@ -137,26 +137,26 @@ const PROJECTS = [
     colorEnd: '#0284c7',
     tagClass: 'tag-cyan',
     tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],
-    emoji: 'ðŸŒ´',
+    emoji: '🌴',
     highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
   },
 ];
 
 const SKILLS = [
-  { label: 'React / Vite', icon: 'âš›ï¸' },
-  { label: 'TypeScript', icon: 'ðŸ“˜' },
-  { label: 'Node.js', icon: 'ðŸŸ¢' },
-  { label: 'Tailwind CSS', icon: 'ðŸŽ¨' },
-  { label: 'SQL / SQLite', icon: 'ðŸ—„ï¸' },
-  { label: 'REST & WebSockets', icon: 'ðŸ”Œ' },
-  { label: 'AI / LLM APIs', icon: 'ðŸ¤–' },
-  { label: 'DeFi / Web3', icon: 'ðŸ”—' },
-  { label: 'Python', icon: 'ðŸ' },
-  { label: 'Figma', icon: 'ðŸŽ¨' },
-  { label: 'Bloomberg Terminal', icon: 'ðŸ“Š' },
-  { label: 'Vercel / Railway', icon: 'ðŸš€' },
-  { label: 'Advanced Excel', icon: 'ðŸ“ˆ' },
-  { label: 'Git / GitHub', icon: 'ðŸ™' },
+  { label: 'React / Vite', icon: '⚛️' },
+  { label: 'TypeScript', icon: '📘' },
+  { label: 'Node.js', icon: '🟢' },
+  { label: 'Tailwind CSS', icon: '🎨' },
+  { label: 'SQL / SQLite', icon: '🗄️' },
+  { label: 'REST & WebSockets', icon: '🔌' },
+  { label: 'AI / LLM APIs', icon: '🤖' },
+  { label: 'DeFi / Web3', icon: '🔗' },
+  { label: 'Python', icon: '🐍' },
+  { label: 'Figma', icon: '🎨' },
+  { label: 'Bloomberg Terminal', icon: '📊' },
+  { label: 'Vercel / Railway', icon: '🚀' },
+  { label: 'Advanced Excel', icon: '📈' },
+  { label: 'Git / GitHub', icon: '🐙' },
 ];
 
 const EXPERIENCE = [
@@ -244,7 +244,7 @@ const EXPERIENCE = [
   },
 ];
 
-// â”€â”€ Components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Components ─────────────────────────────────────────────────────────────────
 
 function Nav({ active }) {
   const [scrolled, setScrolled] = useState(false);
@@ -294,7 +294,7 @@ function Nav({ active }) {
           <a key={s} href={`#${s.toLowerCase()}`} className="nav-link">{s}</a>
         ))}
         <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: '8px 16px', fontSize: '13px' }}>
-          GitHub â†—
+          GitHub ↗
         </a>
       </div>
 
@@ -306,7 +306,7 @@ function Nav({ active }) {
         }}
         className="mobile-menu-btn"
       >
-        {mobileMenuOpen ? 'âœ•' : 'â˜°'}
+        {mobileMenuOpen ? '✕' : '☰'}
       </button>
 
       {/* Mobile Menu */}
@@ -322,7 +322,7 @@ function Nav({ active }) {
           ))}
           <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="mobile-github-link btn-ghost" style={{ padding: '10px 14px', fontSize: '13px', justifyContent: 'space-between', borderRadius: 12 }}>
             <span>GitHub</span>
-            <span aria-hidden="true">â†—</span>
+            <span aria-hidden="true">↗</span>
           </a>
         </div>
       )}
@@ -394,10 +394,10 @@ function HeroSection() {
         {/* CTAs */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="#projects" className="btn-primary" style={{ fontSize: 15 }}>
-            View My Work â†“
+            View My Work ↓
           </a>
           <a href="/Zachary_Bienstock_Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
-            Resume â†—
+            Resume ↗
           </a>
         </div>
 
@@ -406,7 +406,7 @@ function HeroSection() {
           {[
             { num: '9', label: 'Live in Production' },
             { num: '3+', label: 'Currently Building' },
-            { num: '\u221e', label: 'Problems Left to Solve' },
+            { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.num}</div>
@@ -458,7 +458,7 @@ function AboutSection() {
             </div>
             <div>
               <div style={{ fontWeight: 800, fontSize: 18, color: '#f0f4ff' }}>Zach Bienstock</div>
-              <div style={{ color: '#10d9a0', fontSize: 13, fontWeight: 600 }}>Builder Â· Analyst Â· Developer</div>
+              <div style={{ color: '#10d9a0', fontSize: 13, fontWeight: 600 }}>Builder · Analyst · Developer</div>
               <div style={{ color: '#4a5580', fontSize: 12, marginTop: 2 }}>Hawthorne, NJ</div>
             </div>
           </div>
@@ -472,8 +472,8 @@ function AboutSection() {
             Outside of work: deeply into <span style={{ color: '#f0f4ff', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: '#f0f4ff', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: '#f0f4ff', fontWeight: 600 }}>snowboarding</span> - specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub â†—</a>
-            <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>LinkedIn â†—</a>
+            <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>LinkedIn ↗</a>
           </div>
         </div>
 
@@ -628,7 +628,7 @@ function ProjectCard({ project }) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 14 }}>
               {project.highlights.slice(0, 4).map((h) => (
                 <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: '#9fb0d9', lineHeight: 1.45 }}>
-                  <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>â†’</span>
+                  <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>→</span>
                   <span>{h}</span>
                 </div>
               ))}
@@ -646,11 +646,11 @@ function ProjectCard({ project }) {
             <div className="compact-project-actions" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {project.url && (
                 <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn-primary compact-btn" style={{ fontSize: 13, padding: '10px 16px', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 4px 15px ${project.color}30` }} onClick={(e) => e.stopPropagation()}>
-                  Visit â†—
+                  Visit ↗
                 </a>
               )}
               <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-ghost compact-btn" style={{ fontSize: 13, padding: '10px 16px' }} onClick={(e) => e.stopPropagation()}>
-                GitHub â†—
+                GitHub ↗
               </a>
               {hasDemo && (
                 <button
@@ -658,7 +658,7 @@ function ProjectCard({ project }) {
                   className="btn-ghost compact-btn"
                   style={{ fontSize: 13, padding: '10px 16px', borderColor: `${project.color}30`, color: project.color }}
                 >
-                  Try â†’
+                  Try →
                 </button>
               )}
             </div>
@@ -698,7 +698,7 @@ function ProjectCard({ project }) {
                   cursor: 'pointer',
                 }}
               >
-                â† Back
+                ← Back
               </button>
             </div>
             {projectDemos[project.id]}
@@ -769,12 +769,12 @@ function ProjectCarouselCard({ project, position }) {
           {project.url && (
             <a href={project.url} target="_blank" rel="noopener noreferrer"
               style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}
-            >View Live â†—</a>
+            >View Live ↗</a>
           )}
           {project.github && (
             <a href={project.github} target="_blank" rel="noopener noreferrer"
               style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}
-            >GitHub â†—</a>
+            >GitHub ↗</a>
           )}
         </div>
       </div>
@@ -790,10 +790,10 @@ function ProjectsSection() {
     web: PROJECTS.filter(p => ['staywestpalm','reflect','omo','gigaton'].includes(p.id)),
   };
   const TABS = [
-    { id:'all',    label:'All Projects',  short:'All',    count: PROJECTS.length },
-    { id:'ai',     label:'AI & Products', short:'AI',     count: CATS.ai.length },
-    { id:'crypto', label:'Crypto & Web3', short:'Crypto', count: CATS.crypto.length },
-    { id:'web',    label:'Web & Sites',   short:'Web',    count: CATS.web.length },
+    { id:'all',    label:'All Projects',  count: PROJECTS.length },
+    { id:'ai',     label:'AI & Products', count: CATS.ai.length },
+    { id:'crypto', label:'Crypto & Web3', count: CATS.crypto.length },
+    { id:'web',    label:'Web & Sites',   count: CATS.web.length },
   ];
 
   const [activeTab, setActiveTab] = useState('all');
@@ -808,7 +808,7 @@ function ProjectsSection() {
   const projects = CATS[activeTab] || PROJECTS;
   const featured = projects.slice(0, 2);
   const compact = projects.slice(2);
-  const active = TABS.find(t => t.id === activeTab);
+  const activeTabObj = TABS.find(t => t.id === activeTab);
 
   const statusCfg = (s) => s === 'live'
     ? { bg:'rgba(16,217,160,0.12)', color:'#10d9a0', border:'rgba(16,217,160,0.25)', label:'Live' }
@@ -821,6 +821,7 @@ function ProjectsSection() {
       <style>{`
         @keyframes pf { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .pf { animation: pf 0.28s ease forwards; }
+        .tab-btn:hover { opacity: 0.85; }
       `}</style>
       <div style={{ maxWidth: 1160, margin: '0 auto' }}>
 
@@ -830,7 +831,7 @@ function ProjectsSection() {
             Projects <span className="gradient-text">in the wild</span>
           </h2>
           <p style={{ color:'#4a5580', fontSize:14, fontFamily:"'JetBrains Mono',monospace" }}>
-            {projects.length} project{projects.length !== 1 ? 's' : ''} â€” {active?.label}
+            {projects.length} project{projects.length !== 1 ? 's' : ''} — {activeTabObj?.label}
           </p>
         </div>
 
@@ -838,10 +839,18 @@ function ProjectsSection() {
           {TABS.map(tab => {
             const on = activeTab === tab.id;
             return (
-              <button key={tab.id} onClick={() => switchTab(tab.id)}
-                style={{ padding:'10px 20px', borderRadius:100, fontSize:13, fontWeight:700, cursor:'pointer', border: `1px solid ${on ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`, background: on ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)', color: on ? '#10d9a0' : '#6b7db3', display:'flex', alignItems:'center', gap:8, transition:'all 0.2s', boxShadow: on ? '0 0 20px rgba(16,217,160,0.1)' : 'none' }}>
-                <span>{tab.short}</span>
-                <span style={{ padding:'1px 7px', borderRadius:100, fontSize:11, fontWeight:700, background: on ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)', color: on ? '#10d9a0' : '#4a5580' }}>{tab.count}</span>
+              <button key={tab.id} onClick={() => switchTab(tab.id)} className="tab-btn"
+                style={{ padding:'10px 22px', borderRadius:100, fontSize:13, fontWeight:700, cursor:'pointer',
+                  border: `1px solid ${on ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`,
+                  background: on ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)',
+                  color: on ? '#10d9a0' : '#6b7db3',
+                  display:'flex', alignItems:'center', gap:8,
+                  boxShadow: on ? '0 0 20px rgba(16,217,160,0.1)' : 'none',
+                  transition:'all 0.2s' }}>
+                <span>{tab.label}</span>
+                <span style={{ padding:'2px 8px', borderRadius:100, fontSize:11, fontWeight:700,
+                  background: on ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)',
+                  color: on ? '#10d9a0' : '#4a5580' }}>{tab.count}</span>
               </button>
             );
           })}
@@ -853,36 +862,68 @@ function ProjectsSection() {
               {featured.map((p, i) => {
                 const sc = statusCfg(p.status);
                 return (
-                  <div key={p.id} className="glass" style={{ borderRadius:22, overflow:'hidden', transition:'all 0.3s', animation:`pf 0.3s ease ${i*60}ms both` }}>
+                  <div key={p.id} className="glass" style={{ borderRadius:22, overflow:'hidden', transition:'all 0.3s',
+                    animation:`pf 0.3s ease ${i*60}ms both`,
+                    border:'1px solid rgba(255,255,255,0.07)',
+                    boxShadow:'0 4px 20px rgba(0,0,0,0.2)' }}>
                     <div style={{ height:3, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
-                    <div style={{ padding:'26px 26px 22px', display:'flex', flexDirection:'column', gap:16 }}>
+                    <div style={{ padding:'26px 26px 24px', display:'flex', flexDirection:'column', gap:16 }}>
                       <div style={{ display:'flex', alignItems:'flex-start', gap:14 }}>
-                        <div style={{ width:52, height:52, borderRadius:15, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0, boxShadow:`0 8px 20px ${p.color}40` }}>{p.emoji}</div>
-                        <div style={{ flex:1 }}>
-                          <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginBottom:4 }}>
-                            <h3 style={{ fontWeight:900, fontSize:21, color:'#f0f4ff', margin:0 }}>{p.name}</h3>
-                            <div style={{ padding:'3px 10px', borderRadius:100, fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:1, background:sc.bg, color:sc.color, border:`1px solid ${sc.border}`, display:'flex', alignItems:'center', gap:5 }}>
-                              <span style={{ width:5, height:5, borderRadius:'50%', background:sc.color }} />{sc.label}
+                        <div style={{ width:54, height:54, borderRadius:16, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
+                          display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0,
+                          boxShadow:`0 8px 20px ${p.color}40` }}>{p.emoji}</div>
+                        <div style={{ flex:1, minWidth:0 }}>
+                          <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginBottom:5 }}>
+                            <h3 style={{ fontWeight:900, fontSize:22, color:'#f0f4ff', margin:0, lineHeight:1.1 }}>{p.name}</h3>
+                            <div style={{ padding:'3px 10px', borderRadius:100, fontSize:10, fontWeight:700,
+                              textTransform:'uppercase', letterSpacing:1,
+                              background:sc.bg, color:sc.color, border:`1px solid ${sc.border}`,
+                              display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
+                              <span style={{ width:5, height:5, borderRadius:'50%', background:sc.color, display:'inline-block' }} />
+                              {sc.label}
                             </div>
                           </div>
                           <p style={{ color:'#8b9cc8', fontSize:13, fontWeight:600, margin:0 }}>{p.tagline}</p>
                         </div>
                       </div>
                       <p style={{ color:'#6b7db3', fontSize:14, lineHeight:1.7, margin:0 }}>{p.description}</p>
-                      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>
+                      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:7 }}>
                         {p.highlights.slice(0,4).map(h => (
                           <div key={h} style={{ display:'flex', gap:7, fontSize:12, color:'#9fb0d9', lineHeight:1.45 }}>
-                            <span style={{ color:p.color, fontWeight:700, flexShrink:0 }}>â†’</span><span>{h}</span>
+                            <span style={{ color:p.color, fontWeight:700, flexShrink:0 }}>→</span><span>{h}</span>
                           </div>
                         ))}
                       </div>
                       <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
-                        {p.tags.slice(0,5).map(t => <span key={t} style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600, background:`${p.color}12`, color:p.color, border:`1px solid ${p.color}25` }}>{t}</span>)}
-                        {p.tags.length > 5 && <span style={{ padding:'4px 10px', borderRadius:7, fontSize:11, background:'rgba(255,255,255,0.05)', color:'#8b9cc8', border:'1px solid rgba(255,255,255,0.1)' }}>+{p.tags.length-5}</span>}
+                        {p.tags.slice(0,5).map(t => (
+                          <span key={t} style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600,
+                            background:`${p.color}12`, color:p.color, border:`1px solid ${p.color}25` }}>{t}</span>
+                        ))}
+                        {p.tags.length > 5 && (
+                          <span style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600,
+                            background:'rgba(255,255,255,0.05)', color:'#8b9cc8', border:'1px solid rgba(255,255,255,0.1)' }}>
+                            +{p.tags.length-5}
+                          </span>
+                        )}
                       </div>
                       <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-                        {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ padding:'10px 18px', borderRadius:10, fontSize:13, fontWeight:700, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`, color:'#fff', textDecoration:'none' }}>Visit Live â†—</a>}
-                        {p.github && <a href={p.github} target="_blank" rel="noopener noreferrer" style={{ padding:'10px 18px', borderRadius:10, fontSize:13, fontWeight:700, background:'rgba(255,255,255,0.05)', color:'#8b9cc8', border:'1px solid rgba(255,255,255,0.1)', textDecoration:'none' }}>GitHub â†—</a>}
+                        {p.url && (
+                          <a href={p.url} target="_blank" rel="noopener noreferrer"
+                            style={{ padding:'10px 20px', borderRadius:10, fontSize:13, fontWeight:700,
+                              background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
+                              color:'#fff', textDecoration:'none',
+                              boxShadow:`0 4px 14px ${p.color}30` }}>
+                            Visit Live ↗
+                          </a>
+                        )}
+                        {p.github && (
+                          <a href={p.github} target="_blank" rel="noopener noreferrer"
+                            style={{ padding:'10px 20px', borderRadius:10, fontSize:13, fontWeight:700,
+                              background:'rgba(255,255,255,0.05)', color:'#8b9cc8',
+                              border:'1px solid rgba(255,255,255,0.1)', textDecoration:'none' }}>
+                            GitHub ↗
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -895,33 +936,55 @@ function ProjectsSection() {
             <>
               <div style={{ display:'flex', alignItems:'center', gap:12, margin:'8px 0 16px' }}>
                 <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.05)' }} />
-                <span style={{ fontSize:11, color:'#2a3255', fontWeight:700, textTransform:'uppercase', letterSpacing:2 }}>More Projects</span>
+                <span style={{ fontSize:11, color:'#2a3255', fontWeight:700,
+                  textTransform:'uppercase', letterSpacing:2, whiteSpace:'nowrap' }}>More Projects</span>
                 <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.05)' }} />
               </div>
               <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,280px),1fr))', gap:14 }}>
                 {compact.map((p, i) => {
                   const sc = statusCfg(p.status);
                   return (
-                    <div key={p.id} className="glass" style={{ borderRadius:18, overflow:'hidden', transition:'all 0.25s', animation:`pf 0.3s ease ${(i+2)*60}ms both` }}>
+                    <div key={p.id} className="glass" style={{ borderRadius:18, overflow:'hidden',
+                      transition:'all 0.25s', animation:`pf 0.3s ease ${(i+2)*60}ms both` }}>
                       <div style={{ height:2, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
-                      <div style={{ padding:'18px 20px', display:'flex', flexDirection:'column', gap:12 }}>
+                      <div style={{ padding:'16px 18px', display:'flex', flexDirection:'column', gap:11 }}>
                         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                          <div style={{ width:40, height:40, borderRadius:12, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>{p.emoji}</div>
-                          <div style={{ flex:1 }}>
-                            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                          <div style={{ width:42, height:42, borderRadius:12, flexShrink:0,
+                            background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
+                            display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>{p.emoji}</div>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
                               <span style={{ fontWeight:800, fontSize:15, color:'#f0f4ff' }}>{p.name}</span>
-                              <span style={{ fontSize:9, fontWeight:700, textTransform:'uppercase', color:sc.color }}>â— {sc.label}</span>
+                              <span style={{ fontSize:9, fontWeight:700, textTransform:'uppercase',
+                                color:sc.color, letterSpacing:0.5 }}>● {sc.label}</span>
                             </div>
                             <p style={{ color:'#6b7db3', fontSize:12, margin:0, lineHeight:1.4, marginTop:2 }}>{p.tagline}</p>
                           </div>
                         </div>
                         <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                          {p.tags.slice(0,3).map(t => <span key={t} style={{ padding:'3px 8px', borderRadius:6, fontSize:10, fontWeight:600, background:`${p.color}10`, color:p.color, border:`1px solid ${p.color}20` }}>{t}</span>)}
-                          {p.tags.length > 3 && <span style={{ padding:'3px 8px', borderRadius:6, fontSize:10, color:'#4a5580' }}>+{p.tags.length-3}</span>}
+                          {p.tags.slice(0,3).map(t => (
+                            <span key={t} style={{ padding:'3px 8px', borderRadius:6, fontSize:10, fontWeight:600,
+                              background:`${p.color}10`, color:p.color, border:`1px solid ${p.color}20` }}>{t}</span>
+                          ))}
+                          {p.tags.length > 3 && (
+                            <span style={{ padding:'3px 8px', borderRadius:6, fontSize:10,
+                              color:'#4a5580', background:'rgba(255,255,255,0.04)',
+                              border:'1px solid rgba(255,255,255,0.08)' }}>+{p.tags.length-3}</span>
+                          )}
                         </div>
                         <div style={{ display:'flex', gap:8 }}>
-                          {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" style={{ padding:'7px 12px', borderRadius:8, fontSize:11, fontWeight:700, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`, color:'#fff', textDecoration:'none' }}>Visit â†—</a>}
-                          {p.github && <a href={p.github} target="_blank" rel="noopener noreferrer" style={{ padding:'7px 12px', borderRadius:8, fontSize:11, fontWeight:600, background:'rgba(255,255,255,0.05)', color:'#6b7db3', border:'1px solid rgba(255,255,255,0.08)', textDecoration:'none' }}>GitHub</a>}
+                          {p.url && (
+                            <a href={p.url} target="_blank" rel="noopener noreferrer"
+                              style={{ padding:'7px 14px', borderRadius:8, fontSize:11, fontWeight:700,
+                                background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
+                                color:'#fff', textDecoration:'none' }}>Visit ↗</a>
+                          )}
+                          {p.github && (
+                            <a href={p.github} target="_blank" rel="noopener noreferrer"
+                              style={{ padding:'7px 14px', borderRadius:8, fontSize:11, fontWeight:600,
+                                background:'rgba(255,255,255,0.05)', color:'#6b7db3',
+                                border:'1px solid rgba(255,255,255,0.08)', textDecoration:'none' }}>GitHub</a>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -933,8 +996,10 @@ function ProjectsSection() {
         </div>
 
         <div style={{ textAlign:'center', marginTop:40 }}>
-          <div className="glass" style={{ display:'inline-flex', alignItems:'center', gap:12, padding:'12px 24px', borderRadius:100, fontSize:13, color:'#6b7db3' }}>
-            <span style={{ width:6, height:6, borderRadius:'50%', background:'#8b5cf6', display:'inline-block', animation:'pulse 2s infinite' }} />
+          <div className="glass" style={{ display:'inline-flex', alignItems:'center', gap:12,
+            padding:'12px 24px', borderRadius:100, fontSize:13, color:'#6b7db3' }}>
+            <span style={{ width:6, height:6, borderRadius:'50%', background:'#8b5cf6',
+              display:'inline-block', animation:'pulse 2s infinite' }} />
             More projects shipping soon
           </div>
         </div>
@@ -961,13 +1026,13 @@ function ExperienceSection() {
               </div>
               <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
                 <span style={{ fontWeight: 700, fontSize: 14, color: exp.color }}>{exp.company}</span>
-                <span style={{ color: '#2a3255', fontSize: 12 }}>Â·</span>
+                <span style={{ color: '#2a3255', fontSize: 12 }}>·</span>
                 <span style={{ color: '#4a5580', fontSize: 12 }}>{exp.location}</span>
               </div>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {exp.highlights.map((h, j) => (
                   <li key={j} style={{ display: 'flex', gap: 8, fontSize: 13, color: '#6b7db3', lineHeight: 1.5 }}>
-                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>â€º</span> {h}
+                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
                   </li>
                 ))}
               </ul>
@@ -982,7 +1047,7 @@ function ExperienceSection() {
       {/* Education */}
       <div style={{ maxWidth: 780, margin: '24px auto 0' }}>
         <div className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 36 }}>ðŸŽ“</div>
+          <div style={{ fontSize: 36 }}>🎓</div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance - Business Analytics Concentration</div>
             <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Rutgers University, New Brunswick</div>
@@ -997,10 +1062,10 @@ function ExperienceSection() {
       {/* Resume CTA */}
       <div style={{ textAlign: 'center', marginTop: 40, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 15 }}>
-          View Resume Online â†—
+          View Resume Online ↗
         </a>
         <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
-          Download PDF â†“
+          Download PDF ↓
         </a>
       </div>
     </section>
@@ -1018,7 +1083,7 @@ const LIFE_PHOTOS = [
   { src: '/life/photo8.jpg',  label: 'Friends dinner' },
 ];
 
-// â”€â”€ Micro-Apps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Micro-Apps ────────────────────────────────────────────────────────────────
 
 function CryptoTickerDemo() {
   const [cryptos, setCryptos] = useState([
@@ -1097,7 +1162,7 @@ function CryptoTickerDemo() {
             animation: refreshing ? 'spin 1s linear infinite' : 'none',
           }}
         >
-          â†» {refreshing ? 'Updating' : 'Refresh'}
+          ↻ {refreshing ? 'Updating' : 'Refresh'}
         </button>
       </div>
       <div style={{ display: 'grid', gap: 10 }}>
@@ -1126,7 +1191,7 @@ function CryptoTickerDemo() {
                 {c.loading ? '...' : `$${c.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
               </div>
               <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
-                {c.change > 0 ? 'â–²' : 'â–¼'} {Math.abs(c.change)}%
+                {c.change > 0 ? '▲' : '▼'} {Math.abs(c.change)}%
               </div>
             </div>
           </div>
@@ -1178,11 +1243,11 @@ function JobMatcherDemo() {
         <div style={{ color: '#6b7db3', fontSize: 12 }}>{job.company}</div>
       </div>
       <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>â† Prev</button>
+        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>← Prev</button>
         <button onClick={toggleLike} style={{ padding: '8px 16px', background: isLiked ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(236,72,153,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, color: isLiked ? '#ec4899' : '#6b7db3', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
-          {isLiked ? 'â˜… Saved' : 'â˜† Save'}
+          {isLiked ? '★ Saved' : '☆ Save'}
         </button>
-        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next â†’</button>
+        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next →</button>
       </div>
     </div>
   );
@@ -1375,7 +1440,7 @@ function LifeSection() {
           <button onClick={prev} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
             onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
             onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
-          >â†</button>
+          >←</button>
 
           {/* Dots */}
           <div style={{ display: 'flex', gap: 8 }}>
@@ -1387,7 +1452,7 @@ function LifeSection() {
           <button onClick={next} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
             onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
             onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
-          >â†’</button>
+          >→</button>
         </div>
 
         {/* Swipe hint */}
@@ -1478,29 +1543,29 @@ function ContactSection() {
         {/* Social links */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40 }}>
           <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>ðŸ™</span> GitHub
+            <span style={{ fontSize: 20 }}>🐙</span> GitHub
           </a>
           <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>ðŸ’¼</span> LinkedIn
+            <span style={{ fontSize: 20 }}>💼</span> LinkedIn
           </a>
           <a href="mailto:Zbienstock@gmail.com" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>âœ‰ï¸</span> Email
+            <span style={{ fontSize: 20 }}>✉️</span> Email
           </a>
           <button onClick={() => copy('Zbienstock@gmail.com')} className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(255,255,255,0.06)', color: copied ? '#10d9a0' : '#8b9cc8', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: 'rgba(15,22,41,0.7)', backdropFilter: 'blur(20px)', transition: 'all 0.2s' }}>
-            <span style={{ fontSize: 16 }}>{copied ? 'âœ…' : 'ðŸ“‹'}</span> {copied ? 'Copied!' : 'Copy Email'}
+            <span style={{ fontSize: 16 }}>{copied ? '✅' : '📋'}</span> {copied ? 'Copied!' : 'Copy Email'}
           </button>
         </div>
 
         {/* Footer note */}
         <p style={{ color: '#2a3255', fontSize: 13, fontFamily: "'JetBrains Mono', monospace" }}>
-          Built by Zach Bienstock Â· 2026
+          Built by Zach Bienstock · 2026
         </p>
       </div>
     </section>
   );
 }
 
-// â”€â”€ App â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── App ────────────────────────────────────────────────────────────────────────
 
 function ScrollProgressBar() {
   const [progress, setProgress] = useState(0);
