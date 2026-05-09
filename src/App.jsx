@@ -1182,6 +1182,133 @@ function ExperienceSection() {
   );
 }
 
+function LifeSection() {
+  const [active, setActive] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(0);
+  const total = LIFE_PHOTOS.length;
+
+  // Auto-rotate
+  useEffect(() => {
+    if (dragging) return;
+    const t = setInterval(() => setActive(a => (a + 1) % total), 3500);
+    return () => clearInterval(t);
+  }, [dragging, total]);
+
+  const prev = () => setActive(a => (a - 1 + total) % total);
+  const next = () => setActive(a => (a + 1) % total);
+
+  // Touch/drag
+  const onDragStart = (e) => { setDragging(true); setDragStart(e.clientX || e.touches?.[0]?.clientX || 0); };
+  const onDragEnd = (e) => {
+    const end = e.clientX || e.changedTouches?.[0]?.clientX || 0;
+    const diff = dragStart - end;
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+    setDragging(false);
+  };
+
+  return (
+    <section id="life" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 64 }}>
+          <p className="section-label" style={{ marginBottom: 16 }}>Beyond the Work</p>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
+            A slice of <span className="gradient-text">life</span>
+          </h2>
+        </div>
+
+        {/* Stacked card carousel */}
+        <div style={{ position: 'relative', height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none' }}
+          onMouseDown={onDragStart} onMouseUp={onDragEnd}
+          onTouchStart={onDragStart} onTouchEnd={onDragEnd}
+        >
+          {LIFE_PHOTOS.map((photo, i) => {
+            const offset = (i - active + total) % total;
+            const isActive = offset === 0;
+            const isPrev = offset === total - 1;
+            const isNext = offset === 1;
+            const isVisible = isActive || isPrev || isNext || offset === 2 || offset === total - 2;
+
+            let transform, zIndex, opacity, scale;
+            if (isActive) {
+              transform = 'translateX(0) rotate(0deg)';
+              zIndex = 10; opacity = 1; scale = 1;
+            } else if (isNext) {
+              transform = 'translateX(160px) rotate(4deg)';
+              zIndex = 8; opacity = 0.7; scale = 0.88;
+            } else if (offset === 2) {
+              transform = 'translateX(260px) rotate(7deg)';
+              zIndex = 6; opacity = 0.35; scale = 0.78;
+            } else if (isPrev) {
+              transform = 'translateX(-160px) rotate(-4deg)';
+              zIndex = 8; opacity = 0.7; scale = 0.88;
+            } else if (offset === total - 2) {
+              transform = 'translateX(-260px) rotate(-7deg)';
+              zIndex = 6; opacity = 0.35; scale = 0.78;
+            } else {
+              transform = 'translateX(0)'; zIndex = 1; opacity = 0; scale = 0.7;
+            }
+
+            if (!isVisible) return null;
+
+            return (
+              <div key={i} onClick={() => !dragging && setActive(i)}
+                style={{
+                  position: 'absolute', width: 320, height: 420,
+                  transform: `${transform} scale(${scale})`,
+                  zIndex, opacity, transition: 'all 0.5s cubic-bezier(0.4,0,0.2,1)',
+                  cursor: isActive ? 'grab' : 'pointer',
+                  borderRadius: 20, overflow: 'hidden',
+                  boxShadow: isActive
+                    ? '0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(16,217,160,0.15)'
+                    : '0 10px 30px rgba(0,0,0,0.4)',
+                }}
+              >
+                <img src={photo.src} alt={photo.label}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+                />
+                {isActive && (
+                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px 20px 20px', background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10d9a0' }} />
+                      <span style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 600 }}>{photo.label}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 40 }}>
+          <button onClick={prev} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+            onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
+            onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
+          >←</button>
+
+          {/* Dots */}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {LIFE_PHOTOS.map((_, i) => (
+              <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 4, background: i === active ? '#10d9a0' : 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
+            ))}
+          </div>
+
+          <button onClick={next} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+            onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
+            onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
+          >→</button>
+        </div>
+
+        {/* Swipe hint */}
+        <p style={{ textAlign: 'center', color: '#2a3255', fontSize: 12, marginTop: 16, fontFamily: "'JetBrains Mono', monospace" }}>
+          drag or swipe to explore
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function SkillsSection() {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
