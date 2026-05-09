@@ -1009,6 +1009,10 @@ function ProjectsSection() {
 }
 
 function ExperienceSection() {
+  const [expanded, setExpanded] = useState(null);
+
+  const toggle = (i) => setExpanded(expanded === i ? null : i);
+
   return (
     <section id="experience" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -1017,448 +1021,162 @@ function ExperienceSection() {
           Where I've <span className="gradient-text">been</span>
         </h2>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 780, margin: '0 auto' }}>
-        {EXPERIENCE.map((exp, i) => (
-          <div key={i} className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: `3px solid ${exp.color}`, display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, alignItems: 'start' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4, flexWrap: 'wrap' }}>
-                <span style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff' }}>{exp.role}</span>
-              </div>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
-                <span style={{ fontWeight: 700, fontSize: 14, color: exp.color }}>{exp.company}</span>
-                <span style={{ color: '#2a3255', fontSize: 12 }}>·</span>
-                <span style={{ color: '#4a5580', fontSize: 12 }}>{exp.location}</span>
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {exp.highlights.map((h, j) => (
-                  <li key={j} style={{ display: 'flex', gap: 8, fontSize: 13, color: '#6b7db3', lineHeight: 1.5 }}>
-                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div style={{ flexShrink: 0, textAlign: 'right' }}>
-              <span style={{ fontSize: 12, color: '#4a5580', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
-            </div>
-          </div>
-        ))}
-      </div>
 
-      {/* Education */}
-      <div style={{ maxWidth: 780, margin: '24px auto 0' }}>
-        <div className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 36 }}>🎓</div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance - Business Analytics Concentration</div>
-            <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Rutgers University, New Brunswick</div>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>SQL Cert - UC Davis</span>
-            </div>
-          </div>
-          <div style={{ color: '#4a5580', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>Dec 2022</div>
-        </div>
-      </div>
-
-      {/* Resume CTA */}
-      <div style={{ textAlign: 'center', marginTop: 40, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-        <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 15 }}>
-          View Resume Online ↗
-        </a>
-        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
-          Download PDF ↓
-        </a>
-      </div>
-    </section>
-  );
-}
-
-const LIFE_PHOTOS = [
-  { src: '/life/photo1.jpeg', label: 'Living life' },
-  { src: '/life/photo2.jpg',  label: 'Moments' },
-  { src: '/life/photo3.jpeg', label: 'Adventures' },
-  { src: '/life/photo4.jpeg', label: 'Vibes' },
-  { src: '/life/photo5.jpeg', label: 'Good times' },
-  { src: '/life/photo6.jpeg', label: 'The journey' },
-  { src: '/life/photo7.jpg',  label: 'Life' },
-  { src: '/life/photo8.jpg',  label: 'Friends dinner' },
-];
-
-// ── Micro-Apps ────────────────────────────────────────────────────────────────
-
-function CryptoTickerDemo() {
-  const [cryptos, setCryptos] = useState([
-    { symbol: 'BTC', name: 'Bitcoin', price: 0, change: 0, loading: true },
-    { symbol: 'ETH', name: 'Ethereum', price: 0, change: 0, loading: true },
-    { symbol: 'SOL', name: 'Solana', price: 0, change: 0, loading: true },
-  ]);
-  const [highlighted, setHighlighted] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const fetchPrices = async () => {
-    setRefreshing(true);
-    try {
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
-      );
-      const data = await response.json();
-
-      setCryptos([
-        {
-          symbol: 'BTC',
-          name: 'Bitcoin',
-          price: data.bitcoin?.usd || 0,
-          change: Math.round((data.bitcoin?.usd_24h_change || 0) * 100) / 100,
-          loading: false
-        },
-        {
-          symbol: 'ETH',
-          name: 'Ethereum',
-          price: data.ethereum?.usd || 0,
-          change: Math.round((data.ethereum?.usd_24h_change || 0) * 100) / 100,
-          loading: false
-        },
-        {
-          symbol: 'SOL',
-          name: 'Solana',
-          price: data.solana?.usd || 0,
-          change: Math.round((data.solana?.usd_24h_change || 0) * 100) / 100,
-          loading: false
-        },
-      ]);
-    } catch (error) {
-      console.error('Failed to fetch crypto prices:', error);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPrices();
-    const interval = setInterval(fetchPrices, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div style={{ background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.25)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #4f9deb, #10d9a0)', boxShadow: '0 0 12px rgba(79,157,235,0.5)' }} />
-          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Price Feed</h4>
-        </div>
-        <button
-          onClick={() => { setHighlighted(null); fetchPrices(); }}
-          disabled={refreshing}
-          style={{
-            padding: '6px 14px',
-            background: refreshing ? 'rgba(79,157,235,0.1)' : 'rgba(79,157,235,0.2)',
-            color: refreshing ? '#4f9deb' : '#4f9deb',
-            border: '1px solid rgba(79,157,235,0.3)',
-            borderRadius: 6,
-            fontSize: 12,
-            fontWeight: 600,
-            cursor: refreshing ? 'not-allowed' : 'pointer',
-            transition: 'all 0.2s',
-            opacity: refreshing ? 0.6 : 1,
-            animation: refreshing ? 'spin 1s linear infinite' : 'none',
-          }}
-        >
-          ↻ {refreshing ? 'Updating' : 'Refresh'}
-        </button>
-      </div>
-      <div style={{ display: 'grid', gap: 10 }}>
-        {cryptos.map(c => (
-          <div
-            key={c.symbol}
-            onClick={() => setHighlighted(c.symbol)}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '14px',
-              background: highlighted === c.symbol ? 'rgba(79,157,235,0.15)' : 'rgba(255,255,255,0.02)',
-              borderRadius: 10,
-              border: `1px solid ${highlighted === c.symbol ? 'rgba(79,157,235,0.4)' : 'rgba(79,157,235,0.1)'}`,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            <div>
-              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>{c.symbol}</div>
-              <div style={{ color: '#6b7db3', fontSize: 11 }}>{c.name}</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>
-                {c.loading ? '...' : `$${c.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
-              </div>
-              <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
-                {c.change > 0 ? '▲' : '▼'} {Math.abs(c.change)}%
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
       <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+        .exp-card {
+          border-radius: 18px;
+          padding: 20px 24px;
+          cursor: pointer;
+          transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
+          border-left-width: 3px;
+          border-left-style: solid;
+          background: rgba(255,255,255,0.03);
+          backdrop-filter: blur(12px);
+          border-top: 1px solid rgba(255,255,255,0.05);
+          border-right: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          position: relative;
+          overflow: hidden;
+        }
+        .exp-card:hover {
+          transform: translateY(-4px);
+          background: rgba(255,255,255,0.05);
+        }
+        .exp-card.expanded {
+          transform: translateY(-2px);
+        }
+        .exp-highlights {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease, margin 0.25s ease;
+          opacity: 0;
+          margin-top: 0;
+        }
+        .exp-highlights.open {
+          max-height: 400px;
+          opacity: 1;
+          margin-top: 14px;
+        }
+        @media (min-width: 768px) {
+          .exp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            align-items: start;
+          }
+          .exp-col-right {
+            margin-top: 32px;
+          }
+        }
+        @media (max-width: 767px) {
+          .exp-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
+          .exp-col-right { margin-top: 0; }
         }
       `}</style>
-    </div>
-  );
-}
 
-function JobMatcherDemo() {
-  const [index, setIndex] = useState(0);
-  const [liked, setLiked] = useState(new Set());
-  const jobs = [
-    { title: 'Senior React Developer', company: 'TechStart Inc', match: 92, role: 'Frontend' },
-    { title: 'Full-Stack Engineer', company: 'Scale Corp', match: 87, role: 'Full-Stack' },
-    { title: 'Product Engineer', company: 'Growth Labs', match: 95, role: 'Full-Stack' },
-  ];
-  const job = jobs[index];
-  const isLiked = liked.has(index);
-
-  const next = () => setIndex((index + 1) % jobs.length);
-  const prev = () => setIndex((index - 1 + jobs.length) % jobs.length);
-  const toggleLike = () => {
-    const newLiked = new Set(liked);
-    if (newLiked.has(index)) newLiked.delete(index);
-    else newLiked.add(index);
-    setLiked(newLiked);
-  };
-
-  return (
-    <div style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(79,157,235,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(139,92,246,0.25)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #8b5cf6, #4f9deb)', boxShadow: '0 0 12px rgba(139,92,246,0.5)' }} />
-          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Job Matcher</h4>
-        </div>
-        <span style={{ fontSize: 12, color: '#6b7db3', background: 'rgba(139,92,246,0.1)', padding: '4px 10px', borderRadius: 6 }}>{index + 1}/3</span>
-      </div>
-      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(79,157,235,0.05))', borderRadius: 12, marginBottom: 16, minHeight: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid rgba(139,92,246,0.2)' }}>
-        <div style={{ color: '#8b5cf6', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', marginBottom: 4 }}>{job.role}</div>
-        <div style={{ color: '#f0f4ff', fontSize: 28, fontWeight: 900, marginBottom: 12 }}>{job.match}%</div>
-        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{job.title}</div>
-        <div style={{ color: '#6b7db3', fontSize: 12 }}>{job.company}</div>
-      </div>
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>← Prev</button>
-        <button onClick={toggleLike} style={{ padding: '8px 16px', background: isLiked ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(236,72,153,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, color: isLiked ? '#ec4899' : '#6b7db3', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
-          {isLiked ? '★ Saved' : '☆ Save'}
-        </button>
-        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next →</button>
-      </div>
-    </div>
-  );
-}
-
-function MealPlannerDemo() {
-  const [calories, setCalories] = useState(2000);
-  const [preset, setPreset] = useState('balanced');
-
-  const presets = {
-    balanced: { p: 0.3, c: 0.4, f: 0.3, name: 'Balanced' },
-    lowcarb: { p: 0.4, c: 0.2, f: 0.4, name: 'Low-Carb' },
-    highprotein: { p: 0.45, c: 0.35, f: 0.2, name: 'High-Protein' },
-  };
-
-  const { p, c, f } = presets[preset];
-  const protein = Math.round((calories * p) / 4);
-  const carbs = Math.round((calories * c) / 4);
-  const fat = Math.round((calories * f) / 9);
-
-  return (
-    <div style={{ background: 'linear-gradient(135deg, rgba(16,217,160,0.1), rgba(79,157,235,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(16,217,160,0.25)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', boxShadow: '0 0 12px rgba(16,217,160,0.5)' }} />
-          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Macro Calculator</h4>
-        </div>
-        <span style={{ fontSize: 11, color: '#6b7db3', background: 'rgba(16,217,160,0.1)', padding: '4px 10px', borderRadius: 6 }}>{presets[preset].name}</span>
-      </div>
-
-      <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
-        {Object.keys(presets).map(p => (
-          <button
-            key={p}
-            onClick={() => setPreset(p)}
-            style={{
-              flex: 1,
-              padding: '8px 10px',
-              background: preset === p ? 'linear-gradient(135deg, #10d9a0, rgba(16,217,160,0.3))' : 'rgba(255,255,255,0.05)',
-              color: preset === p ? '#10d9a0' : '#6b7db3',
-              border: preset === p ? '1px solid rgba(16,217,160,0.4)' : '1px solid rgba(255,255,255,0.1)',
-              borderRadius: 8,
-              fontSize: 11,
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            {presets[p].name}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ marginBottom: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-          <label style={{ color: '#6b7db3', fontSize: 11, fontWeight: 600 }}>Daily Target</label>
-          <span style={{ color: '#f0f4ff', fontSize: 12, fontWeight: 700 }}>{calories} kcal</span>
-        </div>
-        <input
-          type="range"
-          min="1200"
-          max="3500"
-          value={calories}
-          onChange={(e) => setCalories(Number(e.target.value))}
-          style={{ width: '100%', height: '6px', borderRadius: '3px', background: 'linear-gradient(to right, #4f9deb, #10d9a0)', cursor: 'pointer' }}
-        />
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(79,157,235,0.15), rgba(79,157,235,0.05))', borderRadius: 10, border: '1px solid rgba(79,157,235,0.25)', textAlign: 'center' }}>
-          <div style={{ color: '#4f9deb', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Protein</div>
-          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{protein}g</div>
-          <div style={{ fontSize: 10, color: '#4f9deb' }}>{Math.round(p * 100)}%</div>
-        </div>
-        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05))', borderRadius: 10, border: '1px solid rgba(245,158,11,0.25)', textAlign: 'center' }}>
-          <div style={{ color: '#f59e0b', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Carbs</div>
-          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{carbs}g</div>
-          <div style={{ fontSize: 10, color: '#f59e0b' }}>{Math.round(c * 100)}%</div>
-        </div>
-        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05))', borderRadius: 10, border: '1px solid rgba(236,72,153,0.25)', textAlign: 'center' }}>
-          <div style={{ color: '#ec4899', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Fat</div>
-          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{fat}g</div>
-          <div style={{ fontSize: 10, color: '#ec4899' }}>{Math.round(f * 100)}%</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LifeSection() {
-  const [active, setActive] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const [dragStart, setDragStart] = useState(0);
-  const total = LIFE_PHOTOS.length;
-
-  // Auto-rotate
-  useEffect(() => {
-    if (dragging) return;
-    const t = setInterval(() => setActive(a => (a + 1) % total), 3500);
-    return () => clearInterval(t);
-  }, [dragging, total]);
-
-  const prev = () => setActive(a => (a - 1 + total) % total);
-  const next = () => setActive(a => (a + 1) % total);
-
-  // Touch/drag
-  const onDragStart = (e) => { setDragging(true); setDragStart(e.clientX || e.touches?.[0]?.clientX || 0); };
-  const onDragEnd = (e) => {
-    const end = e.clientX || e.changedTouches?.[0]?.clientX || 0;
-    const diff = dragStart - end;
-    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
-    setDragging(false);
-  };
-
-  return (
-    <section id="life" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <p className="section-label" style={{ marginBottom: 16 }}>Beyond the Work</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
-            A slice of <span className="gradient-text">life</span>
-          </h2>
-        </div>
-
-        {/* Stacked card carousel */}
-        <div style={{ position: 'relative', height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none' }}
-          onMouseDown={onDragStart} onMouseUp={onDragEnd}
-          onTouchStart={onDragStart} onTouchEnd={onDragEnd}
-        >
-          {LIFE_PHOTOS.map((photo, i) => {
-            const offset = (i - active + total) % total;
-            const isActive = offset === 0;
-            const isPrev = offset === total - 1;
-            const isNext = offset === 1;
-            const isVisible = isActive || isPrev || isNext || offset === 2 || offset === total - 2;
-
-            let transform, zIndex, opacity, scale;
-            if (isActive) {
-              transform = 'translateX(0) rotate(0deg)';
-              zIndex = 10; opacity = 1; scale = 1;
-            } else if (isNext) {
-              transform = 'translateX(160px) rotate(4deg)';
-              zIndex = 8; opacity = 0.7; scale = 0.88;
-            } else if (offset === 2) {
-              transform = 'translateX(260px) rotate(7deg)';
-              zIndex = 6; opacity = 0.35; scale = 0.78;
-            } else if (isPrev) {
-              transform = 'translateX(-160px) rotate(-4deg)';
-              zIndex = 8; opacity = 0.7; scale = 0.88;
-            } else if (offset === total - 2) {
-              transform = 'translateX(-260px) rotate(-7deg)';
-              zIndex = 6; opacity = 0.35; scale = 0.78;
-            } else {
-              transform = 'translateX(0)'; zIndex = 1; opacity = 0; scale = 0.7;
-            }
-
-            if (!isVisible) return null;
-
+      <div className="exp-grid" style={{ maxWidth: 900, margin: '0 auto' }}>
+        {/* Left column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {EXPERIENCE.filter((_, i) => i % 2 === 0).map((exp, colIdx) => {
+            const realIdx = colIdx * 2;
+            const isOpen = expanded === realIdx;
             return (
-              <div key={i} onClick={() => !dragging && setActive(i)}
-                style={{
-                  position: 'absolute', width: 320, height: 420,
-                  transform: `${transform} scale(${scale})`,
-                  zIndex, opacity, transition: 'all 0.5s cubic-bezier(0.4,0,0.2,1)',
-                  cursor: isActive ? 'grab' : 'pointer',
-                  borderRadius: 20, overflow: 'hidden',
-                  boxShadow: isActive
-                    ? '0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(16,217,160,0.15)'
-                    : '0 10px 30px rgba(0,0,0,0.4)',
-                }}
-              >
-                <img src={photo.src} alt={photo.label}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
-                />
-                {isActive && (
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px 20px 20px', background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10d9a0' }} />
-                      <span style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 600 }}>{photo.label}</span>
+              <div key={realIdx} onClick={() => toggle(realIdx)}
+                className={`exp-card ${isOpen ? 'expanded' : ''}`}
+                style={{ borderLeftColor: exp.color, boxShadow: isOpen ? `0 8px 32px ${exp.color}20, -2px 0 0 ${exp.color}` : `0 2px 12px rgba(0,0,0,0.2)` }}>
+                <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${exp.color}06, transparent)`, pointerEvents: 'none' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: '#f0f4ff', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span style={{ fontWeight: 700, fontSize: 12, color: exp.color }}>{exp.company}</span>
+                      <span style={{ color: '#2a3255', fontSize: 11 }}>·</span>
+                      <span style={{ color: '#4a5580', fontSize: 11 }}>{exp.location}</span>
                     </div>
                   </div>
-                )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                    <span style={{ fontSize: 11, color: '#4a5580', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
+                    <span style={{ fontSize: 12, color: isOpen ? exp.color : '#2a3255', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
+                  </div>
+                </div>
+                <div className={`exp-highlights ${isOpen ? 'open' : ''}`}>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {exp.highlights.map((h, j) => (
+                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: '#6b7db3', lineHeight: 1.55 }}>
+                        <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 40 }}>
-          <button onClick={prev} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-            onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
-            onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
-          >←</button>
-
-          {/* Dots */}
-          <div style={{ display: 'flex', gap: 8 }}>
-            {LIFE_PHOTOS.map((_, i) => (
-              <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 4, background: i === active ? '#10d9a0' : 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
-            ))}
-          </div>
-
-          <button onClick={next} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-            onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
-            onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
-          >→</button>
+        {/* Right column — offset */}
+        <div className="exp-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {EXPERIENCE.filter((_, i) => i % 2 === 1).map((exp, colIdx) => {
+            const realIdx = colIdx * 2 + 1;
+            const isOpen = expanded === realIdx;
+            return (
+              <div key={realIdx} onClick={() => toggle(realIdx)}
+                className={`exp-card ${isOpen ? 'expanded' : ''}`}
+                style={{ borderLeftColor: exp.color, boxShadow: isOpen ? `0 8px 32px ${exp.color}20, -2px 0 0 ${exp.color}` : `0 2px 12px rgba(0,0,0,0.2)` }}>
+                <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${exp.color}06, transparent)`, pointerEvents: 'none' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: '#f0f4ff', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span style={{ fontWeight: 700, fontSize: 12, color: exp.color }}>{exp.company}</span>
+                      <span style={{ color: '#2a3255', fontSize: 11 }}>·</span>
+                      <span style={{ color: '#4a5580', fontSize: 11 }}>{exp.location}</span>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                    <span style={{ fontSize: 11, color: '#4a5580', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
+                    <span style={{ fontSize: 12, color: isOpen ? exp.color : '#2a3255', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
+                  </div>
+                </div>
+                <div className={`exp-highlights ${isOpen ? 'open' : ''}`}>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {exp.highlights.map((h, j) => (
+                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: '#6b7db3', lineHeight: 1.55 }}>
+                        <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Swipe hint */}
-        <p style={{ textAlign: 'center', color: '#2a3255', fontSize: 12, marginTop: 16, fontFamily: "'JetBrains Mono', monospace" }}>
-          drag or swipe to explore
-        </p>
+      {/* Education */}
+      <div style={{ maxWidth: 900, margin: '20px auto 0' }}>
+        <div className="glass" style={{ borderRadius: 18, padding: '18px 24px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 28 }}>🎓</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance — Business Analytics</div>
+            <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Rutgers University, New Brunswick</div>
+            <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)', fontSize: 11 }}>SQL Cert — UC Davis</span>
+          </div>
+          <div style={{ color: '#4a5580', fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>Dec 2022</div>
+        </div>
+      </div>
+
+      {/* Resume CTA */}
+      <div style={{ textAlign: 'center', marginTop: 32, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>
+          View Resume Online ↗
+        </a>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>
+          Download PDF ↓
+        </a>
       </div>
     </section>
   );
