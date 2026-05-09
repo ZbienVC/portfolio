@@ -98,6 +98,21 @@ const PROJECTS = [
     highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
   },
   {
+    id: 'gigaton',
+    name: '$GIGATON',
+    tagline: 'Gigachad on TON — Memecoin Website',
+    description: 'A fully custom memecoin landing site for $GIGATON — Gigachad on the TON blockchain. TON-blue design system, Gigachad meme gallery, live DexScreener chart embed, scrolling ticker, tokenomics section, and Web3 CTAs.',
+    status: 'live',
+    url: 'https://gigaton.pro',
+    github: 'https://github.com/ZbienVC/gigaton-token',
+    color: '#0088CC',
+    colorEnd: '#005F8F',
+    tagClass: 'tag-blue',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
+    emoji: '🔷',
+    highlights: ['TON blockchain blue design', 'Live DexScreener chart', 'Gigachad meme vault gallery', 'Scrolling ticker + tokenomics'],
+  },
+  {
     id: 'omo',
     name: '$OMO',
     tagline: 'Memecoin Landing Page - The Last White Giraffe',
@@ -391,8 +406,8 @@ function HeroSection() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '2', label: 'Products in Development' },
-            { num: '8', label: 'Live in Production' },
+            { num: '9', label: 'Live in Production' },
+            { num: '3+', label: 'Currently Building' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
@@ -774,7 +789,7 @@ function ProjectCarouselCard({ project, position }) {
 const CATEGORIZED_PROJECTS = {
   all: PROJECTS,
   ai: PROJECTS.filter(p => ['dipper', 'careeva', 'plato', 'reflect', 'wayfound'].includes(p.id)),
-  crypto: PROJECTS.filter(p => ['splash', 'omo', 'staywestpalm'].includes(p.id)),
+  crypto: PROJECTS.filter(p => ['splash', 'gigaton', 'omo', 'staywestpalm'].includes(p.id)),
   web: PROJECTS.filter(p => ['staywestpalm', 'reflect'].includes(p.id)),
 };
 
