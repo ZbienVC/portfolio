@@ -769,99 +769,300 @@ function ProjectCarouselCard({ project, position }) {
   );
 }
 
+// ── Projects Data with Categories ─────────────────────────────────────────────
+
+const CATEGORIZED_PROJECTS = {
+  all: PROJECTS,
+  ai: PROJECTS.filter(p => ['dipper', 'careeva', 'plato', 'reflect', 'wayfound'].includes(p.id)),
+  crypto: PROJECTS.filter(p => ['splash', 'omo', 'staywestpalm'].includes(p.id)),
+  web: PROJECTS.filter(p => ['staywestpalm', 'reflect'].includes(p.id)),
+};
+
+const CATEGORIES = [
+  { id: 'all',    label: 'All Projects',  icon: '⚡', count: PROJECTS.length },
+  { id: 'ai',     label: 'AI & Products', icon: '🤖', count: CATEGORIZED_PROJECTS.ai.length },
+  { id: 'crypto', label: 'Crypto & Web3', icon: '📡', count: CATEGORIZED_PROJECTS.crypto.length },
+  { id: 'web',    label: 'Web & Sites',   icon: '🌐', count: CATEGORIZED_PROJECTS.web.length },
+];
+
+// Featured = first 2 in category, compact = rest
+function FeaturedProjectCard({ project }) {
+  const [hovered, setHovered] = useState(false);
+  const statusCfg = project.status === 'live'
+    ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
+    : project.status === 'soon'
+    ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Coming Soon' }
+    : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        borderRadius: 24,
+        overflow: 'hidden',
+        background: 'rgba(255,255,255,0.03)',
+        backdropFilter: 'blur(16px)',
+        border: `1px solid ${hovered ? project.color + '35' : 'rgba(255,255,255,0.07)'}`,
+        transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
+        transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
+        boxShadow: hovered ? `0 24px 56px rgba(0,0,0,0.35), 0 0 0 1px ${project.color}20` : '0 4px 20px rgba(0,0,0,0.2)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {/* Color bar */}
+      <div style={{ height: 3, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})`, flexShrink: 0 }} />
+
+      <div style={{ padding: '28px 28px 24px', flex: 1, display: 'flex', flexDirection: 'column', gap: 18 }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+          <div style={{ width: 56, height: 56, borderRadius: 16, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, boxShadow: `0 8px 24px ${project.color}40`, flexShrink: 0 }}>
+            {project.emoji}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
+              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', margin: 0, lineHeight: 1.1 }}>{project.name}</h3>
+              <div style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color }} />
+                {statusCfg.label}
+              </div>
+            </div>
+            <p style={{ color: '#8b9cc8', fontSize: 13, fontWeight: 600, margin: 0 }}>{project.tagline}</p>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{project.description}</p>
+
+        {/* Highlights */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
+          {project.highlights.slice(0, 4).map(h => (
+            <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: '#9fb0d9', lineHeight: 1.45 }}>
+              <span style={{ color: project.color, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>→</span>
+              <span>{h}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Tags */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {project.tags.slice(0, 5).map(t => (
+            <span key={t} style={{ padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}>{t}</span>
+          ))}
+          {project.tags.length > 5 && (
+            <span style={{ padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 5}</span>
+          )}
+        </div>
+
+        {/* CTAs */}
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 'auto' }}>
+          {project.url && (
+            <a href={project.url} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', boxShadow: `0 4px 14px ${project.color}30` }}>
+              Visit Live ↗
+            </a>
+          )}
+          {project.github && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}>
+              GitHub ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompactProjectCard({ project }) {
+  const [hovered, setHovered] = useState(false);
+  const statusCfg = project.status === 'live'
+    ? { color: '#10d9a0', label: 'Live' }
+    : project.status === 'soon'
+    ? { color: '#8b5cf6', label: 'Soon' }
+    : { color: '#4f9deb', label: 'Building' };
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        borderRadius: 18,
+        overflow: 'hidden',
+        background: 'rgba(255,255,255,0.025)',
+        backdropFilter: 'blur(12px)',
+        border: `1px solid ${hovered ? project.color + '30' : 'rgba(255,255,255,0.06)'}`,
+        transition: 'all 0.25s ease',
+        transform: hovered ? 'translateY(-3px)' : 'none',
+        boxShadow: hovered ? `0 12px 32px rgba(0,0,0,0.3), 0 0 0 1px ${project.color}18` : 'none',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div style={{ height: 2, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
+      <div style={{ padding: '18px 20px', flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+            {project.emoji}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff' }}>{project.name}</span>
+              <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, color: statusCfg.color, flexShrink: 0 }}>● {statusCfg.label}</span>
+            </div>
+            <p style={{ color: '#6b7db3', fontSize: 12, margin: 0, lineHeight: 1.4, marginTop: 2 }}>{project.tagline}</p>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+          {project.tags.slice(0, 3).map(t => (
+            <span key={t} style={{ padding: '3px 8px', borderRadius: 6, fontSize: 10, fontWeight: 600, background: `${project.color}10`, color: project.color, border: `1px solid ${project.color}20` }}>{t}</span>
+          ))}
+          {project.tags.length > 3 && (
+            <span style={{ padding: '3px 8px', borderRadius: 6, fontSize: 10, color: '#4a5580', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>+{project.tags.length - 3}</span>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
+          {project.url && (
+            <a href={project.url} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none' }}>
+              Visit ↗
+            </a>
+          )}
+          {project.github && (
+            <a href={project.github} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#6b7db3', border: '1px solid rgba(255,255,255,0.08)', textDecoration: 'none' }}>
+              GitHub
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProjectsSection() {
-  const [current, setCurrent] = useState(0);
-  const touchStart = useRef(0);
-  const N = PROJECTS.length;
+  const [activeTab, setActiveTab] = useState('all');
+  const [animating, setAnimating] = useState(false);
+  const prevTab = useRef('all');
 
-  const prev = () => setCurrent(c => (c - 1 + N) % N);
-  const next = () => setCurrent(c => (c + 1) % N);
-  const getProject = (offset) => PROJECTS[(current + offset + N) % N];
-
-  const onTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
-  const onTouchEnd = (e) => {
-    const diff = touchStart.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+  const switchTab = (id) => {
+    if (id === activeTab) return;
+    setAnimating(true);
+    setTimeout(() => {
+      prevTab.current = activeTab;
+      setActiveTab(id);
+      setAnimating(false);
+    }, 160);
   };
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === 'ArrowLeft') prev();
-      if (e.key === 'ArrowRight') next();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [current]);
-
-  const centerProject = getProject(0);
+  const projects = CATEGORIZED_PROJECTS[activeTab] || PROJECTS;
+  const featured = projects.slice(0, 2);
+  const compact = projects.slice(2);
+  const activeCategory = CATEGORIES.find(c => c.id === activeTab);
 
   return (
     <section id="projects" style={{ padding: '88px 24px 72px', background: 'rgba(15,22,41,0.3)' }}>
       <style>{`
-        @media (max-width: 768px) {
-          .carousel-side-card { display: none !important; }
-          .carousel-center-card { width: 100% !important; max-width: 100% !important; }
-          .carousel-center-card > div { width: 100% !important; }
-        }
+        .proj-fade-in { animation: projFadeIn 0.28s ease forwards; }
+        @keyframes projFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn { transition: all 0.2s ease; cursor: pointer; border: none; }
+        .tab-btn:hover { background: rgba(255,255,255,0.07) !important; }
       `}</style>
+
       <div style={{ maxWidth: 1160, margin: '0 auto' }}>
+
+        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 12 }}>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
           <p style={{ color: '#4a5580', fontSize: 14, fontFamily: "'JetBrains Mono', monospace" }}>
-            {current + 1} / {N}
+            {projects.length} project{projects.length !== 1 ? 's' : ''} · {activeCategory?.label}
           </p>
         </div>
 
+        {/* Category tab bar */}
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
+          {CATEGORIES.map(cat => {
+            const isActive = activeTab === cat.id;
+            const accentColor = isActive ? '#10d9a0' : 'transparent';
+            return (
+              <button
+                key={cat.id}
+                onClick={() => switchTab(cat.id)}
+                className="tab-btn"
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: 100,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  background: isActive ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)',
+                  color: isActive ? '#10d9a0' : '#6b7db3',
+                  border: `1px solid ${isActive ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  boxShadow: isActive ? '0 0 20px rgba(16,217,160,0.1)' : 'none',
+                }}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+                <span style={{ padding: '1px 7px', borderRadius: 100, fontSize: 11, background: isActive ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)', color: isActive ? '#10d9a0' : '#4a5580', fontWeight: 700 }}>
+                  {cat.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Projects grid */}
         <div
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', padding: '12px 0' }}
+          key={activeTab}
+          className={animating ? '' : 'proj-fade-in'}
+          style={{ opacity: animating ? 0 : 1, transition: 'opacity 0.16s ease' }}
         >
-          <div className="carousel-side-card">
-            <ProjectCarouselCard project={getProject(-1)} position="left" />
-          </div>
-          <div className="carousel-center-card">
-            <ProjectCarouselCard project={getProject(0)} position="center" />
-          </div>
-          <div className="carousel-side-card">
-            <ProjectCarouselCard project={getProject(1)} position="right" />
-          </div>
+          {/* Featured row — 2 large cards */}
+          {featured.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: 20, marginBottom: compact.length > 0 ? 20 : 0 }}>
+              {featured.map((p, i) => (
+                <div key={p.id} style={{ animation: `projFadeIn 0.3s ease ${i * 60}ms both` }}>
+                  <FeaturedProjectCard project={p} />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Compact grid — smaller cards */}
+          {compact.length > 0 && (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0 16px' }}>
+                <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.05)' }} />
+                <span style={{ fontSize: 11, color: '#2a3255', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 2, whiteSpace: 'nowrap' }}>More Projects</span>
+                <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.05)' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 14 }}>
+                {compact.map((p, i) => (
+                  <div key={p.id} style={{ animation: `projFadeIn 0.3s ease ${(i + 2) * 60}ms both` }}>
+                    <CompactProjectCard project={p} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 32 }}>
-          <button
-            onClick={prev}
-            style={{ background: 'none', border: 'none', color: '#4a5580', cursor: 'pointer', fontSize: 24, padding: '6px 12px', borderRadius: 8, transition: 'color 0.2s', lineHeight: 1 }}
-            onMouseEnter={e => e.currentTarget.style.color = '#f0f4ff'}
-            onMouseLeave={e => e.currentTarget.style.color = '#4a5580'}
-          >&#8249;</button>
-
-          {PROJECTS.map((_, i) => (
-            <button key={i} onClick={() => setCurrent(i)} style={{
-              width: i === current ? 24 : 6, height: 6,
-              borderRadius: 3, border: 'none', cursor: 'pointer',
-              background: i === current ? centerProject.color : 'rgba(255,255,255,0.15)',
-              transition: 'all 0.3s ease', padding: 0,
-            }} />
-          ))}
-
-          <button
-            onClick={next}
-            style={{ background: 'none', border: 'none', color: '#4a5580', cursor: 'pointer', fontSize: 24, padding: '6px 12px', borderRadius: 8, transition: 'color 0.2s', lineHeight: 1 }}
-            onMouseEnter={e => e.currentTarget.style.color = '#f0f4ff'}
-            onMouseLeave={e => e.currentTarget.style.color = '#4a5580'}
-          >&#8250;</button>
-        </div>
-
-        <div style={{ textAlign: 'center', marginTop: 28 }}>
+        {/* Footer note */}
+        <div style={{ textAlign: 'center', marginTop: 40 }}>
           <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 100, fontSize: 13, color: '#6b7db3' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             More projects shipping soon
           </div>
         </div>
+
       </div>
     </section>
   );
