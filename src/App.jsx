@@ -1,24 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-
-  {
-    id: 'wayfound',
-    name: 'WayFound',
-    tagline: 'AI-Powered Travel Concierge',
-    description: 'Describe your trip in plain language and get scored, ranked hotel results instantly. Claude parses your preferences, Amadeus pulls live inventory, Stripe handles checkout — from prompt to booked in under 60 seconds.',
-    status: 'live',
-    url: 'https://wayfound.vercel.app',
-    github: 'https://github.com/ZbienVC/wayfound',
-    color: '#c9a84c',
-    colorEnd: '#e8c96a',
-    tagClass: '',
-    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
-    emoji: '✈️',
-    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
-  },
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
-// ── Data ──────────────────────────────────────────────────────────────────────
+// â”€â”€ Data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const PROJECTS = [
   {
@@ -33,7 +16,7 @@ const PROJECTS = [
     colorEnd: '#059669',
     tagClass: '',
     tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],
-    emoji: '🥗',
+    emoji: 'ðŸ¥—',
     highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
   },
   {
@@ -48,7 +31,7 @@ const PROJECTS = [
     colorEnd: '#6366f1',
     tagClass: 'tag-purple',
     tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
-    emoji: '🤖',
+    emoji: 'ðŸ¤–',
     highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
   },
   {
@@ -63,7 +46,7 @@ const PROJECTS = [
     colorEnd: '#6366f1',
     tagClass: 'tag-blue',
     tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'SQLite'],
-    emoji: '📡',
+    emoji: 'ðŸ“¡',
     highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale wallet tracking', 'Multi-DEX analytics'],
     demoId: 'splash',
   },
@@ -79,7 +62,7 @@ const PROJECTS = [
     colorEnd: '#0284c7',
     tagClass: 'tag-cyan',
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],
-    emoji: '💼',
+    emoji: 'ðŸ’¼',
     highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
   },
   {
@@ -88,29 +71,14 @@ const PROJECTS = [
     tagline: 'Premium Aesthetic Medical Practice Website',
     description: 'A premium medical SaaS-style website and patient experience for Reflect Medical & Cosmetic Center with memberships, treatment catalog, booking flows, Beauty Bank, referrals, and polished conversion-focused UX.',
     status: 'live',
-    url: 'https://reflect-medical.vercel.app',
+    url: 'https://reflect-medical.web.app',
     github: 'https://github.com/ZbienVC/reflect-medical-premium',
     color: '#b57edc',
     colorEnd: '#8b5cf6',
     tagClass: 'tag-purple',
     tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],
-    emoji: '✨',
+    emoji: 'âœ¨',
     highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
-  },
-  {
-    id: 'gigaton',
-    name: '$GIGATON',
-    tagline: 'Gigachad on TON — Memecoin Website',
-    description: 'A fully custom memecoin landing site for $GIGATON — Gigachad on the TON blockchain. TON-blue design system, Gigachad meme gallery, live DexScreener chart embed, scrolling ticker, tokenomics section, and Web3 CTAs.',
-    status: 'live',
-    url: 'https://gigaton.pro',
-    github: 'https://github.com/ZbienVC/gigaton-token',
-    color: '#0088CC',
-    colorEnd: '#005F8F',
-    tagClass: 'tag-blue',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
-    emoji: '🔷',
-    highlights: ['TON blockchain blue design', 'Live DexScreener chart', 'Gigachad meme vault gallery', 'Scrolling ticker + tokenomics'],
   },
   {
     id: 'omo',
@@ -124,8 +92,38 @@ const PROJECTS = [
     colorEnd: '#C0562A',
     tagClass: '',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
-    emoji: '🦒',
+    emoji: 'ðŸ¦’',
     highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
+  },
+  {
+    id: 'gigaton',
+    name: '$GIGATON',
+    tagline: 'Gigachad on TON â€” Memecoin Website',
+    description: 'A fully custom memecoin landing site for $GIGATON â€” Gigachad on the TON blockchain. TON-blue design system, Gigachad meme gallery, live DexScreener chart embed, scrolling ticker, tokenomics section, and Web3 CTAs.',
+    status: 'live',
+    url: 'https://gigaton.pro',
+    github: 'https://github.com/ZbienVC/gigaton-token',
+    color: '#0088CC',
+    colorEnd: '#005F8F',
+    tagClass: 'tag-blue',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
+    emoji: 'ðŸ”·',
+    highlights: ['TON blockchain blue design', 'Live DexScreener chart', 'Gigachad meme vault gallery', 'Scrolling ticker + tokenomics'],
+  },
+  {
+    id: 'wayfound',
+    name: 'WayFound',
+    tagline: 'AI-Powered Travel Concierge',
+    description: 'Describe your trip in plain language and get scored, ranked hotel results instantly. Claude parses your preferences, Amadeus pulls live inventory, Stripe handles checkout â€” from prompt to booked in under 60 seconds.',
+    status: 'live',
+    url: 'https://wayfound.vercel.app',
+    github: 'https://github.com/ZbienVC/wayfound',
+    color: '#c9a84c',
+    colorEnd: '#e8c96a',
+    tagClass: '',
+    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
+    emoji: 'âœˆï¸',
+    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
   },
   {
     id: 'staywestpalm',
@@ -139,26 +137,26 @@ const PROJECTS = [
     colorEnd: '#0284c7',
     tagClass: 'tag-cyan',
     tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],
-    emoji: '🌴',
+    emoji: 'ðŸŒ´',
     highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
   },
 ];
 
 const SKILLS = [
-  { label: 'React / Vite', icon: '⚛️' },
-  { label: 'TypeScript', icon: '📘' },
-  { label: 'Node.js', icon: '🟢' },
-  { label: 'Tailwind CSS', icon: '🎨' },
-  { label: 'SQL / SQLite', icon: '🗄️' },
-  { label: 'REST & WebSockets', icon: '🔌' },
-  { label: 'AI / LLM APIs', icon: '🤖' },
-  { label: 'DeFi / Web3', icon: '🔗' },
-  { label: 'Python', icon: '🐍' },
-  { label: 'Figma', icon: '🎨' },
-  { label: 'Bloomberg Terminal', icon: '📊' },
-  { label: 'Vercel / Railway', icon: '🚀' },
-  { label: 'Advanced Excel', icon: '📈' },
-  { label: 'Git / GitHub', icon: '🐙' },
+  { label: 'React / Vite', icon: 'âš›ï¸' },
+  { label: 'TypeScript', icon: 'ðŸ“˜' },
+  { label: 'Node.js', icon: 'ðŸŸ¢' },
+  { label: 'Tailwind CSS', icon: 'ðŸŽ¨' },
+  { label: 'SQL / SQLite', icon: 'ðŸ—„ï¸' },
+  { label: 'REST & WebSockets', icon: 'ðŸ”Œ' },
+  { label: 'AI / LLM APIs', icon: 'ðŸ¤–' },
+  { label: 'DeFi / Web3', icon: 'ðŸ”—' },
+  { label: 'Python', icon: 'ðŸ' },
+  { label: 'Figma', icon: 'ðŸŽ¨' },
+  { label: 'Bloomberg Terminal', icon: 'ðŸ“Š' },
+  { label: 'Vercel / Railway', icon: 'ðŸš€' },
+  { label: 'Advanced Excel', icon: 'ðŸ“ˆ' },
+  { label: 'Git / GitHub', icon: 'ðŸ™' },
 ];
 
 const EXPERIENCE = [
@@ -246,7 +244,7 @@ const EXPERIENCE = [
   },
 ];
 
-// ── Components ─────────────────────────────────────────────────────────────────
+// â”€â”€ Components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Nav({ active }) {
   const [scrolled, setScrolled] = useState(false);
@@ -296,7 +294,7 @@ function Nav({ active }) {
           <a key={s} href={`#${s.toLowerCase()}`} className="nav-link">{s}</a>
         ))}
         <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ padding: '8px 16px', fontSize: '13px' }}>
-          GitHub ↗
+          GitHub â†—
         </a>
       </div>
 
@@ -308,7 +306,7 @@ function Nav({ active }) {
         }}
         className="mobile-menu-btn"
       >
-        {mobileMenuOpen ? '✕' : '☰'}
+        {mobileMenuOpen ? 'âœ•' : 'â˜°'}
       </button>
 
       {/* Mobile Menu */}
@@ -324,7 +322,7 @@ function Nav({ active }) {
           ))}
           <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="mobile-github-link btn-ghost" style={{ padding: '10px 14px', fontSize: '13px', justifyContent: 'space-between', borderRadius: 12 }}>
             <span>GitHub</span>
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true">â†—</span>
           </a>
         </div>
       )}
@@ -396,10 +394,10 @@ function HeroSection() {
         {/* CTAs */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="#projects" className="btn-primary" style={{ fontSize: 15 }}>
-            View My Work ↓
+            View My Work â†“
           </a>
           <a href="/Zachary_Bienstock_Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
-            Resume ↗
+            Resume â†—
           </a>
         </div>
 
@@ -408,7 +406,7 @@ function HeroSection() {
           {[
             { num: '9', label: 'Live in Production' },
             { num: '3+', label: 'Currently Building' },
-            { num: '∞', label: 'Problems Left to Solve' },
+            { num: 'âˆž', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.num}</div>
@@ -460,7 +458,7 @@ function AboutSection() {
             </div>
             <div>
               <div style={{ fontWeight: 800, fontSize: 18, color: '#f0f4ff' }}>Zach Bienstock</div>
-              <div style={{ color: '#10d9a0', fontSize: 13, fontWeight: 600 }}>Builder · Analyst · Developer</div>
+              <div style={{ color: '#10d9a0', fontSize: 13, fontWeight: 600 }}>Builder Â· Analyst Â· Developer</div>
               <div style={{ color: '#4a5580', fontSize: 12, marginTop: 2 }}>Hawthorne, NJ</div>
             </div>
           </div>
@@ -474,8 +472,8 @@ function AboutSection() {
             Outside of work: deeply into <span style={{ color: '#f0f4ff', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: '#f0f4ff', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: '#f0f4ff', fontWeight: 600 }}>snowboarding</span> - specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub ↗</a>
-            <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>LinkedIn ↗</a>
+            <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub â†—</a>
+            <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>LinkedIn â†—</a>
           </div>
         </div>
 
@@ -630,7 +628,7 @@ function ProjectCard({ project }) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 14 }}>
               {project.highlights.slice(0, 4).map((h) => (
                 <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: '#9fb0d9', lineHeight: 1.45 }}>
-                  <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>→</span>
+                  <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>â†’</span>
                   <span>{h}</span>
                 </div>
               ))}
@@ -648,11 +646,11 @@ function ProjectCard({ project }) {
             <div className="compact-project-actions" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {project.url && (
                 <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn-primary compact-btn" style={{ fontSize: 13, padding: '10px 16px', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 4px 15px ${project.color}30` }} onClick={(e) => e.stopPropagation()}>
-                  Visit ↗
+                  Visit â†—
                 </a>
               )}
               <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn-ghost compact-btn" style={{ fontSize: 13, padding: '10px 16px' }} onClick={(e) => e.stopPropagation()}>
-                GitHub ↗
+                GitHub â†—
               </a>
               {hasDemo && (
                 <button
@@ -660,7 +658,7 @@ function ProjectCard({ project }) {
                   className="btn-ghost compact-btn"
                   style={{ fontSize: 13, padding: '10px 16px', borderColor: `${project.color}30`, color: project.color }}
                 >
-                  Try →
+                  Try â†’
                 </button>
               )}
             </div>
@@ -700,7 +698,7 @@ function ProjectCard({ project }) {
                   cursor: 'pointer',
                 }}
               >
-                ← Back
+                â† Back
               </button>
             </div>
             {projectDemos[project.id]}
@@ -771,12 +769,12 @@ function ProjectCarouselCard({ project, position }) {
           {project.url && (
             <a href={project.url} target="_blank" rel="noopener noreferrer"
               style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}
-            >View Live ↗</a>
+            >View Live â†—</a>
           )}
           {project.github && (
             <a href={project.github} target="_blank" rel="noopener noreferrer"
               style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}
-            >GitHub ↗</a>
+            >GitHub â†—</a>
           )}
         </div>
       </div>
@@ -784,23 +782,22 @@ function ProjectCarouselCard({ project, position }) {
   );
 }
 
-// ── Projects Data with Categories ─────────────────────────────────────────────
+// ── Projects Categories ────────────────────────────────────────────────────────
 
 const CATEGORIZED_PROJECTS = {
   all: PROJECTS,
   ai: PROJECTS.filter(p => ['dipper', 'careeva', 'plato', 'reflect', 'wayfound'].includes(p.id)),
-  crypto: PROJECTS.filter(p => ['splash', 'gigaton', 'omo', 'staywestpalm'].includes(p.id)),
-  web: PROJECTS.filter(p => ['staywestpalm', 'reflect'].includes(p.id)),
+  crypto: PROJECTS.filter(p => ['splash', 'gigaton', 'omo'].includes(p.id)),
+  web: PROJECTS.filter(p => ['staywestpalm', 'reflect', 'omo', 'gigaton'].includes(p.id)),
 };
-const CATEGORIES = [
 
+const CATEGORIES = [
   { id: 'all',    label: 'All Projects',  icon: 'All',    count: PROJECTS.length },
   { id: 'ai',     label: 'AI & Products', icon: 'AI',     count: CATEGORIZED_PROJECTS.ai.length },
   { id: 'crypto', label: 'Crypto & Web3', icon: 'Crypto', count: CATEGORIZED_PROJECTS.crypto.length },
   { id: 'web',    label: 'Web & Sites',   icon: 'Web',    count: CATEGORIZED_PROJECTS.web.length },
 ];
 
-// Featured = first 2 in category, compact = rest
 function FeaturedProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
   const statusCfg = project.status === 'live'
@@ -810,80 +807,39 @@ function FeaturedProjectCard({ project }) {
     : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
 
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        borderRadius: 24,
-        overflow: 'hidden',
-        background: 'rgba(255,255,255,0.03)',
-        backdropFilter: 'blur(16px)',
-        border: `1px solid ${hovered ? project.color + '35' : 'rgba(255,255,255,0.07)'}`,
-        transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
-        transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
-        boxShadow: hovered ? `0 24px 56px rgba(0,0,0,0.35), 0 0 0 1px ${project.color}20` : '0 4px 20px rgba(0,0,0,0.2)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      {/* Color bar */}
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ borderRadius: 24, overflow: 'hidden', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(16px)', border: `1px solid ${hovered ? project.color + '35' : 'rgba(255,255,255,0.07)'}`, transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)', transform: hovered ? 'translateY(-5px)' : 'translateY(0)', boxShadow: hovered ? `0 24px 56px rgba(0,0,0,0.35), 0 0 0 1px ${project.color}20` : '0 4px 20px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column' }}>
       <div style={{ height: 3, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})`, flexShrink: 0 }} />
-
-      <div style={{ padding: '28px 28px 24px', flex: 1, display: 'flex', flexDirection: 'column', gap: 18 }}>
-        {/* Header */}
+      <div style={{ padding: '28px 28px 24px', flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 16, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, boxShadow: `0 8px 24px ${project.color}40`, flexShrink: 0 }}>
-            {project.emoji}
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ width: 54, height: 54, borderRadius: 16, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, boxShadow: `0 8px 24px ${project.color}40`, flexShrink: 0 }}>{project.emoji}</div>
+          <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
-              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', margin: 0, lineHeight: 1.1 }}>{project.name}</h3>
-              <div style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
-                <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color }} />
-                {statusCfg.label}
+              <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', margin: 0 }}>{project.name}</h3>
+              <div style={{ padding: '3px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color }} />{statusCfg.label}
               </div>
             </div>
             <p style={{ color: '#8b9cc8', fontSize: 13, fontWeight: 600, margin: 0 }}>{project.tagline}</p>
           </div>
         </div>
-
-        {/* Description */}
         <p style={{ color: '#6b7db3', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{project.description}</p>
-
-        {/* Highlights */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
           {project.highlights.slice(0, 4).map(h => (
             <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: '#9fb0d9', lineHeight: 1.45 }}>
-              <span style={{ color: project.color, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>→</span>
-              <span>{h}</span>
+              <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>-&gt;</span><span>{h}</span>
             </div>
           ))}
         </div>
-
-        {/* Tags */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {project.tags.slice(0, 5).map(t => (
             <span key={t} style={{ padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}>{t}</span>
           ))}
-          {project.tags.length > 5 && (
-            <span style={{ padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 5}</span>
-          )}
+          {project.tags.length > 5 && <span style={{ padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 5}</span>}
         </div>
-
-        {/* CTAs */}
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 'auto' }}>
-          {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer"
-              style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', boxShadow: `0 4px 14px ${project.color}30` }}>
-              Visit Live ↗
-            </a>
-          )}
-          {project.github && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer"
-              style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}>
-              GitHub ↗
-            </a>
-          )}
+          {project.url && <a href={project.url} target="_blank" rel="noopener noreferrer" style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none', boxShadow: `0 4px 14px ${project.color}30` }}>Visit Live ↗</a>}
+          {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" style={{ padding: '10px 18px', borderRadius: 10, fontSize: 13, fontWeight: 700, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}>GitHub ↗</a>}
         </div>
       </div>
     </div>
@@ -892,66 +848,29 @@ function FeaturedProjectCard({ project }) {
 
 function CompactProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
-  const statusCfg = project.status === 'live'
-    ? { color: '#10d9a0', label: 'Live' }
-    : project.status === 'soon'
-    ? { color: '#8b5cf6', label: 'Soon' }
-    : { color: '#4f9deb', label: 'Building' };
-
+  const statusCfg = project.status === 'live' ? { color: '#10d9a0', label: 'Live' } : project.status === 'soon' ? { color: '#8b5cf6', label: 'Soon' } : { color: '#4f9deb', label: 'Building' };
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        borderRadius: 18,
-        overflow: 'hidden',
-        background: 'rgba(255,255,255,0.025)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${hovered ? project.color + '30' : 'rgba(255,255,255,0.06)'}`,
-        transition: 'all 0.25s ease',
-        transform: hovered ? 'translateY(-3px)' : 'none',
-        boxShadow: hovered ? `0 12px 32px rgba(0,0,0,0.3), 0 0 0 1px ${project.color}18` : 'none',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ borderRadius: 18, overflow: 'hidden', background: 'rgba(255,255,255,0.025)', backdropFilter: 'blur(12px)', border: `1px solid ${hovered ? project.color + '30' : 'rgba(255,255,255,0.06)'}`, transition: 'all 0.25s ease', transform: hovered ? 'translateY(-3px)' : 'none', display: 'flex', flexDirection: 'column' }}>
       <div style={{ height: 2, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
       <div style={{ padding: '18px 20px', flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 40, height: 40, borderRadius: 12, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
-            {project.emoji}
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>{project.emoji}</div>
+          <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff' }}>{project.name}</span>
-              <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, color: statusCfg.color, flexShrink: 0 }}>● {statusCfg.label}</span>
+              <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: statusCfg.color }}>● {statusCfg.label}</span>
             </div>
             <p style={{ color: '#6b7db3', fontSize: 12, margin: 0, lineHeight: 1.4, marginTop: 2 }}>{project.tagline}</p>
           </div>
         </div>
-
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-          {project.tags.slice(0, 3).map(t => (
-            <span key={t} style={{ padding: '3px 8px', borderRadius: 6, fontSize: 10, fontWeight: 600, background: `${project.color}10`, color: project.color, border: `1px solid ${project.color}20` }}>{t}</span>
-          ))}
-          {project.tags.length > 3 && (
-            <span style={{ padding: '3px 8px', borderRadius: 6, fontSize: 10, color: '#4a5580', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>+{project.tags.length - 3}</span>
-          )}
+          {project.tags.slice(0, 3).map(t => <span key={t} style={{ padding: '3px 8px', borderRadius: 6, fontSize: 10, fontWeight: 600, background: `${project.color}10`, color: project.color, border: `1px solid ${project.color}20` }}>{t}</span>)}
+          {project.tags.length > 3 && <span style={{ padding: '3px 8px', borderRadius: 6, fontSize: 10, color: '#4a5580', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>+{project.tags.length - 3}</span>}
         </div>
-
         <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
-          {project.url && (
-            <a href={project.url} target="_blank" rel="noopener noreferrer"
-              style={{ padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none' }}>
-              Visit ↗
-            </a>
-          )}
-          {project.github && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer"
-              style={{ padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#6b7db3', border: '1px solid rgba(255,255,255,0.08)', textDecoration: 'none' }}>
-              GitHub
-            </a>
-          )}
+          {project.url && <a href={project.url} target="_blank" rel="noopener noreferrer" style={{ padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, color: '#fff', textDecoration: 'none' }}>Visit ↗</a>}
+          {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" style={{ padding: '7px 12px', borderRadius: 8, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#6b7db3', border: '1px solid rgba(255,255,255,0.08)', textDecoration: 'none' }}>GitHub</a>}
         </div>
       </div>
     </div>
@@ -966,11 +885,7 @@ function ProjectsSection() {
   const switchTab = (id) => {
     if (id === activeTab) return;
     setAnimating(true);
-    setTimeout(() => {
-      prevTab.current = activeTab;
-      setActiveTab(id);
-      setAnimating(false);
-    }, 160);
+    setTimeout(() => { prevTab.current = activeTab; setActiveTab(id); setAnimating(false); }, 160);
   };
 
   const projects = CATEGORIZED_PROJECTS[activeTab] || PROJECTS;
@@ -981,77 +896,44 @@ function ProjectsSection() {
   return (
     <section id="projects" style={{ padding: '88px 24px 72px', background: 'rgba(15,22,41,0.3)' }}>
       <style>{`
-        .proj-fade-in { animation: projFadeIn 0.28s ease forwards; }
-        @keyframes projFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        .tab-btn { transition: all 0.2s ease; cursor: pointer; border: none; }
-        .tab-btn:hover { background: rgba(255,255,255,0.07) !important; }
+        .proj-fade { animation: projFade 0.28s ease forwards; }
+        @keyframes projFade { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        .tab-pill { transition: all 0.2s ease; cursor: pointer; border: none; }
+        .tab-pill:hover { opacity: 0.85; }
       `}</style>
-
       <div style={{ maxWidth: 1160, margin: '0 auto' }}>
-
-        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 8 }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
           <p style={{ color: '#4a5580', fontSize: 14, fontFamily: "'JetBrains Mono', monospace" }}>
-            {projects.length} project{projects.length !== 1 ? 's' : ''} · {activeCategory?.label}
+            {projects.length} project{projects.length !== 1 ? 's' : ''} — {activeCategory?.label}
           </p>
         </div>
 
-        {/* Category tab bar */}
+        {/* Tab bar */}
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
           {CATEGORIES.map(cat => {
             const isActive = activeTab === cat.id;
-            const accentColor = isActive ? '#10d9a0' : 'transparent';
             return (
-              <button
-                key={cat.id}
-                onClick={() => switchTab(cat.id)}
-                className="tab-btn"
-                style={{
-                  padding: '10px 20px',
-                  borderRadius: 100,
-                  fontSize: 13,
-                  fontWeight: 700,
-                  background: isActive ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)',
-                  color: isActive ? '#10d9a0' : '#6b7db3',
-                  border: `1px solid ${isActive ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  boxShadow: isActive ? '0 0 20px rgba(16,217,160,0.1)' : 'none',
-                }}
-              >
-                <span>{cat.icon}</span>
+              <button key={cat.id} onClick={() => switchTab(cat.id)} className="tab-pill"
+                style={{ padding: '10px 20px', borderRadius: 100, fontSize: 13, fontWeight: 700, background: isActive ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)', color: isActive ? '#10d9a0' : '#6b7db3', border: `1px solid ${isActive ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`, display: 'flex', alignItems: 'center', gap: 8, boxShadow: isActive ? '0 0 20px rgba(16,217,160,0.1)' : 'none' }}>
+                <span style={{ fontSize: 11, fontWeight: 800 }}>{cat.icon}</span>
                 <span>{cat.label}</span>
-                <span style={{ padding: '1px 7px', borderRadius: 100, fontSize: 11, background: isActive ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)', color: isActive ? '#10d9a0' : '#4a5580', fontWeight: 700 }}>
-                  {cat.count}
-                </span>
+                <span style={{ padding: '1px 7px', borderRadius: 100, fontSize: 11, background: isActive ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)', color: isActive ? '#10d9a0' : '#4a5580', fontWeight: 700 }}>{cat.count}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Projects grid */}
-        <div
-          key={activeTab}
-          className={animating ? '' : 'proj-fade-in'}
-          style={{ opacity: animating ? 0 : 1, transition: 'opacity 0.16s ease' }}
-        >
-          {/* Featured row — 2 large cards */}
+        {/* Grid */}
+        <div key={activeTab} style={{ opacity: animating ? 0 : 1, transition: 'opacity 0.16s ease' }} className={animating ? '' : 'proj-fade'}>
           {featured.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: 20, marginBottom: compact.length > 0 ? 20 : 0 }}>
-              {featured.map((p, i) => (
-                <div key={p.id} style={{ animation: `projFadeIn 0.3s ease ${i * 60}ms both` }}>
-                  <FeaturedProjectCard project={p} />
-                </div>
-              ))}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))', gap: 20, marginBottom: compact.length > 0 ? 20 : 0 }}>
+              {featured.map((p, i) => <div key={p.id} style={{ animation: `projFade 0.3s ease ${i * 60}ms both` }}><FeaturedProjectCard project={p} /></div>)}
             </div>
           )}
-
-          {/* Compact grid — smaller cards */}
           {compact.length > 0 && (
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0 16px' }}>
@@ -1060,24 +942,18 @@ function ProjectsSection() {
                 <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.05)' }} />
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 14 }}>
-                {compact.map((p, i) => (
-                  <div key={p.id} style={{ animation: `projFadeIn 0.3s ease ${(i + 2) * 60}ms both` }}>
-                    <CompactProjectCard project={p} />
-                  </div>
-                ))}
+                {compact.map((p, i) => <div key={p.id} style={{ animation: `projFade 0.3s ease ${(i + 2) * 60}ms both` }}><CompactProjectCard project={p} /></div>)}
               </div>
             </>
           )}
         </div>
 
-        {/* Footer note */}
         <div style={{ textAlign: 'center', marginTop: 40 }}>
           <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 100, fontSize: 13, color: '#6b7db3' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             More projects shipping soon
           </div>
         </div>
-
       </div>
     </section>
   );
@@ -1100,13 +976,13 @@ function ExperienceSection() {
               </div>
               <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
                 <span style={{ fontWeight: 700, fontSize: 14, color: exp.color }}>{exp.company}</span>
-                <span style={{ color: '#2a3255', fontSize: 12 }}>·</span>
+                <span style={{ color: '#2a3255', fontSize: 12 }}>Â·</span>
                 <span style={{ color: '#4a5580', fontSize: 12 }}>{exp.location}</span>
               </div>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {exp.highlights.map((h, j) => (
                   <li key={j} style={{ display: 'flex', gap: 8, fontSize: 13, color: '#6b7db3', lineHeight: 1.5 }}>
-                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
+                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>â€º</span> {h}
                   </li>
                 ))}
               </ul>
@@ -1121,7 +997,7 @@ function ExperienceSection() {
       {/* Education */}
       <div style={{ maxWidth: 780, margin: '24px auto 0' }}>
         <div className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 36 }}>🎓</div>
+          <div style={{ fontSize: 36 }}>ðŸŽ“</div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance - Business Analytics Concentration</div>
             <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Rutgers University, New Brunswick</div>
@@ -1136,10 +1012,10 @@ function ExperienceSection() {
       {/* Resume CTA */}
       <div style={{ textAlign: 'center', marginTop: 40, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
         <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 15 }}>
-          View Resume Online ↗
+          View Resume Online â†—
         </a>
         <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
-          Download PDF ↓
+          Download PDF â†“
         </a>
       </div>
     </section>
@@ -1157,7 +1033,7 @@ const LIFE_PHOTOS = [
   { src: '/life/photo8.jpg',  label: 'Friends dinner' },
 ];
 
-// ── Micro-Apps ────────────────────────────────────────────────────────────────
+// â”€â”€ Micro-Apps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function CryptoTickerDemo() {
   const [cryptos, setCryptos] = useState([
@@ -1236,7 +1112,7 @@ function CryptoTickerDemo() {
             animation: refreshing ? 'spin 1s linear infinite' : 'none',
           }}
         >
-          ↻ {refreshing ? 'Updating' : 'Refresh'}
+          â†» {refreshing ? 'Updating' : 'Refresh'}
         </button>
       </div>
       <div style={{ display: 'grid', gap: 10 }}>
@@ -1265,7 +1141,7 @@ function CryptoTickerDemo() {
                 {c.loading ? '...' : `$${c.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
               </div>
               <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
-                {c.change > 0 ? '▲' : '▼'} {Math.abs(c.change)}%
+                {c.change > 0 ? 'â–²' : 'â–¼'} {Math.abs(c.change)}%
               </div>
             </div>
           </div>
@@ -1317,11 +1193,11 @@ function JobMatcherDemo() {
         <div style={{ color: '#6b7db3', fontSize: 12 }}>{job.company}</div>
       </div>
       <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>← Prev</button>
+        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>â† Prev</button>
         <button onClick={toggleLike} style={{ padding: '8px 16px', background: isLiked ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(236,72,153,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, color: isLiked ? '#ec4899' : '#6b7db3', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
-          {isLiked ? '★ Saved' : '☆ Save'}
+          {isLiked ? 'â˜… Saved' : 'â˜† Save'}
         </button>
-        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next →</button>
+        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next â†’</button>
       </div>
     </div>
   );
@@ -1514,7 +1390,7 @@ function LifeSection() {
           <button onClick={prev} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
             onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
             onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
-          >←</button>
+          >â†</button>
 
           {/* Dots */}
           <div style={{ display: 'flex', gap: 8 }}>
@@ -1526,7 +1402,7 @@ function LifeSection() {
           <button onClick={next} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
             onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
             onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
-          >→</button>
+          >â†’</button>
         </div>
 
         {/* Swipe hint */}
@@ -1617,29 +1493,29 @@ function ContactSection() {
         {/* Social links */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40 }}>
           <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>🐙</span> GitHub
+            <span style={{ fontSize: 20 }}>ðŸ™</span> GitHub
           </a>
           <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>💼</span> LinkedIn
+            <span style={{ fontSize: 20 }}>ðŸ’¼</span> LinkedIn
           </a>
           <a href="mailto:Zbienstock@gmail.com" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>✉️</span> Email
+            <span style={{ fontSize: 20 }}>âœ‰ï¸</span> Email
           </a>
           <button onClick={() => copy('Zbienstock@gmail.com')} className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(255,255,255,0.06)', color: copied ? '#10d9a0' : '#8b9cc8', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: 'rgba(15,22,41,0.7)', backdropFilter: 'blur(20px)', transition: 'all 0.2s' }}>
-            <span style={{ fontSize: 16 }}>{copied ? '✅' : '📋'}</span> {copied ? 'Copied!' : 'Copy Email'}
+            <span style={{ fontSize: 16 }}>{copied ? 'âœ…' : 'ðŸ“‹'}</span> {copied ? 'Copied!' : 'Copy Email'}
           </button>
         </div>
 
         {/* Footer note */}
         <p style={{ color: '#2a3255', fontSize: 13, fontFamily: "'JetBrains Mono', monospace" }}>
-          Built by Zach Bienstock · 2026
+          Built by Zach Bienstock Â· 2026
         </p>
       </div>
     </section>
   );
 }
 
-// ── App ────────────────────────────────────────────────────────────────────────
+// â”€â”€ App â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ScrollProgressBar() {
   const [progress, setProgress] = useState(0);
