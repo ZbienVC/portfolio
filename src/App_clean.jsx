@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import ChatWidget from './ChatWidget.jsx';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -95,51 +94,6 @@ const PROJECTS = [
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
     emoji: '🦒',
     highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
-  },
-  {
-    id: 'gigaton',
-    name: '$GIGATON',
-    tagline: 'Gigachad on TON — Memecoin Website',
-    description: 'A fully custom memecoin landing site for $GIGATON on the TON blockchain. TON-blue design, Gigachad meme gallery, live DexScreener chart, scrolling ticker, and tokenomics.',
-    status: 'live',
-    url: 'https://gigaton.pro',
-    github: 'https://github.com/ZbienVC/gigaton-token',
-    color: '#0088CC',
-    colorEnd: '#005F8F',
-    tagClass: 'tag-blue',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
-    emoji: '🔷',
-    highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
-  },
-  {
-    id: 'wayfound',
-    name: 'WayFound',
-    tagline: 'AI-Powered Travel Concierge',
-    description: 'Describe your trip in plain language and get scored, ranked hotel results instantly. Claude parses preferences, Amadeus pulls live inventory, Stripe handles checkout.',
-    status: 'live',
-    url: 'https://wayfound.vercel.app',
-    github: 'https://github.com/ZbienVC/wayfound',
-    color: '#c9a84c',
-    colorEnd: '#e8c96a',
-    tagClass: '',
-    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
-    emoji: '✈️',
-    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
-  },
-  {
-    id: 'pepelien',
-    name: '$PEPELIEN',
-    tagline: 'Elon. Pepe. Alien. On Solana.',
-    description: 'A fully custom memecoin website for $PEPELIEN on Solana. Space/alien theme, Orbitron font, matrix rain + particle burst effects, Gigachad meme vault, live DexScreener chart, and full Web3 CTAs.',
-    status: 'live',
-    url: 'https://pepelien.com',
-    github: 'https://github.com/ZbienVC/pepelien',
-    color: '#39FF14',
-    colorEnd: '#4CAF50',
-    tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],
-    emoji: '👽',
-    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
   },
   {
     id: 'staywestpalm',
@@ -420,8 +374,8 @@ function HeroSection() {
         {/* Stats */}
         <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '10', label: 'Live in Production' },
-            { num: '3+', label: 'Currently Building' },
+            { num: '2', label: 'Products in Development' },
+            { num: '8', label: 'Live in Production' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
@@ -799,223 +753,95 @@ function ProjectCarouselCard({ project, position }) {
 }
 
 function ProjectsSection() {
-  const CATS = {
-    all: PROJECTS,
-    ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound'].includes(p.id)),
-    crypto: ['splash','pepelien','omo','gigaton'].map(id => PROJECTS.find(p => p.id === id)).filter(Boolean),
-    web: PROJECTS.filter(p => ['staywestpalm','reflect','omo','gigaton'].includes(p.id)),
-  };
-  const TABS = [
-    { id:'all',    label:'All Projects',  count: PROJECTS.length },
-    { id:'ai',     label:'AI & Products', count: CATS.ai.length },
-    { id:'crypto', label:'Crypto & Web3', count: CATS.crypto.length },
-    { id:'web',    label:'Web & Sites',   count: CATS.web.length },
-  ];
+  const [current, setCurrent] = useState(0);
+  const touchStart = useRef(0);
+  const N = PROJECTS.length;
 
-  const [activeTab, setActiveTab] = useState('all');
-  const [fade, setFade] = useState(false);
+  const prev = () => setCurrent(c => (c - 1 + N) % N);
+  const next = () => setCurrent(c => (c + 1) % N);
+  const getProject = (offset) => PROJECTS[(current + offset + N) % N];
 
-  const switchTab = (id) => {
-    if (id === activeTab) return;
-    setFade(true);
-    setTimeout(() => { setActiveTab(id); setFade(false); }, 150);
+  const onTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
   };
 
-  const projects = CATS[activeTab] || PROJECTS;
-  const featured = projects.slice(0, 2);
-  const compact = projects.slice(2);
-  const activeTabObj = TABS.find(t => t.id === activeTab);
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [current]);
 
-  const statusCfg = (s) => s === 'live'
-    ? { bg:'rgba(16,217,160,0.12)', color:'#10d9a0', border:'rgba(16,217,160,0.25)', label:'Live' }
-    : s === 'soon'
-    ? { bg:'rgba(139,92,246,0.12)', color:'#8b5cf6', border:'rgba(139,92,246,0.25)', label:'Soon' }
-    : { bg:'rgba(79,157,235,0.12)', color:'#4f9deb', border:'rgba(79,157,235,0.25)', label:'Building' };
+  const centerProject = getProject(0);
 
   return (
     <section id="projects" style={{ padding: '88px 24px 72px', background: 'rgba(15,22,41,0.3)' }}>
       <style>{`
-        @keyframes pf { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-        .pf { animation: pf 0.28s ease forwards; }
-        .tab-btn:hover { opacity: 0.85; }
+        @media (max-width: 768px) {
+          .carousel-side-card { display: none !important; }
+          .carousel-center-card { width: 100% !important; max-width: 100% !important; }
+          .carousel-center-card > div { width: 100% !important; }
+        }
       `}</style>
       <div style={{ maxWidth: 1160, margin: '0 auto' }}>
-
-        <div style={{ textAlign:'center', marginBottom: 48 }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
-          <h2 style={{ fontSize:'clamp(32px,4vw,48px)', fontWeight:900, letterSpacing:'-1px', marginBottom:8 }}>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 12 }}>
             Projects <span className="gradient-text">in the wild</span>
           </h2>
-          <p style={{ color:'#4a5580', fontSize:14, fontFamily:"'JetBrains Mono',monospace" }}>
-            {projects.length} project{projects.length !== 1 ? 's' : ''} — {activeTabObj?.label}
+          <p style={{ color: '#4a5580', fontSize: 14, fontFamily: "'JetBrains Mono', monospace" }}>
+            {current + 1} / {N}
           </p>
         </div>
 
-        <div style={{ display:'flex', gap:8, justifyContent:'center', flexWrap:'wrap', marginBottom:48 }}>
-          {TABS.map(tab => {
-            const on = activeTab === tab.id;
-            return (
-              <button key={tab.id} onClick={() => switchTab(tab.id)} className="tab-btn"
-                style={{ padding:'10px 22px', borderRadius:100, fontSize:13, fontWeight:700, cursor:'pointer',
-                  border: `1px solid ${on ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                  background: on ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)',
-                  color: on ? '#10d9a0' : '#6b7db3',
-                  display:'flex', alignItems:'center', gap:8,
-                  boxShadow: on ? '0 0 20px rgba(16,217,160,0.1)' : 'none',
-                  transition:'all 0.2s' }}>
-                <span>{tab.label}</span>
-                <span style={{ padding:'2px 8px', borderRadius:100, fontSize:11, fontWeight:700,
-                  background: on ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)',
-                  color: on ? '#10d9a0' : '#4a5580' }}>{tab.count}</span>
-              </button>
-            );
-          })}
+        <div
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', padding: '12px 0' }}
+        >
+          <div className="carousel-side-card">
+            <ProjectCarouselCard project={getProject(-1)} position="left" />
+          </div>
+          <div className="carousel-center-card">
+            <ProjectCarouselCard project={getProject(0)} position="center" />
+          </div>
+          <div className="carousel-side-card">
+            <ProjectCarouselCard project={getProject(1)} position="right" />
+          </div>
         </div>
 
-        <div key={activeTab} className="pf" style={{ opacity: fade ? 0 : 1, transition:'opacity 0.15s' }}>
-          {featured.length > 0 && (
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,460px),1fr))', gap:20, marginBottom: compact.length ? 20 : 0 }}>
-              {featured.map((p, i) => {
-                const sc = statusCfg(p.status);
-                return (
-                  <div key={p.id} className="glass" style={{ borderRadius:22, overflow:'hidden', transition:'all 0.3s',
-                    animation:`pf 0.3s ease ${i*60}ms both`,
-                    border:'1px solid rgba(255,255,255,0.07)',
-                    boxShadow:'0 4px 20px rgba(0,0,0,0.2)' }}>
-                    <div style={{ height:3, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
-                    <div style={{ padding:'26px 26px 24px', display:'flex', flexDirection:'column', gap:16 }}>
-                      <div style={{ display:'flex', alignItems:'flex-start', gap:14 }}>
-                        <div style={{ width:54, height:54, borderRadius:16, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
-                          display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0,
-                          boxShadow:`0 8px 20px ${p.color}40` }}>{p.emoji}</div>
-                        <div style={{ flex:1, minWidth:0 }}>
-                          <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginBottom:5 }}>
-                            <h3 style={{ fontWeight:900, fontSize:22, color:'#f0f4ff', margin:0, lineHeight:1.1 }}>{p.name}</h3>
-                            <div style={{ padding:'3px 10px', borderRadius:100, fontSize:10, fontWeight:700,
-                              textTransform:'uppercase', letterSpacing:1,
-                              background:sc.bg, color:sc.color, border:`1px solid ${sc.border}`,
-                              display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
-                              <span style={{ width:5, height:5, borderRadius:'50%', background:sc.color, display:'inline-block' }} />
-                              {sc.label}
-                            </div>
-                          </div>
-                          <p style={{ color:'#8b9cc8', fontSize:13, fontWeight:600, margin:0 }}>{p.tagline}</p>
-                        </div>
-                      </div>
-                      <p style={{ color:'#6b7db3', fontSize:14, lineHeight:1.7, margin:0 }}>{p.description}</p>
-                      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:7 }}>
-                        {p.highlights.slice(0,4).map(h => (
-                          <div key={h} style={{ display:'flex', gap:7, fontSize:12, color:'#9fb0d9', lineHeight:1.45 }}>
-                            <span style={{ color:p.color, fontWeight:700, flexShrink:0 }}>→</span><span>{h}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
-                        {p.tags.slice(0,5).map(t => (
-                          <span key={t} style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600,
-                            background:`${p.color}12`, color:p.color, border:`1px solid ${p.color}25` }}>{t}</span>
-                        ))}
-                        {p.tags.length > 5 && (
-                          <span style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600,
-                            background:'rgba(255,255,255,0.05)', color:'#8b9cc8', border:'1px solid rgba(255,255,255,0.1)' }}>
-                            +{p.tags.length-5}
-                          </span>
-                        )}
-                      </div>
-                      <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-                        {p.url && (
-                          <a href={p.url} target="_blank" rel="noopener noreferrer"
-                            style={{ padding:'10px 20px', borderRadius:10, fontSize:13, fontWeight:700,
-                              background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
-                              color:'#fff', textDecoration:'none',
-                              boxShadow:`0 4px 14px ${p.color}30` }}>
-                            Visit Live ↗
-                          </a>
-                        )}
-                        {p.github && (
-                          <a href={p.github} target="_blank" rel="noopener noreferrer"
-                            style={{ padding:'10px 20px', borderRadius:10, fontSize:13, fontWeight:700,
-                              background:'rgba(255,255,255,0.05)', color:'#8b9cc8',
-                              border:'1px solid rgba(255,255,255,0.1)', textDecoration:'none' }}>
-                            GitHub ↗
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 32 }}>
+          <button
+            onClick={prev}
+            style={{ background: 'none', border: 'none', color: '#4a5580', cursor: 'pointer', fontSize: 24, padding: '6px 12px', borderRadius: 8, transition: 'color 0.2s', lineHeight: 1 }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f0f4ff'}
+            onMouseLeave={e => e.currentTarget.style.color = '#4a5580'}
+          >&#8249;</button>
 
-          {compact.length > 0 && (
-            <>
-              <div style={{ display:'flex', alignItems:'center', gap:12, margin:'8px 0 16px' }}>
-                <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.05)' }} />
-                <span style={{ fontSize:11, color:'#2a3255', fontWeight:700,
-                  textTransform:'uppercase', letterSpacing:2, whiteSpace:'nowrap' }}>More Projects</span>
-                <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.05)' }} />
-              </div>
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,280px),1fr))', gap:14 }}>
-                {compact.map((p, i) => {
-                  const sc = statusCfg(p.status);
-                  return (
-                    <div key={p.id} className="glass" style={{ borderRadius:18, overflow:'hidden',
-                      transition:'all 0.25s', animation:`pf 0.3s ease ${(i+2)*60}ms both` }}>
-                      <div style={{ height:2, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
-                      <div style={{ padding:'16px 18px', display:'flex', flexDirection:'column', gap:11 }}>
-                        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                          <div style={{ width:42, height:42, borderRadius:12, flexShrink:0,
-                            background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
-                            display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>{p.emoji}</div>
-                          <div style={{ flex:1, minWidth:0 }}>
-                            <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
-                              <span style={{ fontWeight:800, fontSize:15, color:'#f0f4ff' }}>{p.name}</span>
-                              <span style={{ fontSize:9, fontWeight:700, textTransform:'uppercase',
-                                color:sc.color, letterSpacing:0.5 }}>● {sc.label}</span>
-                            </div>
-                            <p style={{ color:'#6b7db3', fontSize:12, margin:0, lineHeight:1.4, marginTop:2 }}>{p.tagline}</p>
-                          </div>
-                        </div>
-                        <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                          {p.tags.slice(0,3).map(t => (
-                            <span key={t} style={{ padding:'3px 8px', borderRadius:6, fontSize:10, fontWeight:600,
-                              background:`${p.color}10`, color:p.color, border:`1px solid ${p.color}20` }}>{t}</span>
-                          ))}
-                          {p.tags.length > 3 && (
-                            <span style={{ padding:'3px 8px', borderRadius:6, fontSize:10,
-                              color:'#4a5580', background:'rgba(255,255,255,0.04)',
-                              border:'1px solid rgba(255,255,255,0.08)' }}>+{p.tags.length-3}</span>
-                          )}
-                        </div>
-                        <div style={{ display:'flex', gap:8 }}>
-                          {p.url && (
-                            <a href={p.url} target="_blank" rel="noopener noreferrer"
-                              style={{ padding:'7px 14px', borderRadius:8, fontSize:11, fontWeight:700,
-                                background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
-                                color:'#fff', textDecoration:'none' }}>Visit ↗</a>
-                          )}
-                          {p.github && (
-                            <a href={p.github} target="_blank" rel="noopener noreferrer"
-                              style={{ padding:'7px 14px', borderRadius:8, fontSize:11, fontWeight:600,
-                                background:'rgba(255,255,255,0.05)', color:'#6b7db3',
-                                border:'1px solid rgba(255,255,255,0.08)', textDecoration:'none' }}>GitHub</a>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
+          {PROJECTS.map((_, i) => (
+            <button key={i} onClick={() => setCurrent(i)} style={{
+              width: i === current ? 24 : 6, height: 6,
+              borderRadius: 3, border: 'none', cursor: 'pointer',
+              background: i === current ? centerProject.color : 'rgba(255,255,255,0.15)',
+              transition: 'all 0.3s ease', padding: 0,
+            }} />
+          ))}
+
+          <button
+            onClick={next}
+            style={{ background: 'none', border: 'none', color: '#4a5580', cursor: 'pointer', fontSize: 24, padding: '6px 12px', borderRadius: 8, transition: 'color 0.2s', lineHeight: 1 }}
+            onMouseEnter={e => e.currentTarget.style.color = '#f0f4ff'}
+            onMouseLeave={e => e.currentTarget.style.color = '#4a5580'}
+          >&#8250;</button>
         </div>
 
-        <div style={{ textAlign:'center', marginTop:40 }}>
-          <div className="glass" style={{ display:'inline-flex', alignItems:'center', gap:12,
-            padding:'12px 24px', borderRadius:100, fontSize:13, color:'#6b7db3' }}>
-            <span style={{ width:6, height:6, borderRadius:'50%', background:'#8b5cf6',
-              display:'inline-block', animation:'pulse 2s infinite' }} />
+        <div style={{ textAlign: 'center', marginTop: 28 }}>
+          <div className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 100, fontSize: 13, color: '#6b7db3' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#8b5cf6', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             More projects shipping soon
           </div>
         </div>
@@ -1023,12 +849,7 @@ function ProjectsSection() {
     </section>
   );
 }
-
 function ExperienceSection() {
-  const [expanded, setExpanded] = useState(null);
-
-  const toggle = (i) => setExpanded(expanded === i ? null : i);
-
   return (
     <section id="experience" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -1037,160 +858,54 @@ function ExperienceSection() {
           Where I've <span className="gradient-text">been</span>
         </h2>
       </div>
-
-      <style>{`
-        .exp-card {
-          border-radius: 18px;
-          padding: 20px 24px;
-          cursor: pointer;
-          transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
-          border-left-width: 3px;
-          border-left-style: solid;
-          background: rgba(255,255,255,0.03);
-          backdrop-filter: blur(12px);
-          border-top: 1px solid rgba(255,255,255,0.05);
-          border-right: 1px solid rgba(255,255,255,0.05);
-          border-bottom: 1px solid rgba(255,255,255,0.05);
-          position: relative;
-          overflow: hidden;
-        }
-        .exp-card:hover {
-          transform: translateY(-4px);
-          background: rgba(255,255,255,0.05);
-        }
-        .exp-card.expanded {
-          transform: translateY(-2px);
-        }
-        .exp-highlights {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease, margin 0.25s ease;
-          opacity: 0;
-          margin-top: 0;
-        }
-        .exp-highlights.open {
-          max-height: 400px;
-          opacity: 1;
-          margin-top: 14px;
-        }
-        @media (min-width: 768px) {
-          .exp-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            align-items: start;
-          }
-          .exp-col-right {
-            margin-top: 32px;
-          }
-        }
-        @media (max-width: 767px) {
-          .exp-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-          }
-          .exp-col-right { margin-top: 0; }
-        }
-      `}</style>
-
-      <div className="exp-grid" style={{ maxWidth: 900, margin: '0 auto' }}>
-        {/* Left column */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {EXPERIENCE.filter((_, i) => i % 2 === 0).map((exp, colIdx) => {
-            const realIdx = colIdx * 2;
-            const isOpen = expanded === realIdx;
-            return (
-              <div key={realIdx} onClick={() => toggle(realIdx)}
-                className={`exp-card ${isOpen ? 'expanded' : ''}`}
-                style={{ borderLeftColor: exp.color, boxShadow: isOpen ? `0 8px 32px ${exp.color}20, -2px 0 0 ${exp.color}` : `0 2px 12px rgba(0,0,0,0.2)` }}>
-                <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${exp.color}06, transparent)`, pointerEvents: 'none' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 14, color: '#f0f4ff', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                      <span style={{ fontWeight: 700, fontSize: 12, color: exp.color }}>{exp.company}</span>
-                      <span style={{ color: '#2a3255', fontSize: 11 }}>·</span>
-                      <span style={{ color: '#4a5580', fontSize: 11 }}>{exp.location}</span>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                    <span style={{ fontSize: 11, color: '#4a5580', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
-                    <span style={{ fontSize: 12, color: isOpen ? exp.color : '#2a3255', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
-                  </div>
-                </div>
-                <div className={`exp-highlights ${isOpen ? 'open' : ''}`}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {exp.highlights.map((h, j) => (
-                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: '#6b7db3', lineHeight: 1.55 }}>
-                        <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 780, margin: '0 auto' }}>
+        {EXPERIENCE.map((exp, i) => (
+          <div key={i} className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: `3px solid ${exp.color}`, display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, alignItems: 'start' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4, flexWrap: 'wrap' }}>
+                <span style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff' }}>{exp.role}</span>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Right column — offset */}
-        <div className="exp-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {EXPERIENCE.filter((_, i) => i % 2 === 1).map((exp, colIdx) => {
-            const realIdx = colIdx * 2 + 1;
-            const isOpen = expanded === realIdx;
-            return (
-              <div key={realIdx} onClick={() => toggle(realIdx)}
-                className={`exp-card ${isOpen ? 'expanded' : ''}`}
-                style={{ borderLeftColor: exp.color, boxShadow: isOpen ? `0 8px 32px ${exp.color}20, -2px 0 0 ${exp.color}` : `0 2px 12px rgba(0,0,0,0.2)` }}>
-                <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${exp.color}06, transparent)`, pointerEvents: 'none' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 14, color: '#f0f4ff', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                      <span style={{ fontWeight: 700, fontSize: 12, color: exp.color }}>{exp.company}</span>
-                      <span style={{ color: '#2a3255', fontSize: 11 }}>·</span>
-                      <span style={{ color: '#4a5580', fontSize: 11 }}>{exp.location}</span>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                    <span style={{ fontSize: 11, color: '#4a5580', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
-                    <span style={{ fontSize: 12, color: isOpen ? exp.color : '#2a3255', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
-                  </div>
-                </div>
-                <div className={`exp-highlights ${isOpen ? 'open' : ''}`}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {exp.highlights.map((h, j) => (
-                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: '#6b7db3', lineHeight: 1.55 }}>
-                        <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+                <span style={{ fontWeight: 700, fontSize: 14, color: exp.color }}>{exp.company}</span>
+                <span style={{ color: '#2a3255', fontSize: 12 }}>·</span>
+                <span style={{ color: '#4a5580', fontSize: 12 }}>{exp.location}</span>
               </div>
-            );
-          })}
-        </div>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {exp.highlights.map((h, j) => (
+                  <li key={j} style={{ display: 'flex', gap: 8, fontSize: 13, color: '#6b7db3', lineHeight: 1.5 }}>
+                    <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div style={{ flexShrink: 0, textAlign: 'right' }}>
+              <span style={{ fontSize: 12, color: '#4a5580', fontFamily: "'JetBrains Mono', monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Education */}
-      <div style={{ maxWidth: 900, margin: '20px auto 0' }}>
-        <div className="glass" style={{ borderRadius: 18, padding: '18px 24px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 28 }}>🎓</div>
+      <div style={{ maxWidth: 780, margin: '24px auto 0' }}>
+        <div className="glass" style={{ borderRadius: 20, padding: '24px 28px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 36 }}>🎓</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance — Business Analytics</div>
-            <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Rutgers University, New Brunswick</div>
-            <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)', fontSize: 11 }}>SQL Cert — UC Davis</span>
+            <div style={{ fontWeight: 800, fontSize: 17, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance - Business Analytics Concentration</div>
+            <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14, marginBottom: 6 }}>Rutgers University, New Brunswick</div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)' }}>SQL Cert - UC Davis</span>
+            </div>
           </div>
-          <div style={{ color: '#4a5580', fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>Dec 2022</div>
+          <div style={{ color: '#4a5580', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" }}>Dec 2022</div>
         </div>
       </div>
 
       {/* Resume CTA */}
-      <div style={{ textAlign: 'center', marginTop: 32, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-        <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>
+      <div style={{ textAlign: 'center', marginTop: 40, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 15 }}>
           View Resume Online ↗
         </a>
-        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
           Download PDF ↓
         </a>
       </div>
@@ -1208,6 +923,260 @@ const LIFE_PHOTOS = [
   { src: '/life/photo7.jpg',  label: 'Life' },
   { src: '/life/photo8.jpg',  label: 'Friends dinner' },
 ];
+
+// ── Micro-Apps ────────────────────────────────────────────────────────────────
+
+function CryptoTickerDemo() {
+  const [cryptos, setCryptos] = useState([
+    { symbol: 'BTC', name: 'Bitcoin', price: 0, change: 0, loading: true },
+    { symbol: 'ETH', name: 'Ethereum', price: 0, change: 0, loading: true },
+    { symbol: 'SOL', name: 'Solana', price: 0, change: 0, loading: true },
+  ]);
+  const [highlighted, setHighlighted] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchPrices = async () => {
+    setRefreshing(true);
+    try {
+      const response = await fetch(
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true'
+      );
+      const data = await response.json();
+
+      setCryptos([
+        {
+          symbol: 'BTC',
+          name: 'Bitcoin',
+          price: data.bitcoin?.usd || 0,
+          change: Math.round((data.bitcoin?.usd_24h_change || 0) * 100) / 100,
+          loading: false
+        },
+        {
+          symbol: 'ETH',
+          name: 'Ethereum',
+          price: data.ethereum?.usd || 0,
+          change: Math.round((data.ethereum?.usd_24h_change || 0) * 100) / 100,
+          loading: false
+        },
+        {
+          symbol: 'SOL',
+          name: 'Solana',
+          price: data.solana?.usd || 0,
+          change: Math.round((data.solana?.usd_24h_change || 0) * 100) / 100,
+          loading: false
+        },
+      ]);
+    } catch (error) {
+      console.error('Failed to fetch crypto prices:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPrices();
+    const interval = setInterval(fetchPrices, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{ background: 'linear-gradient(135deg, rgba(79,157,235,0.1), rgba(139,92,246,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(79,157,235,0.25)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #4f9deb, #10d9a0)', boxShadow: '0 0 12px rgba(79,157,235,0.5)' }} />
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Price Feed</h4>
+        </div>
+        <button
+          onClick={() => { setHighlighted(null); fetchPrices(); }}
+          disabled={refreshing}
+          style={{
+            padding: '6px 14px',
+            background: refreshing ? 'rgba(79,157,235,0.1)' : 'rgba(79,157,235,0.2)',
+            color: refreshing ? '#4f9deb' : '#4f9deb',
+            border: '1px solid rgba(79,157,235,0.3)',
+            borderRadius: 6,
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: refreshing ? 'not-allowed' : 'pointer',
+            transition: 'all 0.2s',
+            opacity: refreshing ? 0.6 : 1,
+            animation: refreshing ? 'spin 1s linear infinite' : 'none',
+          }}
+        >
+          ↻ {refreshing ? 'Updating' : 'Refresh'}
+        </button>
+      </div>
+      <div style={{ display: 'grid', gap: 10 }}>
+        {cryptos.map(c => (
+          <div
+            key={c.symbol}
+            onClick={() => setHighlighted(c.symbol)}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '14px',
+              background: highlighted === c.symbol ? 'rgba(79,157,235,0.15)' : 'rgba(255,255,255,0.02)',
+              borderRadius: 10,
+              border: `1px solid ${highlighted === c.symbol ? 'rgba(79,157,235,0.4)' : 'rgba(79,157,235,0.1)'}`,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            <div>
+              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>{c.symbol}</div>
+              <div style={{ color: '#6b7db3', fontSize: 11 }}>{c.name}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ color: '#f0f4ff', fontWeight: 700, fontSize: 13 }}>
+                {c.loading ? '...' : `$${c.price.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+              </div>
+              <div style={{ color: c.change > 0 ? '#10d9a0' : '#ff6b6b', fontSize: 11, fontWeight: 600 }}>
+                {c.change > 0 ? '▲' : '▼'} {Math.abs(c.change)}%
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function JobMatcherDemo() {
+  const [index, setIndex] = useState(0);
+  const [liked, setLiked] = useState(new Set());
+  const jobs = [
+    { title: 'Senior React Developer', company: 'TechStart Inc', match: 92, role: 'Frontend' },
+    { title: 'Full-Stack Engineer', company: 'Scale Corp', match: 87, role: 'Full-Stack' },
+    { title: 'Product Engineer', company: 'Growth Labs', match: 95, role: 'Full-Stack' },
+  ];
+  const job = jobs[index];
+  const isLiked = liked.has(index);
+
+  const next = () => setIndex((index + 1) % jobs.length);
+  const prev = () => setIndex((index - 1 + jobs.length) % jobs.length);
+  const toggleLike = () => {
+    const newLiked = new Set(liked);
+    if (newLiked.has(index)) newLiked.delete(index);
+    else newLiked.add(index);
+    setLiked(newLiked);
+  };
+
+  return (
+    <div style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(79,157,235,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(139,92,246,0.25)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #8b5cf6, #4f9deb)', boxShadow: '0 0 12px rgba(139,92,246,0.5)' }} />
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Job Matcher</h4>
+        </div>
+        <span style={{ fontSize: 12, color: '#6b7db3', background: 'rgba(139,92,246,0.1)', padding: '4px 10px', borderRadius: 6 }}>{index + 1}/3</span>
+      </div>
+      <div style={{ padding: '16px', background: 'linear-gradient(135deg, rgba(139,92,246,0.1), rgba(79,157,235,0.05))', borderRadius: 12, marginBottom: 16, minHeight: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid rgba(139,92,246,0.2)' }}>
+        <div style={{ color: '#8b5cf6', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', marginBottom: 4 }}>{job.role}</div>
+        <div style={{ color: '#f0f4ff', fontSize: 28, fontWeight: 900, marginBottom: 12 }}>{job.match}%</div>
+        <div style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{job.title}</div>
+        <div style={{ color: '#6b7db3', fontSize: 12 }}>{job.company}</div>
+      </div>
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+        <button onClick={prev} style={{ padding: '8px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#f0f4ff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>← Prev</button>
+        <button onClick={toggleLike} style={{ padding: '8px 16px', background: isLiked ? 'rgba(236,72,153,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isLiked ? 'rgba(236,72,153,0.3)' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, color: isLiked ? '#ec4899' : '#6b7db3', cursor: 'pointer', fontSize: 13, fontWeight: 600, transition: 'all 0.2s' }}>
+          {isLiked ? '★ Saved' : '☆ Save'}
+        </button>
+        <button onClick={next} style={{ padding: '8px 14px', background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', border: 'none', borderRadius: 8, color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600, transition: 'all 0.2s' }}>Next →</button>
+      </div>
+    </div>
+  );
+}
+
+function MealPlannerDemo() {
+  const [calories, setCalories] = useState(2000);
+  const [preset, setPreset] = useState('balanced');
+
+  const presets = {
+    balanced: { p: 0.3, c: 0.4, f: 0.3, name: 'Balanced' },
+    lowcarb: { p: 0.4, c: 0.2, f: 0.4, name: 'Low-Carb' },
+    highprotein: { p: 0.45, c: 0.35, f: 0.2, name: 'High-Protein' },
+  };
+
+  const { p, c, f } = presets[preset];
+  const protein = Math.round((calories * p) / 4);
+  const carbs = Math.round((calories * c) / 4);
+  const fat = Math.round((calories * f) / 9);
+
+  return (
+    <div style={{ background: 'linear-gradient(135deg, rgba(16,217,160,0.1), rgba(79,157,235,0.05))', borderRadius: 16, padding: '20px', border: '1px solid rgba(16,217,160,0.25)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', boxShadow: '0 0 12px rgba(16,217,160,0.5)' }} />
+          <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Macro Calculator</h4>
+        </div>
+        <span style={{ fontSize: 11, color: '#6b7db3', background: 'rgba(16,217,160,0.1)', padding: '4px 10px', borderRadius: 6 }}>{presets[preset].name}</span>
+      </div>
+
+      <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+        {Object.keys(presets).map(p => (
+          <button
+            key={p}
+            onClick={() => setPreset(p)}
+            style={{
+              flex: 1,
+              padding: '8px 10px',
+              background: preset === p ? 'linear-gradient(135deg, #10d9a0, rgba(16,217,160,0.3))' : 'rgba(255,255,255,0.05)',
+              color: preset === p ? '#10d9a0' : '#6b7db3',
+              border: preset === p ? '1px solid rgba(16,217,160,0.4)' : '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 8,
+              fontSize: 11,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            {presets[p].name}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+          <label style={{ color: '#6b7db3', fontSize: 11, fontWeight: 600 }}>Daily Target</label>
+          <span style={{ color: '#f0f4ff', fontSize: 12, fontWeight: 700 }}>{calories} kcal</span>
+        </div>
+        <input
+          type="range"
+          min="1200"
+          max="3500"
+          value={calories}
+          onChange={(e) => setCalories(Number(e.target.value))}
+          style={{ width: '100%', height: '6px', borderRadius: '3px', background: 'linear-gradient(to right, #4f9deb, #10d9a0)', cursor: 'pointer' }}
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(79,157,235,0.15), rgba(79,157,235,0.05))', borderRadius: 10, border: '1px solid rgba(79,157,235,0.25)', textAlign: 'center' }}>
+          <div style={{ color: '#4f9deb', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Protein</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{protein}g</div>
+          <div style={{ fontSize: 10, color: '#4f9deb' }}>{Math.round(p * 100)}%</div>
+        </div>
+        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05))', borderRadius: 10, border: '1px solid rgba(245,158,11,0.25)', textAlign: 'center' }}>
+          <div style={{ color: '#f59e0b', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Carbs</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{carbs}g</div>
+          <div style={{ fontSize: 10, color: '#f59e0b' }}>{Math.round(c * 100)}%</div>
+        </div>
+        <div style={{ padding: '12px', background: 'linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05))', borderRadius: 10, border: '1px solid rgba(236,72,153,0.25)', textAlign: 'center' }}>
+          <div style={{ color: '#ec4899', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Fat</div>
+          <div style={{ color: '#f0f4ff', fontSize: 16, fontWeight: 900, marginBottom: 2 }}>{fat}g</div>
+          <div style={{ fontSize: 10, color: '#ec4899' }}>{Math.round(f * 100)}%</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function LifeSection() {
   const [active, setActive] = useState(0);
@@ -1474,7 +1443,6 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#040810' }}>
       <ScrollProgressBar />
-      <ChatWidget />
       <Nav />
       <HeroSection />
       <AboutSection />
@@ -1486,6 +1454,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
