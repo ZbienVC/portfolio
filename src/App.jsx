@@ -41,7 +41,7 @@ const PROJECTS = [
     tagline: 'Crypto Intelligence Dashboard',
     description: 'A real-time crypto alpha-hunting dashboard with live token feeds, risk scoring, whale tracking, narrative intelligence, and DeFi analytics - powered by on-chain data.',
     status: 'live',
-    url: 'https://splash-signal-production.up.railway.app',
+    url: 'https://splashsignal.xyz',
     github: 'https://github.com/ZbienVC/splash-signal',
     color: '#4f9deb',
     colorEnd: '#6366f1',
