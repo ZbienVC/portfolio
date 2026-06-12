@@ -1282,7 +1282,7 @@ function LifeSection() {
         </div>
 
         {/* Stacked card carousel */}
-        <div style={{ position: 'relative', height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none' }}
+        <div style={{ position: 'relative', height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center', userSelect: 'none', overflow: 'hidden', maxWidth: '100%' }}
           onMouseDown={onDragStart} onMouseUp={onDragEnd}
           onTouchStart={onDragStart} onTouchEnd={onDragEnd}
         >
