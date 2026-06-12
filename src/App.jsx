@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useScrollReveal, useMagnetic, useParallax } from './useMotion';
 import ChatWidget from './ChatWidget.jsx';
 import './index.css';
 
@@ -184,7 +185,7 @@ const EXPERIENCE = [
     company: 'Grapevine',
     period: 'Feb 2024 \u2013 Oct 2025',
     location: 'New York, NY',
-    color: '#10d9a0',
+    color: '#e0a155',
     highlights: [
       'Built automated Excel reporting systems and Figma dashboards, reducing manual reporting by 80%+',
       'Analyzed tens of thousands of product groups - generated 20-85% cost savings, ranging from tens of thousands to millions annually',
@@ -196,7 +197,7 @@ const EXPERIENCE = [
     company: 'Reflect Medical & Cosmetic Center',
     period: 'Jul 2023 \u2013 Present',
     location: 'Hawthorne, NJ',
-    color: '#ec4899',
+    color: '#c98a5e',
     highlights: [
       'Managed financial workflows in QuickBooks: transaction entry, reconciliation, expense tracking',
       'Oversaw inventory procurement and vendor coordination for consistent medical supply availability',
@@ -208,7 +209,7 @@ const EXPERIENCE = [
     company: 'Bloomberg LP',
     period: 'Mar 2023 \u2013 Feb 2024',
     location: 'Remote',
-    color: '#4f9deb',
+    color: '#d4a373',
     highlights: [
       'Analyzed large financial datasets to identify trends and support ML surveillance models',
       'Evaluated derivatives activity - options, swaps, forwards - to validate structured financial data',
@@ -220,7 +221,7 @@ const EXPERIENCE = [
     company: 'Cambridge Wilkinson',
     period: 'Feb 2022 \u2013 Feb 2023',
     location: 'New York, NY',
-    color: '#8b5cf6',
+    color: '#b08d57',
     highlights: [
       'Researched middle-market companies to support debt and equity capital raises ($25M - $1B)',
       'Built detailed target lists of executives and financial metrics for active deal sourcing',
@@ -232,7 +233,7 @@ const EXPERIENCE = [
     company: 'Prior2IPO Investments',
     period: 'May 2021 \u2013 Aug 2021',
     location: 'Sparta, NJ',
-    color: '#6366f1',
+    color: '#9c8466',
     highlights: [
       'Connected accredited investors with Pre-IPO investment funds and deal opportunities',
       'Conducted outreach to prospective investors and gained exposure to private equity deal flow',
@@ -243,7 +244,7 @@ const EXPERIENCE = [
     company: 'Freelance',
     period: 'May 2019 - Aug 2024',
     location: 'Remote',
-    color: '#64748b',
+    color: '#8a7f72',
     highlights: [
       'Built and sold 50+ custom desktop computers through eBay',
       'Diagnosed and repaired hardware/software issues; performed upgrades and performance optimization',
@@ -254,7 +255,7 @@ const EXPERIENCE = [
     company: 'Independent / Crypto Projects',
     period: 'Dec 2024 - Present',
     location: 'Remote',
-    color: '#f59e0b',
+    color: '#c2823a',
     highlights: [
       'Advise early-stage Web3 projects on token design, positioning, marketing strategy, and community growth',
       'Guide go-to-market strategies and token launches reaching + market capitalization',
@@ -295,7 +296,7 @@ function Nav({ active }) {
     <nav style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
       padding: '16px 24px',
-      background: scrolled ? 'rgba(4,8,16,0.85)' : 'transparent',
+      background: scrolled ? 'rgba(11,10,13,0.82)' : 'transparent',
       backdropFilter: scrolled ? 'blur(20px)' : 'none',
       borderBottom: scrolled ? '1px solid rgba(255,255,255,0.05)' : 'none',
       transition: 'all 0.3s ease',
@@ -304,7 +305,7 @@ function Nav({ active }) {
       opacity: hidden ? 0 : 1,
     }}>
       <a href="#hero" style={{ textDecoration: 'none', flexShrink: 0 }}>
-        <span style={{ fontWeight: 900, fontSize: '18px', background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>ZB</span>
+        <span style={{ fontWeight: 800, fontSize: '20px', fontFamily: 'var(--serif)', color: 'var(--ink)' }}>Z<span className="accent-italic" style={{ fontSize: '1.05em' }}>B</span></span>
       </a>
 
       {/* Desktop Nav */}
@@ -321,7 +322,7 @@ function Nav({ active }) {
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         style={{
-          background: 'none', border: 'none', color: '#10d9a0', fontSize: '24px', cursor: 'pointer', padding: '0 8px'
+          background: 'none', border: 'none', color: 'var(--accent-bright)', fontSize: '24px', cursor: 'pointer', padding: '0 8px'
         }}
         className="mobile-menu-btn"
       >
@@ -332,7 +333,7 @@ function Nav({ active }) {
       {mobileMenuOpen && (
         <div className="mobile-menu" style={{
           position: 'absolute', top: '100%', left: 0, right: 0,
-          background: 'rgba(4,8,16,0.95)', backdropFilter: 'blur(20px)',
+          background: 'rgba(11,10,13,0.95)', backdropFilter: 'blur(20px)',
           borderBottom: '1px solid rgba(255,255,255,0.05)',
           padding: '16px', flexDirection: 'column', gap: '12px'
         }}>
@@ -350,20 +351,22 @@ function Nav({ active }) {
 }
 
 function HeroSection() {
-  const [typed, setTyped] = useState('');
-  const titles = ['Builder', 'Developer', 'Founder', 'Creator'];
+  const titles = ['builder', 'developer', 'founder', 'creator'];
   const [titleIdx, setTitleIdx] = useState(0);
+  const [typed, setTyped] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const magRef = useMagnetic(16);
+  const meshRef = useParallax(0.18);
 
   useEffect(() => {
     const current = titles[titleIdx];
     let timeout;
     if (!isDeleting && typed.length < current.length) {
-      timeout = setTimeout(() => setTyped(current.slice(0, typed.length + 1)), 100);
+      timeout = setTimeout(() => setTyped(current.slice(0, typed.length + 1)), 90);
     } else if (!isDeleting && typed.length === current.length) {
-      timeout = setTimeout(() => setIsDeleting(true), 2000);
+      timeout = setTimeout(() => setIsDeleting(true), 1900);
     } else if (isDeleting && typed.length > 0) {
-      timeout = setTimeout(() => setTyped(typed.slice(0, -1)), 60);
+      timeout = setTimeout(() => setTyped(typed.slice(0, -1)), 45);
     } else if (isDeleting && typed.length === 0) {
       setIsDeleting(false);
       setTitleIdx((titleIdx + 1) % titles.length);
@@ -372,47 +375,52 @@ function HeroSection() {
   }, [typed, isDeleting, titleIdx]);
 
   return (
-    <section id="hero" className="mesh-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 40px', textAlign: 'center', position: 'relative', marginTop: 0 }}>
-      {/* Floating orbs */}
-      <div style={{ position: 'absolute', top: '15%', left: '10%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,217,160,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: '20%', right: '8%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,157,235,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', top: '40%', right: '20%', width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)', pointerEvents: 'none' }} />
+    <section id="hero" className="mesh-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '120px 24px 40px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      {/* Parallax ambient depth (warm) */}
+      <div ref={meshRef} style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: '14%', left: '12%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(224,161,85,0.10) 0%, transparent 70%)' }} />
+        <div style={{ position: 'absolute', bottom: '14%', right: '10%', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(138,162,200,0.07) 0%, transparent 70%)' }} />
+      </div>
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 760 }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 820 }}>
         {/* Headshot avatar */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb, #8b5cf6)', padding: 3, margin: '0 auto', boxShadow: '0 0 40px rgba(16,217,160,0.2)' }}>
+        <div className="reveal" style={{ marginBottom: 26 }}>
+          <div style={{ width: 96, height: 96, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-bright), var(--accent-deep))', padding: 2.5, margin: '0 auto', boxShadow: '0 0 0 1px rgba(224,161,85,0.25), 0 14px 40px rgba(0,0,0,0.5)' }}>
             <img src="/headshot.jpg" alt="Zach Bienstock" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
           </div>
         </div>
 
         {/* Badge */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(16,217,160,0.08)', border: '1px solid rgba(16,217,160,0.2)', borderRadius: 100, padding: '6px 16px', marginBottom: 32, fontSize: 13, color: '#10d9a0', fontWeight: 600 }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10d9a0', display: 'inline-block', animation: 'pulse 2s infinite' }} />
+        <div className="reveal d1" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: 'var(--accent-soft)', border: '1px solid var(--accent-line)', borderRadius: 100, padding: '6px 15px', marginBottom: 30, fontSize: 12.5, color: 'var(--accent-bright)', fontWeight: 600, fontFamily: 'var(--mono)', letterSpacing: 0.3 }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent-bright)', display: 'inline-block', boxShadow: '0 0 8px var(--accent-glow)', animation: 'pulse 2.4s infinite' }} />
           Available for opportunities
         </div>
 
-        {/* Name */}
-        <h1 style={{ fontSize: 'clamp(48px, 8vw, 88px)', fontWeight: 900, lineHeight: 1.05, marginBottom: 16, letterSpacing: '-2px' }}>
-          <span style={{ color: '#f0f4ff' }}>Zach</span>{' '}
-          <span className="gradient-text">Bienstock</span>
+        {/* Name — editorial serif with mask-reveal */}
+        <h1 style={{ fontSize: 'clamp(54px, 9vw, 104px)', lineHeight: 0.98, marginBottom: 18, letterSpacing: '-2px', fontFamily: 'var(--sans)', fontWeight: 800 }}>
+          <span style={{ display: 'block', overflow: 'hidden' }}>
+            <span style={{ display: 'inline-block', color: 'var(--ink)', animation: 'maskUp 0.8s cubic-bezier(0.2,0.7,0.2,1) both' }}>Zach</span>
+          </span>
+          <span style={{ display: 'block', overflow: 'hidden' }}>
+            <span className="accent-italic" style={{ display: 'inline-block', fontSize: '1.04em', animation: 'maskUp 0.8s cubic-bezier(0.2,0.7,0.2,1) 0.12s both' }}>Bienstock</span>
+          </span>
         </h1>
 
-        {/* Typewriter */}
-        <div style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 700, color: '#8b9cc8', marginBottom: 24, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", color: '#4f9deb' }}>{'>'}</span>
-          <span style={{ marginLeft: 12, color: '#f0f4ff' }}>{typed}</span>
-          <span style={{ width: 2, height: 28, background: '#10d9a0', marginLeft: 2, animation: 'pulse 1s step-end infinite' }} />
+        {/* Rotating role line */}
+        <div style={{ fontSize: 'clamp(17px, 2.4vw, 22px)', fontWeight: 500, marginBottom: 26, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--mono)', animation: 'fadeUp 0.7s ease 0.5s both' }}>
+          <span style={{ color: 'var(--ink-4)' }}>{'// '}</span>
+          <span style={{ marginLeft: 6, color: 'var(--ink-2)' }}>{typed}</span>
+          <span style={{ width: 9, height: 20, background: 'var(--accent)', marginLeft: 4, display: 'inline-block', animation: 'pulse 1s step-end infinite' }} />
         </div>
 
         {/* Bio */}
-        <p style={{ fontSize: 18, color: '#6b7db3', lineHeight: 1.7, maxWidth: 580, margin: '0 auto 40px', fontWeight: 400 }}>
-          I don't just want to know how things work - I want to make them <span style={{ color: '#f0f4ff', fontWeight: 600 }}>work better</span>. Finance background from <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: '#10d9a0', fontWeight: 600 }}>data</span>, <span style={{ color: '#4f9deb', fontWeight: 600 }}>product</span>, and <span style={{ color: '#8b5cf6', fontWeight: 600 }}>AI</span>.
+        <p className="reveal d2" style={{ fontSize: 18, color: 'var(--ink-3)', lineHeight: 1.75, maxWidth: 600, margin: '0 auto 38px', fontWeight: 400 }}>
+          I don't just want to know how things work — I want to make them <span className="serif-italic" style={{ color: 'var(--ink)', fontSize: '1.12em' }}>work better</span>. Finance background from <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>data</span>, <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>product</span>, and <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>AI</span>.
         </p>
 
         {/* CTAs */}
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="#projects" className="btn-primary" style={{ fontSize: 15 }}>
+        <div className="reveal d3" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a ref={magRef} href="#projects" className="btn-primary magnetic" style={{ fontSize: 15 }}>
             View My Work ↓
           </a>
           <a href="/Zachary_Bienstock_Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 15 }}>
@@ -421,24 +429,24 @@ function HeroSection() {
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
+        <div className="reveal d4" style={{ display: 'flex', gap: 48, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
             { num: '10', label: 'Live in Production' },
             { num: '3+', label: 'Currently Building' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #10d9a0, #4f9deb)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.num}</div>
-              <div style={{ fontSize: 12, color: '#4a5580', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginTop: 4 }}>{s.label}</div>
+              <div className="serif" style={{ fontSize: 44, lineHeight: 1, color: 'var(--ink)' }}>{s.num}</div>
+              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1.5px', marginTop: 8, fontFamily: 'var(--mono)' }}>{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div style={{ position: 'absolute', bottom: 32, right: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, #4a5580, transparent)' }} />
-        <span style={{ fontSize: 10, color: '#4a5580', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600, writingMode: 'vertical-rl' }}>Scroll</span>
+      <div style={{ position: 'absolute', bottom: 32, right: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 1 }}>
+        <div style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, var(--accent), transparent)' }} />
+        <span style={{ fontSize: 10, color: 'var(--ink-4)', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600, writingMode: 'vertical-rl', fontFamily: 'var(--mono)' }}>Scroll</span>
       </div>
     </section>
   );
@@ -448,19 +456,19 @@ function AboutSection() {
   return (
     <section id="about" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+      <div className="reveal" style={{ textAlign: 'center', marginBottom: 64 }}>
         <p className="section-label" style={{ marginBottom: 16 }}>About Me</p>
         <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1px', maxWidth: 700, margin: '0 auto' }}>
           I want to understand how things<br />
-          <span className="gradient-text">actually work.</span>
+          <span className="accent-italic" style={{ fontSize: '1.1em' }}>actually work.</span>
         </h2>
       </div>
 
       {/* Quote callout */}
-      <div className="glass" style={{ borderRadius: 20, padding: '28px 36px', maxWidth: 780, margin: '0 auto 64px', borderLeft: '3px solid #10d9a0', position: 'relative' }}>
-        <div style={{ fontSize: 48, color: '#10d9a0', opacity: 0.15, position: 'absolute', top: 16, left: 20, fontFamily: 'Georgia, serif', lineHeight: 1 }}>"</div>
-        <p style={{ color: '#c4d0f5', fontSize: 18, lineHeight: 1.7, fontStyle: 'italic', fontWeight: 400, paddingLeft: 8 }}>
-          I naturally operate at the intersection of <span style={{ color: '#10d9a0', fontStyle: 'normal', fontWeight: 700 }}>data</span>, <span style={{ color: '#4f9deb', fontStyle: 'normal', fontWeight: 700 }}>creativity</span>, and <span style={{ color: '#8b5cf6', fontStyle: 'normal', fontWeight: 700 }}>strategy</span>. I'm at my best when I can take something complex or messy and turn it into something clearer, more usable, and more thoughtful.
+      <div className="glass reveal" style={{ borderRadius: 20, padding: '28px 36px', maxWidth: 780, margin: '0 auto 64px', borderLeft: '3px solid var(--accent)', position: 'relative' }}>
+        <div style={{ fontSize: 64, color: 'var(--accent)', opacity: 0.18, position: 'absolute', top: 8, left: 18, fontFamily: 'var(--serif)', lineHeight: 1 }}>“</div>
+        <p style={{ color: 'var(--ink-2)', fontSize: 19, lineHeight: 1.7, fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, paddingLeft: 8 }}>
+          I naturally operate at the intersection of <span className="accent-text" style={{ fontStyle: 'normal', fontWeight: 700, fontFamily: 'var(--sans)' }}>data</span>, <span className="accent-text" style={{ fontStyle: 'normal', fontWeight: 700, fontFamily: 'var(--sans)' }}>creativity</span>, and <span className="accent-text" style={{ fontStyle: 'normal', fontWeight: 700, fontFamily: 'var(--sans)' }}>strategy</span>. I'm at my best when I can take something complex or messy and turn it into something clearer, more usable, and more thoughtful.
         </p>
       </div>
 
@@ -470,25 +478,25 @@ function AboutSection() {
           {/* Headshot */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 28 }}>
             <div style={{ position: 'relative', flexShrink: 0 }}>
-              <div style={{ width: 88, height: 88, borderRadius: '50%', background: 'linear-gradient(135deg, #10d9a0, #4f9deb, #8b5cf6)', padding: 3 }}>
+              <div style={{ width: 88, height: 88, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-bright), var(--accent-deep))', padding: 3 }}>
                 <img src="/headshot.jpg" alt="Zach Bienstock" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
-              <div style={{ position: 'absolute', bottom: 2, right: 2, width: 16, height: 16, borderRadius: '50%', background: '#10d9a0', border: '2px solid #040810' }} />
+              <div style={{ position: 'absolute', bottom: 2, right: 2, width: 16, height: 16, borderRadius: '50%', background: 'var(--accent)', border: '2px solid var(--bg)' }} />
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 18, color: '#f0f4ff' }}>Zach Bienstock</div>
-              <div style={{ color: '#10d9a0', fontSize: 13, fontWeight: 600 }}>Builder · Analyst · Developer</div>
-              <div style={{ color: '#4a5580', fontSize: 12, marginTop: 2 }}>Hawthorne, NJ</div>
+              <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--ink)' }}>Zach Bienstock</div>
+              <div style={{ color: 'var(--accent-bright)', fontSize: 13, fontWeight: 600, fontFamily: 'var(--mono)' }}>Builder · Analyst · Developer</div>
+              <div style={{ color: 'var(--ink-4)', fontSize: 12, marginTop: 2 }}>Hawthorne, NJ</div>
             </div>
           </div>
-          <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
-            Finance graduate from <span style={{ color: '#f0f4ff', fontWeight: 600 }}>Rutgers</span> who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M-$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
+          <p style={{ color: 'var(--ink-3)', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
+            Finance graduate from <span style={{ color: 'var(--ink)', fontWeight: 600 }}>Rutgers</span> who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M-$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
           </p>
-          <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
+          <p style={{ color: 'var(--ink-3)', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
             That curiosity has been with me since long before formal roles - buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.
           </p>
-          <p style={{ color: '#6b7db3', lineHeight: 1.85, fontSize: 15, marginBottom: 32 }}>
-            Outside of work: deeply into <span style={{ color: '#f0f4ff', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: '#f0f4ff', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: '#f0f4ff', fontWeight: 600 }}>snowboarding</span> - specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
+          <p style={{ color: 'var(--ink-3)', lineHeight: 1.85, fontSize: 15, marginBottom: 32 }}>
+            Outside of work: deeply into <span style={{ color: 'var(--ink)', fontWeight: 600 }}>crypto mechanics</span> and incentive design, <span style={{ color: 'var(--ink)', fontWeight: 600 }}>cognitive science</span> and how attention works, and <span style={{ color: 'var(--ink)', fontWeight: 600 }}>snowboarding</span> - specifically the technical side of board design and performance optimization. That same mindset shows up in my work.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>GitHub ↗</a>
@@ -514,8 +522,8 @@ function AboutSection() {
               </svg>
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Systems Thinker</div>
-              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>I ask where data comes from, what it represents, and how confident we should be in it. Numbers should explain reality, not just look correct.</div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 4 }}>Systems Thinker</div>
+              <div style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.6 }}>I ask where data comes from, what it represents, and how confident we should be in it. Numbers should explain reality, not just look correct.</div>
             </div>
           </div>
 
@@ -530,21 +538,21 @@ function AboutSection() {
               </svg>
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Builder by Nature</div>
-              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Long before formal roles - repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.</div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 4 }}>Builder by Nature</div>
+              <div style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.6 }}>Long before formal roles - repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.</div>
             </div>
           </div>
 
           {/* Impact Over Process - flashing bolt */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(245,158,11,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ animation: 'iconBolt 3s ease-in-out infinite' }}>
                 <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="#f59e0b" />
               </svg>
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Impact Over Process</div>
-              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>I don't enjoy analysis that lives in isolation. Every insight should turn into a decision, a better experience, or a smarter system.</div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 4 }}>Impact Over Process</div>
+              <div style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.6 }}>I don't enjoy analysis that lives in isolation. Every insight should turn into a decision, a better experience, or a smarter system.</div>
             </div>
           </div>
 
@@ -562,8 +570,8 @@ function AboutSection() {
               </svg>
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 4 }}>Precision & Iteration</div>
-              <div style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.6 }}>Drawn to the technical details. Snowboard geometry, ML model validation, product design - I care about why things work, not just that they do.</div>
+              <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 4 }}>Precision & Iteration</div>
+              <div style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.6 }}>Drawn to the technical details. Snowboard geometry, ML model validation, product design - I care about why things work, not just that they do.</div>
             </div>
           </div>
         </div>
@@ -629,24 +637,24 @@ function ProjectCard({ project }) {
                 </div>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
-                    <h3 style={{ fontWeight: 900, fontSize: 22, color: '#f0f4ff', lineHeight: 1.05, margin: 0 }}>{project.name}</h3>
+                    <h3 style={{ fontWeight: 900, fontSize: 22, color: 'var(--ink)', lineHeight: 1.05, margin: 0 }}>{project.name}</h3>
                     <div className="status-badge" style={{ flexShrink: 0, padding: '4px 10px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 5 }}>
                       <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
                       {statusCfg.label}
                     </div>
                   </div>
-                  <p style={{ color: '#8b9cc8', fontSize: 13, fontWeight: 600, lineHeight: 1.45 }}>{project.tagline}</p>
+                  <p style={{ color: 'var(--ink-2)', fontSize: 13, fontWeight: 600, lineHeight: 1.45 }}>{project.tagline}</p>
                 </div>
               </div>
             </div>
 
-            <p style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.65, marginBottom: 14 }}>
+            <p style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.65, marginBottom: 14 }}>
               {project.description}
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 14 }}>
               {project.highlights.slice(0, 4).map((h) => (
-                <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: '#9fb0d9', lineHeight: 1.45 }}>
+                <div key={h} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, fontSize: 12, color: 'var(--ink-2)', lineHeight: 1.45 }}>
                   <span style={{ color: project.color, fontWeight: 700, flexShrink: 0 }}>→</span>
                   <span>{h}</span>
                 </div>
@@ -658,7 +666,7 @@ function ProjectCard({ project }) {
                 <span key={t} className={`tag ${project.tagClass}`} style={{ background: `${project.color}12`, color: project.color, borderColor: `${project.color}25` }}>{t}</span>
               ))}
               {project.tags.length > 4 && (
-                <span className="tag" style={{ background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', borderColor: 'rgba(255,255,255,0.1)' }}>+{project.tags.length - 4}</span>
+                <span className="tag" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--ink-2)', borderColor: 'rgba(255,255,255,0.1)' }}>+{project.tags.length - 4}</span>
               )}
             </div>
 
@@ -702,7 +710,7 @@ function ProjectCard({ project }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, boxShadow: `0 0 12px ${project.color}80` }} />
-                <h4 style={{ color: '#f0f4ff', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
+                <h4 style={{ color: 'var(--ink)', fontSize: 14, fontWeight: 700, margin: 0 }}>Try {project.name}</h4>
               </div>
               <button
                 onClick={handleFlipClick}
@@ -765,15 +773,15 @@ function ProjectCarouselCard({ project, position }) {
       <div style={{ padding: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
           <span style={{ fontSize: 26, lineHeight: 1 }}>{project.emoji}</span>
-          <span style={{ fontWeight: 800, fontSize: 18, color: '#f0f4ff', flex: 1 }}>{project.name}</span>
+          <span style={{ fontWeight: 800, fontSize: 18, color: 'var(--ink)', flex: 1 }}>{project.name}</span>
           <div style={{ padding: '3px 9px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
             <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
             {statusCfg.label}
           </div>
         </div>
-        <p style={{ color: '#8b9cc8', fontSize: 13, fontWeight: 500, lineHeight: 1.45, marginBottom: 14 }}>{project.tagline}</p>
+        <p style={{ color: 'var(--ink-2)', fontSize: 13, fontWeight: 500, lineHeight: 1.45, marginBottom: 14 }}>{project.tagline}</p>
         <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: 14 }} />
-        <p style={{ color: '#6b7db3', fontSize: 13, lineHeight: 1.65, marginBottom: 16, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+        <p style={{ color: 'var(--ink-3)', fontSize: 13, lineHeight: 1.65, marginBottom: 16, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
           {project.description}
         </p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 18 }}>
@@ -781,7 +789,7 @@ function ProjectCarouselCard({ project, position }) {
             <span key={t} style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}>{t}</span>
           ))}
           {project.tags.length > 4 && (
-            <span style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 4}</span>
+            <span style={{ padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 600, background: 'rgba(255,255,255,0.05)', color: 'var(--ink-2)', border: '1px solid rgba(255,255,255,0.1)' }}>+{project.tags.length - 4}</span>
           )}
         </div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
@@ -792,7 +800,7 @@ function ProjectCarouselCard({ project, position }) {
           )}
           {project.github && (
             <a href={project.github} target="_blank" rel="noopener noreferrer"
-              style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: '#8b9cc8', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}
+              style={{ padding: '7px 14px', borderRadius: 9, fontSize: 12, fontWeight: 700, background: 'rgba(255,255,255,0.06)', color: 'var(--ink-2)', border: '1px solid rgba(255,255,255,0.1)', textDecoration: 'none' }}
             >GitHub ↗</a>
           )}
         </div>
@@ -836,7 +844,7 @@ function ProjectsSection() {
     : { bg:'rgba(79,157,235,0.12)', color:'#4f9deb', border:'rgba(79,157,235,0.25)', label:'Building' };
 
   return (
-    <section id="projects" style={{ padding: '88px 24px 72px', background: 'rgba(15,22,41,0.3)' }}>
+    <section id="projects" style={{ padding: '88px 24px 72px', background: 'var(--bg-2)' }}>
       <style>{`
         @keyframes pf { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .pf { animation: pf 0.28s ease forwards; }
@@ -844,12 +852,12 @@ function ProjectsSection() {
       `}</style>
       <div style={{ maxWidth: 1160, margin: '0 auto' }}>
 
-        <div style={{ textAlign:'center', marginBottom: 48 }}>
+        <div className="reveal" style={{ textAlign:'center', marginBottom: 48 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>What I've Built</p>
           <h2 style={{ fontSize:'clamp(32px,4vw,48px)', fontWeight:900, letterSpacing:'-1px', marginBottom:8 }}>
-            Projects <span className="gradient-text">in the wild</span>
+            Projects <span className="accent-italic" style={{ fontSize: '1.1em' }}>in the wild</span>
           </h2>
-          <p style={{ color:'#4a5580', fontSize:14, fontFamily:"'JetBrains Mono',monospace" }}>
+          <p style={{ color:'var(--ink-4)', fontSize:14, fontFamily:"'JetBrains Mono',monospace" }}>
             {projects.length} project{projects.length !== 1 ? 's' : ''} — {activeTabObj?.label}
           </p>
         </div>
@@ -860,16 +868,16 @@ function ProjectsSection() {
             return (
               <button key={tab.id} onClick={() => switchTab(tab.id)} className="tab-btn"
                 style={{ padding:'10px 22px', borderRadius:100, fontSize:13, fontWeight:700, cursor:'pointer',
-                  border: `1px solid ${on ? 'rgba(16,217,160,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                  background: on ? 'rgba(16,217,160,0.1)' : 'rgba(255,255,255,0.04)',
-                  color: on ? '#10d9a0' : '#6b7db3',
+                  border: `1px solid ${on ? 'var(--accent-line)' : 'rgba(255,255,255,0.08)'}`,
+                  background: on ? 'var(--accent-soft)' : 'rgba(255,255,255,0.04)',
+                  color: on ? 'var(--accent-bright)' : 'var(--ink-3)',
                   display:'flex', alignItems:'center', gap:8,
-                  boxShadow: on ? '0 0 20px rgba(16,217,160,0.1)' : 'none',
+                  boxShadow: on ? '0 0 20px var(--accent-soft)' : 'none',
                   transition:'all 0.2s' }}>
                 <span>{tab.label}</span>
                 <span style={{ padding:'2px 8px', borderRadius:100, fontSize:11, fontWeight:700,
-                  background: on ? 'rgba(16,217,160,0.15)' : 'rgba(255,255,255,0.06)',
-                  color: on ? '#10d9a0' : '#4a5580' }}>{tab.count}</span>
+                  background: on ? 'var(--accent-soft)' : 'rgba(255,255,255,0.06)',
+                  color: on ? 'var(--accent-bright)' : 'var(--ink-4)' }}>{tab.count}</span>
               </button>
             );
           })}
@@ -893,7 +901,7 @@ function ProjectsSection() {
                           boxShadow:`0 8px 20px ${p.color}40` }}>{p.emoji}</div>
                         <div style={{ flex:1, minWidth:0 }}>
                           <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginBottom:5 }}>
-                            <h3 style={{ fontWeight:900, fontSize:22, color:'#f0f4ff', margin:0, lineHeight:1.1 }}>{p.name}</h3>
+                            <h3 style={{ fontWeight:900, fontSize:22, color:'var(--ink)', margin:0, lineHeight:1.1 }}>{p.name}</h3>
                             <div style={{ padding:'3px 10px', borderRadius:100, fontSize:10, fontWeight:700,
                               textTransform:'uppercase', letterSpacing:1,
                               background:sc.bg, color:sc.color, border:`1px solid ${sc.border}`,
@@ -910,13 +918,13 @@ function ProjectsSection() {
                               </div>
                             )}
                           </div>
-                          <p style={{ color:'#8b9cc8', fontSize:13, fontWeight:600, margin:0 }}>{p.tagline}</p>
+                          <p style={{ color:'var(--ink-2)', fontSize:13, fontWeight:600, margin:0 }}>{p.tagline}</p>
                         </div>
                       </div>
-                      <p style={{ color:'#6b7db3', fontSize:14, lineHeight:1.7, margin:0 }}>{p.description}</p>
+                      <p style={{ color:'var(--ink-3)', fontSize:14, lineHeight:1.7, margin:0 }}>{p.description}</p>
                       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:7 }}>
                         {p.highlights.slice(0,4).map(h => (
-                          <div key={h} style={{ display:'flex', gap:7, fontSize:12, color:'#9fb0d9', lineHeight:1.45 }}>
+                          <div key={h} style={{ display:'flex', gap:7, fontSize:12, color:'var(--ink-2)', lineHeight:1.45 }}>
                             <span style={{ color:p.color, fontWeight:700, flexShrink:0 }}>→</span><span>{h}</span>
                           </div>
                         ))}
@@ -928,7 +936,7 @@ function ProjectsSection() {
                         ))}
                         {p.tags.length > 5 && (
                           <span style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600,
-                            background:'rgba(255,255,255,0.05)', color:'#8b9cc8', border:'1px solid rgba(255,255,255,0.1)' }}>
+                            background:'rgba(255,255,255,0.05)', color:'var(--ink-2)', border:'1px solid rgba(255,255,255,0.1)' }}>
                             +{p.tags.length-5}
                           </span>
                         )}
@@ -955,7 +963,7 @@ function ProjectsSection() {
                         {p.twitter && (
                           <a href={p.twitter} target="_blank" rel="noopener noreferrer"
                             style={{ padding:'10px 18px', borderRadius:10, fontSize:13, fontWeight:700,
-                              background:'rgba(255,255,255,0.05)', color:'#c4d0f5',
+                              background:'rgba(255,255,255,0.05)', color:'var(--ink-2)',
                               border:'1px solid rgba(255,255,255,0.12)', textDecoration:'none',
                               display:'inline-flex', alignItems:'center', gap:6 }}>
                             𝕏 Twitter
@@ -964,7 +972,7 @@ function ProjectsSection() {
                         {p.github && (
                           <a href={p.github} target="_blank" rel="noopener noreferrer"
                             style={{ padding:'10px 20px', borderRadius:10, fontSize:13, fontWeight:700,
-                              background:'rgba(255,255,255,0.05)', color:'#8b9cc8',
+                              background:'rgba(255,255,255,0.05)', color:'var(--ink-2)',
                               border:'1px solid rgba(255,255,255,0.1)', textDecoration:'none' }}>
                             GitHub ↗
                           </a>
@@ -981,7 +989,7 @@ function ProjectsSection() {
             <>
               <div style={{ display:'flex', alignItems:'center', gap:12, margin:'8px 0 16px' }}>
                 <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.05)' }} />
-                <span style={{ fontSize:11, color:'#2a3255', fontWeight:700,
+                <span style={{ fontSize:11, color:'var(--ink-4)', fontWeight:700,
                   textTransform:'uppercase', letterSpacing:2, whiteSpace:'nowrap' }}>More Projects</span>
                 <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.05)' }} />
               </div>
@@ -999,11 +1007,11 @@ function ProjectsSection() {
                             display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>{p.emoji}</div>
                           <div style={{ flex:1, minWidth:0 }}>
                             <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
-                              <span style={{ fontWeight:800, fontSize:15, color:'#f0f4ff' }}>{p.name}</span>
+                              <span style={{ fontWeight:800, fontSize:15, color:'var(--ink)' }}>{p.name}</span>
                               <span style={{ fontSize:9, fontWeight:700, textTransform:'uppercase',
                                 color:sc.color, letterSpacing:0.5 }}>● {sc.label}</span>
                             </div>
-                            <p style={{ color:'#6b7db3', fontSize:12, margin:0, lineHeight:1.4, marginTop:2 }}>{p.tagline}</p>
+                            <p style={{ color:'var(--ink-3)', fontSize:12, margin:0, lineHeight:1.4, marginTop:2 }}>{p.tagline}</p>
                           </div>
                         </div>
                         <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
@@ -1013,7 +1021,7 @@ function ProjectsSection() {
                           ))}
                           {p.tags.length > 3 && (
                             <span style={{ padding:'3px 8px', borderRadius:6, fontSize:10,
-                              color:'#4a5580', background:'rgba(255,255,255,0.04)',
+                              color:'var(--ink-4)', background:'rgba(255,255,255,0.04)',
                               border:'1px solid rgba(255,255,255,0.08)' }}>+{p.tags.length-3}</span>
                           )}
                         </div>
@@ -1027,7 +1035,7 @@ function ProjectsSection() {
                           {p.github && (
                             <a href={p.github} target="_blank" rel="noopener noreferrer"
                               style={{ padding:'7px 14px', borderRadius:8, fontSize:11, fontWeight:600,
-                                background:'rgba(255,255,255,0.05)', color:'#6b7db3',
+                                background:'rgba(255,255,255,0.05)', color:'var(--ink-3)',
                                 border:'1px solid rgba(255,255,255,0.08)', textDecoration:'none' }}>GitHub</a>
                           )}
                         </div>
@@ -1042,7 +1050,7 @@ function ProjectsSection() {
 
         <div style={{ textAlign:'center', marginTop:40 }}>
           <div className="glass" style={{ display:'inline-flex', alignItems:'center', gap:12,
-            padding:'12px 24px', borderRadius:100, fontSize:13, color:'#6b7db3' }}>
+            padding:'12px 24px', borderRadius:100, fontSize:13, color:'var(--ink-3)' }}>
             <span style={{ width:6, height:6, borderRadius:'50%', background:'#8b5cf6',
               display:'inline-block', animation:'pulse 2s infinite' }} />
             More projects shipping soon
@@ -1060,10 +1068,10 @@ function ExperienceSection() {
 
   return (
     <section id="experience" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+      <div className="reveal" style={{ textAlign: 'center', marginBottom: 64 }}>
         <p className="section-label" style={{ marginBottom: 16 }}>Background</p>
         <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
-          Where I've <span className="gradient-text">been</span>
+          Where I've <span className="accent-italic" style={{ fontSize: '1.1em' }}>been</span>
         </h2>
       </div>
 
@@ -1136,22 +1144,22 @@ function ExperienceSection() {
                 <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${exp.color}06, transparent)`, pointerEvents: 'none' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 14, color: '#f0f4ff', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--ink)', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                       <span style={{ fontWeight: 700, fontSize: 12, color: exp.color }}>{exp.company}</span>
-                      <span style={{ color: '#2a3255', fontSize: 11 }}>·</span>
-                      <span style={{ color: '#4a5580', fontSize: 11 }}>{exp.location}</span>
+                      <span style={{ color: 'var(--ink-4)', fontSize: 11 }}>·</span>
+                      <span style={{ color: 'var(--ink-4)', fontSize: 11 }}>{exp.location}</span>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                    <span style={{ fontSize: 11, color: '#4a5580', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
-                    <span style={{ fontSize: 12, color: isOpen ? exp.color : '#2a3255', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
+                    <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
+                    <span style={{ fontSize: 12, color: isOpen ? exp.color : 'var(--ink-4)', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
                   </div>
                 </div>
                 <div className={`exp-highlights ${isOpen ? 'open' : ''}`}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {exp.highlights.map((h, j) => (
-                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: '#6b7db3', lineHeight: 1.55 }}>
+                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.55 }}>
                         <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
                       </li>
                     ))}
@@ -1174,22 +1182,22 @@ function ExperienceSection() {
                 <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${exp.color}06, transparent)`, pointerEvents: 'none' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 14, color: '#f0f4ff', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--ink)', lineHeight: 1.3, marginBottom: 4 }}>{exp.role}</div>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                       <span style={{ fontWeight: 700, fontSize: 12, color: exp.color }}>{exp.company}</span>
-                      <span style={{ color: '#2a3255', fontSize: 11 }}>·</span>
-                      <span style={{ color: '#4a5580', fontSize: 11 }}>{exp.location}</span>
+                      <span style={{ color: 'var(--ink-4)', fontSize: 11 }}>·</span>
+                      <span style={{ color: 'var(--ink-4)', fontSize: 11 }}>{exp.location}</span>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                    <span style={{ fontSize: 11, color: '#4a5580', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
-                    <span style={{ fontSize: 12, color: isOpen ? exp.color : '#2a3255', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
+                    <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: "'JetBrains Mono',monospace", whiteSpace: 'nowrap' }}>{exp.period}</span>
+                    <span style={{ fontSize: 12, color: isOpen ? exp.color : 'var(--ink-4)', transition: 'all 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>›</span>
                   </div>
                 </div>
                 <div className={`exp-highlights ${isOpen ? 'open' : ''}`}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {exp.highlights.map((h, j) => (
-                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: '#6b7db3', lineHeight: 1.55 }}>
+                      <li key={j} style={{ display: 'flex', gap: 8, fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.55 }}>
                         <span style={{ color: exp.color, flexShrink: 0, fontWeight: 700 }}>›</span> {h}
                       </li>
                     ))}
@@ -1203,14 +1211,14 @@ function ExperienceSection() {
 
       {/* Education */}
       <div style={{ maxWidth: 900, margin: '20px auto 0' }}>
-        <div className="glass" style={{ borderRadius: 18, padding: '18px 24px', borderLeft: '3px solid #f59e0b', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+        <div className="glass" style={{ borderRadius: 18, padding: '18px 24px', borderLeft: '3px solid var(--accent)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 28 }}>🎓</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 800, fontSize: 15, color: '#f0f4ff', marginBottom: 2 }}>B.S. Finance — Business Analytics</div>
-            <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Rutgers University, New Brunswick</div>
-            <span className="tag" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', borderColor: 'rgba(245,158,11,0.2)', fontSize: 11 }}>SQL Cert — UC Davis</span>
+            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 2 }}>B.S. Finance — Business Analytics</div>
+            <div style={{ color: 'var(--accent-bright)', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Rutgers University, New Brunswick</div>
+            <span className="tag" style={{ background: 'var(--accent-soft)', color: 'var(--accent-bright)', borderColor: 'var(--accent-line)', fontSize: 11 }}>SQL Cert — UC Davis</span>
           </div>
-          <div style={{ color: '#4a5580', fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>Dec 2022</div>
+          <div style={{ color: 'var(--ink-4)', fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>Dec 2022</div>
         </div>
       </div>
 
@@ -1264,12 +1272,12 @@ function LifeSection() {
   };
 
   return (
-    <section id="life" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
+    <section id="life" style={{ padding: '100px 24px', background: 'var(--bg-2)' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
+        <div className="reveal" style={{ textAlign: 'center', marginBottom: 64 }}>
           <p className="section-label" style={{ marginBottom: 16 }}>Beyond the Work</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
-            A slice of <span className="gradient-text">life</span>
+            A slice of <span className="accent-italic" style={{ fontSize: '1.1em' }}>life</span>
           </h2>
         </div>
 
@@ -1316,7 +1324,7 @@ function LifeSection() {
                   cursor: isActive ? 'grab' : 'pointer',
                   borderRadius: 20, overflow: 'hidden',
                   boxShadow: isActive
-                    ? '0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(16,217,160,0.15)'
+                    ? '0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--accent-line)'
                     : '0 10px 30px rgba(0,0,0,0.4)',
                 }}
               >
@@ -1326,8 +1334,8 @@ function LifeSection() {
                 {isActive && (
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px 20px 20px', background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10d9a0' }} />
-                      <span style={{ color: '#f0f4ff', fontSize: 13, fontWeight: 600 }}>{photo.label}</span>
+                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }} />
+                      <span style={{ color: 'var(--ink)', fontSize: 13, fontWeight: 600 }}>{photo.label}</span>
                     </div>
                   </div>
                 )}
@@ -1338,26 +1346,26 @@ function LifeSection() {
 
         {/* Controls */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 40 }}>
-          <button onClick={prev} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-            onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
+          <button onClick={prev} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--ink)', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+            onMouseEnter={e => e.target.style.background='var(--accent-soft)'}
             onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
           >←</button>
 
           {/* Dots */}
           <div style={{ display: 'flex', gap: 8 }}>
             {LIFE_PHOTOS.map((_, i) => (
-              <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 4, background: i === active ? '#10d9a0' : 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
+              <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? 24 : 8, height: 8, borderRadius: 4, background: i === active ? 'var(--accent)' : 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
             ))}
           </div>
 
-          <button onClick={next} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f0f4ff', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-            onMouseEnter={e => e.target.style.background='rgba(16,217,160,0.15)'}
+          <button onClick={next} style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--ink)', fontSize: 18, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+            onMouseEnter={e => e.target.style.background='var(--accent-soft)'}
             onMouseLeave={e => e.target.style.background='rgba(255,255,255,0.06)'}
           >→</button>
         </div>
 
         {/* Swipe hint */}
-        <p style={{ textAlign: 'center', color: '#2a3255', fontSize: 12, marginTop: 16, fontFamily: "'JetBrains Mono', monospace" }}>
+        <p style={{ textAlign: 'center', color: 'var(--ink-4)', fontSize: 12, marginTop: 16, fontFamily: "'JetBrains Mono', monospace" }}>
           drag or swipe to explore
         </p>
       </div>
@@ -1386,10 +1394,10 @@ function SkillsSection() {
 
   return (
     <section id="skills" style={{ padding: '100px 24px', maxWidth: 1100, margin: '0 auto' }} ref={ref}>
-      <div style={{ textAlign: 'center', marginBottom: 64 }}>
+      <div className="reveal" style={{ textAlign: 'center', marginBottom: 64 }}>
         <p className="section-label" style={{ marginBottom: 16 }}>Tech Stack</p>
         <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px' }}>
-          Tools I <span className="gradient-text">build with</span>
+          Tools I <span className="accent-italic" style={{ fontSize: '1.1em' }}>build with</span>
         </h2>
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
@@ -1407,11 +1415,11 @@ function SkillsSection() {
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
               transition: `all 0.5s ease ${i * 50}ms`,
-              background: `linear-gradient(135deg, rgba(16,217,160,0.05), rgba(79,157,235,0.05))`,
+              background: `linear-gradient(135deg, var(--accent-soft), rgba(138,162,200,0.05))`,
             }}
           >
             <span style={{ fontSize: 20 }}>{s.icon}</span>
-            <span style={{ fontWeight: 600, fontSize: 14, color: '#c4d0f5' }}>{s.label}</span>
+            <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ink-2)' }}>{s.label}</span>
           </div>
         ))}
       </div>
@@ -1430,35 +1438,35 @@ function ContactSection() {
   };
 
   return (
-    <section id="contact" style={{ padding: '100px 24px', background: 'rgba(15,22,41,0.3)' }}>
+    <section id="contact" style={{ padding: '100px 24px', background: 'var(--bg-2)' }}>
       <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
         <p className="section-label" style={{ marginBottom: 16 }}>Get In Touch</p>
         <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-1px', marginBottom: 20 }}>
           Let's build something<br />
-          <span className="gradient-text">together.</span>
+          <span className="accent-italic" style={{ fontSize: '1.1em' }}>together.</span>
         </h2>
-        <p style={{ color: '#6b7db3', fontSize: 16, lineHeight: 1.7, marginBottom: 48 }}>
+        <p style={{ color: 'var(--ink-3)', fontSize: 16, lineHeight: 1.7, marginBottom: 48 }}>
           Open to interesting opportunities, collabs, and conversations. Whether you have a project idea or just want to connect - reach out.
         </p>
 
         {/* Social links */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40 }}>
-          <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
+          <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)', fontWeight: 700, fontSize: 15 }}>
             <span style={{ fontSize: 20 }}>🐙</span> GitHub
           </a>
-          <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
+          <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)', fontWeight: 700, fontSize: 15 }}>
             <span style={{ fontSize: 20 }}>💼</span> LinkedIn
           </a>
-          <a href="mailto:Zbienstock@gmail.com" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: '#f0f4ff', fontWeight: 700, fontSize: 15 }}>
+          <a href="mailto:Zbienstock@gmail.com" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)', fontWeight: 700, fontSize: 15 }}>
             <span style={{ fontSize: 20 }}>✉️</span> Email
           </a>
-          <button onClick={() => copy('Zbienstock@gmail.com')} className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(255,255,255,0.06)', color: copied ? '#10d9a0' : '#8b9cc8', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: 'rgba(15,22,41,0.7)', backdropFilter: 'blur(20px)', transition: 'all 0.2s' }}>
+          <button onClick={() => copy('Zbienstock@gmail.com')} className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(255,255,255,0.06)', color: copied ? '#10d9a0' : 'var(--ink-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: 'rgba(15,22,41,0.7)', backdropFilter: 'blur(20px)', transition: 'all 0.2s' }}>
             <span style={{ fontSize: 16 }}>{copied ? '✅' : '📋'}</span> {copied ? 'Copied!' : 'Copy Email'}
           </button>
         </div>
 
         {/* Footer note */}
-        <p style={{ color: '#2a3255', fontSize: 13, fontFamily: "'JetBrains Mono', monospace" }}>
+        <p style={{ color: 'var(--ink-4)', fontSize: 13, fontFamily: "'JetBrains Mono', monospace" }}>
           Built by Zach Bienstock · 2026
         </p>
       </div>
@@ -1489,19 +1497,20 @@ function ScrollProgressBar() {
         top: 0,
         left: 0,
         height: 3,
-        background: 'linear-gradient(90deg, #10d9a0, #4f9deb, #8b5cf6)',
+        background: 'linear-gradient(90deg, var(--accent-deep), var(--accent-bright))',
         width: `${progress}%`,
         zIndex: 10000,
         transition: 'width 0.1s ease',
-        boxShadow: '0 0 10px rgba(16,217,160,0.4)',
+        boxShadow: '0 0 10px var(--accent-glow)',
       }}
     />
   );
 }
 
 export default function App() {
+  useScrollReveal();
   return (
-    <div style={{ minHeight: '100vh', background: '#040810' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       <ScrollProgressBar />
       <ChatWidget />
       <Nav />
