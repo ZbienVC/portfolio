@@ -6,6 +6,25 @@ import './index.css';
 
 const PROJECTS = [
   {
+    id: 'splash',
+    name: 'Splash Signal',
+    tagline: 'Real-Time Crypto Alpha & Intelligence Engine',
+    description: 'My flagship project - a real-time crypto intelligence platform that surfaces alpha before the crowd. Live token feeds, AI narrative scoring, whale & dev-wallet tracking, bundle detection, and risk analytics across multiple DEXs - delivered through a full dashboard plus an instant Telegram alerts bot.',
+    status: 'live',
+    url: 'https://splashsignal.xyz',
+    github: 'https://github.com/ZbienVC/splash-signal',
+    twitter: 'https://x.com/splashsignal',
+    telegram: 'https://t.me/SplashSignalAlertsBot',
+    color: '#4f9deb',
+    colorEnd: '#8b5cf6',
+    tagClass: 'tag-blue',
+    tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'On-Chain', 'AI'],
+    emoji: '📡',
+    featured: true,
+    highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale & dev-wallet tracking', 'Instant Telegram alert bot'],
+    demoId: 'splash',
+  },
+  {
     id: 'plato',
     name: 'Plato',
     tagline: 'AI-Powered Meal Planning & Nutrition',
@@ -34,22 +53,6 @@ const PROJECTS = [
     tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
     emoji: '🤖',
     highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
-  },
-  {
-    id: 'splash',
-    name: 'Splash Signal',
-    tagline: 'Crypto Intelligence Dashboard',
-    description: 'A real-time crypto alpha-hunting dashboard with live token feeds, risk scoring, whale tracking, narrative intelligence, and DeFi analytics - powered by on-chain data.',
-    status: 'live',
-    url: 'https://splashsignal.xyz',
-    github: 'https://github.com/ZbienVC/splash-signal',
-    color: '#4f9deb',
-    colorEnd: '#6366f1',
-    tagClass: 'tag-blue',
-    tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'SQLite'],
-    emoji: '📡',
-    highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale wallet tracking', 'Multi-DEX analytics'],
-    demoId: 'splash',
   },
   {
     id: 'careeva',
@@ -898,6 +901,14 @@ function ProjectsSection() {
                               <span style={{ width:5, height:5, borderRadius:'50%', background:sc.color, display:'inline-block' }} />
                               {sc.label}
                             </div>
+                            {p.featured && (
+                              <div style={{ padding:'3px 10px', borderRadius:100, fontSize:10, fontWeight:800,
+                                textTransform:'uppercase', letterSpacing:1,
+                                background:`${p.color}1a`, color:p.color, border:`1px solid ${p.color}40`,
+                                display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
+                                ⭐ Best Work
+                              </div>
+                            )}
                           </div>
                           <p style={{ color:'#8b9cc8', fontSize:13, fontWeight:600, margin:0 }}>{p.tagline}</p>
                         </div>
@@ -930,6 +941,24 @@ function ProjectsSection() {
                               color:'#fff', textDecoration:'none',
                               boxShadow:`0 4px 14px ${p.color}30` }}>
                             Visit Live ↗
+                          </a>
+                        )}
+                        {p.telegram && (
+                          <a href={p.telegram} target="_blank" rel="noopener noreferrer"
+                            style={{ padding:'10px 18px', borderRadius:10, fontSize:13, fontWeight:700,
+                              background:'rgba(79,157,235,0.12)', color:'#4f9deb',
+                              border:'1px solid rgba(79,157,235,0.3)', textDecoration:'none',
+                              display:'inline-flex', alignItems:'center', gap:6 }}>
+                            ✈️ Telegram Bot
+                          </a>
+                        )}
+                        {p.twitter && (
+                          <a href={p.twitter} target="_blank" rel="noopener noreferrer"
+                            style={{ padding:'10px 18px', borderRadius:10, fontSize:13, fontWeight:700,
+                              background:'rgba(255,255,255,0.05)', color:'#c4d0f5',
+                              border:'1px solid rgba(255,255,255,0.12)', textDecoration:'none',
+                              display:'inline-flex', alignItems:'center', gap:6 }}>
+                            𝕏 Twitter
                           </a>
                         )}
                         {p.github && (
