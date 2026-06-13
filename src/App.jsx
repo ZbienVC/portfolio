@@ -24,10 +24,12 @@ const PROJECTS = [
     github: 'https://github.com/ZbienVC/splash-signal',
     twitter: 'https://x.com/splashsignal',
     telegram: 'https://t.me/SplashSignalAlertsBot',
+    logo: '/splash-logo-square.png',
     color: '#e0a155',
     colorEnd: '#c2823a',
     tagClass: '',
-    tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'On-Chain', 'AI'],    featured: true,
+    tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'On-Chain', 'AI'],
+    featured: true,
     highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale & dev-wallet tracking', 'Instant Telegram alert bot'],
     demoId: 'splash',
   },
@@ -42,7 +44,8 @@ const PROJECTS = [
     color: '#d6a06a',
     colorEnd: '#b07d45',
     tagClass: '',
-    tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],    highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
+    tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],
+    highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
   },
   {
     id: 'dipper',
@@ -55,7 +58,8 @@ const PROJECTS = [
     color: '#caa37e',
     colorEnd: '#a07d57',
     tagClass: '',
-    tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],    highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
+    tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
+    highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
   },
   {
     id: 'careeva',
@@ -68,7 +72,8 @@ const PROJECTS = [
     color: '#d8b07a',
     colorEnd: '#b58a4e',
     tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],    highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],
+    highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
   },
   {
     id: 'reflect',
@@ -81,7 +86,8 @@ const PROJECTS = [
     color: '#c9956b',
     colorEnd: '#a06f48',
     tagClass: '',
-    tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],    highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
+    tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],
+    highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
   },
   {
     id: 'omo',
@@ -94,7 +100,8 @@ const PROJECTS = [
     color: '#d4943a',
     colorEnd: '#b06a2a',
     tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],    highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
+    highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
   },
   {
     id: 'gigaton',
@@ -107,7 +114,8 @@ const PROJECTS = [
     color: '#c2a06a',
     colorEnd: '#9c7e4e',
     tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],    highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
+    highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
   },
   {
     id: 'wayfound',
@@ -120,7 +128,8 @@ const PROJECTS = [
     color: '#dcb36a',
     colorEnd: '#bd9248',
     tagClass: '',
-    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
+    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
+    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
   },
   {
     id: 'pepelien',
@@ -133,7 +142,8 @@ const PROJECTS = [
     color: '#cda06a',
     colorEnd: '#a87f4e',
     tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],
+    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
   },
   {
     id: 'staywestpalm',
@@ -146,7 +156,8 @@ const PROJECTS = [
     color: '#d2a878',
     colorEnd: '#ab8254',
     tagClass: '',
-    tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],    highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
+    tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],
+    highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
   },
 ];
 
@@ -884,9 +895,15 @@ function ProjectsSection() {
                     <div style={{ height:3, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
                     <div style={{ padding:'26px 26px 24px', display:'flex', flexDirection:'column', gap:16 }}>
                       <div style={{ display:'flex', alignItems:'flex-start', gap:14 }}>
-                        <div style={{ width:54, height:54, borderRadius:16, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
-                          display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0,
-                          boxShadow:`0 8px 20px ${p.color}40`, fontFamily:'var(--serif)', fontStyle:'italic', fontSize:26, fontWeight:400, color:'#1a130a', letterSpacing:'-0.5px' }}>{mono(p.name)}</div>
+                        {p.logo ? (
+                          <div style={{ width:54, height:54, borderRadius:16, background:'radial-gradient(circle at 35% 28%, #1a2433, #0c1018)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 8px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06) inset', overflow:'hidden' }}>
+                            <img src={p.logo} alt={`${p.name} logo`} style={{ width:38, height:38, objectFit:'contain', display:'block' }} />
+                          </div>
+                        ) : (
+                          <div style={{ width:54, height:54, borderRadius:16, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
+                            display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,
+                            boxShadow:`0 8px 20px ${p.color}40`, fontFamily:'var(--serif)', fontStyle:'italic', fontSize:26, fontWeight:400, color:'#1a130a', letterSpacing:'-0.5px' }}>{mono(p.name)}</div>
+                        )}
                         <div style={{ flex:1, minWidth:0 }}>
                           <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginBottom:5 }}>
                             <h3 style={{ fontWeight:900, fontSize:22, color:'var(--ink)', margin:0, lineHeight:1.1 }}>{p.name}</h3>
