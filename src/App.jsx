@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useScrollReveal, useMagnetic, useParallax } from './useMotion';
 import ChatWidget from './ChatWidget.jsx';
+import PlatoMark from './PlatoMark.jsx';
 import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -41,8 +42,8 @@ const PROJECTS = [
     status: 'live',
     url: 'https://eatplato.app',
     github: 'https://github.com/ZbienVC/plato',
-    color: '#d6a06a',
-    colorEnd: '#b07d45',
+    color: '#5BA82E',
+    colorEnd: '#2E7D1E',
     tagClass: '',
     tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],
     highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
@@ -631,9 +632,15 @@ function ProjectCard({ project }) {
           <div className="compact-project-inner" style={{ padding: '22px 22px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14, marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, minWidth: 0, flex: 1 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0, fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, fontWeight: 400, color: '#1a130a', letterSpacing: '-0.5px' }}>
-                  {mono(project.name)}
-                </div>
+                {project.id === 'plato' ? (
+                  <div style={{ width: 48, height: 48, borderRadius: 14, overflow: 'hidden', boxShadow: `0 8px 20px rgba(35,90,32,0.45)`, flexShrink: 0 }}>
+                    <PlatoMark size={48} rounded />
+                  </div>
+                ) : (
+                  <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0, fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, fontWeight: 400, color: '#1a130a', letterSpacing: '-0.5px' }}>
+                    {mono(project.name)}
+                  </div>
+                )}
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
                     <h3 style={{ fontWeight: 900, fontSize: 22, color: 'var(--ink)', lineHeight: 1.05, margin: 0 }}>{project.name}</h3>
@@ -895,7 +902,11 @@ function ProjectsSection() {
                     <div style={{ height:3, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
                     <div style={{ padding:'26px 26px 24px', display:'flex', flexDirection:'column', gap:16 }}>
                       <div style={{ display:'flex', alignItems:'flex-start', gap:14 }}>
-                        {p.logo ? (
+                        {p.id === 'plato' ? (
+                          <div style={{ width:54, height:54, borderRadius:16, overflow:'hidden', flexShrink:0, boxShadow:'0 8px 20px rgba(35,90,32,0.45)' }}>
+                            <PlatoMark size={54} rounded />
+                          </div>
+                        ) : p.logo ? (
                           <div style={{ width:54, height:54, borderRadius:16, background:'radial-gradient(circle at 35% 28%, #1a2433, #0c1018)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 8px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06) inset', overflow:'hidden' }}>
                             <img src={p.logo} alt={`${p.name} logo`} style={{ width:38, height:38, objectFit:'contain', display:'block' }} />
                           </div>
@@ -1007,9 +1018,15 @@ function ProjectsSection() {
                       <div style={{ height:2, background:`linear-gradient(90deg,${p.color},${p.colorEnd})` }} />
                       <div style={{ padding:'16px 18px', display:'flex', flexDirection:'column', gap:11 }}>
                         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                          {p.id === 'plato' ? (
+                            <div style={{ width:42, height:42, borderRadius:12, overflow:'hidden', flexShrink:0, boxShadow:'0 6px 16px rgba(35,90,32,0.4)' }}>
+                              <PlatoMark size={42} rounded />
+                            </div>
+                          ) : (
                           <div style={{ width:42, height:42, borderRadius:12, flexShrink:0,
                             background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
                             display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--serif)', fontStyle:'italic', fontSize:20, fontWeight:400, color:'#1a130a', letterSpacing:'-0.5px' }}>{mono(p.name)}</div>
+                          )}
                           <div style={{ flex:1, minWidth:0 }}>
                             <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
                               <span style={{ fontWeight:800, fontSize:15, color:'var(--ink)' }}>{p.name}</span>
