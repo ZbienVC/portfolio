@@ -5,6 +5,14 @@ import './index.css';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
+// Refined lettermark from a project/skill name (premium, replaces emoji)
+function mono(name) {
+  const cleaned = String(name).replace(/[$]/g, '').trim();
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+  return cleaned.slice(0, 2).toUpperCase();
+}
+
 const PROJECTS = [
   {
     id: 'splash',
@@ -16,12 +24,10 @@ const PROJECTS = [
     github: 'https://github.com/ZbienVC/splash-signal',
     twitter: 'https://x.com/splashsignal',
     telegram: 'https://t.me/SplashSignalAlertsBot',
-    color: '#4f9deb',
-    colorEnd: '#8b5cf6',
-    tagClass: 'tag-blue',
-    tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'On-Chain', 'AI'],
-    emoji: '📡',
-    featured: true,
+    color: '#e0a155',
+    colorEnd: '#c2823a',
+    tagClass: '',
+    tags: ['TypeScript', 'Node.js', 'WebSocket', 'DeFi APIs', 'On-Chain', 'AI'],    featured: true,
     highlights: ['Live on-chain token feeds', 'AI-powered narrative scoring', 'Whale & dev-wallet tracking', 'Instant Telegram alert bot'],
     demoId: 'splash',
   },
@@ -33,12 +39,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://eatplato.app',
     github: 'https://github.com/ZbienVC/plato',
-    color: '#10d9a0',
-    colorEnd: '#059669',
+    color: '#d6a06a',
+    colorEnd: '#b07d45',
     tagClass: '',
-    tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],
-    emoji: '🥗',
-    highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
+    tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],    highlights: ['Personalized macro targets', 'Restaurant Mode (10+ chains)', 'Recipe Book with real photos', 'Voice food logging'],
   },
   {
     id: 'dipper',
@@ -48,12 +52,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://dipper-ai-production.up.railway.app',
     github: 'https://github.com/ZbienVC/dipper-ai',
-    color: '#8b5cf6',
-    colorEnd: '#6366f1',
-    tagClass: 'tag-purple',
-    tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
-    emoji: '🤖',
-    highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
+    color: '#caa37e',
+    colorEnd: '#a07d57',
+    tagClass: '',
+    tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],    highlights: ['Build agents in minutes', 'Deploy to Telegram, Discord, SMS', 'Subscription monetization model', 'Multi-model: Claude, GPT-4, Gemini'],
   },
   {
     id: 'careeva',
@@ -63,12 +65,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://careeva-production.up.railway.app',
     github: 'https://github.com/ZbienVC/careeva',
-    color: '#0ea5e9',
-    colorEnd: '#0284c7',
-    tagClass: 'tag-cyan',
-    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],
-    emoji: '💼',
-    highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
+    color: '#d8b07a',
+    colorEnd: '#b58a4e',
+    tagClass: '',
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],    highlights: ['AI resume optimization', 'Smart cover letter generation', 'Application tracking', 'Job scoring & matching'],
   },
   {
     id: 'reflect',
@@ -78,12 +78,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://reflect-medical.web.app',
     github: 'https://github.com/ZbienVC/reflect-medical-premium',
-    color: '#b57edc',
-    colorEnd: '#8b5cf6',
-    tagClass: 'tag-purple',
-    tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],
-    emoji: '✨',
-    highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
+    color: '#c9956b',
+    colorEnd: '#a06f48',
+    tagClass: '',
+    tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],    highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
   },
   {
     id: 'omo',
@@ -93,12 +91,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://omogiraffe.fun',
     github: 'https://github.com/ZbienVC/omo-token',
-    color: '#D4943A',
-    colorEnd: '#C0562A',
+    color: '#d4943a',
+    colorEnd: '#b06a2a',
     tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
-    emoji: '🦒',
-    highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],    highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
   },
   {
     id: 'gigaton',
@@ -108,12 +104,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://gigaton.pro',
     github: 'https://github.com/ZbienVC/gigaton-token',
-    color: '#0088CC',
-    colorEnd: '#005F8F',
-    tagClass: 'tag-blue',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
-    emoji: '🔷',
-    highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
+    color: '#c2a06a',
+    colorEnd: '#9c7e4e',
+    tagClass: '',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],    highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
   },
   {
     id: 'wayfound',
@@ -123,12 +117,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://wayfound.vercel.app',
     github: 'https://github.com/ZbienVC/wayfound',
-    color: '#c9a84c',
-    colorEnd: '#e8c96a',
+    color: '#dcb36a',
+    colorEnd: '#bd9248',
     tagClass: '',
-    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
-    emoji: '✈️',
-    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
+    tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],    highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
   },
   {
     id: 'pepelien',
@@ -138,12 +130,10 @@ const PROJECTS = [
     status: 'live',
     url: 'https://pepelien.com',
     github: 'https://github.com/ZbienVC/pepelien',
-    color: '#39FF14',
-    colorEnd: '#4CAF50',
+    color: '#cda06a',
+    colorEnd: '#a87f4e',
     tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],
-    emoji: '👽',
-    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
   },
   {
     id: 'staywestpalm',
@@ -153,30 +143,28 @@ const PROJECTS = [
     status: 'live',
     url: 'https://www.staywestpalm.now',
     github: null,
-    color: '#06b6d4',
-    colorEnd: '#0284c7',
-    tagClass: 'tag-cyan',
-    tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],
-    emoji: '🌴',
-    highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
+    color: '#d2a878',
+    colorEnd: '#ab8254',
+    tagClass: '',
+    tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],    highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
   },
 ];
 
 const SKILLS = [
-  { label: 'React / Vite', icon: '⚛️' },
-  { label: 'TypeScript', icon: '📘' },
-  { label: 'Node.js', icon: '🟢' },
-  { label: 'Tailwind CSS', icon: '🎨' },
-  { label: 'SQL / SQLite', icon: '🗄️' },
-  { label: 'REST & WebSockets', icon: '🔌' },
-  { label: 'AI / LLM APIs', icon: '🤖' },
-  { label: 'DeFi / Web3', icon: '🔗' },
-  { label: 'Python', icon: '🐍' },
-  { label: 'Figma', icon: '🎨' },
-  { label: 'Bloomberg Terminal', icon: '📊' },
-  { label: 'Vercel / Railway', icon: '🚀' },
-  { label: 'Advanced Excel', icon: '📈' },
-  { label: 'Git / GitHub', icon: '🐙' },
+  { label: 'React / Vite' },
+  { label: 'TypeScript' },
+  { label: 'Node.js' },
+  { label: 'Tailwind CSS' },
+  { label: 'SQL / SQLite' },
+  { label: 'REST & WebSockets' },
+  { label: 'AI / LLM APIs' },
+  { label: 'DeFi / Web3' },
+  { label: 'Python' },
+  { label: 'Figma' },
+  { label: 'Bloomberg Terminal' },
+  { label: 'Vercel / Railway' },
+  { label: 'Advanced Excel' },
+  { label: 'Git / GitHub' },
 ];
 
 const EXPERIENCE = [
@@ -490,7 +478,7 @@ function AboutSection() {
             </div>
           </div>
           <p style={{ color: 'var(--ink-3)', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
-            Finance graduate from <span style={{ color: 'var(--ink)', fontWeight: 600 }}>Rutgers</span> who spent time analyzing derivatives at <span style={{ color: '#4f9deb', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M-$1B capital raises at <span style={{ color: '#8b5cf6', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
+            Finance graduate from <span style={{ color: 'var(--ink)', fontWeight: 600 }}>Rutgers</span> who spent time analyzing derivatives at <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Bloomberg LP</span> and supporting $25M-$1B capital raises at <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Cambridge Wilkinson</span> before turning full attention to building software.
           </p>
           <p style={{ color: 'var(--ink-3)', lineHeight: 1.85, fontSize: 15, marginBottom: 20 }}>
             That curiosity has been with me since long before formal roles - buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.
@@ -508,17 +496,17 @@ function AboutSection() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {/* Systems Thinker - pulsing network nodes */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(16,217,160,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'glowPulse 3s ease-in-out infinite' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'glowPulse 3s ease-in-out infinite' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="3" fill="#10d9a0" style={{ animation: 'iconPulse 2s ease-in-out infinite' }} />
-                <circle cx="4" cy="5" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.3s' }} />
-                <circle cx="20" cy="5" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.6s' }} />
-                <circle cx="4" cy="19" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.9s' }} />
-                <circle cx="20" cy="19" r="2" fill="#10d9a0" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 1.2s' }} />
-                <line x1="9" y1="10.5" x2="6" y2="6.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
-                <line x1="15" y1="10.5" x2="18" y2="6.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
-                <line x1="9" y1="13.5" x2="6" y2="17.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
-                <line x1="15" y1="13.5" x2="18" y2="17.5" stroke="#10d9a0" strokeWidth="1.2" opacity="0.4"/>
+                <circle cx="12" cy="12" r="3" fill="#e0a155" style={{ animation: 'iconPulse 2s ease-in-out infinite' }} />
+                <circle cx="4" cy="5" r="2" fill="#e0a155" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.3s' }} />
+                <circle cx="20" cy="5" r="2" fill="#e0a155" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.6s' }} />
+                <circle cx="4" cy="19" r="2" fill="#e0a155" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 0.9s' }} />
+                <circle cx="20" cy="19" r="2" fill="#e0a155" opacity="0.6" style={{ animation: 'iconPulse 2s ease-in-out infinite 1.2s' }} />
+                <line x1="9" y1="10.5" x2="6" y2="6.5" stroke="#e0a155" strokeWidth="1.2" opacity="0.4"/>
+                <line x1="15" y1="10.5" x2="18" y2="6.5" stroke="#e0a155" strokeWidth="1.2" opacity="0.4"/>
+                <line x1="9" y1="13.5" x2="6" y2="17.5" stroke="#e0a155" strokeWidth="1.2" opacity="0.4"/>
+                <line x1="15" y1="13.5" x2="18" y2="17.5" stroke="#e0a155" strokeWidth="1.2" opacity="0.4"/>
               </svg>
             </div>
             <div>
@@ -529,12 +517,12 @@ function AboutSection() {
 
           {/* Builder by Nature - blinking code cursor */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(79,157,235,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <polyline points="8,6 3,12 8,18" stroke="#4f9deb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <polyline points="16,6 21,12 16,18" stroke="#4f9deb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <line x1="12" y1="4" x2="10.5" y2="20" stroke="#4f9deb" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-                <rect x="13" y="10" width="2" height="5" rx="1" fill="#4f9deb" style={{ animation: 'iconPulse 1s step-end infinite' }} />
+                <polyline points="8,6 3,12 8,18" stroke="#caa37e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <polyline points="16,6 21,12 16,18" stroke="#caa37e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="12" y1="4" x2="10.5" y2="20" stroke="#caa37e" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <rect x="13" y="10" width="2" height="5" rx="1" fill="#caa37e" style={{ animation: 'iconPulse 1s step-end infinite' }} />
               </svg>
             </div>
             <div>
@@ -547,7 +535,7 @@ function AboutSection() {
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
             <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ animation: 'iconBolt 3s ease-in-out infinite' }}>
-                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="#f59e0b" />
+                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="#e0a155" />
               </svg>
             </div>
             <div>
@@ -558,15 +546,15 @@ function AboutSection() {
 
           {/* Precision & Iteration - spinning target ring */}
           <div className="glass glass-hover" style={{ borderRadius: 16, padding: '18px 22px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'rgba(139,92,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+            <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="#8b5cf6" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.4" style={{ transformOrigin: 'center', animation: 'iconSpin 8s linear infinite' }}/>
-                <circle cx="12" cy="12" r="6" stroke="#8b5cf6" strokeWidth="1.5" opacity="0.7"/>
-                <circle cx="12" cy="12" r="2.5" fill="#8b5cf6"/>
-                <line x1="12" y1="2" x2="12" y2="5" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-                <line x1="12" y1="19" x2="12" y2="22" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-                <line x1="2" y1="12" x2="5" y2="12" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-                <line x1="19" y1="12" x2="22" y2="12" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <circle cx="12" cy="12" r="10" stroke="#c98a5e" strokeWidth="1.2" strokeDasharray="4 2" opacity="0.4" style={{ transformOrigin: 'center', animation: 'iconSpin 8s linear infinite' }}/>
+                <circle cx="12" cy="12" r="6" stroke="#c98a5e" strokeWidth="1.5" opacity="0.7"/>
+                <circle cx="12" cy="12" r="2.5" fill="#c98a5e"/>
+                <line x1="12" y1="2" x2="12" y2="5" stroke="#c98a5e" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <line x1="12" y1="19" x2="12" y2="22" stroke="#c98a5e" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <line x1="2" y1="12" x2="5" y2="12" stroke="#c98a5e" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                <line x1="19" y1="12" x2="22" y2="12" stroke="#c98a5e" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
               </svg>
             </div>
             <div>
@@ -598,10 +586,10 @@ function ProjectCard({ project }) {
   };
 
   const statusCfg = project.status === 'live'
-    ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
+    ? { bg: 'rgba(122,168,116,0.12)', color: '#9ec995', border: 'rgba(122,168,116,0.28)', label: 'Live' }
     : project.status === 'soon'
-    ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Coming Soon' }
-    : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
+    ? { bg: 'var(--accent-soft)', color: 'var(--accent-bright)', border: 'var(--accent-line)', label: 'Coming Soon' }
+    : { bg: 'rgba(201,138,94,0.12)', color: '#d4a87e', border: 'rgba(201,138,94,0.28)', label: 'Building' };
 
   return (
     <div
@@ -632,8 +620,8 @@ function ProjectCard({ project }) {
           <div className="compact-project-inner" style={{ padding: '22px 22px 20px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14, marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, minWidth: 0, flex: 1 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0 }}>
-                  {project.emoji}
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${project.color}, ${project.colorEnd})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 20px ${project.color}33`, flexShrink: 0, fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, fontWeight: 400, color: '#1a130a', letterSpacing: '-0.5px' }}>
+                  {mono(project.name)}
                 </div>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
@@ -743,10 +731,10 @@ function ProjectCarouselCard({ project, position }) {
   const isRight = position === 'right';
 
   const statusCfg = project.status === 'live'
-    ? { bg: 'rgba(16,217,160,0.12)', color: '#10d9a0', border: 'rgba(16,217,160,0.25)', label: 'Live' }
+    ? { bg: 'rgba(122,168,116,0.12)', color: '#9ec995', border: 'rgba(122,168,116,0.28)', label: 'Live' }
     : project.status === 'soon'
-    ? { bg: 'rgba(139,92,246,0.12)', color: '#8b5cf6', border: 'rgba(139,92,246,0.25)', label: 'Soon' }
-    : { bg: 'rgba(79,157,235,0.12)', color: '#4f9deb', border: 'rgba(79,157,235,0.25)', label: 'Building' };
+    ? { bg: 'var(--accent-soft)', color: 'var(--accent-bright)', border: 'var(--accent-line)', label: 'Soon' }
+    : { bg: 'rgba(201,138,94,0.12)', color: '#d4a87e', border: 'rgba(201,138,94,0.28)', label: 'Building' };
 
   const sideExtra = (isLeft || isRight) ? { transform: 'scale(0.92)', opacity: 0.65, filter: 'blur(1px)', pointerEvents: 'none' } : {};
   const hoverExtra = isCenter && hovered ? { transform: 'translateY(-4px)', border: `1px solid ${project.color}55`, boxShadow: `0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px ${project.color}25` } : {};
@@ -772,7 +760,7 @@ function ProjectCarouselCard({ project, position }) {
       <div style={{ height: 2, background: `linear-gradient(90deg, ${project.color}, ${project.colorEnd})` }} />
       <div style={{ padding: 24 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-          <span style={{ fontSize: 26, lineHeight: 1 }}>{project.emoji}</span>
+          <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 24, fontWeight: 400, color: '#1a130a', letterSpacing: '-0.5px' }}>{mono(project.name)}</span>
           <span style={{ fontWeight: 800, fontSize: 18, color: 'var(--ink)', flex: 1 }}>{project.name}</span>
           <div style={{ padding: '3px 9px', borderRadius: 100, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8, background: statusCfg.bg, color: statusCfg.color, border: `1px solid ${statusCfg.border}`, display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
             <span style={{ width: 5, height: 5, borderRadius: '50%', background: statusCfg.color, display: 'inline-block' }} />
@@ -838,10 +826,10 @@ function ProjectsSection() {
   const activeTabObj = TABS.find(t => t.id === activeTab);
 
   const statusCfg = (s) => s === 'live'
-    ? { bg:'rgba(16,217,160,0.12)', color:'#10d9a0', border:'rgba(16,217,160,0.25)', label:'Live' }
+    ? { bg:'rgba(122,168,116,0.12)', color:'#9ec995', border:'rgba(122,168,116,0.28)', label:'Live' }
     : s === 'soon'
-    ? { bg:'rgba(139,92,246,0.12)', color:'#8b5cf6', border:'rgba(139,92,246,0.25)', label:'Soon' }
-    : { bg:'rgba(79,157,235,0.12)', color:'#4f9deb', border:'rgba(79,157,235,0.25)', label:'Building' };
+    ? { bg:'var(--accent-soft)', color:'var(--accent-bright)', border:'var(--accent-line)', label:'Soon' }
+    : { bg:'rgba(201,138,94,0.12)', color:'#d4a87e', border:'rgba(201,138,94,0.28)', label:'Building' };
 
   return (
     <section id="projects" style={{ padding: '88px 24px 72px', background: 'var(--bg-2)' }}>
@@ -898,7 +886,7 @@ function ProjectsSection() {
                       <div style={{ display:'flex', alignItems:'flex-start', gap:14 }}>
                         <div style={{ width:54, height:54, borderRadius:16, background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
                           display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, flexShrink:0,
-                          boxShadow:`0 8px 20px ${p.color}40` }}>{p.emoji}</div>
+                          boxShadow:`0 8px 20px ${p.color}40`, fontFamily:'var(--serif)', fontStyle:'italic', fontSize:26, fontWeight:400, color:'#1a130a', letterSpacing:'-0.5px' }}>{mono(p.name)}</div>
                         <div style={{ flex:1, minWidth:0 }}>
                           <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', marginBottom:5 }}>
                             <h3 style={{ fontWeight:900, fontSize:22, color:'var(--ink)', margin:0, lineHeight:1.1 }}>{p.name}</h3>
@@ -914,7 +902,7 @@ function ProjectsSection() {
                                 textTransform:'uppercase', letterSpacing:1,
                                 background:`${p.color}1a`, color:p.color, border:`1px solid ${p.color}40`,
                                 display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
-                                ⭐ Best Work
+                                <span style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontSize:13, lineHeight:1 }}>{'—'}</span> Best Work
                               </div>
                             )}
                           </div>
@@ -954,10 +942,10 @@ function ProjectsSection() {
                         {p.telegram && (
                           <a href={p.telegram} target="_blank" rel="noopener noreferrer"
                             style={{ padding:'10px 18px', borderRadius:10, fontSize:13, fontWeight:700,
-                              background:'rgba(79,157,235,0.12)', color:'#4f9deb',
-                              border:'1px solid rgba(79,157,235,0.3)', textDecoration:'none',
-                              display:'inline-flex', alignItems:'center', gap:6 }}>
-                            ✈️ Telegram Bot
+                              background:'rgba(255,255,255,0.04)', color:'var(--ink-2)',
+                              border:'1px solid var(--line)', textDecoration:'none',
+                              display:'inline-flex', alignItems:'center', gap:7 }}>
+                            Telegram Bot
                           </a>
                         )}
                         {p.twitter && (
@@ -1004,7 +992,7 @@ function ProjectsSection() {
                         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
                           <div style={{ width:42, height:42, borderRadius:12, flexShrink:0,
                             background:`linear-gradient(135deg,${p.color},${p.colorEnd})`,
-                            display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>{p.emoji}</div>
+                            display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'var(--serif)', fontStyle:'italic', fontSize:20, fontWeight:400, color:'#1a130a', letterSpacing:'-0.5px' }}>{mono(p.name)}</div>
                           <div style={{ flex:1, minWidth:0 }}>
                             <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
                               <span style={{ fontWeight:800, fontSize:15, color:'var(--ink)' }}>{p.name}</span>
@@ -1051,7 +1039,7 @@ function ProjectsSection() {
         <div style={{ textAlign:'center', marginTop:40 }}>
           <div className="glass" style={{ display:'inline-flex', alignItems:'center', gap:12,
             padding:'12px 24px', borderRadius:100, fontSize:13, color:'var(--ink-3)' }}>
-            <span style={{ width:6, height:6, borderRadius:'50%', background:'#8b5cf6',
+            <span style={{ width:6, height:6, borderRadius:'50%', background:'var(--accent)',
               display:'inline-block', animation:'pulse 2s infinite' }} />
             More projects shipping soon
           </div>
@@ -1212,7 +1200,9 @@ function ExperienceSection() {
       {/* Education */}
       <div style={{ maxWidth: 900, margin: '20px auto 0' }}>
         <div className="glass" style={{ borderRadius: 18, padding: '18px 24px', borderLeft: '3px solid var(--accent)', display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-          <div style={{ fontSize: 28 }}>🎓</div>
+          <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/><path d="M22 10v5"/></svg>
+          </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 2 }}>B.S. Finance — Business Analytics</div>
             <div style={{ color: 'var(--accent-bright)', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Rutgers University, New Brunswick</div>
@@ -1406,20 +1396,21 @@ function SkillsSection() {
             key={s.label}
             className={`glass glass-hover skill-card ${visible ? 'skill-animate' : ''}`}
             style={{
-              padding: '14px 22px',
-              borderRadius: 14,
+              padding: '11px 18px',
+              borderRadius: 100,
               display: 'flex',
               alignItems: 'center',
-              gap: 10,
+              gap: 9,
               cursor: 'default',
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
               transition: `all 0.5s ease ${i * 50}ms`,
-              background: `linear-gradient(135deg, var(--accent-soft), rgba(138,162,200,0.05))`,
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid var(--line)',
             }}
           >
-            <span style={{ fontSize: 20 }}>{s.icon}</span>
-            <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--ink-2)' }}>{s.label}</span>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--accent)', flexShrink: 0, opacity: 0.8 }} />
+            <span style={{ fontWeight: 500, fontSize: 13.5, color: 'var(--ink-2)', fontFamily: 'var(--mono)', letterSpacing: '-0.2px' }}>{s.label}</span>
           </div>
         ))}
       </div>
@@ -1452,16 +1443,16 @@ function ContactSection() {
         {/* Social links */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40 }}>
           <a href="https://github.com/ZbienVC" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>🐙</span> GitHub
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" style={{ color: 'var(--accent)' }}><path d="M12 1.5A10.5 10.5 0 0 0 1.5 12c0 4.64 3.01 8.57 7.18 9.96.53.1.72-.23.72-.5v-1.76c-2.92.63-3.54-1.4-3.54-1.4-.48-1.22-1.17-1.55-1.17-1.55-.95-.65.07-.64.07-.64 1.06.07 1.62 1.09 1.62 1.09.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.67-1.4-2.33-.27-4.78-1.17-4.78-5.18 0-1.15.41-2.08 1.09-2.81-.11-.27-.47-1.34.1-2.8 0 0 .89-.28 2.91 1.07a10.1 10.1 0 0 1 5.3 0c2.02-1.35 2.9-1.07 2.9-1.07.58 1.46.22 2.53.11 2.8.68.73 1.09 1.66 1.09 2.81 0 4.02-2.46 4.9-4.8 5.16.38.33.71.97.71 1.96v2.9c0 .28.19.61.73.5A10.5 10.5 0 0 0 22.5 12 10.5 10.5 0 0 0 12 1.5Z"/></svg> GitHub
           </a>
           <a href="https://www.linkedin.com/in/zach-bienstock" target="_blank" rel="noopener noreferrer" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>💼</span> LinkedIn
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" style={{ color: 'var(--accent)' }}><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg> LinkedIn
           </a>
           <a href="mailto:Zbienstock@gmail.com" className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'var(--ink)', fontWeight: 700, fontSize: 15 }}>
-            <span style={{ fontSize: 20 }}>✉️</span> Email
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ color: 'var(--accent)' }}><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6.5L21 6"/></svg> Email
           </a>
-          <button onClick={() => copy('Zbienstock@gmail.com')} className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, border: '1px solid rgba(255,255,255,0.06)', color: copied ? '#10d9a0' : 'var(--ink-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: 'rgba(15,22,41,0.7)', backdropFilter: 'blur(20px)', transition: 'all 0.2s' }}>
-            <span style={{ fontSize: 16 }}>{copied ? '✅' : '📋'}</span> {copied ? 'Copied!' : 'Copy Email'}
+          <button onClick={() => copy('Zbienstock@gmail.com')} className="glass glass-hover" style={{ padding: '16px 24px', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 10, border: '1px solid var(--line)', color: copied ? '#9ec995' : 'var(--ink-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', transition: 'all 0.2s' }}>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{copied ? <polyline points="4 12 9 18 20 5"/> : <><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></>}</svg> {copied ? 'Copied!' : 'Copy Email'}
           </button>
         </div>
 
