@@ -1,10 +1,9 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { createRoot } from 'react-dom/client';
+import './styles/alpine.css';
+import './styles/panels.css';
+import './styles/journey.css';
+import App from './App.jsx';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+// No StrictMode: the journey effect owns a WebGL context; dev double-invoke
+// would churn / leak GL contexts. The effect cleans up correctly on unmount.
+createRoot(document.getElementById('root')).render(<App />);

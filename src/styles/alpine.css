@@ -1,0 +1,225 @@
+/* ==========================================================================
+   Alpine Descent — design system
+   Cold moonlit-indigo snow · warm cabin-amber glow · a whisper of aurora.
+   Grotesk display (Archivo) · instrument mono (JetBrains) · editorial italic (Fraunces)
+   ========================================================================== */
+
+@import '@fontsource-variable/archivo';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/fraunces';
+
+:root {
+  /* ground & depth — indigo-biased, never pure grey */
+  --bg:        #080d16;
+  --summit:    #0e1524;
+  --glacier:   #16223a;
+  --frost:     #24354f;
+  --frost-2:   #33486a;
+
+  /* snow / text — warm-cool off-white going cold as it recedes */
+  --snow:      #eef2fa;
+  --snow-2:    #c6d2e4;
+  --snow-3:    #93a4c1;
+  --snow-4:    #647698;   /* mono labels / muted */
+
+  /* accents */
+  --amber:        #e0a155;   /* his brand — cabin & lantern glow */
+  --amber-bright: #f0b978;
+  --ember:        #c2823a;
+  --aurora:       #5fd6c4;   /* sky wonder / signal — used sparingly */
+  --aurora-dim:   #3f9d92;
+
+  --amber-soft:  rgba(224, 161, 85, 0.10);
+  --amber-line:  rgba(224, 161, 85, 0.26);
+  --amber-glow:  rgba(224, 161, 85, 0.55);
+
+  /* glass over the live world */
+  --glass-bg:     rgba(12, 19, 34, 0.62);
+  --glass-bg-2:   rgba(18, 28, 48, 0.55);
+  --glass-border: rgba(147, 164, 193, 0.16);
+  --glass-hi:     rgba(230, 238, 250, 0.10);
+
+  --line:      rgba(147, 164, 193, 0.12);
+  --live:      #7fd6b0;   /* "live" status — cool mint */
+
+  --display: 'Archivo Variable', system-ui, -apple-system, sans-serif;
+  --body:    'Archivo Variable', system-ui, -apple-system, sans-serif;
+  --serif:   'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --mono:    'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --ease: cubic-bezier(0.22, 0.7, 0.2, 1);
+  --panel-max: 1120px;
+
+  /* compatibility aliases so the existing ChatWidget themes to alpine */
+  --accent: var(--amber);
+  --accent-bright: var(--amber-bright);
+  --accent-deep: var(--ember);
+  --accent-soft: var(--amber-soft);
+  --accent-line: var(--amber-line);
+  --accent-glow: var(--amber-glow);
+  --accent-text: var(--amber-bright);
+  --ink: var(--snow);
+  --ink-2: var(--snow-2);
+  --ink-3: var(--snow-3);
+  --ink-4: var(--snow-4);
+  --bg-2: #0e1524;
+  --sans: var(--display);
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--snow-2);
+  font-family: var(--body);
+  font-weight: 420;
+  line-height: 1.6;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--amber); color: #1a1206; }
+
+/* thin cold scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--summit); }
+::-webkit-scrollbar-thumb { background: var(--frost); border-radius: 0; border: 3px solid var(--summit); }
+::-webkit-scrollbar-thumb:hover { background: var(--frost-2); }
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; }
+
+/* ── type helpers ─────────────────────────────────────────────────────────── */
+.display {
+  font-family: var(--display);
+  font-weight: 820;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  color: var(--snow);
+  font-stretch: 125%;   /* Archivo Variable supports width axis */
+}
+.serif-italic {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 460;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+.mono {
+  font-family: var(--mono);
+  font-weight: 460;
+  letter-spacing: 0.02em;
+}
+
+/* eyebrow / waypoint label — instrument readout */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--amber);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: var(--amber);
+  opacity: 0.7;
+}
+
+.altitude {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--snow-4);
+}
+
+/* ── grain (cinematic film texture) ───────────────────────────────────────── */
+.grain {
+  position: fixed; inset: 0; z-index: 60; pointer-events: none;
+  opacity: 0.055; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.vignette {
+  position: fixed; inset: 0; z-index: 58; pointer-events: none;
+  background: radial-gradient(125% 95% at 50% 42%, transparent 55%, rgba(4, 7, 14, 0.62) 100%);
+}
+
+/* ── glass panel ──────────────────────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 1px 0 0 var(--glass-hi) inset,
+    0 30px 80px -20px rgba(2, 5, 12, 0.7);
+  border-radius: 4px;   /* deliberate: crisp, map-plate corners — not pill-soft */
+}
+.glass-hover { transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease); }
+.glass-hover:hover { transform: translateY(-3px); border-color: var(--amber-line); background: var(--glass-bg-2); }
+
+/* ── buttons ──────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-weight: 600; font-size: 13px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 13px 22px; border-radius: 3px;
+  cursor: pointer; border: 1px solid transparent;
+  transition: transform 0.25s var(--ease), background 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  will-change: transform;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--amber-bright), var(--ember));
+  color: #1c1206;
+  box-shadow: 0 8px 26px -8px var(--amber-glow);
+}
+.btn-primary:hover { box-shadow: 0 12px 34px -8px var(--amber-glow); }
+.btn-ghost {
+  background: rgba(147, 164, 193, 0.05);
+  border-color: var(--glass-border);
+  color: var(--snow-2);
+}
+.btn-ghost:hover { border-color: var(--amber-line); color: var(--snow); background: rgba(147, 164, 193, 0.08); }
+
+/* ── scroll reveal (stagger) ──────────────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 0.07s; }
+.reveal.d2 { transition-delay: 0.14s; }
+.reveal.d3 { transition-delay: 0.21s; }
+.reveal.d4 { transition-delay: 0.28s; }
+
+/* status pill */
+.status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 2px;
+  color: var(--live); background: rgba(127, 214, 176, 0.10); border: 1px solid rgba(127, 214, 176, 0.28);
+}
+.status .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* tag chip */
+.chip {
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.02em; padding: 4px 9px; border-radius: 2px;
+  border: 1px solid var(--amber-line); color: var(--amber); background: var(--amber-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .btn, .glass-hover { transition: none; }
+}
