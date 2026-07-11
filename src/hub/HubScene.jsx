@@ -28,11 +28,31 @@ export function approachPoint(lm) {
 
 function CameraRig({ focus, traveling }) {
   const cc = useRef();
+  const intro = useRef(true); // entrance glide owns the camera until it lands
+
+  // cinematic entrance: high aerial establishing shot gliding down to overview
+  useEffect(() => {
+    const c = cc.current;
+    if (!c) return;
+    c.setLookAt(-4, 13, 25, 0, 0.6, -2, false); // instant: raised aerial
+    c.smoothTime = 1.1;
+    c.setLookAt(...OVERVIEW.pos, ...OVERVIEW.look, true);
+    const t = setTimeout(() => {
+      intro.current = false;
+      if (cc.current) cc.current.smoothTime = 0.6;
+    }, 2000);
+    return () => clearTimeout(t);
+  }, []);
+
+  // (no idle camera drift — writing angles per-frame cancels in-flight tweens;
+  // the snow, aurora, and wandering fox keep the frame alive instead)
 
   useEffect(() => {
     const c = cc.current;
     if (!c) return;
+    if (focus) intro.current = false; // a click interrupts the entrance
     if (!focus) {
+      if (intro.current) return; // entrance effect owns the first move
       c.smoothTime = 0.6;
       c.setLookAt(...OVERVIEW.pos, ...OVERVIEW.look, true);
       return;
@@ -88,8 +108,10 @@ export default function HubScene({ active, pending, roam, hovered, onHover, onSe
   return (
     <>
       <color attach="background" args={['#0a0f1e']} />
+      {/* NOTE: no drei <SoftShadows> — its PCSS patch doesn't compile on three 0.185
+          (unpackRGBAToDepth removed) and silently kills every lit material */}
       <Environment3D onGroundClick={onGroundClick} />
-      <Dog target={dogTarget} lookAt={dogLookAt} onArrive={onArrive} />
+      <Dog target={dogTarget} lookAt={dogLookAt} onArrive={onArrive} wander={!lm && !roam} />
 
       {LANDMARKS.map((l) => {
         const Geom = GEOM[l.kind];

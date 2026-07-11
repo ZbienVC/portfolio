@@ -60,7 +60,7 @@ function Footprints({ api }) {
   );
 }
 
-export default function Dog({ target, lookAt = null, onArrive }) {
+export default function Dog({ target, lookAt = null, onArrive, wander = false }) {
   const group = useRef();
   const rig = useRef();
   const { scene, animations } = useGLTF('/models/fox.glb');
@@ -70,6 +70,10 @@ export default function Dog({ target, lookAt = null, onArrive }) {
   const stride = useRef(0);
   const stepSide = useRef(1);
   const arrived = useRef(true);
+  // idle wandering — the fox sniffs around basecamp when left alone
+  const wanderPt = useRef(null);
+  const idleFor = useRef(0);
+  const nextWanderIn = useRef(6);
 
   useEffect(() => {
     scene.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; } });
@@ -81,8 +85,12 @@ export default function Dog({ target, lookAt = null, onArrive }) {
     return () => idle?.fadeOut(0.2);
   }, [actions]);
 
-  // new target → not arrived yet
-  useEffect(() => { arrived.current = false; }, [target]);
+  // new target → not arrived yet; cancel any idle wandering
+  useEffect(() => {
+    arrived.current = false;
+    wanderPt.current = null;
+    idleFor.current = 0;
+  }, [target]);
 
   const setClip = (want, timeScale = 1) => {
     if (want === state.current) {
@@ -99,7 +107,24 @@ export default function Dog({ target, lookAt = null, onArrive }) {
   useFrame((_, dt) => {
     const g = group.current;
     if (!g) return;
-    const [tx, , tz] = target?.point || [0, 0, 0];
+    // idle wander: after a quiet stretch at home, pick a nearby sniff spot
+    if (wander && arrived.current && !wanderPt.current) {
+      idleFor.current += dt;
+      if (idleFor.current > nextWanderIn.current) {
+        const a = Math.random() * Math.PI * 2;
+        const r = 1.6 + Math.random() * 2.2;
+        wanderPt.current = [
+          target.point[0] + Math.cos(a) * r,
+          target.point[2] + Math.sin(a) * r * 0.7,
+        ];
+        idleFor.current = 0;
+        nextWanderIn.current = 5 + Math.random() * 6;
+      }
+    }
+    const pt = wanderPt.current
+      ? [wanderPt.current[0], 0, wanderPt.current[1]]
+      : target?.point || [0, 0, 0];
+    const [tx, , tz] = pt;
     const dx = tx - g.position.x;
     const dz = tz - g.position.z;
     const dist = Math.hypot(dx, dz);
@@ -131,6 +156,7 @@ export default function Dog({ target, lookAt = null, onArrive }) {
         stamp.current(g.position.x, g.position.z, desired, stepSide.current);
       }
     } else {
+      if (wanderPt.current) wanderPt.current = null; // sniffed the spot — settle
       if (!arrived.current) {
         arrived.current = true;
         onArrive?.(target?.id ?? null);

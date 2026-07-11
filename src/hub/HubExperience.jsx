@@ -23,7 +23,7 @@ const SECTIONS = {
   contact: { Panel: ContactPanel, waypoint: { title: 'The Signpost' } },
 };
 
-function HubNav({ active, pending, onJump }) {
+function HubNav({ active, pending, onJump, onClassic }) {
   const [open, setOpen] = useState(false);
   const current = pending || active;
   const go = (id) => { onJump(id); setOpen(false); };
@@ -39,6 +39,7 @@ function HubNav({ active, pending, onJump }) {
             {l.label}
           </button>
         ))}
+        <button className="jnav-link mono jnav-mode" onClick={onClassic} title="View the classic website instead">Classic site</button>
         <a className="btn btn-ghost jnav-cta" href={PROFILE.socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       </div>
       <button className="jnav-burger" onClick={() => setOpen((v) => !v)} aria-label="Menu">{open ? '✕' : '☰'}</button>
@@ -48,6 +49,7 @@ function HubNav({ active, pending, onJump }) {
           {LANDMARKS.map((l) => (
             <button key={l.id} className={`jnav-link mono${current === l.id ? ' active' : ''}`} onClick={() => go(l.id)}>{l.label}</button>
           ))}
+          <button className="jnav-link mono jnav-mode" onClick={onClassic}>Classic site</button>
           <a className="btn btn-ghost" href={PROFILE.socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
       )}
@@ -86,11 +88,21 @@ function SectionPanel({ id, onClose }) {
   );
 }
 
-export default function HubExperience() {
+// mounted inside the same <Suspense> as the scene — when it mounts, assets are in
+function ReadySignal({ onReady }) {
+  useEffect(() => {
+    const t = setTimeout(onReady, 220); // let the first frames land
+    return () => clearTimeout(t);
+  }, [onReady]);
+  return null;
+}
+
+export default function HubExperience({ onClassic }) {
   const [active, setActive] = useState(null); // panel open at this landmark
   const [pending, setPending] = useState(null); // fox is traveling to this landmark
   const [roam, setRoam] = useState(null); // free-roam point on the snow
   const [hovered, setHovered] = useState(null);
+  const [ready, setReady] = useState(false);
   const pendingRef = useRef(null);
   pendingRef.current = pending;
 
@@ -148,14 +160,24 @@ export default function HubExperience() {
             onArrive={arrive}
             onGroundClick={groundClick}
           />
+          <ReadySignal onReady={() => setReady(true)} />
         </Suspense>
       </Canvas>
 
       <div className="vignette" aria-hidden="true" />
       <div className={`hub-topscrim${active || pending ? ' dim' : ''}`} aria-hidden="true" />
-      <HubNav active={active} pending={pending} onJump={select} />
+      <HubNav active={active} pending={pending} onJump={select} onClassic={onClassic} />
       <HubIntro visible={!active && !pending} />
+      {pending && (
+        <div className="hub-status mono">
+          ▸ THE FOX IS LEADING YOU TO {LANDMARKS.find((l) => l.id === pending)?.label.toUpperCase()}…
+        </div>
+      )}
       <SectionPanel id={active} onClose={() => select(null)} />
+      {/* smooth reveal — covers the first-load blank, fades once the scene breathes */}
+      <div className={`hub-veil${ready ? ' out' : ''}`} aria-hidden="true">
+        <span className="display">Z<span className="serif-italic">B</span></span>
+      </div>
       <Loader
         containerStyles={{ background: 'rgba(8,13,22,0.96)' }}
         barStyles={{ background: 'linear-gradient(90deg,#f0b978,#c2823a)', height: '3px' }}
