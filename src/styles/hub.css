@@ -42,10 +42,17 @@
 .hub-name .serif-italic { color: var(--amber-bright); font-weight: 480; font-stretch: normal; }
 .hub-role { font-size: clamp(13px, 1.6vw, 16px); display: flex; align-items: center; justify-content: center; height: 24px; margin-bottom: 12px; color: var(--snow-2); }
 .hub-role .slash { color: var(--snow-4); margin-right: 6px; }
-.hub-tag { font-family: var(--serif); font-style: italic; font-size: clamp(14px, 1.7vw, 18px); line-height: 1.5; color: var(--snow-2); max-width: 480px; margin: 0 auto; text-shadow: 0 2px 24px rgba(6,10,20,0.9); }
+/* tagline lives at the BOTTOM of the frame — keeps the center band clear of
+   the 3D landmark labels (they collided mid-screen) */
+.hub-tag {
+  position: fixed; left: 0; right: 0; bottom: 56px;
+  font-family: var(--serif); font-style: italic; font-size: clamp(14px, 1.6vw, 17px);
+  line-height: 1.5; color: var(--snow-2); max-width: 520px; margin: 0 auto;
+  text-align: center; text-shadow: 0 2px 24px rgba(6,10,20,0.95);
+}
 .hub-hint {
-  position: fixed; left: 0; right: 0; bottom: 26px; z-index: 20;
-  text-align: center; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--snow-4);
+  position: fixed; left: 0; right: 0; bottom: 24px; z-index: 20;
+  text-align: center; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--snow-4);
   pointer-events: none;
 }
 
@@ -82,6 +89,11 @@
 
 /* panels in the hub always show their reveal content (no scroll-trigger here) */
 .hub-panel .reveal { opacity: 1 !important; transform: none !important; }
+
+/* the "ALT x,xxx m" readout was a scroll-journey artifact — it collided with
+   the close button; keep the room clear for it too */
+.hub-panel .section-eyebrow .altitude { display: none; }
+.hub-panel .section-eyebrow { padding-right: 120px; }
 
 /* the section shell is full-width inside the narrower panel */
 .hub-panel .section-shell.wide, .hub-panel .section-shell { width: 100%; }

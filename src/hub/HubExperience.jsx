@@ -13,13 +13,14 @@ import SkillsPanel from '../sections/SkillsPanel.jsx';
 import LifePanel from '../sections/LifePanel.jsx';
 import ContactPanel from '../sections/ContactPanel.jsx';
 
+// each panel is titled after the landmark you actually visited in the world
 const SECTIONS = {
-  about: AboutPanel,
-  projects: ProjectsPanel,
-  experience: ExperiencePanel,
-  skills: SkillsPanel,
-  life: LifePanel,
-  contact: ContactPanel,
+  about: { Panel: AboutPanel, waypoint: { title: 'The Cabin' } },
+  projects: { Panel: ProjectsPanel, waypoint: { title: 'The Monoliths' } },
+  experience: { Panel: ExperiencePanel, waypoint: { title: 'The Cairn' } },
+  skills: { Panel: SkillsPanel, waypoint: { title: 'The Gear Cache' } },
+  life: { Panel: LifePanel, waypoint: { title: 'The Frozen Lake' } },
+  contact: { Panel: ContactPanel, waypoint: { title: 'The Signpost' } },
 };
 
 function HubNav({ active, pending, onJump }) {
@@ -70,14 +71,14 @@ function HubIntro({ visible }) {
 }
 
 function SectionPanel({ id, onClose }) {
-  const Panel = id ? SECTIONS[id] : null;
+  const entry = id ? SECTIONS[id] : null;
   return (
     <div className={`hub-panel${id ? ' open' : ''}`} aria-hidden={!id}>
-      {Panel && (
+      {entry && (
         <div className="hub-panel-card glass">
           <button className="hub-panel-close" onClick={onClose} aria-label="Back to basecamp">✕ <span className="mono">BASECAMP</span></button>
           <div className="hub-panel-scroll">
-            <Panel active />
+            <entry.Panel active waypoint={entry.waypoint} />
           </div>
         </div>
       )}

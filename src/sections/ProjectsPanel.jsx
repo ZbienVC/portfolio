@@ -70,8 +70,8 @@ export default function ProjectsPanel({ waypoint }) {
       label={waypoint?.title || 'Basecamp'}
       altitude={waypoint?.altitude || '2,180 m'}
       wide
-      title={<>The cabins are <span className="serif-italic">lit</span></>}
-      intro="Ten projects live in production — each a window glowing on the mountain. Warm one up."
+      title={<>The signals are <span className="serif-italic">lit</span></>}
+      intro="Ten projects live in production — ten signals glowing at basecamp. Warm one up."
     >
       <div className="proj-tabs reveal d2">
         {PROJECT_CATEGORIES.map((c) => {

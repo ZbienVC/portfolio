@@ -41,22 +41,26 @@ export function Landmark({ data, hovered, active, onHover, onSelect, children })
         {children({ lit: isHot, accent: data.accent, t })}
       </group>
 
-      <Billboard position={[0, data.labelY ?? 3.4, 0]}>
-        <Text
-          fontSize={0.4}
-          color={isHot ? data.accent : '#c6d2e4'}
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0.014}
-          outlineColor="#0a0f1a"
-          letterSpacing={0.05}
-        >
-          {data.label.toUpperCase()}
-        </Text>
-        <Text position={[0, -0.4, 0]} fontSize={0.155} color={isHot ? '#e9edf6' : '#647698'} anchorX="center" anchorY="middle" letterSpacing={0.24} outlineWidth={0.008} outlineColor="#0a0f1a">
-          {isHot ? '▸ SEND THE FOX' : data.hint}
-        </Text>
-      </Billboard>
+      {/* label hides while you're AT the landmark — the panel names it, and the
+          up-close billboard just clutters the frame */}
+      {!active && (
+        <Billboard position={[0, data.labelY ?? 3.4, 0]}>
+          <Text
+            fontSize={0.4}
+            color={isHot ? data.accent : '#c6d2e4'}
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.014}
+            outlineColor="#0a0f1a"
+            letterSpacing={0.05}
+          >
+            {data.label.toUpperCase()}
+          </Text>
+          <Text position={[0, -0.4, 0]} fontSize={0.155} color={isHot ? '#e9edf6' : '#647698'} anchorX="center" anchorY="middle" letterSpacing={0.24} outlineWidth={0.008} outlineColor="#0a0f1a">
+            {isHot ? '▸ SEND THE FOX' : data.hint}
+          </Text>
+        </Billboard>
+      )}
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <ringGeometry args={[1.2, 1.34, 44]} />
