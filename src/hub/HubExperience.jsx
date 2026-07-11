@@ -1,6 +1,7 @@
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Loader } from '@react-three/drei';
+import * as THREE from 'three';
 import HubScene, { LANDMARKS } from './HubScene.jsx';
 import { PROFILE } from '../content/portfolio.js';
 import { useTypewriter } from '../journey/hooks.js';
@@ -21,8 +22,9 @@ const SECTIONS = {
   contact: ContactPanel,
 };
 
-function HubNav({ active, onJump }) {
+function HubNav({ active, pending, onJump }) {
   const [open, setOpen] = useState(false);
+  const current = pending || active;
   const go = (id) => { onJump(id); setOpen(false); };
   return (
     <nav className="hub-nav">
@@ -30,9 +32,9 @@ function HubNav({ active, onJump }) {
         <span className="display">Z<span className="serif-italic">B</span></span>
       </button>
       <div className="jnav-links">
-        <button className={`jnav-link mono${!active ? ' active' : ''}`} onClick={() => go(null)}>Basecamp</button>
+        <button className={`jnav-link mono${!current ? ' active' : ''}`} onClick={() => go(null)}>Basecamp</button>
         {LANDMARKS.map((l) => (
-          <button key={l.id} className={`jnav-link mono${active === l.id ? ' active' : ''}`} onClick={() => go(l.id)}>
+          <button key={l.id} className={`jnav-link mono${current === l.id ? ' active' : ''}`} onClick={() => go(l.id)}>
             {l.label}
           </button>
         ))}
@@ -41,9 +43,9 @@ function HubNav({ active, onJump }) {
       <button className="jnav-burger" onClick={() => setOpen((v) => !v)} aria-label="Menu">{open ? '✕' : '☰'}</button>
       {open && (
         <div className="jnav-mobile">
-          <button className={`jnav-link mono${!active ? ' active' : ''}`} onClick={() => go(null)}>Basecamp</button>
+          <button className={`jnav-link mono${!current ? ' active' : ''}`} onClick={() => go(null)}>Basecamp</button>
           {LANDMARKS.map((l) => (
-            <button key={l.id} className={`jnav-link mono${active === l.id ? ' active' : ''}`} onClick={() => go(l.id)}>{l.label}</button>
+            <button key={l.id} className={`jnav-link mono${current === l.id ? ' active' : ''}`} onClick={() => go(l.id)}>{l.label}</button>
           ))}
           <a className="btn btn-ghost" href={PROFILE.socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
@@ -62,7 +64,7 @@ function HubIntro({ visible }) {
       </h1>
       <div className="hub-role mono"><span className="slash">{'// '}</span>{role}<span className="caret" /></div>
       <p className="hub-tag">{PROFILE.tagline}</p>
-      <p className="hub-hint mono">Hover a marker to explore · drag to look around · or use the menu</p>
+      <p className="hub-hint mono">Click a landmark — the fox will take you · click the snow to send it exploring · drag to look around</p>
     </div>
   );
 }
@@ -84,8 +86,12 @@ function SectionPanel({ id, onClose }) {
 }
 
 export default function HubExperience() {
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState(null); // panel open at this landmark
+  const [pending, setPending] = useState(null); // fox is traveling to this landmark
+  const [roam, setRoam] = useState(null); // free-roam point on the snow
   const [hovered, setHovered] = useState(null);
+  const pendingRef = useRef(null);
+  pendingRef.current = pending;
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -93,25 +99,62 @@ export default function HubExperience() {
     return () => { document.body.style.overflow = prev; };
   }, []);
 
+  const select = (id) => {
+    setRoam(null);
+    if (!id) { setActive(null); setPending(null); return; }
+    if (id === active) return;
+    setActive(null);
+    setPending(id);
+  };
+
+  const arrive = (id) => {
+    if (id && id === pendingRef.current) {
+      setActive(id);
+      setPending(null);
+    }
+  };
+
+  const groundClick = (point) => {
+    // send the fox exploring — clamp to the basecamp clearing
+    const v = new THREE.Vector2(point.x, point.z);
+    if (v.length() > 13) v.setLength(13);
+    setActive(null);
+    setPending(null);
+    setRoam([v.x, v.y]);
+  };
+
   return (
     <div className="hub-root">
       <Canvas
         shadows
         dpr={[1, 2]}
-        camera={{ position: [0, 5.2, 15.5], fov: 42, near: 0.1, far: 400 }}
+        camera={{ position: [0, 5.4, 16], fov: 42, near: 0.1, far: 400 }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
-        onPointerMissed={() => setActive(null)}
+        onCreated={({ gl }) => {
+          gl.toneMapping = THREE.ACESFilmicToneMapping;
+          gl.toneMappingExposure = 1.18;
+        }}
+        onPointerMissed={() => { setActive(null); setPending(null); }}
       >
         <Suspense fallback={null}>
-          <HubScene active={active} hovered={hovered} onHover={setHovered} onSelect={setActive} />
+          <HubScene
+            active={active}
+            pending={pending}
+            roam={roam}
+            hovered={hovered}
+            onHover={setHovered}
+            onSelect={select}
+            onArrive={arrive}
+            onGroundClick={groundClick}
+          />
         </Suspense>
       </Canvas>
 
       <div className="vignette" aria-hidden="true" />
-      <div className={`hub-topscrim${active ? ' dim' : ''}`} aria-hidden="true" />
-      <HubNav active={active} onJump={setActive} />
-      <HubIntro visible={!active} />
-      <SectionPanel id={active} onClose={() => setActive(null)} />
+      <div className={`hub-topscrim${active || pending ? ' dim' : ''}`} aria-hidden="true" />
+      <HubNav active={active} pending={pending} onJump={select} />
+      <HubIntro visible={!active && !pending} />
+      <SectionPanel id={active} onClose={() => select(null)} />
       <Loader
         containerStyles={{ background: 'rgba(8,13,22,0.96)' }}
         barStyles={{ background: 'linear-gradient(90deg,#f0b978,#c2823a)', height: '3px' }}

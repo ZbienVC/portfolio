@@ -1,25 +1,18 @@
-import { useRef, useState } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Billboard, Text, MeshReflectorMaterial } from '@react-three/drei';
 import * as THREE from 'three';
+import { woodMaps, rockMaps, makeSoftDisc } from './textures.js';
 
-// ── shared little material helpers ──────────────────────────────────────────
-const WOOD = '#3a2c22';
-const WOOD_L = '#5a4030';
-const STONE = '#4a5670';
-const SNOW = '#eef4fb';
-const IRON = '#26242b';
+const SNOW = '#e8eff9';
 
-function Glow({ color, intensity = 1, scale = 1 }) {
-  // additive sprite-ish glow via a small emissive sphere + point light
+// snow mound — grounds a structure into the drifts instead of floating on them
+function Mound({ r = 1.6, y = 0.05 }) {
   return (
-    <>
-      <pointLight color={color} intensity={intensity * 6} distance={9} decay={2} />
-      <mesh scale={scale}>
-        <sphereGeometry args={[0.18, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={0.9} />
-      </mesh>
-    </>
+    <mesh position={[0, y, 0]} scale={[1, 0.22, 1]} receiveShadow>
+      <sphereGeometry args={[r, 20, 12]} />
+      <meshStandardMaterial color="#dbe5f4" roughness={1} />
+    </mesh>
   );
 }
 
@@ -32,7 +25,7 @@ export function Landmark({ data, hovered, active, onHover, onSelect, children })
   useFrame((_, dt) => {
     t.current += dt;
     if (g.current) {
-      const target = isHot ? 1.05 : 1;
+      const target = isHot ? 1.04 : 1;
       g.current.scale.setScalar(THREE.MathUtils.lerp(g.current.scale.x, target, 1 - Math.pow(0.001, dt)));
     }
   });
@@ -48,28 +41,26 @@ export function Landmark({ data, hovered, active, onHover, onSelect, children })
         {children({ lit: isHot, accent: data.accent, t })}
       </group>
 
-      {/* floating label — billboarded, brightens on hover */}
       <Billboard position={[0, data.labelY ?? 3.4, 0]}>
         <Text
-          fontSize={0.42}
+          fontSize={0.4}
           color={isHot ? data.accent : '#c6d2e4'}
           anchorX="center"
           anchorY="middle"
-          outlineWidth={0.012}
+          outlineWidth={0.014}
           outlineColor="#0a0f1a"
-          letterSpacing={0.04}
+          letterSpacing={0.05}
         >
           {data.label.toUpperCase()}
         </Text>
-        <Text position={[0, -0.42, 0]} fontSize={0.16} color="#647698" anchorX="center" anchorY="middle" letterSpacing={0.24}>
-          {isHot ? '▸ ENTER' : data.hint}
+        <Text position={[0, -0.4, 0]} fontSize={0.155} color={isHot ? '#e9edf6' : '#647698'} anchorX="center" anchorY="middle" letterSpacing={0.24} outlineWidth={0.008} outlineColor="#0a0f1a">
+          {isHot ? '▸ SEND THE FOX' : data.hint}
         </Text>
       </Billboard>
 
-      {/* base ring — reads as interactive */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-        <ringGeometry args={[1.15, 1.32, 40]} />
-        <meshBasicMaterial color={data.accent} transparent opacity={isHot ? 0.55 : 0.16} side={THREE.DoubleSide} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+        <ringGeometry args={[1.2, 1.34, 44]} />
+        <meshBasicMaterial color={data.accent} transparent opacity={isHot ? 0.6 : 0.14} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
     </group>
   );
@@ -80,189 +71,269 @@ function pulse(t, base, amp = 0.4, freq = 1.6) {
   return base + amp * (0.5 + 0.5 * Math.sin(t.current * freq));
 }
 
+function ChimneySmoke({ position }) {
+  const tex = useMemo(() => makeSoftDisc('150,160,185'), []);
+  const puffs = useRef([]);
+  useFrame((s) => {
+    const e = s.clock.elapsedTime;
+    puffs.current.forEach((p, i) => {
+      if (!p) return;
+      const ph = (e * 0.28 + i / 3) % 1;
+      p.position.y = ph * 2.4;
+      p.position.x = Math.sin(e * 0.7 + i * 2) * 0.18 * ph;
+      const s2 = 0.25 + ph * 0.9;
+      p.scale.setScalar(s2);
+      p.material.opacity = 0.36 * Math.sin(ph * Math.PI);
+    });
+  });
+  return (
+    <group position={position}>
+      {[0, 1, 2].map((i) => (
+        <sprite key={i} ref={(el) => (puffs.current[i] = el)}>
+          <spriteMaterial map={tex} transparent depthWrite={false} opacity={0} />
+        </sprite>
+      ))}
+    </group>
+  );
+}
+
 export function Cabin({ lit, accent, t }) {
+  const wood = useMemo(() => woodMaps(), []);
   const win = useRef();
-  useFrame(() => { if (win.current) win.current.material.emissiveIntensity = pulse(t, lit ? 2.6 : 1.4, 0.5, 1.2); });
+  useFrame(() => { if (win.current) win.current.material.emissiveIntensity = pulse(t, lit ? 2.8 : 1.6, 0.5, 1.2); });
   return (
     <group>
-      <mesh position={[0, 0.8, 0]} castShadow receiveShadow>
-        <boxGeometry args={[2.2, 1.6, 1.8]} />
-        <meshStandardMaterial color={WOOD_L} roughness={0.85} flatShading />
+      <Mound r={2.3} />
+      <mesh position={[0, 0.85, 0]} castShadow receiveShadow>
+        <boxGeometry args={[2.3, 1.7, 1.9]} />
+        <meshStandardMaterial map={wood.map} bumpMap={wood.bumpMap} bumpScale={0.6} roughness={0.85} />
       </mesh>
-      <mesh position={[0, 2.05, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
-        <coneGeometry args={[1.75, 1.1, 4]} />
-        <meshStandardMaterial color={WOOD} roughness={0.9} flatShading />
+      {/* pitched roof + snow blanket */}
+      <mesh position={[0, 2.15, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
+        <coneGeometry args={[1.85, 1.15, 4]} />
+        <meshStandardMaterial color="#2e2119" roughness={0.9} />
       </mesh>
-      <mesh position={[0, 2.14, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
-        <coneGeometry args={[1.62, 0.95, 4]} />
-        <meshStandardMaterial color={SNOW} roughness={1} flatShading />
+      <mesh position={[0, 2.26, 0]} rotation={[0, Math.PI / 4, 0]} castShadow>
+        <coneGeometry args={[1.72, 1.0, 4]} />
+        <meshStandardMaterial color={SNOW} roughness={1} />
+      </mesh>
+      {/* chimney + smoke */}
+      <mesh position={[0.62, 2.6, -0.3]} castShadow>
+        <boxGeometry args={[0.3, 0.9, 0.3]} />
+        <meshStandardMaterial map={rockMaps().map} roughness={0.95} />
+      </mesh>
+      <ChimneySmoke position={[0.62, 3.1, -0.3]} />
+      {/* door with warm seam */}
+      <mesh position={[-0.45, 0.62, 0.96]}>
+        <boxGeometry args={[0.55, 1.15, 0.06]} />
+        <meshStandardMaterial map={wood.map} roughness={0.8} color="#8a6a48" />
       </mesh>
       {/* glowing windows on the front (+Z) */}
-      {[-0.5, 0.5].map((x) => (
-        <mesh key={x} ref={x > 0 ? win : undefined} position={[x, 0.85, 0.91]}>
-          <planeGeometry args={[0.5, 0.66]} />
-          <meshStandardMaterial color="#1a1206" emissive={'#ffcf87'} emissiveIntensity={1.6} toneMapped={false} />
-        </mesh>
+      {[0.35, 0.85].map((x, i) => (
+        <group key={i} position={[x, 0.95, 0.96]}>
+          <mesh>
+            <boxGeometry args={[0.5, 0.6, 0.04]} />
+            <meshStandardMaterial color="#241a10" roughness={0.6} />
+          </mesh>
+          <mesh ref={i === 0 ? win : undefined} position={[0, 0, 0.03]}>
+            <planeGeometry args={[0.42, 0.52]} />
+            <meshStandardMaterial color="#1a1206" emissive={'#ffcf87'} emissiveIntensity={1.8} toneMapped={false} />
+          </mesh>
+        </group>
       ))}
-      <group position={[0, 0.85, 1.4]}>
-        <pointLight color="#ffcf87" intensity={lit ? 9 : 5} distance={8} decay={2} />
-      </group>
+      <pointLight position={[0.6, 1.0, 1.6]} color="#ffcf87" intensity={lit ? 11 : 6} distance={9} decay={2} />
     </group>
   );
 }
 
 export function Monoliths({ lit, accent, t }) {
-  // flagship "Projects" — a cluster of tall glowing standing slabs
   const refs = [useRef(), useRef(), useRef(), useRef()];
   useFrame(() => {
-    refs.forEach((r, i) => { if (r.current) r.current.material.emissiveIntensity = pulse(t, lit ? 2.4 : 1.5, 0.5, 1.1 + i * 0.2); });
+    refs.forEach((r, i) => { if (r.current) r.current.material.emissiveIntensity = pulse(t, lit ? 2.6 : 1.6, 0.5, 1.1 + i * 0.2); });
   });
+  const rock = useMemo(() => rockMaps(), []);
   const slabs = [
-    [-1.1, 2.4, 0.2, '#5fd6c4'],
-    [0, 3.2, -0.3, accent],
-    [1.1, 2.7, 0.1, '#f0b978'],
-    [0.4, 1.9, 0.7, '#5fd6c4'],
+    [-1.15, 2.4, 0.2, '#5fd6c4', -0.06],
+    [0, 3.3, -0.3, accent, 0.03],
+    [1.15, 2.7, 0.1, '#f0b978', 0.06],
+    [0.45, 1.9, 0.75, '#5fd6c4', -0.04],
   ];
   return (
     <group>
-      {slabs.map(([x, h, z, c], i) => (
-        <group key={i} position={[x, h / 2, z]}>
-          <mesh ref={refs[i]} castShadow>
-            <boxGeometry args={[0.5, h, 0.16]} />
-            <meshStandardMaterial color="#12151f" emissive={c} emissiveIntensity={1.6} toneMapped={false} flatShading />
+      <Mound r={2.1} />
+      {slabs.map(([x, h, z, c, tilt], i) => (
+        <group key={i} position={[x, h / 2, z]} rotation={[0, i * 0.3, tilt]}>
+          {/* stone frame */}
+          <mesh castShadow>
+            <boxGeometry args={[0.6, h, 0.26]} />
+            <meshStandardMaterial map={rock.map} bumpMap={rock.bumpMap} bumpScale={0.5} roughness={0.9} />
+          </mesh>
+          {/* inset glowing face */}
+          <mesh ref={refs[i]} position={[0, 0, 0.14]}>
+            <planeGeometry args={[0.42, h - 0.3]} />
+            <meshStandardMaterial color="#0c0f18" emissive={c} emissiveIntensity={1.8} toneMapped={false} />
+          </mesh>
+          {/* snow on top */}
+          <mesh position={[0, h / 2 + 0.03, 0]} scale={[1, 0.3, 1]}>
+            <sphereGeometry args={[0.32, 10, 8]} />
+            <meshStandardMaterial color={SNOW} roughness={1} />
           </mesh>
         </group>
       ))}
-      <pointLight color={accent} intensity={lit ? 10 : 6} distance={10} decay={2} position={[0, 2, 0.5]} />
+      <pointLight color={accent} intensity={lit ? 11 : 7} distance={11} decay={2} position={[0, 2.2, 0.6]} />
     </group>
   );
 }
 
 export function Cairn({ lit, accent, t }) {
   const flag = useRef();
-  useFrame(() => { if (flag.current) flag.current.rotation.z = 0.1 * Math.sin(t.current * 2); });
+  useFrame(() => { if (flag.current) flag.current.rotation.z = 0.12 * Math.sin(t.current * 2); });
+  const rock = useMemo(() => rockMaps(), []);
   const stones = [[1.1, 0.35], [0.95, 0.85], [0.75, 1.3], [0.55, 1.7], [0.38, 2.0]];
   return (
     <group>
+      <Mound r={1.8} />
       {stones.map(([r, y], i) => (
         <mesh key={i} position={[0, y, 0]} rotation={[0, i * 0.6, 0]} castShadow receiveShadow>
           <dodecahedronGeometry args={[r, 0]} />
-          <meshStandardMaterial color={STONE} roughness={0.95} flatShading />
+          <meshStandardMaterial map={rock.map} bumpMap={rock.bumpMap} bumpScale={0.5} roughness={0.95} />
         </mesh>
       ))}
       <mesh position={[0, 2.05, 0]} scale={[1, 0.5, 1]} castShadow>
         <dodecahedronGeometry args={[0.42, 0]} />
-        <meshStandardMaterial color={SNOW} roughness={1} flatShading />
+        <meshStandardMaterial color={SNOW} roughness={1} />
       </mesh>
       <mesh position={[0.1, 2.8, 0]} castShadow>
         <cylinderGeometry args={[0.03, 0.03, 1.4, 6]} />
-        <meshStandardMaterial color={IRON} roughness={0.7} />
+        <meshStandardMaterial color="#1e1c22" roughness={0.6} metalness={0.4} />
       </mesh>
       <mesh ref={flag} position={[0.42, 3.2, 0]}>
-        <planeGeometry args={[0.6, 0.36]} />
-        <meshStandardMaterial color={accent} emissive={accent} emissiveIntensity={lit ? 0.8 : 0.3} side={THREE.DoubleSide} flatShading />
+        <planeGeometry args={[0.6, 0.36, 6, 1]} />
+        <meshStandardMaterial color={accent} emissive={accent} emissiveIntensity={lit ? 0.9 : 0.35} side={THREE.DoubleSide} />
       </mesh>
     </group>
   );
 }
 
 export function Cache({ lit, accent, t }) {
-  // Skills — a supply crate + a leaning snowboard (nod to his snowboarding) + lantern
+  const wood = useMemo(() => woodMaps(), []);
   const lamp = useRef();
-  useFrame(() => { if (lamp.current) lamp.current.material.emissiveIntensity = pulse(t, lit ? 2.4 : 1.4, 0.5, 1.4); });
+  useFrame(() => { if (lamp.current) lamp.current.material.emissiveIntensity = pulse(t, lit ? 2.6 : 1.5, 0.5, 1.4); });
   return (
     <group>
-      <mesh position={[0, 0.55, 0]} castShadow receiveShadow>
-        <boxGeometry args={[1.3, 1.1, 1.0]} />
-        <meshStandardMaterial color={WOOD_L} roughness={0.85} flatShading />
+      <Mound r={1.7} />
+      <mesh position={[0, 0.58, 0]} castShadow receiveShadow>
+        <boxGeometry args={[1.35, 1.1, 1.05]} />
+        <meshStandardMaterial map={wood.map} bumpMap={wood.bumpMap} bumpScale={0.5} roughness={0.85} />
       </mesh>
-      <mesh position={[0, 1.15, 0]} castShadow>
-        <boxGeometry args={[1.36, 0.12, 1.06]} />
-        <meshStandardMaterial color={WOOD} roughness={0.9} flatShading />
+      <mesh position={[0, 1.18, 0]} castShadow>
+        <boxGeometry args={[1.42, 0.14, 1.12]} />
+        <meshStandardMaterial map={wood.map} roughness={0.9} color="#4a3626" />
       </mesh>
-      {/* leaning snowboard */}
-      <mesh position={[-0.85, 1.1, 0.2]} rotation={[0, 0.2, 0.35]} castShadow>
-        <boxGeometry args={[0.34, 2.2, 0.06]} />
-        <meshStandardMaterial color={accent} roughness={0.4} metalness={0.1} flatShading />
+      {/* snow dusting the lid */}
+      <mesh position={[0, 1.28, 0]} scale={[1, 0.16, 1]}>
+        <sphereGeometry args={[0.7, 12, 8]} />
+        <meshStandardMaterial color={SNOW} roughness={1} />
       </mesh>
-      {/* lantern on the crate */}
-      <group position={[0.5, 1.35, 0.1]}>
+      {/* leaning snowboard — glossy premium deck */}
+      <group position={[-0.92, 1.05, 0.22]} rotation={[0.05, 0.25, 0.4]}>
+        <mesh castShadow>
+          <capsuleGeometry args={[0.19, 1.7, 4, 12]} />
+          <meshStandardMaterial color={accent} roughness={0.22} metalness={0.15} envMapIntensity={1.2} />
+        </mesh>
+      </group>
+      <group position={[0.52, 1.5, 0.12]}>
         <mesh ref={lamp}>
-          <sphereGeometry args={[0.16, 12, 12]} />
+          <sphereGeometry args={[0.16, 14, 14]} />
           <meshStandardMaterial color="#1a1206" emissive="#ffcf87" emissiveIntensity={1.6} toneMapped={false} />
         </mesh>
-        <pointLight color="#ffcf87" intensity={lit ? 6 : 3.5} distance={6} decay={2} />
+        <pointLight color="#ffcf87" intensity={lit ? 7 : 4} distance={7} decay={2} />
       </group>
     </group>
   );
 }
 
 export function FrozenLake({ lit, accent, t }) {
-  // Life — a reflective ice sheet + a wooden photo easel at its edge
   const frame = useRef();
-  useFrame(() => { if (frame.current) frame.current.material.emissiveIntensity = pulse(t, lit ? 0.9 : 0.4, 0.25, 1.2); });
+  const wood = useMemo(() => woodMaps(), []);
+  useFrame(() => { if (frame.current) frame.current.material.emissiveIntensity = pulse(t, lit ? 1.0 : 0.45, 0.25, 1.2); });
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]} receiveShadow>
-        <circleGeometry args={[2.4, 48]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.06, 0]} receiveShadow>
+        <circleGeometry args={[2.5, 48]} />
         <MeshReflectorMaterial
-          resolution={512}
-          mirror={0.55}
-          mixBlur={7}
-          mixStrength={2.2}
-          blur={[300, 80]}
-          roughness={0.5}
+          resolution={640}
+          mirror={0.6}
+          mixBlur={6}
+          mixStrength={2.6}
+          blur={[280, 70]}
+          roughness={0.38}
           depthScale={0.8}
-          color="#8299bd"
-          metalness={0.6}
+          color="#8fa5c9"
+          metalness={0.65}
         />
       </mesh>
-      {/* photo easel */}
-      <group position={[0, 0, 1.4]}>
-        <mesh position={[0, 0.7, 0]} rotation={[0.06, 0, 0]} castShadow>
-          <boxGeometry args={[1.1, 1.4, 0.08]} />
-          <meshStandardMaterial color={WOOD} roughness={0.9} flatShading />
+      {/* rim of snow-dusted stones around the ice */}
+      {Array.from({ length: 9 }, (_, i) => {
+        const a = (i / 9) * Math.PI * 2 + 0.4;
+        return (
+          <mesh key={i} position={[Math.cos(a) * 2.5, 0.12, Math.sin(a) * 2.5]} rotation={[0, a, 0]} castShadow>
+            <dodecahedronGeometry args={[0.2 + (i % 3) * 0.07, 0]} />
+            <meshStandardMaterial color="#5b6880" roughness={0.95} />
+          </mesh>
+        );
+      })}
+      {/* photo easel at the shore */}
+      <group position={[0, 0, 1.9]}>
+        <mesh position={[0, 0.72, 0]} rotation={[0.06, 0, 0]} castShadow>
+          <boxGeometry args={[1.1, 1.4, 0.09]} />
+          <meshStandardMaterial map={wood.map} bumpMap={wood.bumpMap} bumpScale={0.4} roughness={0.9} />
         </mesh>
-        <mesh ref={frame} position={[0, 0.75, 0.05]} rotation={[0.06, 0, 0]}>
+        <mesh ref={frame} position={[0, 0.77, 0.06]} rotation={[0.06, 0, 0]}>
           <planeGeometry args={[0.9, 1.15]} />
-          <meshStandardMaterial color="#cfd9ec" emissive={accent} emissiveIntensity={0.5} flatShading />
+          <meshStandardMaterial color="#cfd9ec" emissive={accent} emissiveIntensity={0.55} />
         </mesh>
-        <mesh position={[-0.35, 0.1, 0.3]} rotation={[1.1, 0, 0.2]} castShadow>
-          <cylinderGeometry args={[0.03, 0.03, 1.5, 5]} />
-          <meshStandardMaterial color={WOOD} />
-        </mesh>
-        <mesh position={[0.35, 0.1, 0.3]} rotation={[1.1, 0, -0.2]} castShadow>
-          <cylinderGeometry args={[0.03, 0.03, 1.5, 5]} />
-          <meshStandardMaterial color={WOOD} />
-        </mesh>
+        {[-0.35, 0.35].map((x) => (
+          <mesh key={x} position={[x, 0.12, 0.3]} rotation={[1.1, 0, x > 0 ? -0.2 : 0.2]} castShadow>
+            <cylinderGeometry args={[0.035, 0.035, 1.5, 6]} />
+            <meshStandardMaterial color="#2e2119" roughness={0.9} />
+          </mesh>
+        ))}
       </group>
     </group>
   );
 }
 
 export function Signpost({ lit, accent, t }) {
+  const wood = useMemo(() => woodMaps(), []);
   const lamp = useRef();
-  useFrame(() => { if (lamp.current) lamp.current.material.emissiveIntensity = pulse(t, lit ? 2.4 : 1.4, 0.5, 1.3); });
+  useFrame(() => { if (lamp.current) lamp.current.material.emissiveIntensity = pulse(t, lit ? 2.6 : 1.5, 0.5, 1.3); });
   return (
     <group>
+      <Mound r={1.3} />
       <mesh position={[0, 1.3, 0]} castShadow>
-        <cylinderGeometry args={[0.09, 0.11, 2.6, 8]} />
-        <meshStandardMaterial color={WOOD} roughness={0.9} flatShading />
+        <cylinderGeometry args={[0.09, 0.12, 2.6, 8]} />
+        <meshStandardMaterial map={wood.map} bumpMap={wood.bumpMap} bumpScale={0.4} roughness={0.9} />
       </mesh>
-      {[[1.6, 0.5, -0.5], [2.05, -0.35, 0.6], [1.15, 0.55, 0.4]].map(([y, rot, off], i) => (
+      {[[1.62, 0.5, -0.5], [2.06, -0.35, 0.6], [1.18, 0.55, 0.4]].map(([y, rot, off], i) => (
         <group key={i} position={[off > 0 ? 0.5 : -0.5, y, 0]} rotation={[0, rot, 0]}>
           <mesh castShadow>
-            <boxGeometry args={[1.1, 0.34, 0.07]} />
-            <meshStandardMaterial color={i === 0 ? accent : WOOD_L} roughness={0.85} flatShading />
+            <boxGeometry args={[1.1, 0.32, 0.07]} />
+            <meshStandardMaterial map={wood.map} roughness={0.85} color={i === 0 ? accent : '#7a5a3c'} />
           </mesh>
         </group>
       ))}
-      <group position={[0, 2.75, 0]}>
+      {/* snow on the top arm */}
+      <mesh position={[0, 2.62, 0]} scale={[1, 0.25, 1]}>
+        <sphereGeometry args={[0.2, 10, 8]} />
+        <meshStandardMaterial color={SNOW} roughness={1} />
+      </mesh>
+      <group position={[0, 2.85, 0]}>
         <mesh ref={lamp}>
-          <sphereGeometry args={[0.15, 12, 12]} />
+          <sphereGeometry args={[0.15, 14, 14]} />
           <meshStandardMaterial color="#1a1206" emissive="#ffcf87" emissiveIntensity={1.6} toneMapped={false} />
         </mesh>
-        <pointLight color="#ffcf87" intensity={lit ? 6 : 3.5} distance={7} decay={2} />
+        <pointLight color="#ffcf87" intensity={lit ? 7 : 4} distance={8} decay={2} />
       </group>
     </group>
   );

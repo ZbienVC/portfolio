@@ -1,21 +1,79 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { makeSoftDisc } from './textures.js';
 
-// The guide — a CC0 rigged canine (Khronos "Fox", public domain). Crossfades
-// idle↔walk, drifts toward a target, and turns to face the active landmark.
-// Swap the .glb at /models/fox.glb to change the character (same clip names
-// Survey/Walk/Run, or update the CLIP map below).
+// The guide — a CC0 rigged canine (Khronos "Fox", public domain).
+// It TRAVELS: give it a target and it trots/runs there at real speed, leaves
+// footprints in the snow, and fires onArrive when it gets there. Swap the
+// .glb at /models/fox.glb (clips Survey/Walk/Run) to change the character.
 const CLIP = { idle: 'Survey', walk: 'Walk', run: 'Run' };
+const WALK_SPEED = 2.7;
+const RUN_SPEED = 5.4;
+const RUN_DIST = 7; // farther than this → gallop
+const ARRIVE_EPS = 0.35;
 
-export default function Dog({ target = [0, 0, 0], lookAt = null }) {
+const FOOTPRINTS = 42;
+
+function Footprints({ api }) {
+  const tex = useMemo(() => makeSoftDisc('26,34,54'), []);
+  const meshes = useRef([]);
+  // expose a stamp() the dog calls while moving
+  useEffect(() => {
+    let next = 0;
+    api.current = (x, z, heading, side) => {
+      const m = meshes.current[next];
+      if (!m) return;
+      next = (next + 1) % FOOTPRINTS;
+      const lat = side * 0.09;
+      m.position.set(x + Math.cos(heading) * lat, 0.04, z - Math.sin(heading) * lat);
+      m.rotation.z = -heading;
+      m.userData.t0 = performance.now();
+      m.visible = true;
+    };
+  }, [api]);
+  useFrame(() => {
+    const now = performance.now();
+    for (const m of meshes.current) {
+      if (!m || !m.visible) continue;
+      const age = (now - m.userData.t0) / 1000;
+      if (age > 9) { m.visible = false; continue; }
+      m.material.opacity = 0.4 * Math.max(0, 1 - age / 9);
+    }
+  });
+  return (
+    <group>
+      {Array.from({ length: FOOTPRINTS }, (_, i) => (
+        <mesh
+          key={i}
+          ref={(el) => (meshes.current[i] = el)}
+          rotation={[-Math.PI / 2, 0, 0]}
+          visible={false}
+          renderOrder={1}
+        >
+          <planeGeometry args={[0.26, 0.36]} />
+          <meshBasicMaterial map={tex} transparent opacity={0} depthWrite={false} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+export default function Dog({ target, lookAt = null, onArrive }) {
   const group = useRef();
   const rig = useRef();
   const { scene, animations } = useGLTF('/models/fox.glb');
   const { actions } = useAnimations(animations, group);
   const state = useRef('idle');
-  const tmp = useRef(new THREE.Vector3());
+  const stamp = useRef(null);
+  const stride = useRef(0);
+  const stepSide = useRef(1);
+  const arrived = useRef(true);
+
+  useEffect(() => {
+    scene.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; } });
+  }, [scene]);
 
   useEffect(() => {
     const idle = actions[CLIP.idle];
@@ -23,50 +81,85 @@ export default function Dog({ target = [0, 0, 0], lookAt = null }) {
     return () => idle?.fadeOut(0.2);
   }, [actions]);
 
+  // new target → not arrived yet
+  useEffect(() => { arrived.current = false; }, [target]);
+
+  const setClip = (want, timeScale = 1) => {
+    if (want === state.current) {
+      const a = actions[CLIP[want]];
+      if (a) a.timeScale = timeScale;
+      return;
+    }
+    actions[CLIP[state.current]]?.fadeOut(0.22);
+    const to = actions[CLIP[want]];
+    if (to) { to.reset().fadeIn(0.22).play(); to.timeScale = timeScale; }
+    state.current = want;
+  };
+
   useFrame((_, dt) => {
     const g = group.current;
     if (!g) return;
-    const [tx, , tz] = target;
-    // drift toward target
+    const [tx, , tz] = target?.point || [0, 0, 0];
     const dx = tx - g.position.x;
     const dz = tz - g.position.z;
     const dist = Math.hypot(dx, dz);
-    const moving = dist > 0.06;
-    const k = 1 - Math.pow(0.001, dt); // dt-normalized ease
-    g.position.x += dx * k;
-    g.position.z += dz * k;
 
-    // desired facing: toward motion while moving, else toward lookAt (landmark)
-    let yaw = rig.current ? rig.current.rotation.y : 0;
-    let desired = yaw;
-    if (moving) desired = Math.atan2(dx, dz);
-    else if (lookAt) desired = Math.atan2(lookAt[0] - g.position.x, lookAt[2] - g.position.z);
-    if (rig.current) {
-      // shortest-arc lerp
-      let d = desired - rig.current.rotation.y;
-      d = Math.atan2(Math.sin(d), Math.cos(d));
-      rig.current.rotation.y += d * (1 - Math.pow(0.002, dt));
-    }
+    if (dist > ARRIVE_EPS) {
+      // travel at real speed — walk near, gallop far
+      const run = dist > RUN_DIST;
+      const speed = run ? RUN_SPEED : WALK_SPEED;
+      const step = Math.min(speed * dt, dist);
+      const nx = dx / dist, nz = dz / dist;
+      g.position.x += nx * step;
+      g.position.z += nz * step;
+      setClip(run ? 'run' : 'walk', run ? 1 : 1.1);
 
-    // clip state
-    const want = moving ? 'walk' : 'idle';
-    if (want !== state.current) {
-      const from = actions[CLIP[state.current]];
-      const to = actions[CLIP[want]];
-      from?.fadeOut(0.25);
-      to?.reset().fadeIn(0.25).play();
-      to && (to.timeScale = want === 'walk' ? 1.1 : 1);
-      state.current = want;
+      // face travel direction (shortest arc)
+      const desired = Math.atan2(dx, dz);
+      if (rig.current) {
+        let d = desired - rig.current.rotation.y;
+        d = Math.atan2(Math.sin(d), Math.cos(d));
+        rig.current.rotation.y += d * (1 - Math.pow(0.0005, dt));
+      }
+
+      // stamp footprints by distance travelled
+      stride.current += step;
+      const strideLen = run ? 0.62 : 0.42;
+      if (stride.current > strideLen && stamp.current) {
+        stride.current = 0;
+        stepSide.current *= -1;
+        stamp.current(g.position.x, g.position.z, desired, stepSide.current);
+      }
+    } else {
+      if (!arrived.current) {
+        arrived.current = true;
+        onArrive?.(target?.id ?? null);
+      }
+      setClip('idle', 1);
+      // settle facing toward the landmark (or camera at rest)
+      if (lookAt && rig.current) {
+        const desired = Math.atan2(lookAt[0] - g.position.x, lookAt[2] - g.position.z);
+        let d = desired - rig.current.rotation.y;
+        d = Math.atan2(Math.sin(d), Math.cos(d));
+        rig.current.rotation.y += d * (1 - Math.pow(0.005, dt));
+      }
     }
   });
 
   return (
-    <group ref={group}>
-      {/* rig wrapper for yaw; the Fox model faces +Z, scaled to ~dog height */}
-      <group ref={rig}>
-        <primitive object={scene} scale={0.019} rotation={[0, Math.PI, 0]} />
+    <>
+      <group ref={group} position={[0.6, 0, 1.6]}>
+        <group ref={rig}>
+          <primitive object={scene} scale={0.019} rotation={[0, Math.PI, 0]} />
+        </group>
+        {/* soft contact blob so the fox sits IN the snow, not on it */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
+          <circleGeometry args={[0.55, 24]} />
+          <meshBasicMaterial color="#0c1424" transparent opacity={0.32} depthWrite={false} />
+        </mesh>
       </group>
-    </group>
+      <Footprints api={stamp} />
+    </>
   );
 }
 
