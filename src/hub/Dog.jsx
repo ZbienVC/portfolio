@@ -150,7 +150,8 @@ export default function Dog({ target, lookAt = null, onArrive }) {
     <>
       <group ref={group} position={[0.6, 0, 1.6]}>
         <group ref={rig}>
-          <primitive object={scene} scale={0.019} rotation={[0, Math.PI, 0]} />
+          {/* the Fox GLB natively faces +Z — no flip, or it moonwalks */}
+          <primitive object={scene} scale={0.019} />
         </group>
         {/* soft contact blob so the fox sits IN the snow, not on it */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>

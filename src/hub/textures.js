@@ -14,7 +14,7 @@ function tex(c, { srgb = true, repeat = 1 } = {}) {
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(repeat, repeat);
   if (srgb) t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = 8;
+  t.anisotropy = 16;
   return t;
 }
 
@@ -48,16 +48,16 @@ function blobs(g, size, R, n, rad, alpha, colorFn) {
 }
 
 export function makeSnowMaps() {
-  const S = 512;
+  const S = 1024; // the ground covers the whole frame — needs the resolution
   const R = rng(2026);
   // albedo — cool blue-white with wind-blown tonal drifts + crystalline speckle
   const [c, g] = canvas(S);
   g.fillStyle = '#dfe7f4'; g.fillRect(0, 0, S, S);
-  blobs(g, S, R, 90, (r) => 30 + r() * 90, (r) => 0.10 + r() * 0.12, (r) =>
+  blobs(g, S, R, 320, (r) => 40 + r() * 130, (r) => 0.10 + r() * 0.12, (r) =>
     r() > 0.5 ? '190,205,230' : '235,242,252');
-  blobs(g, S, R, 40, (r) => 60 + r() * 120, (r) => 0.05 + r() * 0.08, () => '160,178,210');
+  blobs(g, S, R, 140, (r) => 90 + r() * 180, (r) => 0.05 + r() * 0.08, () => '160,178,210');
   // sparkle: tiny bright crystals + faint shadow specks
-  for (let i = 0; i < 2600; i++) {
+  for (let i = 0; i < 9500; i++) {
     const x = R() * S, y = R() * S;
     g.fillStyle = R() > 0.24 ? `rgba(255,255,255,${0.25 + R() * 0.5})` : `rgba(140,158,195,${0.2 + R() * 0.25})`;
     g.fillRect(x, y, 1 + R(), 1 + R());
@@ -66,11 +66,11 @@ export function makeSnowMaps() {
   const R2 = rng(77);
   const [bc, bg] = canvas(S);
   bg.fillStyle = '#808080'; bg.fillRect(0, 0, S, S);
-  blobs(bg, S, R2, 110, (r) => 24 + r() * 80, (r) => 0.16 + r() * 0.2, (r) =>
+  blobs(bg, S, R2, 380, (r) => 32 + r() * 110, (r) => 0.16 + r() * 0.2, (r) =>
     r() > 0.5 ? '40,40,40' : '215,215,215');
-  for (let i = 0; i < 3200; i++) {
+  for (let i = 0; i < 11000; i++) {
     bg.fillStyle = R2() > 0.5 ? `rgba(255,255,255,${0.3 + R2() * 0.4})` : `rgba(0,0,0,${0.25 + R2() * 0.3})`;
-    bg.fillRect(R2() * S, R2() * S, 1.4, 1.4);
+    bg.fillRect(R2() * S, R2() * S, 1.6, 1.6);
   }
   return { map: tex(c), bumpMap: tex(bc, { srgb: false }) };
 }

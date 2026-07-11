@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { CameraControls } from '@react-three/drei';
-import { EffectComposer, Bloom, Vignette, Noise, DepthOfField, N8AO } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, Vignette, Noise, N8AO } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import Environment3D from './Environment3D.jsx';
 import Dog from './Dog.jsx';
@@ -109,12 +109,12 @@ export default function HubScene({ active, pending, roam, hovered, onHover, onSe
 
       <CameraRig focus={journeyId} traveling={!!pending} />
 
-      <EffectComposer multisampling={4}>
-        <N8AO aoRadius={1.6} intensity={2.8} distanceFalloff={1} quality="performance" color="#06101f" />
+      {/* crisp premium stack — no DOF (it read as "low resolution"), high-res AO */}
+      <EffectComposer multisampling={8}>
+        <N8AO aoRadius={1.6} intensity={2.8} distanceFalloff={1} quality="medium" color="#06101f" />
         <Bloom mipmapBlur luminanceThreshold={0.62} luminanceSmoothing={0.2} intensity={0.9} radius={0.72} />
-        <DepthOfField focusDistance={0.014} focalLength={0.038} bokehScale={2.0} />
         <Vignette eskil={false} offset={0.26} darkness={0.74} />
-        <Noise opacity={0.04} premultiply />
+        <Noise opacity={0.03} premultiply />
       </EffectComposer>
     </>
   );

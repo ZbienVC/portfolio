@@ -127,7 +127,7 @@ export default function HubExperience() {
     <div className="hub-root">
       <Canvas
         shadows
-        dpr={[1, 2]}
+        dpr={[1.5, 2]}
         camera={{ position: [0, 5.4, 16], fov: 42, near: 0.1, far: 400 }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         onCreated={({ gl }) => {
