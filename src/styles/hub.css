@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Alpine Basecamp — the interactive 3D hub
+   ========================================================================== */
+
+.hub-root { position: fixed; inset: 0; overflow: hidden; background: #0a0f1e; }
+.hub-root canvas { display: block; touch-action: none; }
+
+/* soft top scrim — lifts the intro title card off the diorama for legibility */
+.hub-topscrim {
+  position: fixed; top: 0; left: 0; right: 0; height: 46vh; z-index: 15;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(8,12,22,0.72) 0%, rgba(8,12,22,0.32) 40%, transparent 100%);
+  transition: opacity 0.6s var(--ease);
+}
+.hub-topscrim.dim { opacity: 0; }
+
+/* ── Nav (reuses .jnav-* inner styles from journey.css) ───────────────────── */
+.hub-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 26px;
+  background: linear-gradient(to bottom, rgba(8,13,22,0.72), transparent);
+}
+
+/* ── Intro overlay ────────────────────────────────────────────────────────── */
+.hub-intro {
+  position: fixed; top: 6.5vh; left: 0; right: 0; z-index: 20;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 0 24px; pointer-events: none;
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+.hub-intro > * { pointer-events: auto; }
+.hub-intro.gone { opacity: 0; transform: translateY(-16px); pointer-events: none; }
+.hub-intro.gone > * { pointer-events: none; }
+.hub-intro .eyebrow { justify-content: center; margin-bottom: 14px; }
+.hub-name {
+  font-family: var(--display); font-weight: 840; font-stretch: 120%;
+  font-size: clamp(36px, 5.6vw, 72px); line-height: 0.98; letter-spacing: -0.035em;
+  margin: 0 0 10px; color: var(--snow);
+  text-shadow: 0 6px 40px rgba(6,10,20,0.85);
+}
+.hub-name .serif-italic { color: var(--amber-bright); font-weight: 480; font-stretch: normal; }
+.hub-role { font-size: clamp(13px, 1.6vw, 16px); display: flex; align-items: center; justify-content: center; height: 24px; margin-bottom: 12px; color: var(--snow-2); }
+.hub-role .slash { color: var(--snow-4); margin-right: 6px; }
+.hub-tag { font-family: var(--serif); font-style: italic; font-size: clamp(14px, 1.7vw, 18px); line-height: 1.5; color: var(--snow-2); max-width: 480px; margin: 0 auto; text-shadow: 0 2px 24px rgba(6,10,20,0.9); }
+.hub-hint {
+  position: fixed; left: 0; right: 0; bottom: 26px; z-index: 20;
+  text-align: center; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--snow-4);
+  pointer-events: none;
+}
+
+/* ── Section panel (slides in from the right; world stays visible) ────────── */
+.hub-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 30;
+  width: min(600px, 96vw);
+  transform: translateX(105%);
+  transition: transform 0.55s var(--ease);
+  pointer-events: none;
+  padding: 74px 18px 18px;
+}
+.hub-panel.open { transform: translateX(0); pointer-events: auto; }
+.hub-panel-card {
+  position: relative; height: 100%; display: flex; flex-direction: column;
+  border-radius: 6px; overflow: hidden;
+  background: rgba(10, 16, 30, 0.82);
+  -webkit-backdrop-filter: blur(26px) saturate(1.4); backdrop-filter: blur(26px) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  box-shadow: -30px 0 80px -30px rgba(2,5,12,0.8), 0 1px 0 0 var(--glass-hi) inset;
+}
+.hub-panel-close {
+  position: absolute; top: 14px; right: 16px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(147,164,193,0.08); border: 1px solid var(--glass-border);
+  color: var(--snow-2); border-radius: 3px; padding: 8px 12px; cursor: pointer;
+  font-size: 13px; transition: all 0.2s;
+}
+.hub-panel-close .mono { font-size: 10px; letter-spacing: 0.16em; }
+.hub-panel-close:hover { border-color: var(--amber-line); color: var(--snow); }
+.hub-panel-scroll { height: 100%; overflow-y: auto; overscroll-behavior: contain; padding: clamp(22px, 3vw, 38px); }
+.hub-panel-scroll::-webkit-scrollbar { width: 8px; }
+.hub-panel-scroll::-webkit-scrollbar-thumb { background: var(--frost); border-radius: 4px; }
+
+/* panels in the hub always show their reveal content (no scroll-trigger here) */
+.hub-panel .reveal { opacity: 1 !important; transform: none !important; }
+
+/* the section shell is full-width inside the narrower panel */
+.hub-panel .section-shell.wide, .hub-panel .section-shell { width: 100%; }
+.hub-panel .about-grid { grid-template-columns: 1fr; }
+.hub-panel .proj-grid { grid-template-columns: 1fr; }
+.hub-panel .proj-card.featured { grid-column: span 1; }
+.hub-panel .proj-card.featured .proj-highlights { grid-template-columns: 1fr; }
+
+@media (max-width: 640px) {
+  .hub-panel { width: 100vw; padding: 68px 0 0; }
+  .hub-panel-card { border-radius: 0; }
+}
