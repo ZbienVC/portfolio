@@ -4,7 +4,7 @@ import { Loader } from '@react-three/drei';
 import * as THREE from 'three';
 import HubScene, { LANDMARKS } from './HubScene.jsx';
 import { PROFILE } from '../content/portfolio.js';
-import { useTypewriter } from '../journey/hooks.js';
+import { useTypewriter, COARSE_POINTER } from '../journey/hooks.js';
 
 import AboutPanel from '../sections/AboutPanel.jsx';
 import ProjectsPanel from '../sections/ProjectsPanel.jsx';
@@ -66,8 +66,24 @@ function HubIntro({ visible }) {
         <span className="display">Zach</span> <span className="serif-italic">Bienstock</span>
       </h1>
       <div className="hub-role mono"><span className="slash">{'// '}</span>{role}<span className="caret" /></div>
+    </div>
+  );
+}
+
+// Tagline + hint share ONE bottom stack so they can never collide on narrow
+// screens, where both wrap to several lines. It's a sibling of .hub-intro, not
+// a child: the intro takes a transform when it hides, and a transformed
+// ancestor would re-anchor these fixed elements to it instead of the viewport.
+function HubFoot({ visible }) {
+  const tap = COARSE_POINTER;
+  return (
+    <div className={`hub-foot${visible ? '' : ' gone'}`}>
       <p className="hub-tag">{PROFILE.tagline}</p>
-      <p className="hub-hint mono">Click a landmark — the fox will take you · click the snow to send it exploring · drag to look around</p>
+      <p className="hub-hint mono">
+        {tap ? 'Tap' : 'Click'} a landmark — the fox will take you
+        <span className="hint-more"> · {tap ? 'tap' : 'click'} the snow to send it exploring</span>
+        {' · '}drag to look around
+      </p>
     </div>
   );
 }
@@ -168,6 +184,7 @@ export default function HubExperience({ onClassic }) {
       <div className={`hub-topscrim${active || pending ? ' dim' : ''}`} aria-hidden="true" />
       <HubNav active={active} pending={pending} onJump={select} onClassic={onClassic} />
       <HubIntro visible={!active && !pending} />
+      <HubFoot visible={!active && !pending} />
       {pending && (
         <div className="hub-status mono">
           ▸ THE FOX IS LEADING YOU TO {LANDMARKS.find((l) => l.id === pending)?.label.toUpperCase()}…

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PROJECTS, PROJECT_CATEGORIES } from '../content/portfolio.js';
+import { PROJECTS, PROJECT_CATEGORIES, LIVE_COUNT } from '../content/portfolio.js';
 import { SectionShell, ProjectMark } from './common.jsx';
 
 function ProjectCard({ project, featured }) {
@@ -24,14 +24,31 @@ function ProjectCard({ project, featured }) {
 
         <p className="proj-desc">{project.description}</p>
 
-        <ul className="proj-highlights">
-          {project.highlights.slice(0, featured ? 4 : 3).map((h) => (
-            <li key={h}>
-              <span className="hl-arrow" style={{ color: project.color }}>›</span>
-              {h}
-            </li>
-          ))}
-        </ul>
+        {project.collection ? (
+          <ul className="proj-collection">
+            {project.collection.map((s) => (
+              <li key={s.url}>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ borderColor: `${project.color}33` }}>
+                  <span className="pc-head">
+                    <span className="pc-name" style={{ color: project.color }}>{s.name}</span>
+                    <span className="pc-chain mono">{s.chain}</span>
+                    <span className="pc-go">↗</span>
+                  </span>
+                  <span className="pc-blurb">{s.blurb}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ul className="proj-highlights">
+            {project.highlights.slice(0, featured ? 4 : 3).map((h) => (
+              <li key={h}>
+                <span className="hl-arrow" style={{ color: project.color }}>›</span>
+                {h}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div className="proj-tags">
           {project.tags.slice(0, featured ? 6 : 4).map((t) => (
@@ -71,7 +88,7 @@ export default function ProjectsPanel({ waypoint }) {
       altitude={waypoint?.altitude || '2,180 m'}
       wide
       title={<>The signals are <span className="serif-italic">lit</span></>}
-      intro="Ten projects live in production — ten signals glowing at basecamp. Warm one up."
+      intro={`${LIVE_COUNT} projects live in production — every signal at basecamp is lit. Warm one up.`}
     >
       <div className="proj-tabs reveal d2">
         {PROJECT_CATEGORIES.map((c) => {

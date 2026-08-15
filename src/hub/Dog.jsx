@@ -16,6 +16,65 @@ const ARRIVE_EPS = 0.35;
 
 const FOOTPRINTS = 42;
 
+// ── German Shepherd coat ────────────────────────────────────────────────────
+// The GLB ships as a red fox. Rather than repaint a texture whose UV layout we
+// don't own, recolor in-shader from BIND-POSE vertex position: a dark saddle
+// over the back and tail-top plus a black muzzle mask, warm tan everywhere else
+// — cheeks, ears, chest, legs, underbelly. The original texture's luminance is
+// kept as shading detail so the eyes and nose still read.
+const COAT_DARK = new THREE.Color('#15161c');
+const COAT_TAN = new THREE.Color('#b0762f');
+
+function shepherdCoat(mesh) {
+  if (mesh.userData.coated) return;
+  mesh.userData.coated = true;
+  const geo = mesh.geometry;
+  geo.computeBoundingBox();
+  const bb = geo.boundingBox;
+  // bind pose measures X 25 wide, Y 79 tall, Z 155 long — Y up, nose at +Z
+  const size = new THREE.Vector3().subVectors(bb.max, bb.min);
+  const mat = mesh.material.clone();
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.uMin = { value: bb.min.clone() };
+    shader.uniforms.uSize = { value: size.clone() };
+    shader.uniforms.uDark = { value: COAT_DARK };
+    shader.uniforms.uTan = { value: COAT_TAN };
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+         uniform vec3 uMin; uniform vec3 uSize; varying vec3 vCoat;`
+      )
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+         vCoat = (position - uMin) / uSize;`
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+         uniform vec3 uDark; uniform vec3 uTan; varying vec3 vCoat;`
+      )
+      .replace(
+        '#include <map_fragment>',
+        `#include <map_fragment>
+         // vCoat is 0..1 inside the bind-pose box: .y up, .z toward the nose
+         // the saddle stops at the NECK, so the whole head — ears, cheeks,
+         // brow — stays golden; only the muzzle goes black
+         float back   = smoothstep(0.38, 0.60, vCoat.y);
+         float body   = smoothstep(0.03, 0.16, vCoat.z) * (1.0 - smoothstep(0.70, 0.80, vCoat.z));
+         float saddle = clamp(back * body, 0.0, 1.0);
+         float muzzle = smoothstep(0.90, 0.99, vCoat.z);
+         float dark   = clamp(saddle + muzzle * 0.9, 0.0, 1.0);
+         float lum    = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+         diffuseColor.rgb = mix(uTan, uDark, dark) * (0.45 + 1.05 * lum);`
+      );
+  };
+  mat.needsUpdate = true;
+  mesh.material = mat;
+}
+
 function Footprints({ api }) {
   const tex = useMemo(() => makeSoftDisc('26,34,54'), []);
   const meshes = useRef([]);
@@ -76,7 +135,9 @@ export default function Dog({ target, lookAt = null, onArrive, wander = false })
   const nextWanderIn = useRef(6);
 
   useEffect(() => {
-    scene.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; } });
+    scene.traverse((o) => {
+      if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; shepherdCoat(o); }
+    });
   }, [scene]);
 
   useEffect(() => {

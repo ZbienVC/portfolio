@@ -55,6 +55,23 @@
 .proj-card.featured .proj-highlights { grid-template-columns: 1fr 1fr; gap: 6px 18px; }
 .proj-highlights li { display: flex; gap: 8px; font-size: 12px; color: var(--snow-2); line-height: 1.45; }
 .hl-arrow { flex-shrink: 0; font-weight: 700; }
+
+/* a card that holds several shipped sites instead of one — each row is its own
+   link, so the group reads as a body of work without three near-identical cards */
+.proj-collection { list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; }
+.proj-collection a {
+  display: grid; gap: 3px; padding: 9px 12px;
+  border: 1px solid var(--glass-border); border-radius: 4px;
+  background: rgba(147, 164, 193, 0.05); text-decoration: none;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.proj-collection a:hover { background: rgba(147, 164, 193, 0.1); transform: translateX(2px); }
+.pc-head { display: flex; align-items: baseline; gap: 9px; }
+.pc-name { font-weight: 700; font-size: 12.5px; letter-spacing: 0.01em; }
+.pc-chain { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--snow-4); }
+.pc-go { margin-left: auto; color: var(--snow-4); font-size: 11px; }
+.proj-collection a:hover .pc-go { color: var(--snow-2); }
+.pc-blurb { font-size: 11.5px; line-height: 1.45; color: var(--snow-3); }
 .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .proj-actions { display: flex; gap: 9px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
 .proj-actions .btn { font-size: 11.5px; padding: 10px 16px; }

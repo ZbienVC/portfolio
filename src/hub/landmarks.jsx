@@ -16,6 +16,87 @@ function Mound({ r = 1.6, y = 0.05 }) {
   );
 }
 
+// ── snowboards ──────────────────────────────────────────────────────────────
+// A real deck silhouette, not a rounded box: half-width tapers from a waist out
+// to the contact points and rounds off blunt at nose and tail. Built once and
+// shared — every board on the mountain is the same geometry, different topsheet.
+let _deck = null;
+function deckGeometry() {
+  if (_deck) return _deck;
+  const LEN = 1.5, WAIST = 0.125, TIP = 0.152;
+  const half = LEN / 2;
+  const hw = (u) =>
+    (WAIST + (TIP - WAIST) * u * u) * Math.pow(Math.max(0, 1 - Math.pow(Math.abs(u), 8)), 0.4);
+  const N = 34;
+  const right = [], left = [];
+  for (let i = 0; i <= N; i++) {
+    const u = -1 + (2 * i) / N;
+    const w = Math.max(hw(u), 0.005);
+    right.push(new THREE.Vector2(w, u * half));
+    left.push(new THREE.Vector2(-w, u * half));
+  }
+  const shape = new THREE.Shape();
+  shape.setFromPoints([...right, ...left.reverse()]);
+  _deck = new THREE.ExtrudeGeometry(shape, {
+    depth: 0.02,
+    bevelEnabled: true,
+    bevelThickness: 0.007,
+    bevelSize: 0.007,
+    bevelSegments: 2,
+    curveSegments: 1,
+  });
+  _deck.center();
+  return _deck;
+}
+
+function Binding({ y, angle }) {
+  return (
+    <group position={[0, y, 0.023]} rotation={[0, 0, angle]}>
+      <mesh castShadow>
+        <boxGeometry args={[0.185, 0.1, 0.028]} />
+        <meshStandardMaterial color="#22262e" roughness={0.55} />
+      </mesh>
+      {/* highback */}
+      <mesh position={[0, -0.055, 0.05]} rotation={[0.34, 0, 0]} castShadow>
+        <boxGeometry args={[0.165, 0.125, 0.02]} />
+        <meshStandardMaterial color="#2c313b" roughness={0.5} />
+      </mesh>
+      {/* toe + ankle straps */}
+      {[0.03, -0.005].map((sy, i) => (
+        <mesh key={i} position={[0, sy, 0.032]}>
+          <boxGeometry args={[0.195, 0.028, 0.016]} />
+          <meshStandardMaterial color="#3d434f" roughness={0.65} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// length runs along local Y, topsheet faces +Z
+export function Snowboard({ color = '#e0a155', stripe = '#f0b978', bindings = true }) {
+  const geo = useMemo(() => deckGeometry(), []);
+  return (
+    <group>
+      <mesh geometry={geo} castShadow receiveShadow>
+        {/* caps = topsheet/base, sides = steel edge */}
+        <meshStandardMaterial attach="material-0" color={color} roughness={0.24} metalness={0.2} envMapIntensity={1.3} />
+        <meshStandardMaterial attach="material-1" color="#c4cede" roughness={0.28} metalness={0.85} />
+      </mesh>
+      {/* topsheet graphic */}
+      <mesh position={[0, 0, 0.017]}>
+        <planeGeometry args={[0.052, 1.02]} />
+        <meshStandardMaterial color={stripe} emissive={stripe} emissiveIntensity={0.28} roughness={0.3} />
+      </mesh>
+      {bindings && (
+        <>
+          <Binding y={0.23} angle={0.24} />
+          <Binding y={-0.23} angle={-0.16} />
+        </>
+      )}
+    </group>
+  );
+}
+
 // ── the interactive wrapper ─────────────────────────────────────────────────
 export function Landmark({ data, hovered, active, onHover, onSelect, children }) {
   const g = useRef();
@@ -239,12 +320,9 @@ export function Cache({ lit, accent, t }) {
         <sphereGeometry args={[0.7, 12, 8]} />
         <meshStandardMaterial color={SNOW} roughness={1} />
       </mesh>
-      {/* leaning snowboard — glossy premium deck */}
-      <group position={[-0.92, 1.05, 0.22]} rotation={[0.05, 0.25, 0.4]}>
-        <mesh castShadow>
-          <capsuleGeometry args={[0.19, 1.7, 4, 12]} />
-          <meshStandardMaterial color={accent} roughness={0.22} metalness={0.15} envMapIntensity={1.2} />
-        </mesh>
+      {/* board leaning on the crate — a real deck, same model as the lake stash */}
+      <group position={[-0.95, 0.72, 0.25]} rotation={[0.05, 0.3, 0.36]}>
+        <Snowboard color={accent} stripe="#ffd6a0" />
       </group>
       <group position={[0.52, 1.5, 0.12]}>
         <mesh ref={lamp}>
@@ -303,6 +381,30 @@ export function FrozenLake({ lit, accent, t }) {
             <meshStandardMaterial color="#2e2119" roughness={0.9} />
           </mesh>
         ))}
+      </group>
+
+      {/* the board stash — snowboarding is the hobby that shows up in the work,
+          so it gets real decks at the lake rather than a prop */}
+      <group position={[-2.05, 0, 1.45]} rotation={[0, 0.55, 0]}>
+        <Mound r={0.8} y={0.04} />
+        <group position={[-0.2, 0.71, 0]} rotation={[0.09, 0.22, 0.15]}>
+          <Snowboard color="#e0a155" stripe="#ffd6a0" />
+        </group>
+        <group position={[0.23, 0.69, -0.14]} rotation={[0.06, -0.28, -0.19]}>
+          <Snowboard color="#2f7d75" stripe="#5fd6c4" />
+        </group>
+      </group>
+
+      <group position={[2.15, 0, 1.15]} rotation={[0, -0.7, 0]}>
+        <Mound r={0.62} y={0.04} />
+        <group position={[0, 0.7, 0]} rotation={[0.07, 0.15, -0.11]}>
+          <Snowboard color="#b8c6de" stripe="#e0a155" />
+        </group>
+      </group>
+
+      {/* one dropped flat on the ice, the way they actually get left */}
+      <group position={[0.55, 0.09, -1.15]} rotation={[-Math.PI / 2, 0, 0.85]}>
+        <Snowboard color="#c2823a" stripe="#f0b978" />
       </group>
     </group>
   );

@@ -27,12 +27,6 @@ export const PROFILE = {
   },
 };
 
-export const HERO_STATS = [
-  { num: '10', label: 'Live in Production' },
-  { num: '3+', label: 'Currently Building' },
-  { num: '∞', label: 'Problems Left to Solve' },
-];
-
 export const ABOUT = {
   quote:
     "I naturally operate at the intersection of data, creativity, and strategy. I'm at my best when I can take something complex or messy and turn it into something clearer, more usable, and more thoughtful.",
@@ -196,6 +190,46 @@ export const PROJECTS = [
     ],
   },
   {
+    id: 'matchedge',
+    name: 'MatchEdge AI',
+    tagline: 'NFL Player Projections & Matchup Intelligence',
+    description:
+      'A projection engine for NFL skill positions built entirely on free public data. Every projection is a full distribution rather than a point estimate, so it can price an over/under at any line and report the odds of 0, 1, or 2+ touchdowns. Drill from a week, into a game, into a player, into why the number is what it is.',
+    status: 'live',
+    url: 'https://web-production-df5f7e.up.railway.app',
+    github: null,
+    color: '#d9ad55',
+    colorEnd: '#b0852c',
+    tags: ['FastAPI', 'Python', 'PostgreSQL', 'React', 'Monte Carlo', 'Railway'],
+    category: ['ai'],
+    highlights: [
+      'Distribution-based prop projections',
+      'Week → game → player drill-down',
+      'Fantasy ranks with custom-league VOR',
+      'Model constants measured, not assumed',
+    ],
+  },
+  {
+    id: 'wakerush',
+    name: 'Wake Rush',
+    tagline: 'Real-Time Multiplayer Arcade Boat Racer',
+    description:
+      'A server-authoritative arcade boat racer for up to 20 players on a live ocean — drift to charge a boost, fire six counterable items, and climb eight skill ranks. Ships as a web dashboard and a Telegram Mini App on one shared backend, with optional entry pools settled on chain and cosmetic-only rewards.',
+    status: 'live',
+    url: 'https://wakerush.fun',
+    github: null,
+    color: '#c58f62',
+    colorEnd: '#9c6b41',
+    tags: ['Three.js', 'React Three Fiber', 'Colyseus', 'TypeScript', 'Solana', 'Telegram'],
+    category: ['crypto', 'web'],
+    highlights: [
+      '20-player server-authoritative races',
+      'Drift-charge boost + six-item arsenal',
+      'Entry pools settled on chain',
+      'Web dashboard + Telegram Mini App',
+    ],
+  },
+  {
     id: 'plato',
     name: 'Plato',
     tagline: 'AI-Powered Meal Planning & Nutrition',
@@ -276,43 +310,39 @@ export const PROJECTS = [
     ],
   },
   {
-    id: 'omo',
-    name: '$OMO',
-    tagline: 'Memecoin Landing Page — The Last White Giraffe',
+    // one card, three shipped sites — these are the same job done three times,
+    // so they read better as a body of work than as three near-identical cards
+    id: 'cryptosites',
+    name: 'Token Launch Sites',
+    tagline: 'Memecoin Landing Pages — Three Tokens, Three Chains',
     description:
-      'A fully custom memecoin landing site for $OMO — the last white giraffe on earth. Emotional storytelling, Tarangire/Tanzania aesthetic, live DexScreener chart embed, real Omo photography, and Web3 CTAs.',
+      'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, and a live rewards-flywheel dashboard for a cat. Live charts, tokenomics, and Web3 CTAs across all three.',
     status: 'live',
-    url: 'https://omogiraffe.fun',
-    github: 'https://github.com/ZbienVC/omo-token',
+    url: null,
+    github: null,
     color: '#d4943a',
     colorEnd: '#b06a2a',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
     category: ['crypto', 'web'],
-    highlights: [
-      'Real Omo giraffe photography',
-      'Live DexScreener chart',
-      'Tarangire Africa aesthetic',
-      'Emotional scroll-driven narrative',
-    ],
-  },
-  {
-    id: 'gigaton',
-    name: '$GIGATON',
-    tagline: 'Gigachad on TON — Memecoin Website',
-    description:
-      'A fully custom memecoin landing site for $GIGATON on the TON blockchain. TON-blue design, Gigachad meme gallery, live DexScreener chart, scrolling ticker, and tokenomics.',
-    status: 'live',
-    url: 'https://gigaton.pro',
-    github: 'https://github.com/ZbienVC/gigaton-token',
-    color: '#c2a06a',
-    colorEnd: '#9c7e4e',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
-    category: ['crypto', 'web'],
-    highlights: [
-      'TON blue design system',
-      'Live DexScreener chart',
-      'Gigachad meme vault',
-      'Scrolling ticker + tokenomics',
+    collection: [
+      {
+        name: '$OMO',
+        chain: 'Solana',
+        url: 'https://omogiraffe.fun',
+        blurb: 'The last white giraffe on earth — Tarangire aesthetic, real Omo photography, scroll-driven narrative.',
+      },
+      {
+        name: '$GIGATON',
+        chain: 'TON',
+        url: 'https://gigaton.pro',
+        blurb: 'Gigachad on TON — TON-blue design system, meme vault, scrolling ticker, tokenomics.',
+      },
+      {
+        name: '$CASHKITTEN',
+        chain: 'Robinhood Chain',
+        url: 'https://cashkitten.fun',
+        blurb: 'A $CASHCAT rewards flywheel — a 5% tax buys back on the open market and auto-distributes to holders.',
+      },
     ],
   },
   {
@@ -375,6 +405,20 @@ export const PROJECTS = [
       'Guest experience focused',
     ],
   },
+];
+
+// Every live site shipped. A collection card counts each site inside it, so the
+// headline number tracks the work rather than the number of cards on screen —
+// this used to be hand-typed in four places and drifted every time.
+export const LIVE_COUNT = PROJECTS.reduce(
+  (n, p) => n + (p.collection ? p.collection.length : 1),
+  0
+);
+
+export const HERO_STATS = [
+  { num: String(LIVE_COUNT), label: 'Live in Production' },
+  { num: '3+', label: 'Currently Building' },
+  { num: '∞', label: 'Problems Left to Solve' },
 ];
 
 export const PROJECT_CATEGORIES = [

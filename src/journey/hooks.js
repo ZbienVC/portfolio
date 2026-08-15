@@ -23,6 +23,12 @@ export function hasWebGL() {
 
 export const REDUCED_MOTION = prefersReduced();
 
+// Touch/pen device — no hover, so the instructions say "tap", not "click".
+export const COARSE_POINTER =
+  typeof window !== 'undefined' &&
+  window.matchMedia &&
+  window.matchMedia('(hover: none)').matches;
+
 // Reveal on scroll — adds `.in` to any `.reveal` descendant as it enters view.
 export function useReveal(deps = []) {
   const root = useRef(null);

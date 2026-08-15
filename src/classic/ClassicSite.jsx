@@ -35,6 +35,34 @@ const PROJECTS = [
     demoId: 'splash',
   },
   {
+    id: 'matchedge',
+    name: 'MatchEdge AI',
+    tagline: 'NFL Player Projections & Matchup Intelligence',
+    description: 'A projection engine for NFL skill positions built entirely on free public data. Every projection is a full distribution rather than a point estimate, so it can price an over/under at any line and report the odds of 0, 1, or 2+ touchdowns. Drill from a week, into a game, into a player, into why the number is what it is.',
+    status: 'live',
+    url: 'https://web-production-df5f7e.up.railway.app',
+    github: null,
+    color: '#d9ad55',
+    colorEnd: '#b0852c',
+    tagClass: '',
+    tags: ['FastAPI', 'Python', 'PostgreSQL', 'React', 'Monte Carlo', 'Railway'],
+    highlights: ['Distribution-based prop projections', 'Week to game to player drill-down', 'Fantasy ranks with custom-league VOR', 'Model constants measured, not assumed'],
+  },
+  {
+    id: 'wakerush',
+    name: 'Wake Rush',
+    tagline: 'Real-Time Multiplayer Arcade Boat Racer',
+    description: 'A server-authoritative arcade boat racer for up to 20 players on a live ocean - drift to charge a boost, fire six counterable items, and climb eight skill ranks. Ships as a web dashboard and a Telegram Mini App on one shared backend, with optional entry pools settled on chain and cosmetic-only rewards.',
+    status: 'live',
+    url: 'https://wakerush.fun',
+    github: null,
+    color: '#c58f62',
+    colorEnd: '#9c6b41',
+    tagClass: '',
+    tags: ['Three.js', 'React Three Fiber', 'Colyseus', 'TypeScript', 'Solana', 'Telegram'],
+    highlights: ['20-player server-authoritative races', 'Drift-charge boost + six-item arsenal', 'Entry pools settled on chain', 'Web dashboard + Telegram Mini App'],
+  },
+  {
     id: 'plato',
     name: 'Plato',
     tagline: 'AI-Powered Meal Planning & Nutrition',
@@ -91,32 +119,24 @@ const PROJECTS = [
     highlights: ['Live production website', 'Premium membership UX', 'Booking + wallet flows', 'Firebase-backed medical platform'],
   },
   {
-    id: 'omo',
-    name: '$OMO',
-    tagline: 'Memecoin Landing Page - The Last White Giraffe',
-    description: 'A fully custom memecoin landing site for $OMO - the last white giraffe on earth. Emotional storytelling, Tarangire/Tanzania aesthetic, live DexScreener chart embed, real Omo photography, and Web3 CTAs.',
+    // one card, three shipped sites - the same job done three times reads better
+    // as a body of work than as three near-identical cards
+    id: 'cryptosites',
+    name: 'Token Launch Sites',
+    tagline: 'Memecoin Landing Pages - Three Tokens, Three Chains',
+    description: 'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, and a live rewards-flywheel dashboard for a cat. Live charts, tokenomics, and Web3 CTAs across all three.',
     status: 'live',
-    url: 'https://omogiraffe.fun',
-    github: 'https://github.com/ZbienVC/omo-token',
+    url: null,
+    github: null,
     color: '#d4943a',
     colorEnd: '#b06a2a',
     tagClass: '',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Web3'],
-    highlights: ['Real Omo giraffe photography', 'Live DexScreener chart', 'Tarangire Africa aesthetic', 'Emotional scroll-driven narrative'],
-  },
-  {
-    id: 'gigaton',
-    name: '$GIGATON',
-    tagline: 'Gigachad on TON — Memecoin Website',
-    description: 'A fully custom memecoin landing site for $GIGATON on the TON blockchain. TON-blue design, Gigachad meme gallery, live DexScreener chart, scrolling ticker, and tokenomics.',
-    status: 'live',
-    url: 'https://gigaton.pro',
-    github: 'https://github.com/ZbienVC/gigaton-token',
-    color: '#c2a06a',
-    colorEnd: '#9c7e4e',
-    tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'TON'],
-    highlights: ['TON blue design system', 'Live DexScreener chart', 'Gigachad meme vault', 'Scrolling ticker + tokenomics'],
+    collection: [
+      { name: '$OMO', chain: 'Solana', url: 'https://omogiraffe.fun', blurb: 'The last white giraffe on earth - Tarangire aesthetic, real Omo photography, scroll-driven narrative.' },
+      { name: '$GIGATON', chain: 'TON', url: 'https://gigaton.pro', blurb: 'Gigachad on TON - TON-blue design system, meme vault, scrolling ticker, tokenomics.' },
+      { name: '$CASHKITTEN', chain: 'Robinhood Chain', url: 'https://cashkitten.fun', blurb: 'A $CASHCAT rewards flywheel - a 5% tax buys back on the open market and auto-distributes to holders.' },
+    ],
   },
   {
     id: 'wayfound',
@@ -161,6 +181,9 @@ const PROJECTS = [
     highlights: ['Curated local recommendations', 'Mobile-first design', 'Fast & lightweight', 'Guest experience focused'],
   },
 ];
+
+// collection cards hold several sites, so count the sites, not the cards
+const LIVE_COUNT = PROJECTS.reduce((n, p) => n + (p.collection ? p.collection.length : 1), 0);
 
 const SKILLS = [
   { label: 'React / Vite' },
@@ -431,7 +454,7 @@ function HeroSection() {
         {/* Stats */}
         <div className="reveal d4" style={{ display: 'flex', gap: 48, justifyContent: 'center', marginTop: 64, flexWrap: 'wrap' }}>
           {[
-            { num: '10', label: 'Live in Production' },
+            { num: String(LIVE_COUNT), label: 'Live in Production' },
             { num: '3+', label: 'Currently Building' },
             { num: '∞', label: 'Problems Left to Solve' },
           ].map(s => (
@@ -818,9 +841,9 @@ function ProjectCarouselCard({ project, position }) {
 function ProjectsSection() {
   const CATS = {
     all: PROJECTS,
-    ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound'].includes(p.id)),
-    crypto: ['splash','pepelien','omo','gigaton'].map(id => PROJECTS.find(p => p.id === id)).filter(Boolean),
-    web: PROJECTS.filter(p => ['staywestpalm','reflect','omo','gigaton'].includes(p.id)),
+    ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound','matchedge'].includes(p.id)),
+    crypto: ['splash','wakerush','pepelien','cryptosites'].map(id => PROJECTS.find(p => p.id === id)).filter(Boolean),
+    web: PROJECTS.filter(p => ['staywestpalm','reflect','cryptosites','wakerush'].includes(p.id)),
   };
   const TABS = [
     { id:'all',    label:'All Projects',  count: PROJECTS.length },
@@ -938,13 +961,31 @@ function ProjectsSection() {
                         </div>
                       </div>
                       <p style={{ color:'var(--ink-3)', fontSize:14, lineHeight:1.7, margin:0 }}>{p.description}</p>
-                      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:7 }}>
-                        {p.highlights.slice(0,4).map(h => (
-                          <div key={h} style={{ display:'flex', gap:7, fontSize:12, color:'var(--ink-2)', lineHeight:1.45 }}>
-                            <span style={{ color:p.color, fontWeight:700, flexShrink:0 }}>→</span><span>{h}</span>
-                          </div>
-                        ))}
-                      </div>
+                      {p.collection ? (
+                        <div style={{ display:'grid', gap:8 }}>
+                          {p.collection.map(s => (
+                            <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer"
+                              style={{ display:'grid', gap:3, padding:'10px 13px', borderRadius:10,
+                                border:'1px solid rgba(255,255,255,0.08)', background:'rgba(255,255,255,0.03)',
+                                textDecoration:'none' }}>
+                              <span style={{ display:'flex', alignItems:'baseline', gap:9 }}>
+                                <span style={{ fontWeight:800, fontSize:13.5, color:p.color }}>{s.name}</span>
+                                <span style={{ fontSize:10, letterSpacing:1, textTransform:'uppercase', color:'var(--ink-4)' }}>{s.chain}</span>
+                                <span style={{ marginLeft:'auto', color:'var(--ink-4)', fontSize:12 }}>↗</span>
+                              </span>
+                              <span style={{ fontSize:12, lineHeight:1.5, color:'var(--ink-3)' }}>{s.blurb}</span>
+                            </a>
+                          ))}
+                        </div>
+                      ) : (
+                        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:7 }}>
+                          {p.highlights.slice(0,4).map(h => (
+                            <div key={h} style={{ display:'flex', gap:7, fontSize:12, color:'var(--ink-2)', lineHeight:1.45 }}>
+                              <span style={{ color:p.color, fontWeight:700, flexShrink:0 }}>→</span><span>{h}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                         {p.tags.slice(0,5).map(t => (
                           <span key={t} style={{ padding:'4px 10px', borderRadius:7, fontSize:11, fontWeight:600,
@@ -1047,7 +1088,13 @@ function ProjectsSection() {
                               border:'1px solid rgba(255,255,255,0.08)' }}>+{p.tags.length-3}</span>
                           )}
                         </div>
-                        <div style={{ display:'flex', gap:8 }}>
+                        <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+                          {p.collection?.map(s => (
+                            <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer"
+                              style={{ padding:'7px 12px', borderRadius:8, fontSize:11, fontWeight:700,
+                                background:`${p.color}14`, color:p.color,
+                                border:`1px solid ${p.color}33`, textDecoration:'none' }}>{s.name} ↗</a>
+                          ))}
                           {p.url && (
                             <a href={p.url} target="_blank" rel="noopener noreferrer"
                               style={{ padding:'7px 14px', borderRadius:8, fontSize:11, fontWeight:700,
