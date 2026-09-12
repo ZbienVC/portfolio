@@ -210,10 +210,10 @@ const EXPERIENCE = [
     location: 'New Jersey',
     color: '#e8b06a',
     highlights: [
-      'Own AP/AR, QuickBooks bookkeeping, reconciliation, and month-end close across two affiliated telecom entities',
-      'Automated the AP pipeline end to end: invoices and carrier statements are ingested, renamed, filed, and turned into IIF journal files that import straight into QuickBooks, cutting an estimated 30+ hours of manual work per month',
-      'Automated month-over-month comparison of carrier commission statements to catch missing, changed, and underpaid line items that manual review kept missing',
-      'Built the internal operations platform behind it all, consolidating invoice processing, commission reconciliation, revenue reporting, 499-Q filings, and document search into one system',
+      'Own the books for two affiliated telecom companies: AP, AR, QuickBooks entry, reconciliation, and the monthly close',
+      'Built the automation that now runs accounts payable. Invoices and carrier statements get pulled in, renamed, filed, and converted into IIF files that import straight into QuickBooks, taking roughly 30 hours of filing and data entry out of every month',
+      'Wrote a tool that compares each month\'s carrier statements against the prior month so missing, changed, and underpaid lines get caught',
+      'Built the internal platform the rest of it runs on, plus 499-Q reporting pulled straight from billing data and revenue and margin tracking by carrier',
     ],
   },
   {
@@ -229,18 +229,6 @@ const EXPERIENCE = [
     ],
   },
   {
-    role: 'Operations & Marketing Coordinator',
-    company: 'Reflect Medical & Cosmetic Center',
-    period: 'Jul 2023 \u2013 Jun 2026',
-    location: 'Hawthorne, NJ',
-    color: '#c98a5e',
-    highlights: [
-      'Managed financial workflows in QuickBooks: transaction entry, reconciliation, expense tracking',
-      'Oversaw inventory procurement and vendor coordination for consistent medical supply availability',
-      'Designed marketing materials, social media assets, and promotional graphics using Canva',
-    ],
-  },
-  {
     role: 'Financial Data Analyst - Surveillance & Threat Detection',
     company: 'Bloomberg LP',
     period: 'Mar 2023 \u2013 Feb 2024',
@@ -250,6 +238,18 @@ const EXPERIENCE = [
       'Analyzed large financial datasets to identify trends and support ML surveillance models',
       'Evaluated derivatives activity - options, swaps, forwards - to validate structured financial data',
       'Collaborated with senior analysts to improve AI-based trade surveillance and threat detection systems',
+    ],
+  },
+  {
+    role: 'Operations & Marketing Coordinator',
+    company: 'Reflect Medical & Cosmetic Center',
+    period: 'Jul 2023 \u2013 Jun 2026',
+    location: 'Hawthorne, NJ',
+    color: '#c98a5e',
+    highlights: [
+      'Managed financial workflows in QuickBooks: transaction entry, reconciliation, expense tracking',
+      'Oversaw inventory procurement and vendor coordination for consistent medical supply availability',
+      'Designed marketing materials, social media assets, and promotional graphics using Canva',
     ],
   },
   {
