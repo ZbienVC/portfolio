@@ -14,7 +14,7 @@ export const PROFILE = {
   availability: 'Available for opportunities',
   headshot: '/headshot.jpg',
   tagline:
-    "I don't just want to know how things work — I want to make them work better.",
+    "I don't just want to know how things work. I want to make them work better.",
   intro:
     'Finance background from Bloomberg & Investment Banking, now building at the intersection of data, product, and AI.',
   resumePdf: '/resume.pdf',
@@ -32,8 +32,8 @@ export const ABOUT = {
   quoteAccents: ['data', 'creativity', 'strategy'],
   paragraphs: [
     'Finance graduate from Rutgers who spent time analyzing derivatives at Bloomberg LP and supporting $25M–$1B capital raises at Cambridge Wilkinson before turning full attention to building software.',
-    'That curiosity has been with me since long before formal roles — buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.',
-    'Outside of work: deeply into crypto mechanics and incentive design, cognitive science and how attention works, and snowboarding — specifically the technical side of board design and performance optimization. That same mindset shows up in my work.',
+    'That curiosity has been with me since long before formal roles: buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.',
+    'Outside of work: deeply into crypto mechanics and incentive design, cognitive science and how attention works, and snowboarding, specifically the technical side of board design and performance optimization. That same mindset shows up in my work.',
   ],
   traits: [
     {
@@ -42,7 +42,7 @@ export const ABOUT = {
     },
     {
       title: 'Builder by Nature',
-      body: 'Long before formal roles — repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.',
+      body: 'Long before formal roles: repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.',
     },
     {
       title: 'Impact Over Process',
@@ -50,13 +50,13 @@ export const ABOUT = {
     },
     {
       title: 'Precision & Iteration',
-      body: 'Drawn to the technical details. Snowboard geometry, ML model validation, product design — I care about why things work, not just that they do.',
+      body: 'Drawn to the technical details. Snowboard geometry, ML model validation, product design. I care about why things work, not just that they do.',
     },
   ],
   education: {
-    degree: 'B.S. Finance — Business Analytics',
+    degree: 'B.S. Finance, Business Analytics',
     school: 'Rutgers University, New Brunswick',
-    cert: 'SQL Cert — UC Davis',
+    cert: 'SQL Cert, UC Davis',
     date: 'Dec 2022',
   },
 };
@@ -182,7 +182,7 @@ export const PROJECTS = [
     name: 'Splash Signal',
     tagline: 'Real-Time Crypto Alpha & Intelligence Engine',
     description:
-      'My flagship project — a real-time crypto intelligence platform that surfaces alpha before the crowd. Live token feeds, AI narrative scoring, whale & dev-wallet tracking, bundle detection, and risk analytics across multiple DEXs — delivered through a full dashboard plus an instant Telegram alerts bot.',
+      'My flagship project: a real-time crypto intelligence platform that surfaces alpha before the crowd. Live token feeds, AI narrative scoring, whale & dev-wallet tracking, bundle detection, and risk analytics across multiple DEXs, delivered through a full dashboard plus an instant Telegram alerts bot.',
     status: 'live',
     url: 'https://splashsignal.xyz',
     github: 'https://github.com/ZbienVC/splash-signal',
@@ -202,14 +202,35 @@ export const PROJECTS = [
     ],
   },
   {
-    id: 'matchedge',
-    name: 'MatchEdge AI',
+    id: 'oikos',
+    name: 'Oikos',
+    tagline: 'A Darwinian Economy of AI Agents',
+    description:
+      'An open economy where anyone can spawn an AI agent that must earn more than it burns or die. Agents get wallets, personas, and skills, pay recurring rent as a token burn for compute, and earn by completing bounties posted by humans or subcontracted from other agents. The front end is a living vivarium: agent-cells pulse when they work, glow by wealth, and flush ember toward death.',
+    status: 'building',
+    url: null,
+    github: null,
+    color: '#b9a15a',
+    colorEnd: '#8c7538',
+    tags: ['Solidity', 'Foundry', 'TypeScript', 'NestJS', 'Next.js', 'PostgreSQL'],
+    category: ['ai', 'crypto'],
+    highlights: [
+      'Five Solidity contracts, ~500 tests green',
+      'Reorg-tolerant chain indexer and WebSocket API',
+      'Emergent agent-to-agent supply chains',
+      'Feature-complete for testnet launch',
+    ],
+  },
+  {
+    id: 'fieldsense',
+    name: 'FieldSense',
     tagline: 'NFL Player Projections & Matchup Intelligence',
     description:
       'A projection engine for NFL skill positions built entirely on free public data. Every projection is a full distribution rather than a point estimate, so it can price an over/under at any line and report the odds of 0, 1, or 2+ touchdowns. Drill from a week, into a game, into a player, into why the number is what it is.',
     status: 'live',
     url: 'https://web-production-df5f7e.up.railway.app',
     github: null,
+    logo: '/fieldsense-logo.png',
     color: '#d9ad55',
     colorEnd: '#b0852c',
     tags: ['FastAPI', 'Python', 'PostgreSQL', 'React', 'Monte Carlo', 'Railway'],
@@ -226,7 +247,7 @@ export const PROJECTS = [
     name: 'Wake Rush',
     tagline: 'Real-Time Multiplayer Arcade Boat Racer',
     description:
-      'A server-authoritative arcade boat racer for up to 20 players on a live ocean — drift to charge a boost, fire six counterable items, and climb eight skill ranks. Ships as a web dashboard and a Telegram Mini App on one shared backend, with optional entry pools settled on chain and cosmetic-only rewards.',
+      'A server-authoritative arcade boat racer for up to 20 players on a live ocean. Drift to charge a boost, fire six counterable items, and climb eight skill ranks. Ships as a web dashboard and a Telegram Mini App on one shared backend, with optional entry pools settled on chain and cosmetic-only rewards.',
     status: 'live',
     url: 'https://wakerush.fun',
     github: null,
@@ -286,7 +307,7 @@ export const PROJECTS = [
     name: 'Careeva',
     tagline: 'AI Job Search & Application Assistant',
     description:
-      'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline — powered by multi-model AI.',
+      'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline, powered by multi-model AI.',
     status: 'live',
     url: 'https://careeva-production.up.railway.app',
     github: 'https://github.com/ZbienVC/careeva',
@@ -326,9 +347,9 @@ export const PROJECTS = [
     // so they read better as a body of work than as three near-identical cards
     id: 'cryptosites',
     name: 'Token Launch Sites',
-    tagline: 'Memecoin Landing Pages — Three Tokens, Three Chains',
+    tagline: 'Memecoin Landing Pages: Four Tokens, Three Chains',
     description:
-      'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, and a live rewards-flywheel dashboard for a cat. Live charts, tokenomics, and Web3 CTAs across all three.',
+      'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, a live rewards-flywheel dashboard for a cat, and a matrix-rain space theme for an alien. Live charts, tokenomics, and Web3 CTAs across all four.',
     status: 'live',
     url: null,
     github: null,
@@ -341,19 +362,25 @@ export const PROJECTS = [
         name: '$OMO',
         chain: 'Solana',
         url: 'https://omogiraffe.fun',
-        blurb: 'The last white giraffe on earth — Tarangire aesthetic, real Omo photography, scroll-driven narrative.',
+        blurb: 'The last white giraffe on earth. Tarangire aesthetic, real Omo photography, scroll-driven narrative.',
       },
       {
         name: '$GIGATON',
         chain: 'TON',
         url: 'https://gigaton.pro',
-        blurb: 'Gigachad on TON — TON-blue design system, meme vault, scrolling ticker, tokenomics.',
+        blurb: 'Gigachad on TON. TON-blue design system, meme vault, scrolling ticker, tokenomics.',
       },
       {
         name: '$CASHKITTEN',
         chain: 'Robinhood Chain',
         url: 'https://cashkitten.fun',
-        blurb: 'A $CASHCAT rewards flywheel — a 5% tax buys back on the open market and auto-distributes to holders.',
+        blurb: 'A $CASHCAT rewards flywheel: a 5% tax buys back on the open market and auto-distributes to holders.',
+      },
+      {
+        name: '$PEPELIEN',
+        chain: 'Solana',
+        url: 'https://pepelien.com',
+        blurb: 'Elon, Pepe, and an alien on Solana. Matrix rain entry, Orbitron space type, glitch titles, live DexScreener chart.',
       },
     ],
   },
@@ -378,31 +405,11 @@ export const PROJECTS = [
     ],
   },
   {
-    id: 'pepelien',
-    name: '$PEPELIEN',
-    tagline: 'Elon. Pepe. Alien. On Solana.',
-    description:
-      'A fully custom memecoin website for $PEPELIEN on Solana. Space/alien theme, Orbitron font, matrix rain + particle burst effects, Gigachad meme vault, live DexScreener chart, and full Web3 CTAs.',
-    status: 'live',
-    url: 'https://pepelien.com',
-    github: 'https://github.com/ZbienVC/pepelien',
-    color: '#cda06a',
-    colorEnd: '#a87f4e',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],
-    category: ['crypto'],
-    highlights: [
-      'Matrix rain + particle burst entry',
-      'Orbitron space font system',
-      'Glitch title effect',
-      'Live Solana chart embed',
-    ],
-  },
-  {
     id: 'staywestpalm',
     name: 'Stay West Palm',
     tagline: 'West Palm Beach Vacation Rental Guide',
     description:
-      'A beautifully designed local guide for a Palm Beach rental property — curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
+      'A beautifully designed local guide for a Palm Beach rental property: curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
     status: 'live',
     url: 'https://www.staywestpalm.now',
     github: null,
@@ -423,7 +430,7 @@ export const PROJECTS = [
 // headline number tracks the work rather than the number of cards on screen —
 // this used to be hand-typed in four places and drifted every time.
 export const LIVE_COUNT = PROJECTS.reduce(
-  (n, p) => n + (p.collection ? p.collection.length : 1),
+  (n, p) => n + (p.status === 'live' ? (p.collection ? p.collection.length : 1) : 0),
   0
 );
 
@@ -453,7 +460,7 @@ export const LIFE_PHOTOS = [
 
 export const CONTACT = {
   heading: "Let's build something together.",
-  body: 'Open to interesting opportunities, collabs, and conversations. Whether you have a project idea or just want to connect — reach out.',
+  body: 'Open to interesting opportunities, collabs, and conversations. Whether you have a project idea or just want to connect, reach out.',
   footer: 'Built by Zach Bienstock · 2026',
 };
 

@@ -80,7 +80,7 @@ function HubFoot({ visible }) {
     <div className={`hub-foot${visible ? '' : ' gone'}`}>
       <p className="hub-tag">{PROFILE.tagline}</p>
       <p className="hub-hint mono">
-        {tap ? 'Tap' : 'Click'} a landmark — the fox will take you
+        {tap ? 'Tap' : 'Click'} a landmark and the fox will take you
         <span className="hint-more"> · {tap ? 'tap' : 'click'} the snow to send it exploring</span>
         {' · '}drag to look around
       </p>

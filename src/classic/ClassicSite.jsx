@@ -35,13 +35,28 @@ const PROJECTS = [
     demoId: 'splash',
   },
   {
-    id: 'matchedge',
-    name: 'MatchEdge AI',
+    id: 'oikos',
+    name: 'Oikos',
+    tagline: 'A Darwinian Economy of AI Agents',
+    description: 'An open economy where anyone can spawn an AI agent that must earn more than it burns or die. Agents get wallets, personas, and skills, pay recurring rent as a token burn for compute, and earn by completing bounties posted by humans or subcontracted from other agents. The front end is a living vivarium: agent-cells pulse when they work, glow by wealth, and flush ember toward death.',
+    status: 'building',
+    url: null,
+    github: null,
+    color: '#b9a15a',
+    colorEnd: '#8c7538',
+    tagClass: '',
+    tags: ['Solidity', 'Foundry', 'TypeScript', 'NestJS', 'Next.js', 'PostgreSQL'],
+    highlights: ['Five Solidity contracts, ~500 tests green', 'Reorg-tolerant chain indexer and WebSocket API', 'Emergent agent-to-agent supply chains', 'Feature-complete for testnet launch'],
+  },
+  {
+    id: 'fieldsense',
+    name: 'FieldSense',
     tagline: 'NFL Player Projections & Matchup Intelligence',
     description: 'A projection engine for NFL skill positions built entirely on free public data. Every projection is a full distribution rather than a point estimate, so it can price an over/under at any line and report the odds of 0, 1, or 2+ touchdowns. Drill from a week, into a game, into a player, into why the number is what it is.',
     status: 'live',
     url: 'https://web-production-df5f7e.up.railway.app',
     github: null,
+    logo: '/fieldsense-logo.png',
     color: '#d9ad55',
     colorEnd: '#b0852c',
     tagClass: '',
@@ -123,8 +138,8 @@ const PROJECTS = [
     // as a body of work than as three near-identical cards
     id: 'cryptosites',
     name: 'Token Launch Sites',
-    tagline: 'Memecoin Landing Pages - Three Tokens, Three Chains',
-    description: 'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, and a live rewards-flywheel dashboard for a cat. Live charts, tokenomics, and Web3 CTAs across all three.',
+    tagline: 'Memecoin Landing Pages: Four Tokens, Three Chains',
+    description: 'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, a live rewards-flywheel dashboard for a cat, and a matrix-rain space theme for an alien. Live charts, tokenomics, and Web3 CTAs across all four.',
     status: 'live',
     url: null,
     github: null,
@@ -136,6 +151,7 @@ const PROJECTS = [
       { name: '$OMO', chain: 'Solana', url: 'https://omogiraffe.fun', blurb: 'The last white giraffe on earth - Tarangire aesthetic, real Omo photography, scroll-driven narrative.' },
       { name: '$GIGATON', chain: 'TON', url: 'https://gigaton.pro', blurb: 'Gigachad on TON - TON-blue design system, meme vault, scrolling ticker, tokenomics.' },
       { name: '$CASHKITTEN', chain: 'Robinhood Chain', url: 'https://cashkitten.fun', blurb: 'A $CASHCAT rewards flywheel - a 5% tax buys back on the open market and auto-distributes to holders.' },
+      { name: '$PEPELIEN', chain: 'Solana', url: 'https://pepelien.com', blurb: 'Elon, Pepe, and an alien on Solana. Matrix rain entry, Orbitron space type, glitch titles, live DexScreener chart.' },
     ],
   },
   {
@@ -151,20 +167,6 @@ const PROJECTS = [
     tagClass: '',
     tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
     highlights: ['AI preference parsing', 'Live hotel inventory', 'Real Stripe checkout', 'Zero-key demo mode'],
-  },
-  {
-    id: 'pepelien',
-    name: '$PEPELIEN',
-    tagline: 'Elon. Pepe. Alien. On Solana.',
-    description: 'A fully custom memecoin website for $PEPELIEN on Solana. Space/alien theme, Orbitron font, matrix rain + particle burst effects, Gigachad meme vault, live DexScreener chart, and full Web3 CTAs.',
-    status: 'live',
-    url: 'https://pepelien.com',
-    github: 'https://github.com/ZbienVC/pepelien',
-    color: '#cda06a',
-    colorEnd: '#a87f4e',
-    tagClass: '',
-    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Solana'],
-    highlights: ['Matrix rain + particle burst entry', 'Orbitron space font system', 'Glitch title effect', 'Live Solana chart embed'],
   },
   {
     id: 'staywestpalm',
@@ -183,7 +185,7 @@ const PROJECTS = [
 ];
 
 // collection cards hold several sites, so count the sites, not the cards
-const LIVE_COUNT = PROJECTS.reduce((n, p) => n + (p.collection ? p.collection.length : 1), 0);
+const LIVE_COUNT = PROJECTS.reduce((n, p) => n + (p.status === 'live' ? (p.collection ? p.collection.length : 1) : 0), 0);
 
 const SKILLS = [
   { label: 'React / Vite' },
@@ -326,7 +328,7 @@ function Nav({ active }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const navLinks = ['About', 'Projects', 'Experience', 'Skills', 'Demos', 'Life', 'Contact'];
+  const navLinks = ['About', 'Projects', 'Experience', 'Skills', 'Life', 'Contact'];
 
   return (
     <nav style={{
@@ -451,7 +453,7 @@ function HeroSection() {
 
         {/* Bio */}
         <p className="reveal d2" style={{ fontSize: 18, color: 'var(--ink-3)', lineHeight: 1.75, maxWidth: 600, margin: '0 auto 38px', fontWeight: 400 }}>
-          I don't just want to know how things work — I want to make them <span className="serif-italic" style={{ color: 'var(--ink)', fontSize: '1.12em' }}>work better</span>. Finance background from <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>data</span>, <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>product</span>, and <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>AI</span>.
+          I don't just want to know how things work. I want to make them <span className="serif-italic" style={{ color: 'var(--ink)', fontSize: '1.12em' }}>work better</span>. Finance background from <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>Bloomberg</span> &amp; <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>Investment Banking</span>, now building at the intersection of <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>data</span>, <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>product</span>, and <span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>AI</span>.
         </p>
 
         {/* CTAs */}
@@ -854,8 +856,8 @@ function ProjectCarouselCard({ project, position }) {
 function ProjectsSection() {
   const CATS = {
     all: PROJECTS,
-    ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound','matchedge'].includes(p.id)),
-    crypto: ['splash','wakerush','pepelien','cryptosites'].map(id => PROJECTS.find(p => p.id === id)).filter(Boolean),
+    ai: PROJECTS.filter(p => ['dipper','careeva','plato','reflect','wayfound','fieldsense','oikos'].includes(p.id)),
+    crypto: ['splash','wakerush','cryptosites','oikos'].map(id => PROJECTS.find(p => p.id === id)).filter(Boolean),
     web: PROJECTS.filter(p => ['staywestpalm','reflect','cryptosites','wakerush'].includes(p.id)),
   };
   const TABS = [
@@ -900,7 +902,7 @@ function ProjectsSection() {
             Projects <span className="accent-italic" style={{ fontSize: '1.1em' }}>in the wild</span>
           </h2>
           <p style={{ color:'var(--ink-4)', fontSize:14, fontFamily:"'JetBrains Mono',monospace" }}>
-            {projects.length} project{projects.length !== 1 ? 's' : ''} — {activeTabObj?.label}
+            {projects.length} project{projects.length !== 1 ? 's' : ''} · {activeTabObj?.label}
           </p>
         </div>
 
@@ -966,7 +968,7 @@ function ProjectsSection() {
                                 textTransform:'uppercase', letterSpacing:1,
                                 background:`${p.color}1a`, color:p.color, border:`1px solid ${p.color}40`,
                                 display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
-                                <span style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontSize:13, lineHeight:1 }}>{'—'}</span> Best Work
+                                <span style={{ fontFamily:'var(--serif)', fontStyle:'italic', fontSize:13, lineHeight:1 }}>{'\u2605'}</span> Best Work
                               </div>
                             )}
                           </div>
@@ -1075,6 +1077,13 @@ function ProjectsSection() {
                           {p.id === 'plato' ? (
                             <div style={{ width:42, height:42, borderRadius:12, overflow:'hidden', flexShrink:0, boxShadow:'0 6px 16px rgba(35,90,32,0.4)' }}>
                               <PlatoMark size={42} rounded />
+                            </div>
+                          ) : p.logo ? (
+                            <div style={{ width:42, height:42, borderRadius:12, flexShrink:0, overflow:'hidden',
+                              background:'radial-gradient(circle at 35% 28%, #1a2433, #0c1018)',
+                              display:'flex', alignItems:'center', justifyContent:'center',
+                              boxShadow:'0 6px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06) inset' }}>
+                              <img src={p.logo} alt={`${p.name} logo`} style={{ width:30, height:30, objectFit:'contain', display:'block' }} />
                             </div>
                           ) : (
                           <div style={{ width:42, height:42, borderRadius:12, flexShrink:0,
@@ -1298,9 +1307,9 @@ function ExperienceSection() {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/><path d="M22 10v5"/></svg>
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 2 }}>B.S. Finance — Business Analytics</div>
+            <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink)', marginBottom: 2 }}>B.S. Finance, Business Analytics</div>
             <div style={{ color: 'var(--accent-bright)', fontWeight: 700, fontSize: 13, marginBottom: 4 }}>Rutgers University, New Brunswick</div>
-            <span className="tag" style={{ background: 'var(--accent-soft)', color: 'var(--accent-bright)', borderColor: 'var(--accent-line)', fontSize: 11 }}>SQL Cert — UC Davis</span>
+            <span className="tag" style={{ background: 'var(--accent-soft)', color: 'var(--accent-bright)', borderColor: 'var(--accent-line)', fontSize: 11 }}>SQL Cert, UC Davis</span>
           </div>
           <div style={{ color: 'var(--ink-4)', fontSize: 11, fontFamily: "'JetBrains Mono',monospace" }}>Dec 2022</div>
         </div>

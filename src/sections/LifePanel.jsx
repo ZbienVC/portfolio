@@ -32,7 +32,7 @@ export default function LifePanel({ waypoint, active = true }) {
       label={waypoint?.title || 'Frozen Lake'}
       altitude={waypoint?.altitude || '1,050 m'}
       title={<>A slice of <span className="serif-italic">life</span></>}
-      intro="Beyond the work — the reflection on the ice."
+      intro="Beyond the work. The reflection on the ice."
     >
       <div className="life reveal d2">
         <div

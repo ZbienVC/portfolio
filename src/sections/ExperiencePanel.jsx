@@ -11,7 +11,7 @@ export default function ExperiencePanel({ waypoint }) {
       altitude={waypoint?.altitude || '1,740 m'}
       wide
       title={<>Where I've <span className="serif-italic">been</span></>}
-      intro="Every marker on the trail up — markets, surveillance, operations, building."
+      intro="Every marker on the trail up: markets, surveillance, operations, building."
     >
       <div className="exp-trail">
         {EXPERIENCE.map((exp, i) => {

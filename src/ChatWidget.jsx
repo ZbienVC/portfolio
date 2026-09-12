@@ -25,7 +25,7 @@ function TypingDots() {
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hey! I'm Zach's AI — ask me anything about his work, projects, or skills. Or just say hi 👋" }
+    { role: 'assistant', content: "Hey! I'm Zach's AI. Ask me anything about his work, projects, or skills. Or just say hi 👋" }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -65,9 +65,9 @@ export default function ChatWidget() {
         body: JSON.stringify({ messages: newMessages.filter(m => m.role !== 'system') }),
       });
       const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.content || 'Something went wrong — try again.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: data.content || 'Something went wrong, try again.' }]);
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection issue — please try again.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection issue, please try again.' }]);
     } finally {
       setLoading(false);
     }
@@ -198,7 +198,7 @@ export default function ChatWidget() {
               ) : (
                 <>
                   <p style={{ color: '#6b7db3', fontSize: 13, margin: 0 }}>
-                    Drop a message — Zach gets it via email and SMS.
+                    Drop a message and Zach gets it via email and SMS.
                   </p>
                   {[
                     { key: 'name', placeholder: 'Your name *', type: 'text' },
