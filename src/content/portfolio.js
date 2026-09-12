@@ -252,6 +252,7 @@ export const PROJECTS = [
     status: 'live',
     url: 'https://wakerush.fun',
     github: null,
+    logo: '/wakerush-logo.png',
     color: '#c58f62',
     colorEnd: '#9c6b41',
     tags: ['Three.js', 'React Three Fiber', 'Colyseus', 'TypeScript', 'Solana', 'Telegram'],
