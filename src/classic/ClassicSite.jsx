@@ -1334,6 +1334,8 @@ const LIFE_PHOTOS = [
   { src: '/life/photo6.jpeg', label: 'The journey' },
   { src: '/life/photo7.jpg',  label: 'Life' },
   { src: '/life/photo8.jpg',  label: 'Friends dinner' },
+  { src: '/life/photo10.jpg', label: 'Barcelona' },
+  { src: '/life/photo11.jpg', label: 'Underground' },
 ];
 
 function LifeSection() {
