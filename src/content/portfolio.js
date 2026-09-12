@@ -71,9 +71,9 @@ export const EXPERIENCE = [
     color: '#e8b06a',
     highlights: [
       'Own AP/AR, QuickBooks bookkeeping, reconciliation, and month-end close across two affiliated telecom entities',
-      'Reconcile monthly carrier and agent commission statements, validating payouts against contracted rates across a multi-carrier book',
-      'Designed and built Home Base \u2014 an internal operations platform consolidating finance, commission, and admin workflows into one app',
-      'Shipped an AP Console, Commissions module, Statement Comparison tool, 499-Q Builder, revenue analytics, password manager, and file finder',
+      'Automated the AP pipeline end to end: invoices and carrier statements are ingested, renamed, filed, and turned into IIF journal files that import straight into QuickBooks, cutting an estimated 30+ hours of manual work per month',
+      'Automated month-over-month comparison of carrier commission statements to catch missing, changed, and underpaid line items that manual review kept missing',
+      'Built the internal operations platform behind it all, consolidating invoice processing, commission reconciliation, revenue reporting, 499-Q filings, and document search into one system',
     ],
   },
   {
@@ -84,7 +84,7 @@ export const EXPERIENCE = [
     color: '#e0a155',
     highlights: [
       'Built automated Excel reporting systems and Figma dashboards, reducing manual reporting by 80%+',
-      'Analyzed tens of thousands of product groups — generated 20–85% cost savings, ranging from tens of thousands to millions annually',
+      'Analyzed tens of thousands of product groups, generating 20 to 85% cost savings ranging from tens of thousands to millions annually',
       'Resolved 50+ weekly supply backorders; assisted with client onboarding, vendor integration, and system setup',
     ],
   },
@@ -101,14 +101,14 @@ export const EXPERIENCE = [
     ],
   },
   {
-    role: 'Financial Data Analyst — Surveillance & Threat Detection',
+    role: 'Financial Data Analyst, Surveillance & Threat Detection',
     company: 'Bloomberg LP',
     period: 'Mar 2023 – Feb 2024',
     location: 'Remote',
     color: '#d4a373',
     highlights: [
       'Analyzed large financial datasets to identify trends and support ML surveillance models',
-      'Evaluated derivatives activity — options, swaps, forwards — to validate structured financial data',
+      'Evaluated derivatives activity, including options, swaps, and forwards, to validate structured financial data',
       'Collaborated with senior analysts to improve AI-based trade surveillance and threat detection systems',
     ],
   },
