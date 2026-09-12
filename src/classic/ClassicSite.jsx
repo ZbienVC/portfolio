@@ -204,6 +204,19 @@ const SKILLS = [
 
 const EXPERIENCE = [
   {
+    role: 'Financial Operations Analyst',
+    company: 'Interactive Telecom Solutions & Platform Technologies',
+    period: 'Jun 2026 \u2013 Present',
+    location: 'New Jersey',
+    color: '#e8b06a',
+    highlights: [
+      'Own AP/AR, QuickBooks bookkeeping, reconciliation, and month-end close across two affiliated telecom entities',
+      'Reconcile monthly carrier and agent commission statements, validating payouts against contracted rates across a multi-carrier book',
+      'Designed and built Home Base \u2014 an internal operations platform consolidating finance, commission, and admin workflows into one app',
+      'Shipped an AP Console, Commissions module, Statement Comparison tool, 499-Q Builder, revenue analytics, password manager, and file finder',
+    ],
+  },
+  {
     role: 'Savings Analyst & Sales Engineer',
     company: 'Grapevine',
     period: 'Feb 2024 \u2013 Oct 2025',
@@ -218,7 +231,7 @@ const EXPERIENCE = [
   {
     role: 'Operations & Marketing Coordinator',
     company: 'Reflect Medical & Cosmetic Center',
-    period: 'Jul 2023 \u2013 Present',
+    period: 'Jul 2023 \u2013 Jun 2026',
     location: 'Hawthorne, NJ',
     color: '#c98a5e',
     highlights: [
