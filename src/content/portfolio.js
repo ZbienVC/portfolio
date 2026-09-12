@@ -17,7 +17,6 @@ export const PROFILE = {
     "I don't just want to know how things work — I want to make them work better.",
   intro:
     'Finance background from Bloomberg & Investment Banking, now building at the intersection of data, product, and AI.',
-  resumeOnline: 'https://bold.pro/my/zachary-bienstock/354r',
   resumePdf: '/resume.pdf',
   resumePdfNamed: '/Zachary_Bienstock_Resume.pdf',
   email: 'Zbienstock@gmail.com',

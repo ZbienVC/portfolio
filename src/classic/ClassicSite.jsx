@@ -1308,11 +1308,8 @@ function ExperienceSection() {
 
       {/* Resume CTA */}
       <div style={{ textAlign: 'center', marginTop: 32, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-        <a href="https://bold.pro/my/zachary-bienstock/354r" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>
-          View Resume Online ↗
-        </a>
-        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: 14 }}>
-          Download PDF ↓
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ fontSize: 14 }}>
+          View Resume ↗
         </a>
       </div>
     </section>
