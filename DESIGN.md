@@ -44,6 +44,17 @@ to the AI · shared-element project sheets with drag-to-dismiss and `#work/<id>`
 layout-animated ledger filters · tool matrix that filters the work · drag-a-document
 AP toy · throwable photo pile · View Transitions theme switch.
 
+**Who:** the hero carries a portrait: two prints on the glaze, the headshot in front and a
+print behind it that runs through photos from Off the clock. Tap them to swap. The pause
+control's ring is the timer, and the photos hold still off screen, under a resting pointer
+and with reduced motion.
+
+**On a phone:** the glaze becomes a band across the top with the portrait on it, so the
+first screen has color and a face. Navigation moves to the thumb: a dock at the bottom
+names the section you're in and fills with the glaze as you read. It opens a sheet with
+every section, search, the AI, the résumé and the two switches. The four flagships become
+a row you swipe, and roles open one line at a time.
+
 **We refuse:** purple/blue gradients · glass cards · glow blobs · floating mockups ·
 centered label + italic-serif headers · "∞ problems left to solve" stats · typewriter
 role loops · buzzwords.

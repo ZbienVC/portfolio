@@ -84,7 +84,7 @@ export function AskPanel({ onClose, initial }: { onClose: () => void; initial?: 
   useEffect(() => {
     field.current?.focus({ preventScroll: true });
     // opened from the palette's "Ask" row, the opener is gone: land on the search button
-    return () => restoreFocus(opener, '[data-palette-trigger]');
+    return () => restoreFocus(opener, '[data-palette-trigger], [data-menu-trigger]');
   }, [opener]);
 
   useEffect(() => {

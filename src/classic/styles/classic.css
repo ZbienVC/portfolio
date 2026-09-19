@@ -615,14 +615,26 @@
   border-radius: 8px;
 }
 .hero-glaze .ink-note-spec { color: oklch(0.86 0.04 70); }
+/* on a phone the glaze is a band across the top of the page, and the portrait sits on it */
+.hero { --band-h: clamp(300px, 84vw, 380px); }
 @media (max-width: 1023px) {
   .hero-glaze {
-    top: auto;
+    bottom: auto;
     width: 100%;
-    height: min(640px, 150vw);
-    clip-path: polygon(0 16%, 100% 0, 100% 100%, 0 100%);
+    height: var(--band-h);
+    clip-path: polygon(0 0, 100% 0, 100% 84%, 0 100%);
   }
 }
+
+/* the portrait's timer: a ring that fills over one photo, then turns to the next */
+.portrait-ring {
+  stroke-dasharray: 75.4;
+  stroke-dashoffset: 75.4;
+  animation-name: portrait-ring;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes portrait-ring { to { stroke-dashoffset: 0; } }
 
 /* the closing band's top edge: the glaze again, as a rule */
 .closing-glaze {
@@ -643,7 +655,11 @@
   :root[data-show-work] .hero { padding-bottom: clamp(150px, 12vw, 180px); }
 }
 @media (max-width: 1099px) {
-  :root[data-show-work] .hero { padding-top: calc(var(--nav-h) + clamp(40px, 7vw, 96px)); }
+  :root[data-show-work] .hero { padding-top: calc(var(--nav-h) + clamp(40px, 5vw, 72px)); }
+}
+/* a phone's hero starts with the portrait band, notes or not */
+@media (max-width: 1023px) {
+  :root[data-show-work] .hero { padding-top: var(--nav-h); }
 }
 @layer components {
   /* over the glaze the silk runs from oxblood to gold, so pale pencil gets a dark ground of its own */

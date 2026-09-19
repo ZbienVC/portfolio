@@ -218,3 +218,24 @@ export interface Photo {
   label: string;
 }
 export const PHOTOS = RAW_PHOTOS as Photo[];
+
+/* ── The hero's portrait: the headshot, and the life prints that run behind it ── */
+
+export const PORTRAIT = { src: '/me/headshot.webp', alt: 'Zach Bienstock' };
+
+export interface LifePrint {
+  src: string;
+  /** the caption on the print */
+  label: string;
+  /** what's in the photo, for people who can't see it */
+  alt: string;
+}
+// square crops of the Off the clock photos, framed on Zach (or the dog)
+export const LIFE_PRINTS: LifePrint[] = [
+  { src: '/me/barcelona.webp', label: 'Barcelona', alt: 'Zach on an e-scooter under the palms in Barcelona' },
+  { src: '/me/security.webp', label: 'Head of security', alt: "Zach's dog with a blue toy alligator in its mouth" },
+  { src: '/me/suited.webp', label: 'Suited up', alt: 'Zach in a navy suit' },
+  { src: '/me/pastel.webp', label: 'Last chair', alt: 'Zach and friends on skis under a pastel evening sky' },
+  { src: '/me/fog.webp', label: 'Fog day, still riding', alt: 'Zach sitting in fresh snow with his snowboard' },
+  { src: '/me/giants.webp', label: 'Giants game', alt: 'Zach and friends outside the stadium at a Giants game in Foxborough' },
+];

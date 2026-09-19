@@ -116,7 +116,7 @@ export function CommandPalette({ onClose, onOpenProject, onAsk, onCopyEmail }: P
   useEffect(() => {
     input.current?.focus({ preventScroll: true });
     return () => {
-      if (!chosen.current) restoreFocus(opener, '[data-palette-trigger]');
+      if (!chosen.current) restoreFocus(opener, '[data-palette-trigger], [data-menu-trigger]');
     };
   }, [opener]);
 

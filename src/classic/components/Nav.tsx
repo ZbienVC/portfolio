@@ -1,14 +1,14 @@
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
 import { ALSO_SHIPPED, FLAGSHIPS, PROFILE, LIVE_COUNT, shotId, shotSrc, showsShot } from '../lib/data';
-import { modKey, restoreFocus, useActiveSection, useInertPage } from '../lib/hooks';
+import { modKey, useActiveSection } from '../lib/hooks';
 import { fade, spring } from '../lib/motion';
 import { useShowWork } from '../lib/show-work';
 import { useTheme } from '../lib/theme';
 import { openBasecamp } from '../lib/basecamp';
 import { cn } from '../lib/cn';
 import { HoverArrow, Icon } from './Icon';
+import { Dock, MenuSheet, type SectionId } from './MobileNav';
 
 export const SECTIONS = ['work', 'day-job', 'experience', 'toolkit', 'off-the-clock', 'basecamp', 'contact'] as const;
 
@@ -16,6 +16,7 @@ type MenuId = 'work' | 'about';
 interface NavProps {
   onOpenPalette: () => void;
   onOpenProject: (id: string) => void;
+  onOpenAsk: () => void;
 }
 
 /**
@@ -23,7 +24,7 @@ interface NavProps {
  * panel: it morphs between them (size, position and the little caret), the way
  * Stripe's nav does, so moving across the bar never flickers closed and open.
  */
-export function Nav({ onOpenPalette, onOpenProject }: NavProps) {
+export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
   const active = useActiveSection(SECTIONS);
   const [menu, setMenu] = useState<MenuId | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -103,7 +104,7 @@ export function Nav({ onOpenPalette, onOpenProject }: NavProps) {
       <div className="container-x flex h-full items-center gap-6">
         <a href="#top" className="group flex shrink-0 items-center gap-2.5" title="Back to top">
           <Monogram />
-          <span className="sr-only text-[15px] font-[680] tracking-[-0.01em] [font-stretch:112%] xs:not-sr-only">{PROFILE.name}</span>
+          <span className="text-[15px] font-[680] tracking-[-0.01em] [font-stretch:112%]">{PROFILE.name}</span>
         </a>
 
         <nav
@@ -181,9 +182,7 @@ export function Nav({ onOpenPalette, onOpenProject }: NavProps) {
               <kbd className="kbd">K</kbd>
             </span>
           </button>
-          <button type="button" onClick={onOpenPalette} data-palette-trigger="" className="icon-btn md:hidden" aria-label="Search and jump">
-            <Icon name="search" />
-          </button>
+          {/* on a phone, search and the notes switch live in the menu sheet */}
           <ShowWorkSwitch />
           <ThemeSwitch />
           <a href={PROFILE.resumePdfNamed} target="_blank" rel="noopener" className="btn btn-primary btn-sm ml-1.5 hidden sm:inline-flex">
@@ -193,7 +192,9 @@ export function Nav({ onOpenPalette, onOpenProject }: NavProps) {
           <button
             type="button"
             className="icon-btn lg:hidden"
+            data-menu-trigger=""
             aria-label="Open menu"
+            aria-haspopup="dialog"
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
           >
@@ -202,14 +203,14 @@ export function Nav({ onOpenPalette, onOpenProject }: NavProps) {
         </div>
       </div>
 
+      <Dock active={active as SectionId | null} onOpen={() => setMobileOpen(true)} />
       <AnimatePresence>
         {mobileOpen && (
-          <MobileMenu
+          <MenuSheet
+            active={active as SectionId | null}
             onClose={() => setMobileOpen(false)}
-            onOpenPalette={() => {
-              setMobileOpen(false);
-              onOpenPalette();
-            }}
+            onOpenPalette={onOpenPalette}
+            onOpenAsk={onOpenAsk}
           />
         )}
       </AnimatePresence>
@@ -509,7 +510,7 @@ function ShowWorkSwitch() {
       onClick={toggle}
       aria-pressed={on}
       title="Show the work (W)"
-      className={cn('icon-btn relative inline-flex w-auto gap-2 px-2.5', on && 'text-amber-ink')}
+      className={cn('icon-btn relative inline-flex w-auto gap-2 px-2.5 max-lg:hidden', on && 'text-amber-ink')}
     >
       <Icon name="pencil" size={17} />
       <span className="hidden text-[13.5px] font-[560] xl:inline">Show the work</span>
@@ -545,97 +546,5 @@ function ThemeSwitch() {
         </motion.span>
       </AnimatePresence>
     </button>
-  );
-}
-
-function MobileMenu({ onClose, onOpenPalette }: { onClose: () => void; onOpenPalette: () => void }) {
-  const panel = useRef<HTMLDivElement>(null);
-  const [opener] = useState(() => document.activeElement as HTMLElement | null);
-  useInertPage();
-
-  useEffect(() => {
-    panel.current?.querySelector<HTMLElement>('a,button')?.focus({ preventScroll: true });
-    document.documentElement.style.overflow = 'hidden';
-    return () => {
-      document.documentElement.style.overflow = '';
-      restoreFocus(opener);
-    };
-  }, [opener]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
-
-  const links = [
-    ['#work', 'Work'],
-    ['#day-job', 'The day job'],
-    ['#experience', 'Experience'],
-    ['#toolkit', 'Toolkit'],
-    ['#off-the-clock', 'Off the clock'],
-    ['#contact', 'Contact'],
-  ];
-  // rendered on <body>, outside #page, so the page behind can go inert
-  return createPortal(
-    <motion.div
-      ref={panel}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Menu"
-      data-overlay-open=""
-      className="fixed inset-0 z-[60] flex flex-col bg-paper lg:hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={fade}
-    >
-      <div className="container-x flex h-[var(--nav-h)] items-center justify-between">
-        <span className="flex items-center gap-2.5">
-          <Monogram />
-          <span className="text-[15px] font-[680] [font-stretch:112%]">{PROFILE.name}</span>
-        </span>
-        <button type="button" className="icon-btn" onClick={onClose} aria-label="Close menu">
-          <Icon name="close" />
-        </button>
-      </div>
-      <nav aria-label="Main" className="container-x flex-1 overflow-y-auto pt-6">
-        <ul>
-          {links.map(([href, label], i) => (
-            <motion.li
-              key={href}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...spring.crisp, delay: 0.03 * i }}
-              className="border-b border-rule"
-            >
-              <a href={href} onClick={onClose} className="flex items-center justify-between py-4 text-[26px] font-[680] tracking-[-0.02em] [font-stretch:112%]">
-                {label}
-                <Icon name="arrowRight" className="text-ink-3" />
-              </a>
-            </motion.li>
-          ))}
-        </ul>
-        <div className="mt-8 grid gap-3 pb-10">
-          <button type="button" onClick={onOpenPalette} className="btn btn-quiet w-full justify-start">
-            <Icon name="search" size={16} /> Search and jump
-          </button>
-          <a href={PROFILE.resumePdfNamed} target="_blank" rel="noopener" className="btn btn-primary w-full">
-            Résumé (PDF) <HoverArrow />
-          </a>
-          <button
-            type="button"
-            onClick={() => {
-              onClose();
-              requestAnimationFrame(openBasecamp);
-            }}
-            className="btn btn-ghost w-full justify-start"
-          >
-            <Icon name="cube" size={16} /> Walk the 3D basecamp
-          </button>
-        </div>
-      </nav>
-    </motion.div>,
-    document.body,
   );
 }

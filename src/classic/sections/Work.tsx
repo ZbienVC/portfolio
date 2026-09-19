@@ -1,5 +1,5 @@
 import { AnimatePresence, LayoutGroup, motion, useMotionValue, useSpring } from 'motion/react';
-import { useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type RefObject } from 'react';
 import { HoverArrow, Icon } from '../components/Icon';
 import { Ink } from '../components/Ink';
 import { SectionHead } from '../components/SectionHead';
@@ -34,6 +34,7 @@ interface WorkProps {
 const SPANS = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7'];
 
 export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
+  const rail = useRef<HTMLDivElement>(null);
   return (
     <section id="work" aria-labelledby="work-title" className="section-y relative">
       <div className="guides" aria-hidden="true" />
@@ -45,11 +46,23 @@ export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
           lede="I designed, built and shipped each of these myself, from the database to the last hover state. Open any of them for the long version."
         />
 
-        <div className="mt-14 grid gap-x-8 gap-y-16 lg:grid-cols-12 [&>*]:min-w-0">
+        {/* on a phone the four are a row you swipe through, the next one peeking in; on a desktop, a grid */}
+        <motion.div
+          ref={rail}
+          layoutScroll
+          className="no-scrollbar mt-12 -mx-[calc(var(--gutter)+var(--inset))] flex snap-x snap-mandatory scroll-px-[calc(var(--gutter)+var(--inset))] gap-4 overflow-x-auto px-[calc(var(--gutter)+var(--inset))] pb-1 lg:mx-0 lg:mt-14 lg:grid lg:snap-none lg:grid-cols-12 lg:gap-x-8 lg:gap-y-16 lg:overflow-visible lg:px-0 lg:pb-0 [&>*]:min-w-0"
+        >
           {FLAGSHIPS.map((p, i) => (
-            <Flagship key={p.id} project={p} index={i} className={SPANS[i]} onOpen={() => onOpenProject(p.id, true)} />
+            <Flagship
+              key={p.id}
+              project={p}
+              index={i}
+              className={cn(SPANS[i], 'w-[84%] shrink-0 snap-start sm:w-[62%] lg:w-auto')}
+              onOpen={() => onOpenProject(p.id, true)}
+            />
           ))}
-        </div>
+        </motion.div>
+        <RailDots rail={rail} />
 
         <Ledger filter={filter} onFilter={onFilter} onOpenProject={onOpenProject} />
       </div>
@@ -70,18 +83,17 @@ function Flagship({ project: p, index, className, onOpen }: { project: Project; 
           alt={`${p.name}, the live site`}
         />
       </div>
-      <div className="mt-6 flex items-start justify-between gap-6">
-        <div className="min-w-0">
-          <h3 className="h3-type text-ink">
-            <button type="button" onClick={onOpen} data-project-card={p.id} className="text-left after:absolute after:inset-0 after:z-10 after:content-['']">
-              {p.name}
-            </button>
-          </h3>
-          <p className="mt-2 max-w-[34rem] text-[15.5px] leading-relaxed text-ink-2">{p.short}</p>
-        </div>
-        <span className="chip mt-1 shrink-0">{p.kind}</span>
+      {/* the kind sits on the name's line, so the description gets the card's full width */}
+      <div className="mt-6 flex items-center justify-between gap-4">
+        <h3 className="h3-type min-w-0 text-ink">
+          <button type="button" onClick={onOpen} data-project-card={p.id} className="text-left after:absolute after:inset-0 after:z-10 after:content-['']">
+            {p.name}
+          </button>
+        </h3>
+        <span className="chip shrink-0">{p.kind}</span>
       </div>
-      <ul className="mt-5 border-t border-rule">
+      <p className="mt-2 max-w-[34rem] text-[15.5px] leading-relaxed text-ink-2 max-lg:line-clamp-3">{p.short}</p>
+      <ul className="mt-5 border-t border-rule max-lg:hidden">
         {(p.highlights ?? []).slice(0, 3).map((h, i) => (
           <li key={h} className="flex gap-4 border-b border-rule py-2.5 text-[14px] text-ink-2">
             <span className="font-mono text-[11px] leading-[22px] text-ink-3 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
@@ -90,7 +102,7 @@ function Flagship({ project: p, index, className, onOpen }: { project: Project; 
         ))}
       </ul>
       <div className="relative z-20 mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-        <span className="flex flex-wrap gap-1.5">
+        <span className="flex flex-wrap gap-1.5 max-sm:hidden">
           {p.tags.slice(0, 4).map((t) => (
             <span key={t} className="chip">
               {t}
@@ -139,6 +151,48 @@ function Flagship({ project: p, index, className, onOpen }: { project: Project; 
   );
 }
 
+/** Where you are in the phone's row of four: tap a mark to go straight to that project. */
+function RailDots({ rail }: { rail: RefObject<HTMLDivElement | null> }) {
+  const [active, setActive] = useState(0);
+  const reduce = useReducedMotionPref();
+
+  useEffect(() => {
+    const el = rail.current;
+    if (!el) return;
+    const cards = [...el.children] as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setActive(cards.indexOf(e.target as HTMLElement));
+      },
+      { root: el, threshold: 0.6 },
+    );
+    cards.forEach((c) => io.observe(c));
+    return () => io.disconnect();
+  }, [rail]);
+
+  return (
+    <div className="mt-5 flex items-center gap-4 lg:hidden">
+      <div className="flex items-center">
+        {FLAGSHIPS.map((p, i) => (
+          <button
+            key={p.id}
+            type="button"
+            aria-label={`${p.name}, ${i + 1} of ${FLAGSHIPS.length}`}
+            aria-current={i === active ? 'true' : undefined}
+            onClick={() => rail.current?.children[i]?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'start', block: 'nearest' })}
+            className="grid h-8 min-w-7 place-items-center px-1.5"
+          >
+            <span className={cn('block h-1 rounded-full transition-[width,background-color] duration-300', i === active ? 'w-7 bg-amber' : 'w-2.5 bg-rule-2')} />
+          </button>
+        ))}
+      </div>
+      <span className="font-mono text-[11.5px] text-ink-3 tabular-nums">
+        {active + 1} / {FLAGSHIPS.length} · swipe for the next
+      </span>
+    </div>
+  );
+}
+
 /* ── The ledger: every project, filterable ─────────────────────────────────── */
 
 function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
@@ -162,7 +216,7 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
   };
 
   return (
-    <div id="ledger" className="mt-28 scroll-mt-28">
+    <div id="ledger" className="mt-16 scroll-mt-28 lg:mt-28">
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
         <div>
           <h3 className="h3-type text-ink">The whole ledger</h3>

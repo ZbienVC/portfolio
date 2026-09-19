@@ -187,7 +187,7 @@ function Row({ target, result, active, onHover, onOpen }: RowProps) {
       </th>
       <td className="hidden font-mono text-[11.5px] text-term-dim xs:table-cell">{target.host}</td>
       <td className="pr-4 text-right sm:pr-5">
-        <span className="inline-flex items-center justify-end gap-2.5 font-mono text-[12.5px] tabular-nums">
+        <span className="inline-flex items-center justify-end gap-2.5 font-mono text-[12.5px] whitespace-nowrap tabular-nums">
           <AnimatePresence mode="wait" initial={false}>
             <motion.span
               key={state}
@@ -200,7 +200,8 @@ function Row({ target, result, active, onHover, onOpen }: RowProps) {
               {state === 'up' ? `${result?.ms} ms` : state === 'down' ? 'no answer' : '···'}
             </motion.span>
           </AnimatePresence>
-          <span className="hidden h-[5px] w-14 overflow-hidden rounded-full bg-term-2 sm:block" aria-hidden="true">
+          {/* the bar steps aside where the board is narrowest (small laptops), so the times keep their room */}
+          <span className="hidden h-[5px] w-14 overflow-hidden rounded-full bg-term-2 sm:block lg:hidden xl:block" aria-hidden="true">
             <motion.span
               className="block h-full origin-left rounded-full bg-term-amber/70"
               initial={false}
