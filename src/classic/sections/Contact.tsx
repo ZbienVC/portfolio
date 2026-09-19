@@ -22,7 +22,7 @@ export function Contact({ onAsk }: { onAsk: () => void }) {
           Or numbers that don&apos;t tie out, or a product that should exist and doesn&apos;t. Those are my favorite problems. Write to me, I answer.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-3 lg:mt-10">
           <a href={`mailto:${PROFILE.email}`} className="btn bg-term-amber text-term shadow-[0_8px_24px_-10px_var(--term-amber)] hover:bg-[oklch(0.84_0.14_70)]">
             {PROFILE.email}
             <HoverArrow />
@@ -55,7 +55,7 @@ export function Contact({ onAsk }: { onAsk: () => void }) {
           </button>
         </div>
 
-        <ul className="mt-16 grid gap-px overflow-hidden rounded-lg bg-term-rule sm:grid-cols-3">
+        <ul className="mt-10 grid gap-px overflow-hidden rounded-lg bg-term-rule sm:grid-cols-3 lg:mt-16">
           {[
             { href: PROFILE.socials.linkedin, label: 'LinkedIn', sub: 'zach-bienstock', icon: 'linkedin' as const },
             { href: PROFILE.socials.github, label: 'GitHub', sub: 'ZbienVC', icon: 'github' as const },

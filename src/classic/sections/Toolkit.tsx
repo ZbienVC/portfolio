@@ -1,110 +1,19 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState } from 'react';
-import { HoverArrow, Icon } from '../components/Icon';
 import { Ink } from '../components/Ink';
 import { SectionHead } from '../components/SectionHead';
-import { MATRIX_COLUMNS, PRACTICE, TOOL_USAGE, type Tool } from '../lib/data';
+import { MATRIX_COLUMNS, PRACTICE, TOOL_USAGE } from '../lib/data';
 import { ease, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
-
-const MAX_USES = Math.max(...TOOL_USAGE.map((u) => u.columns.length));
-const columnName = (id: string) => MATRIX_COLUMNS.find((c) => c.id === id)?.name ?? id;
-
-/**
- * The matrix, for a phone: fourteen columns of rotated names don't fit a
- * narrow screen, so each tool is a row with a bar for how often it was used.
- * Tap one and it opens to the projects it went into, and a way to filter the
- * work by it.
- */
-function ToolList({ onFilterTool }: { onFilterTool: (toolId: string) => void }) {
-  const [open, setOpen] = useState<string | null>(null);
-  return (
-    <ul className="border-t border-rule lg:hidden">
-      {TOOL_USAGE.map(({ tool, columns }, i) => (
-        <ToolRow
-          key={tool.id}
-          tool={tool}
-          columns={columns}
-          index={i}
-          open={open === tool.id}
-          onToggle={() => setOpen((o) => (o === tool.id ? null : tool.id))}
-          onFilterTool={onFilterTool}
-        />
-      ))}
-    </ul>
-  );
-}
-
-interface ToolRowProps {
-  tool: Tool;
-  columns: string[];
-  index: number;
-  open: boolean;
-  onToggle: () => void;
-  onFilterTool: (toolId: string) => void;
-}
-function ToolRow({ tool, columns, index, open, onToggle, onFilterTool }: ToolRowProps) {
-  const panel = `tool-${tool.id}`;
-  return (
-    <li className="border-b border-rule">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        aria-controls={open ? panel : undefined}
-        className="flex min-h-[52px] w-full items-center gap-3 py-2 text-left"
-      >
-        <span className={cn('w-[7.75rem] shrink-0 text-[15px] font-[560] transition-colors', open ? 'text-ink' : 'text-ink-2')}>{tool.label}</span>
-        {/* how often, as a bar in the glaze's colors, drawn in as the row arrives */}
-        <span className="relative h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-rule" aria-hidden="true">
-          <motion.span
-            className="absolute inset-0 rounded-full bg-[linear-gradient(90deg,#7a1f24,#d8432a_50%,#ffb347)]"
-            style={{ originX: 0 }}
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: columns.length / MAX_USES }}
-            viewport={{ once: true }}
-            transition={{ ...spring.gentle, delay: index * 0.04 }}
-          />
-        </span>
-        <span className="w-6 shrink-0 text-right font-mono text-[12.5px] text-ink-2 tabular-nums">
-          {columns.length}
-          <span className="sr-only"> projects</span>
-        </span>
-        <Icon name="chevronDown" size={16} className={cn('shrink-0 text-ink-3 transition-transform duration-300', open && 'rotate-180')} />
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            id={panel}
-            className="overflow-hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ height: { duration: 0.36, ease: ease.out }, opacity: { duration: 0.2 } }}
-          >
-            <div className="pb-4">
-              <ul className="flex flex-wrap gap-1.5" aria-label={`Built with ${tool.label}`}>
-                {columns.map((id) => (
-                  <li key={id} className={cn('chip', id === 'this-site' && 'bg-amber-wash text-amber-ink')}>
-                    {columnName(id)}
-                  </li>
-                ))}
-              </ul>
-              <button type="button" onClick={() => onFilterTool(tool.id)} className="text-link mt-3.5 inline-flex items-center gap-1.5 text-[14px]">
-                Show the work built with {tool.label} <HoverArrow />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </li>
-  );
-}
 
 /**
  * Not a cloud of logos: a matrix read straight off the project data. Rows are
  * tools, columns are the things I shipped (this page included), and a dot is a
  * real use. Hover to cross-reference; click a tool to filter the work by it.
+ *
+ * On a phone the whole grid fits the screen instead of scrolling sideways under
+ * a pinned column: narrower columns, names that slant back over the empty space
+ * above the tool list (so none run off the right edge), tool names that may wrap.
  */
 export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => void }) {
   const [row, setRow] = useState<string | null>(null);
@@ -123,14 +32,12 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
               <span className="max-lg:hidden">
                 Every dot is a real use, read off the projects above rather than typed into a list. Hover a tool to see where it went; click it to filter the work by it.
               </span>
-              <span className="lg:hidden">
-                Every bar is a real count, read off the projects above rather than typed into a list. Tap a tool to see where it went.
-              </span>
+              <span className="lg:hidden">Every dot is a real use, read off the projects above. Tap a tool to filter the work by it.</span>
             </>
           }
         />
 
-        <div className="mt-14 grid gap-x-12 gap-y-14 lg:grid-cols-12 [&>*]:min-w-0">
+        <div className="mt-10 grid gap-x-12 gap-y-10 lg:mt-14 lg:grid-cols-12 lg:gap-y-14 [&>*]:min-w-0">
           <Ink
             id="matrix"
             type="bracket"
@@ -142,34 +49,36 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
             note="Nothing here was typed in twice. Each row is a tool's aliases matched against every project's tags, so the grid can't drift from the work."
             spec="uses = (tool, p) => p.tags.some(t => tool.aliases.includes(t))"
           >
-            <ToolList onFilterTool={onFilterTool} />
-            <div className="relative hidden overflow-x-auto pb-2 lg:block" onPointerLeave={() => { setRow(null); setCol(null); }}>
-              <table className="w-full min-w-[40rem] border-collapse">
+            <div
+              className="relative -mx-[calc(var(--gutter)+var(--inset)-12px)] lg:mx-0 lg:overflow-x-auto lg:pb-2"
+              onPointerLeave={() => {
+                setRow(null);
+                setCol(null);
+              }}
+            >
+              <table className="w-full border-collapse max-lg:table-fixed lg:min-w-[40rem]">
                 <caption className="sr-only">Which tools were used in which projects</caption>
                 <thead>
                   <tr>
-                    <th scope="col" className="sticky left-0 z-10 w-[10.5rem] bg-paper-2 text-left align-bottom">
+                    <th scope="col" className="w-[6.25rem] bg-paper-2 text-left align-bottom lg:sticky lg:left-0 lg:z-10 lg:w-[10.5rem]">
                       <span className="label-type">Tool</span>
                     </th>
                     {MATRIX_COLUMNS.map((c) => (
-                      <th
-                        key={c.id}
-                        scope="col"
-                        className="h-36 w-8 px-0 align-bottom font-normal"
-                        onPointerEnter={() => setCol(c.id)}
-                      >
+                      <th key={c.id} scope="col" className="relative h-[104px] px-0 align-bottom font-normal lg:h-36 lg:w-8" onPointerEnter={() => setCol(c.id)}>
                         <span
                           className={cn(
-                            'mx-auto block origin-bottom-left translate-x-[14px] -rotate-[58deg] text-left text-[12.5px] whitespace-nowrap transition-colors',
+                            // a phone: the name ends at its column and slants back up to the left
+                            'absolute right-1/2 bottom-1.5 origin-bottom-right rotate-[58deg] text-[11px] whitespace-nowrap transition-colors',
+                            // a desktop: it starts at its column and rises to the right
+                            'lg:static lg:mx-auto lg:block lg:w-6 lg:origin-bottom-left lg:translate-x-[14px] lg:-rotate-[58deg] lg:text-left lg:text-[12.5px]',
                             c.self ? 'font-[620] text-amber-ink' : col === c.id ? 'text-ink' : 'text-ink-3',
-                            'w-6',
                           )}
                         >
                           {c.name}
                         </span>
                       </th>
                     ))}
-                    <th scope="col" className="w-12 pl-3 text-right align-bottom">
+                    <th scope="col" className="w-8 pl-1 text-right align-bottom lg:w-12 lg:pl-3">
                       <span className="label-type">Uses</span>
                     </th>
                   </tr>
@@ -179,18 +88,18 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
                     const hot = row === tool.id;
                     return (
                       <tr key={tool.id} onPointerEnter={() => setRow(tool.id)} className="group">
-                        <th scope="row" className="sticky left-0 z-10 bg-paper-2 py-0 pr-4 text-left font-normal">
+                        <th scope="row" className="bg-paper-2 py-0 pr-2 text-left font-normal lg:sticky lg:left-0 lg:z-10 lg:pr-4">
                           <button
                             type="button"
                             onClick={() => onFilterTool(tool.id)}
                             onFocus={() => setRow(tool.id)}
                             className={cn(
-                              'flex h-9 w-full items-center gap-2 border-b border-rule text-[14px] whitespace-nowrap transition-colors',
+                              'flex h-9 w-full items-center gap-2 border-b border-rule text-left text-[13px] leading-tight transition-colors lg:text-[14px] lg:whitespace-nowrap',
                               hot ? 'text-ink' : 'text-ink-2',
                             )}
                             title={`Show the work built with ${tool.label}`}
                           >
-                            <span className={cn('h-3 w-0.5 rounded-full transition-colors', hot ? 'bg-amber' : 'bg-transparent')} aria-hidden="true" />
+                            <span className={cn('h-3 w-0.5 shrink-0 rounded-full transition-colors', hot ? 'bg-amber' : 'bg-transparent')} aria-hidden="true" />
                             {tool.label}
                           </button>
                         </th>
@@ -222,7 +131,7 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
                             </td>
                           );
                         })}
-                        <td className="h-9 border-b border-rule pl-3 text-right font-mono text-[12.5px] text-ink-2 tabular-nums">{columns.length}</td>
+                        <td className="h-9 border-b border-rule pl-1 text-right font-mono text-[12px] text-ink-2 tabular-nums lg:pl-3 lg:text-[12.5px]">{columns.length}</td>
                       </tr>
                     );
                   })}
@@ -233,7 +142,7 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
 
           <div className="min-w-0 lg:col-span-4">
             <h3 className="label-type">And the part that isn&apos;t code</h3>
-            <div className="mt-4 grid gap-7 border-t border-rule pt-6">
+            <div className="mt-4 grid gap-5 border-t border-rule pt-5 lg:gap-7 lg:pt-6">
               {PRACTICE.map((g, i) => (
                 <motion.div
                   key={g.title}
@@ -243,9 +152,10 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
                   transition={{ duration: 0.6, ease: ease.out, delay: i * 0.06 }}
                 >
                   <h4 className="text-[16px] font-[640] text-ink [font-stretch:106%]">{g.title}</h4>
-                  <ul className="mt-2 grid gap-1">
+                  {/* a phone runs each group's items together as one line of text; a desktop lists them */}
+                  <ul className="mt-1.5 text-[14.5px] leading-relaxed text-ink-2 lg:mt-2 lg:grid lg:gap-1">
                     {g.items.map((it) => (
-                      <li key={it} className="text-[14.5px] text-ink-2">
+                      <li key={it} className="inline after:mx-1.5 after:text-ink-3 after:content-['·'] last:after:content-none lg:block lg:after:content-none">
                         {it}
                       </li>
                     ))}

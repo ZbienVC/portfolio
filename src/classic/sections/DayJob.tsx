@@ -47,7 +47,7 @@ export function DayJob() {
   return (
     <section id="day-job" aria-labelledby="day-job-title" className="section-y relative bg-paper-2">
       <div className="guides" aria-hidden="true" />
-      <div className="container-x relative grid gap-x-12 gap-y-12 lg:grid-cols-12 [&>*]:min-w-0">
+      <div className="container-x relative grid gap-x-12 gap-y-10 lg:grid-cols-12 lg:gap-y-12 [&>*]:min-w-0">
         <div className="lg:col-span-5">
           <SectionHead
             id="day-job-title"
@@ -55,13 +55,13 @@ export function DayJob() {
             title="I run the books for two telecom companies. The filing runs itself."
             lede="Payables, receivables, carrier and agent commissions, the monthly close. Invoices and carrier statements used to be renamed, filed and keyed into QuickBooks by hand. Now code I wrote does that, which takes about 30 hours of data entry out of every month."
           />
-          <ul className="mt-10 border-t border-rule">
+          <ul className="mt-8 border-t border-rule lg:mt-10">
             {[
               ['30 hrs', 'of filing and data entry taken out of every month'],
               ['2', 'companies’ books: AP, AR, commissions, the close'],
               ['499-Q', 'FCC revenue reporting, pulled straight from billing data'],
             ].map(([n, t]) => (
-              <li key={n} className="flex items-baseline gap-5 border-b border-rule py-4">
+              <li key={n} className="flex items-baseline gap-5 border-b border-rule py-3 lg:py-4">
                 <span className="w-[5.5rem] shrink-0 text-[26px] font-[700] tracking-[-0.03em] text-ink tabular-nums [font-stretch:112%]">{n}</span>
                 <span className="text-[15px] text-ink-2">{t}</span>
               </li>
@@ -234,7 +234,7 @@ function Payables() {
       {/* the pipeline */}
       <div
         ref={zone}
-        className={cn('relative min-h-[300px] bg-paper p-4 transition-colors duration-200 sm:p-5', over && 'bg-amber-wash')}
+        className={cn('relative min-h-[220px] bg-paper p-4 transition-colors duration-200 sm:min-h-[300px] sm:p-5', over && 'bg-amber-wash')}
       >
         <div className={cn('pointer-events-none absolute inset-2 rounded-lg border border-dashed transition-colors', over ? 'border-amber' : 'border-transparent')} />
         {current ? (

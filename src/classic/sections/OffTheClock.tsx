@@ -12,7 +12,7 @@ export function OffTheClock() {
   return (
     <section id="off-the-clock" aria-labelledby="otc-title" className="section-y relative overflow-hidden">
       <div className="guides" aria-hidden="true" />
-      <div className="container-x relative grid items-center gap-x-12 gap-y-16 lg:grid-cols-12 [&>*]:min-w-0">
+      <div className="container-x relative grid items-center gap-x-12 gap-y-10 lg:grid-cols-12 lg:gap-y-16 [&>*]:min-w-0">
         <div className="lg:col-span-5">
           <SectionHead
             id="otc-title"
@@ -106,7 +106,7 @@ function PhotoPile() {
     >
       <div
         ref={scope}
-        className="relative mx-auto grid h-[min(480px,108vw)] w-full max-w-[560px] place-items-center select-none"
+        className="relative mx-auto grid h-[min(480px,96vw)] w-full max-w-[560px] place-items-center select-none"
         role="region"
         aria-roledescription="photo stack"
         aria-label="Photos from off the clock. Use the arrow keys to go through them."
