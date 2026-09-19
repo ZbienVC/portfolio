@@ -1,5 +1,10 @@
 // api/contact.js — sends email via Resend + SMS via Twilio
 
+// Visitor text lands in an HTML email, so it's escaped first: a message can't
+// inject markup, links or tracking pixels into the inbox.
+const esc = (v) =>
+  String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -25,7 +30,7 @@ export default async function handler(req, res) {
       const conversationHtml = conversation?.length
         ? `<hr/><h3>Chat Context</h3><div style="background:#f5f5f5;padding:12px;border-radius:6px;font-family:monospace;font-size:13px">${
             conversation.map(m =>
-              `<p><strong>${m.role === 'user' ? '👤 Visitor' : '🤖 Assistant'}:</strong> ${m.content}</p>`
+              `<p><strong>${m.role === 'user' ? '👤 Visitor' : '🤖 Assistant'}:</strong> ${esc(m.content)}</p>`
             ).join('')
           }</div>`
         : '';
@@ -39,15 +44,15 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           from: 'Portfolio Contact <onboarding@resend.dev>',
           to: 'zbienstock@gmail.com',
-          subject: `New message from ${name} — zachbienstock.com`,
+          subject: `New message from ${String(name).slice(0, 80)} — zachbienstock.com`,
           html: `
             <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
               <h2 style="color:#10d9a0">New Portfolio Contact</h2>
-              <p><strong>Name:</strong> ${name}</p>
-              <p><strong>Email:</strong> ${email || 'Not provided'}</p>
+              <p><strong>Name:</strong> ${esc(name)}</p>
+              <p><strong>Email:</strong> ${email ? esc(email) : 'Not provided'}</p>
               <hr/>
               <h3>Message</h3>
-              <p style="background:#f9f9f9;padding:16px;border-radius:8px;border-left:4px solid #10d9a0">${message}</p>
+              <p style="background:#f9f9f9;padding:16px;border-radius:8px;border-left:4px solid #10d9a0">${esc(message)}</p>
               ${conversationHtml}
               <hr/>
               <p style="color:#999;font-size:12px">Sent from zachbienstock.com portfolio chat</p>
