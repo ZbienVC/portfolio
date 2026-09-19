@@ -11,12 +11,12 @@ document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0e
 
 // The 3D basecamp and its stylesheets, loaded only when this mode is chosen.
 // Inside the classic site's window it drops what the host page already has:
-// the way back to the classic site, and the chat.
+// its nav (with the way back to the classic site) and the chat.
 export default function InteractiveMode() {
   const embedded = isEmbedded();
   return (
     <>
-      <HubExperience onClassic={embedded ? undefined : () => switchMode('classic')} />
+      <HubExperience embedded={embedded} onClassic={embedded ? undefined : () => switchMode('classic')} />
       {!embedded && <ChatWidget />}
     </>
   );
