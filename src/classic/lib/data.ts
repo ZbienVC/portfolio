@@ -70,7 +70,7 @@ export const ALSO_SHIPPED = PROJECTS.filter((p) => !(FLAGSHIP_IDS as readonly st
 export const FILTERS = [
   { id: 'all', label: 'Everything' },
   { id: 'ai', label: 'AI & data' },
-  { id: 'crypto', label: 'On-chain' },
+  { id: 'crypto', label: 'Crypto' },
   { id: 'web', label: 'Sites & games' },
 ] as const;
 export type FilterId = (typeof FILTERS)[number]['id'];
@@ -189,19 +189,19 @@ export const TOOL_USAGE = TOOLS.map((tool) => ({
   columns: MATRIX_COLUMNS.filter((c) => uses(tool, c)).map((c) => c.id),
 })).sort((a, b) => b.columns.length - a.columns.length);
 
-// What the résumé lists beyond code (public/Zachary_Bienstock_Resume.pdf, Skills).
+// The résumé's skills that aren't a tool in the matrix (public/Zachary_Bienstock_Resume.pdf, Skills).
 export const PRACTICE = [
   {
-    title: 'AI & LLM engineering',
-    items: ['Production LLM integrations: Claude, GPT, Gemini', 'Agent tooling on the Anthropic SDK Tool Runner', 'AI-assisted development, spec to ship'],
+    title: 'AI and LLMs',
+    items: ['Claude, GPT and Gemini inside live products', "Agents on the Anthropic SDK's Tool Runner", 'AI coding tools, from spec to launch'],
   },
   {
-    title: 'Workflow & automation',
-    items: ['Document intake and filing', 'IIF journal generation and QuickBooks imports', 'Statement comparison and exception reports'],
+    title: 'Automation',
+    items: ['Getting documents in and filed', 'QuickBooks imports (IIF journals)', "Comparing statements and flagging what's off"],
   },
   {
     title: 'Finance & accounting',
-    items: ['AP/AR, reconciliation, the monthly close', 'Carrier and agent commission accounting', 'FCC Form 499-Q revenue reporting'],
+    items: ['Payables, receivables, reconciliation, the monthly close', 'Carrier and agent commission accounting', 'FCC Form 499-Q revenue reporting'],
   },
   {
     title: 'Data & analysis',

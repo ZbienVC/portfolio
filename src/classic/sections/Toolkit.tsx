@@ -30,9 +30,9 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
           lede={
             <>
               <span className="max-lg:hidden">
-                Every dot is a real use, read off the projects above rather than typed into a list. Hover a tool to see where it went; click it to filter the work by it.
+                Each dot means I used that tool on that project. Hover a tool to see where; click it to see just those projects.
               </span>
-              <span className="lg:hidden">Every dot is a real use, read off the projects above. Tap a tool to filter the work by it.</span>
+              <span className="lg:hidden">Each dot means I used that tool on that project. Tap a tool to see just those projects.</span>
             </>
           }
         />
@@ -46,7 +46,7 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
             place="below"
             className="min-w-0 lg:col-span-8"
             noteClassName="!top-[calc(100%+16px)] !left-[30%]"
-            note="Nothing here was typed in twice. Each row is a tool's aliases matched against every project's tags, so the grid can't drift from the work."
+            note="Nothing here is typed in by hand. The grid is worked out from each project's own tags, so it can't fall out of date."
             spec="uses = (tool, p) => p.tags.some(t => tool.aliases.includes(t))"
           >
             <div
@@ -97,7 +97,7 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
                               'flex h-9 w-full items-center gap-2 border-b border-rule text-left text-[13px] leading-tight transition-colors lg:text-[14px] lg:whitespace-nowrap',
                               hot ? 'text-ink' : 'text-ink-2',
                             )}
-                            title={`Show the work built with ${tool.label}`}
+                            title={`Show the projects built with ${tool.label}`}
                           >
                             <span className={cn('h-3 w-0.5 shrink-0 rounded-full transition-colors', hot ? 'bg-amber' : 'bg-transparent')} aria-hidden="true" />
                             {tool.label}
@@ -141,7 +141,7 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
           </Ink>
 
           <div className="min-w-0 lg:col-span-4">
-            <h3 className="label-type">And the part that isn&apos;t code</h3>
+            <h3 className="label-type">Skills that don&apos;t fit in a grid</h3>
             <div className="mt-4 grid gap-5 border-t border-rule pt-5 lg:gap-7 lg:pt-6">
               {PRACTICE.map((g, i) => (
                 <motion.div

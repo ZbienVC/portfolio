@@ -29,7 +29,7 @@ export default function ContactPanel({ waypoint }) {
       no="07"
       label={waypoint?.title || 'Trailhead'}
       altitude={waypoint?.altitude || '720 m'}
-      title={<>Let's build something <span className="serif-italic">together</span></>}
+      title={<>Got a process someone still does <span className="serif-italic">by hand</span>?</>}
       intro={CONTACT.body}
     >
       <div className="contact-links reveal d2">

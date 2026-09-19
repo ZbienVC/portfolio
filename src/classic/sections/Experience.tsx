@@ -38,7 +38,7 @@ export function Experience() {
               id="experience-title"
               label="Experience"
               title="Five years with the numbers."
-              lede="Financial services, telecom and startups: surveillance data at Bloomberg, capital raises in investment banking, savings models at Grapevine, and now the books for two telecom companies."
+              lede="Capital raises in investment banking, surveillance data at Bloomberg, savings models at Grapevine, and now the books for two telecom companies."
             />
             <dl className="mt-8 grid gap-5 border-t border-rule pt-5 lg:mt-10 lg:pt-6">
               <div>
@@ -61,7 +61,7 @@ export function Experience() {
                 Résumé: building with AI <HoverArrow />
               </a>
               <a href={PROFILE.resumePdf} target="_blank" rel="noopener" className="btn btn-sm btn-quiet">
-                <Icon name="file" size={15} /> Finance first
+                <Icon name="file" size={15} /> Résumé: finance first
               </a>
             </div>
           </div>
@@ -76,7 +76,7 @@ export function Experience() {
             as="div"
             className="mb-2 h-0"
             noteClassName="!bottom-[calc(100%+6px)] !left-10"
-            note="This rule draws as you read, and each role stays lit once it's reached. It's a scaleY on the compositor, so it costs nothing to scroll."
+            note="This line draws itself as you read, and each role stays lit once the line reaches it. It only animates a transform, so scrolling stays smooth."
             spec="useScroll({ target, offset: ['start 72%', 'end 58%'] })"
           >
             <span />

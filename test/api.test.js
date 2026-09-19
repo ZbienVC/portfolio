@@ -152,6 +152,16 @@ describe('api/chat', () => {
     assert.deepEqual(sent.messages.slice(1), [{ role: 'user', content: 'What has Zach built?' }]);
   });
 
+  it('hands back plain text when the model writes markdown anyway', async () => {
+    reply = () =>
+      Response.json({
+        choices: [{ message: { content: '## Projects\n- **Oikos**: see [the site](https://example.com)\n- __WayFound__: https://example.com' } }],
+      });
+    const res = await call(chat, { ip: nextIp(), body: ask('Which projects use AI agents?') });
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.content, 'Projects\n- Oikos: see the site (https://example.com)\n- WayFound: https://example.com');
+  });
+
   it("drops the visitor's system and developer messages and any other fields", async () => {
     const res = await call(chat, {
       body: {

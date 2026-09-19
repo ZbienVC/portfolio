@@ -82,7 +82,7 @@ export function Contact({ onAsk }: { onAsk: () => void }) {
         <p>Designed and built by {PROFILE.name}, {PROFILE.location}. React, Motion, and a WebGL shader.</p>
         <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span>
-            Press <kbd className="kbd bg-term-2 text-term-ink shadow-[inset_0_0_0_1px_var(--term-rule)]">W</kbd> to show the work
+            Press <kbd className="kbd bg-term-2 text-term-ink shadow-[inset_0_0_0_1px_var(--term-rule)]">W</kbd> for notes on how it&apos;s built
           </span>
           <button type="button" onClick={openBasecamp} className="inline-flex items-center gap-1.5 hover:text-term-ink">
             <Icon name="cube" size={14} /> Walk the 3D basecamp

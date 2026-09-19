@@ -46,8 +46,8 @@ export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
         <SectionHead
           id="work-title"
           label={`Work · ${LIVE_COUNT} live sites`}
-          title="Fourteen shipped. Four to start with."
-          lede="I designed, built and shipped each of these myself, from the database to the last hover state. Open any of them for the long version."
+          title="I've shipped fourteen. Start with these four."
+          lede="I designed and built every one of them myself, from the database to the last button. Open any of them for the long version."
         />
 
         {/* on a phone the four are a row you swipe through, the next one peeking in; on a desktop, a grid */}
@@ -166,7 +166,7 @@ function LiveDot({ project }: { project: Project }) {
   const result = board.results[target.key];
   const state = result?.state ?? 'pending';
   const said =
-    state === 'up' ? `Live: answered your browser in ${result?.ms} ms` : state === 'down' ? 'Not answering right now' : 'Checking whether it’s up';
+    state === 'up' ? `Up right now (answered in ${result?.ms} ms)` : state === 'down' ? 'Not answering right now' : 'Checking whether it’s up';
   return <span className="dot shrink-0 lg:hidden" data-state={state} role="img" aria-label={said} title={said} />;
 }
 
@@ -206,7 +206,7 @@ function RailDots({ rail }: { rail: RefObject<HTMLDivElement | null> }) {
         ))}
       </div>
       <span className="font-mono text-[11.5px] text-ink-3 tabular-nums">
-        {active + 1} / {FLAGSHIPS.length} · swipe for the next
+        {active + 1} / {FLAGSHIPS.length} · swipe for more
       </span>
     </div>
   );
@@ -238,7 +238,7 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
     <div id="ledger" className="mt-12 scroll-mt-28 lg:mt-28">
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
         <div>
-          <h3 className="h3-type text-ink">The whole ledger</h3>
+          <h3 className="h3-type text-ink">Everything I&apos;ve shipped</h3>
           <p className="mt-1.5 font-mono text-[12.5px] text-ink-3" aria-live="polite">
             {items.length} project{items.length === 1 ? '' : 's'} · {sites} live site{sites === 1 ? '' : 's'}
             {tool && <> · built with {tool.label}</>}
