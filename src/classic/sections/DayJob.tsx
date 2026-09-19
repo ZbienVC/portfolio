@@ -81,7 +81,8 @@ export function DayJob() {
             spec="Motion drag → drop zone hit-test → layoutId hand-off"
           >
             <div className="overflow-hidden rounded-xl bg-paper shadow-[0_0_0_1px_var(--rule),var(--shadow-panel)]">
-              <div className="flex items-center gap-1 border-b border-rule bg-paper-2 px-2 py-2">
+              {/* the tabs keep one line each; on a narrow screen the disclaimer takes the next line */}
+              <div className="flex flex-wrap items-center gap-1 border-b border-rule bg-paper-2 px-2 py-2">
                 <LayoutGroup id="dayjob-tabs">
                   {(
                     [
@@ -94,7 +95,7 @@ export function DayJob() {
                       type="button"
                       aria-pressed={tab === id}
                       onClick={() => setTab(id)}
-                      className={cn('relative h-8 rounded-md px-3 text-[13.5px] font-[560]', tab === id ? 'text-ink' : 'text-ink-2 hover:text-ink')}
+                      className={cn('relative h-8 shrink-0 rounded-md px-3 text-[13.5px] font-[560] whitespace-nowrap', tab === id ? 'text-ink' : 'text-ink-2 hover:text-ink')}
                     >
                       {tab === id && (
                         <motion.span
@@ -107,7 +108,7 @@ export function DayJob() {
                     </button>
                   ))}
                 </LayoutGroup>
-                <span className="ml-auto pr-2 font-mono text-[11px] text-ink-3">invented data, real steps</span>
+                <span className="w-full px-3 pt-1 pb-0.5 font-mono text-[11px] text-ink-3 sm:ml-auto sm:w-auto sm:p-0 sm:pr-2">invented data, real steps</span>
               </div>
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div

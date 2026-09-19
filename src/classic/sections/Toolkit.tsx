@@ -1,10 +1,105 @@
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
+import { HoverArrow, Icon } from '../components/Icon';
 import { Ink } from '../components/Ink';
 import { SectionHead } from '../components/SectionHead';
-import { MATRIX_COLUMNS, PRACTICE, TOOL_USAGE } from '../lib/data';
+import { MATRIX_COLUMNS, PRACTICE, TOOL_USAGE, type Tool } from '../lib/data';
 import { ease, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
+
+const MAX_USES = Math.max(...TOOL_USAGE.map((u) => u.columns.length));
+const columnName = (id: string) => MATRIX_COLUMNS.find((c) => c.id === id)?.name ?? id;
+
+/**
+ * The matrix, for a phone: fourteen columns of rotated names don't fit a
+ * narrow screen, so each tool is a row with a bar for how often it was used.
+ * Tap one and it opens to the projects it went into, and a way to filter the
+ * work by it.
+ */
+function ToolList({ onFilterTool }: { onFilterTool: (toolId: string) => void }) {
+  const [open, setOpen] = useState<string | null>(null);
+  return (
+    <ul className="border-t border-rule lg:hidden">
+      {TOOL_USAGE.map(({ tool, columns }, i) => (
+        <ToolRow
+          key={tool.id}
+          tool={tool}
+          columns={columns}
+          index={i}
+          open={open === tool.id}
+          onToggle={() => setOpen((o) => (o === tool.id ? null : tool.id))}
+          onFilterTool={onFilterTool}
+        />
+      ))}
+    </ul>
+  );
+}
+
+interface ToolRowProps {
+  tool: Tool;
+  columns: string[];
+  index: number;
+  open: boolean;
+  onToggle: () => void;
+  onFilterTool: (toolId: string) => void;
+}
+function ToolRow({ tool, columns, index, open, onToggle, onFilterTool }: ToolRowProps) {
+  const panel = `tool-${tool.id}`;
+  return (
+    <li className="border-b border-rule">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={open ? panel : undefined}
+        className="flex min-h-[52px] w-full items-center gap-3 py-2 text-left"
+      >
+        <span className={cn('w-[7.75rem] shrink-0 text-[15px] font-[560] transition-colors', open ? 'text-ink' : 'text-ink-2')}>{tool.label}</span>
+        {/* how often, as a bar in the glaze's colors, drawn in as the row arrives */}
+        <span className="relative h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-rule" aria-hidden="true">
+          <motion.span
+            className="absolute inset-0 rounded-full bg-[linear-gradient(90deg,#7a1f24,#d8432a_50%,#ffb347)]"
+            style={{ originX: 0 }}
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: columns.length / MAX_USES }}
+            viewport={{ once: true }}
+            transition={{ ...spring.gentle, delay: index * 0.04 }}
+          />
+        </span>
+        <span className="w-6 shrink-0 text-right font-mono text-[12.5px] text-ink-2 tabular-nums">
+          {columns.length}
+          <span className="sr-only"> projects</span>
+        </span>
+        <Icon name="chevronDown" size={16} className={cn('shrink-0 text-ink-3 transition-transform duration-300', open && 'rotate-180')} />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            id={panel}
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ height: { duration: 0.36, ease: ease.out }, opacity: { duration: 0.2 } }}
+          >
+            <div className="pb-4">
+              <ul className="flex flex-wrap gap-1.5" aria-label={`Built with ${tool.label}`}>
+                {columns.map((id) => (
+                  <li key={id} className={cn('chip', id === 'this-site' && 'bg-amber-wash text-amber-ink')}>
+                    {columnName(id)}
+                  </li>
+                ))}
+              </ul>
+              <button type="button" onClick={() => onFilterTool(tool.id)} className="text-link mt-3.5 inline-flex items-center gap-1.5 text-[14px]">
+                Show the work built with {tool.label} <HoverArrow />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
+  );
+}
 
 /**
  * Not a cloud of logos: a matrix read straight off the project data. Rows are
@@ -23,7 +118,16 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
           id="toolkit-title"
           label="Toolkit"
           title="The tools, and where each one went."
-          lede="Every dot is a real use, read off the projects above rather than typed into a list. Hover a tool to see where it went; click it to filter the work by it."
+          lede={
+            <>
+              <span className="max-lg:hidden">
+                Every dot is a real use, read off the projects above rather than typed into a list. Hover a tool to see where it went; click it to filter the work by it.
+              </span>
+              <span className="lg:hidden">
+                Every bar is a real count, read off the projects above rather than typed into a list. Tap a tool to see where it went.
+              </span>
+            </>
+          }
         />
 
         <div className="mt-14 grid gap-x-12 gap-y-14 lg:grid-cols-12 [&>*]:min-w-0">
@@ -38,7 +142,8 @@ export function Toolkit({ onFilterTool }: { onFilterTool: (toolId: string) => vo
             note="Nothing here was typed in twice. Each row is a tool's aliases matched against every project's tags, so the grid can't drift from the work."
             spec="uses = (tool, p) => p.tags.some(t => tool.aliases.includes(t))"
           >
-            <div className="relative -mx-[calc(var(--gutter)+var(--inset))] overflow-x-auto px-[calc(var(--gutter)+var(--inset))] pb-2 lg:mx-0 lg:px-0" onPointerLeave={() => { setRow(null); setCol(null); }}>
+            <ToolList onFilterTool={onFilterTool} />
+            <div className="relative hidden overflow-x-auto pb-2 lg:block" onPointerLeave={() => { setRow(null); setCol(null); }}>
               <table className="w-full min-w-[40rem] border-collapse">
                 <caption className="sr-only">Which tools were used in which projects</caption>
                 <thead>
