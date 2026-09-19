@@ -7,6 +7,7 @@ import { Shot } from '../components/Shot';
 import {
   ALSO_SHIPPED,
   FILTERS,
+  PING_TARGETS,
   FLAGSHIPS,
   LIVE_COUNT,
   PROJECTS,
@@ -20,6 +21,7 @@ import {
   type Project,
 } from '../lib/data';
 import { useFinePointer, useReducedMotionPref } from '../lib/hooks';
+import { startPingsOnce, useBoard } from '../lib/pings';
 import { ease, fade, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
 
@@ -35,6 +37,8 @@ const SPANS = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7
 
 export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
   const rail = useRef<HTMLDivElement>(null);
+  // the checks the desktop board makes; on a phone the cards' dots are what shows them
+  useEffect(() => startPingsOnce(), []);
   return (
     <section id="work" aria-labelledby="work-title" className="section-y relative">
       <div className="guides" aria-hidden="true" />
@@ -85,11 +89,14 @@ function Flagship({ project: p, index, className, onOpen }: { project: Project; 
       </div>
       {/* the kind sits on the name's line, so the description gets the card's full width */}
       <div className="mt-6 flex items-center justify-between gap-4">
-        <h3 className="h3-type min-w-0 text-ink">
-          <button type="button" onClick={onOpen} data-project-card={p.id} className="text-left after:absolute after:inset-0 after:z-10 after:content-['']">
-            {p.name}
-          </button>
-        </h3>
+        <span className="flex min-w-0 items-center gap-3">
+          <LiveDot project={p} />
+          <h3 className="h3-type min-w-0 text-ink">
+            <button type="button" onClick={onOpen} data-project-card={p.id} className="text-left after:absolute after:inset-0 after:z-10 after:content-['']">
+              {p.name}
+            </button>
+          </h3>
+        </span>
         <span className="chip shrink-0">{p.kind}</span>
       </div>
       <p className="mt-2 max-w-[34rem] text-[15.5px] leading-relaxed text-ink-2 max-lg:line-clamp-3">{p.short}</p>
@@ -149,6 +156,18 @@ function Flagship({ project: p, index, className, onOpen }: { project: Project; 
       )}
     </motion.article>
   );
+}
+
+/** On a phone, a project's live check from this visit: green when its site answered, red when it didn't. */
+function LiveDot({ project }: { project: Project }) {
+  const board = useBoard();
+  const target = PING_TARGETS.find((t) => t.projectId === project.id);
+  if (!target) return null;
+  const result = board.results[target.key];
+  const state = result?.state ?? 'pending';
+  const said =
+    state === 'up' ? `Live: answered your browser in ${result?.ms} ms` : state === 'down' ? 'Not answering right now' : 'Checking whether it’s up';
+  return <span className="dot shrink-0 lg:hidden" data-state={state} role="img" aria-label={said} title={said} />;
 }
 
 /** Where you are in the phone's row of four: tap a mark to go straight to that project. */

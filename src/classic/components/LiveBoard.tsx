@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LIVE_COUNT, PING_TARGETS, shotId, shotSrc, showsShot, type PingTarget } from '../lib/data';
 import { runPings, startPingsOnce, useBoard, type PingResult } from '../lib/pings';
-import { useMedia } from '../lib/hooks';
 import { ease, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
 import { Icon } from './Icon';
@@ -21,12 +20,6 @@ const barFor = (ms: number) => Math.max(0.06, Math.min(1, Math.log10(Math.max(ms
 export function LiveBoard({ onOpenProject }: { onOpenProject: (id: string) => void }) {
   const board = useBoard();
   const [hover, setHover] = useState<PingTarget | null>(null);
-  // a desktop has room for all fourteen rows beside the headline; a phone gets the count and
-  // the one-line verdict, with the rows a tap away
-  const wide = useMedia('(min-width: 1024px)');
-  const [open, setOpen] = useState(false);
-  const expanded = wide || open;
-  const sitesId = useId();
 
   useEffect(() => startPingsOnce(), []);
 
@@ -74,52 +67,38 @@ export function LiveBoard({ onOpenProject }: { onOpenProject: (id: string) => vo
           </button>
         </div>
 
-        <AnimatePresence initial={false}>
-          {expanded && (
-            <motion.div
-              key="sites"
-              id={sitesId}
-              className="overflow-hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ height: { duration: 0.42, ease: ease.out }, opacity: { duration: 0.24 } }}
-            >
-              <table className="w-full border-collapse text-left">
-                <caption className="sr-only">
-                  Each of my {LIVE_COUNT} live sites, checked from your browser when this page loaded
-                </caption>
-                <thead>
-                  <tr className="font-mono text-[10.5px] tracking-[0.08em] text-term-dim">
-                    <th scope="col" className="py-2.5 pl-4 font-normal sm:pl-5">
-                      SITE
-                    </th>
-                    <th scope="col" className="hidden py-2.5 font-normal xs:table-cell">
-                      WHERE
-                    </th>
-                    <th scope="col" className="py-2.5 pr-4 text-right font-normal sm:pr-5">
-                      ANSWERED IN
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {PING_TARGETS.map((t) => (
-                    <Row
-                      key={t.key}
-                      target={t}
-                      result={board.results[t.key]}
-                      active={hover?.key === t.key}
-                      onHover={setHover}
-                      onOpen={() => onOpenProject(t.projectId)}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <table className="w-full border-collapse text-left">
+          <caption className="sr-only">
+            Each of my {LIVE_COUNT} live sites, checked from your browser when this page loaded
+          </caption>
+          <thead>
+            <tr className="font-mono text-[10.5px] tracking-[0.08em] text-term-dim">
+              <th scope="col" className="py-2.5 pl-4 font-normal sm:pl-5">
+                SITE
+              </th>
+              <th scope="col" className="hidden py-2.5 font-normal xs:table-cell">
+                WHERE
+              </th>
+              <th scope="col" className="py-2.5 pr-4 text-right font-normal sm:pr-5">
+                ANSWERED IN
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {PING_TARGETS.map((t) => (
+              <Row
+                key={t.key}
+                target={t}
+                result={board.results[t.key]}
+                active={hover?.key === t.key}
+                onHover={setHover}
+                onOpen={() => onOpenProject(t.projectId)}
+              />
+            ))}
+          </tbody>
+        </table>
 
-        <div className={cn('px-4 py-3 text-[12.5px] leading-relaxed text-term-dim sm:px-5', expanded && 'border-t border-term-rule')} aria-live="polite">
+        <div className="border-t border-term-rule px-4 py-3 text-[12.5px] leading-relaxed text-term-dim sm:px-5" aria-live="polite">
           {/* one line while it runs, one when it's done: the live region speaks twice, not per site */}
           {!board.done ? (
             <span>Calling every site from your browser…</span>
@@ -134,19 +113,6 @@ export function LiveBoard({ onOpenProject }: { onOpenProject: (id: string) => vo
             </span>
           )}
         </div>
-
-        {!wide && (
-          <button
-            type="button"
-            onClick={() => setOpen((o) => !o)}
-            aria-expanded={open}
-            aria-controls={open ? sitesId : undefined}
-            className="flex min-h-11 w-full items-center justify-between gap-3 border-t border-term-rule px-4 text-[13.5px] font-[560] text-term-ink transition-colors active:bg-term-2 sm:px-5"
-          >
-            {open ? 'Hide the sites' : `See all ${PING_TARGETS.length} sites`}
-            <Icon name="chevronDown" size={16} className={cn('text-term-dim transition-transform duration-300', open && 'rotate-180')} />
-          </button>
-        )}
       </div>
 
       {/* a peek at the site under the pointer, hung off the board's left edge */}
