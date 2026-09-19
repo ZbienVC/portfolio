@@ -36,7 +36,7 @@ export function LiveBoard({ onOpenProject }: { onOpenProject: (id: string) => vo
       target="box"
       place="below"
       noteClassName="ink-note--pale !top-[calc(100%+20px)] !left-[4%] !max-w-[440px]"
-      note="Real numbers: your browser just sent each site a HEAD request and timed the answer. The counter is a split-flap drum that only turns forward, one flap per answer."
+      note="Real numbers: your browser just pinged each site and timed the reply. The counter is a split-flap drum that only turns forward, one flap per answer."
       spec="fetch(url, { method: 'HEAD', mode: 'no-cors' }) · 72 ms a flap"
     >
       <div className="board relative overflow-hidden rounded-xl bg-term text-term-ink shadow-[0_0_0_1px_var(--term-rule),var(--shadow-float)]">
@@ -101,14 +101,14 @@ export function LiveBoard({ onOpenProject }: { onOpenProject: (id: string) => vo
         <div className="border-t border-term-rule px-4 py-3 text-[12.5px] leading-relaxed text-term-dim sm:px-5" aria-live="polite">
           {/* one line while it runs, one when it's done: the live region speaks twice, not per site */}
           {!board.done ? (
-            <span>Calling every site from your browser…</span>
+            <span>Checking every site from your browser…</span>
           ) : failed.length === 0 ? (
             <span>
-              All {PING_TARGETS.length} answered your browser at {clock}. Median <b className="font-mono font-medium text-term-ink">{board.medianMs} ms</b>.
+              All {PING_TARGETS.length} are up as of {clock}. Median reply <b className="font-mono font-medium text-term-ink">{board.medianMs} ms</b>.
             </span>
           ) : (
             <span>
-              {board.answered} of {PING_TARGETS.length} answered at {clock}.{' '}
+              {board.answered} of {PING_TARGETS.length} are up as of {clock}.{' '}
               <span className="text-term-amber">{failed.map((f) => f.name).join(', ')}</span> didn&apos;t answer within 8 seconds.
             </span>
           )}

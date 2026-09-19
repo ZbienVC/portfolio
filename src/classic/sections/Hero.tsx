@@ -53,7 +53,7 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
         <InkNote
           id="glaze"
           className="top-4 right-[4%] max-lg:hidden"
-          note="A WebGL shader I wrote for Atelier: one draw call, a sheet of simplex-noise folds lit like silk. No WebGL? You get a CSS still in the same colors."
+          note="A WebGL shader I wrote for Atelier, a design project of mine: folds of noise lit like silk, drawn in a single pass. If your browser can't run it, you get a still in the same colors."
           spec="16,261 vertices · 1 draw call · 0 dependencies"
         />
       </div>
@@ -98,11 +98,11 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
           </Ink>
 
           <motion.p className="lede mt-7 max-w-[34rem]" {...rise(0.18)}>
-            Finance and operations by training, builder by habit. By day I run the books for two telecom companies, and I wrote
-            the automation that now does most of the filing. On my own time I've shipped{' '}
-            <strong className="font-[620] text-ink">{LIVE_COUNT} sites and products</strong>, from AI agents to a 20-player boat racer.
-            <span className="max-lg:hidden">The status board is checking on every one of them, from your browser, right now.</span>
-            <span className="lg:hidden">The dot on each project below says whether it&apos;s up right now, checked from your browser.</span>
+            I&apos;m Zach. By day I run the books for two telecom companies, and I built the automation that now does most of the
+            filing. On my own time I&apos;ve shipped <strong className="font-[620] text-ink">{LIVE_COUNT} sites and products</strong>, from
+            AI agents to a 20-player boat racer.{' '}
+            <span className="max-lg:hidden">The board on the right checks that each one is up, live from your browser.</span>
+            <span className="lg:hidden">A green dot next to a project below means it&apos;s up right now.</span>
           </motion.p>
 
           <motion.div className="mt-9 flex flex-wrap items-center gap-3" {...rise(0.26)}>
@@ -116,8 +116,9 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
             </a>
           </motion.div>
 
-          <p className="label-type mt-9 max-w-[29rem] leading-relaxed lg:mt-12">
-            Before this: surveillance data at Bloomberg LP, $25M to $1B raises at Cambridge Wilkinson, savings models at Grapevine.
+          {/* a sentence, so it's set as one: body type, not the small mono labels */}
+          <p className="mt-9 max-w-[31rem] text-[15px] leading-relaxed text-ink-2 lg:mt-12">
+            Before this: surveillance data at Bloomberg LP, $25M to $1B raises at Cambridge Wilkinson, and savings models at Grapevine.
           </p>
         </div>
 

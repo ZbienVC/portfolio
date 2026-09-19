@@ -65,7 +65,7 @@ export function Basecamp() {
             className="lg:col-span-7"
             label="The other version"
             title="Same site, as a place."
-            lede="A 3D basecamp I built with React Three Fiber. A fox walks you between landmarks: the cabin, the monoliths, the cairn, the gear cache, the frozen lake and the signpost. Each one opens a part of this page."
+            lede="A 3D version of this site that I built in React Three Fiber. A fox walks you between landmarks, and each one opens a part of this page."
           />
           <p className="font-mono text-[12px] leading-relaxed text-ink-3 lg:col-span-5 lg:pb-1.5">
             About 1.5 MB of 3D, so it stays shut until you open it.
@@ -81,7 +81,7 @@ export function Basecamp() {
           place="above"
           className="mt-8 lg:mt-12"
           noteClassName="!bottom-[calc(100%+14px)] !left-auto !right-0 !max-w-[360px] text-right"
-          note="Its own document in an iframe: three.js, its stylesheet and its WebGL context load only when you walk in, and leave when you close it."
+          note="It runs in its own frame, so the 3D code only downloads when you walk in, and it's all gone again when you close it."
           spec="<iframe src='/?3d&embed'> · lazy · 0 bytes until asked"
         >
           <div className="overflow-hidden rounded-xl bg-term shadow-[0_0_0_1px_var(--term-rule),var(--shadow-float)]">
@@ -169,7 +169,7 @@ function Poster({ state, onOpen, doorRef }: PosterProps) {
               transition={fade}
               role="status"
             >
-              This browser isn&apos;t drawing WebGL, so the basecamp can&apos;t open here. Everything inside it is already on this page.
+              Your browser can&apos;t show 3D here, so the basecamp won&apos;t open. Everything in it is on this page anyway.
             </motion.p>
           ) : state === 'loading' ? (
             <motion.p

@@ -40,7 +40,7 @@ const iif = (d: Doc) => [
   'ENDTRNS',
 ];
 
-const STEPS = ['Read', 'Named', 'Filed', 'Written as IIF', 'Imported'] as const;
+const STEPS = ['Read', 'Named', 'Filed', 'Written for QuickBooks', 'Imported'] as const;
 
 export function DayJob() {
   const [tab, setTab] = useState<'ap' | 'check'>('ap');
@@ -53,13 +53,13 @@ export function DayJob() {
             id="day-job-title"
             label="The day job"
             title="I run the books for two telecom companies. The filing runs itself."
-            lede="Payables, receivables, carrier and agent commissions, the monthly close. Invoices and carrier statements used to be renamed, filed and keyed into QuickBooks by hand. Now code I wrote does that, which takes about 30 hours of data entry out of every month."
+            lede="Invoices and carrier statements used to be renamed, filed and typed into QuickBooks by hand. Now code I wrote does all of that."
           />
           <ul className="mt-8 border-t border-rule lg:mt-10">
             {[
-              ['30 hrs', 'of filing and data entry taken out of every month'],
-              ['2', 'companies’ books: AP, AR, commissions, the close'],
-              ['499-Q', 'FCC revenue reporting, pulled straight from billing data'],
+              ['30 hrs', 'of filing and data entry saved every month'],
+              ['2', 'companies’ books: payables, receivables, commissions and the monthly close'],
+              ['499-Q', 'FCC revenue reports, pulled straight from billing data'],
             ].map(([n, t]) => (
               <li key={n} className="flex items-baseline gap-5 border-b border-rule py-3 lg:py-4">
                 <span className="w-[5.5rem] shrink-0 text-[26px] font-[700] tracking-[-0.03em] text-ink tabular-nums [font-stretch:112%]">{n}</span>
@@ -228,7 +228,7 @@ function Payables() {
             <Icon name="refresh" size={15} /> Put them back
           </button>
         )}
-        {inbox.length > 0 && <p className="mt-3 text-[12px] leading-snug text-ink-3">Drag one into the pipeline, or tap it.</p>}
+        {inbox.length > 0 && <p className="mt-3 text-[12px] leading-snug text-ink-3">Drag one over, or tap it.</p>}
       </div>
 
       {/* the pipeline */}

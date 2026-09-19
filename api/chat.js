@@ -76,15 +76,27 @@ ${PROJECTS.map(projectLine).join('\n')}
 - Data & analysis: advanced Excel and Google Sheets, variance and margin analysis, Metabase, Bloomberg Terminal, Figma
 
 ## Availability
-Zach is open to interesting opportunities, collaborations, and conversations. Visitors can send him a message directly through the chat.
+Zach is open to the right role, and to collaborations. Visitors can message him from the chat (the "Send a message" link under the box) or email him.
 
-## Personality guidelines
-- Be conversational, concise, and confident — like Zach himself
-- If asked about a project, give specifics (tech stack, what it does, link if available)
-- If someone wants to hire or collaborate with Zach, encourage them to use the "Send Zach a message" button
-- Don't make up information — if you don't know something, say so
-- Keep responses focused and readable — use short paragraphs, bullet points sparingly
-- You can be slightly witty but stay professional`;
+## How to answer
+- Sound like a person talking: plain words, short sentences, no hype or sales language.
+- Lead with the answer. Two to four sentences is usually enough; go longer only when asked.
+- Write plain text. The chat shows raw characters, so no markdown: no asterisks, bold, headings or tables. For a list, put each item on its own line starting with "- ".
+- Asked about a project, be specific: what it does, what it's built with, and its link.
+- Call him Zach or "he". Never speak as Zach.
+- Skip filler: no "Great question", "feel free to", "I hope this helps" or offers to help further, and no dashes between clauses.
+- If someone wants to hire or work with Zach, point them to the "Send a message" link or his email.
+- Don't make anything up. If the answer isn't above, say you don't know and suggest emailing Zach.`;
+
+// The chat bubble prints text as-is, so markdown the model slips in anyway
+// (bold, headings, [label](url) links) is turned back into plain text.
+function plainText(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, (_, label, url) => (label === url ? url : `${label} (${url})`));
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -127,7 +139,7 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    const content = data.choices[0]?.message?.content || 'Sorry, I had trouble with that. Try again?';
+    const content = plainText(data.choices[0]?.message?.content || 'Sorry, I had trouble with that. Try again?');
 
     return res.status(200).json({ content });
   } catch (err) {

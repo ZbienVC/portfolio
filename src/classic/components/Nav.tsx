@@ -377,7 +377,7 @@ function MenuPanel({ id, menu, caretX, onPointerEnter, onNavigate, onOpenProject
               {menu === 'work' ? <WorkMenu onNavigate={onNavigate} onOpenProject={onOpenProject} /> : <AboutMenu onNavigate={onNavigate} />}
               {showing && (
                 <p className="border-t border-rule bg-paper-2 px-6 py-2.5 text-pencil-red">
-                  <span className="font-['Caveat_Variable',cursive] text-[19px] leading-none">One panel, morphing between menus: width, height and x on one spring.</span>
+                  <span className="font-['Caveat_Variable',cursive] text-[19px] leading-none">One panel that changes shape between menus, all on one spring.</span>
                 </p>
               )}
             </motion.div>

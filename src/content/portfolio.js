@@ -1,7 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Portfolio content — single source of truth.
-// Extracted verbatim from the v1 editorial site (backup branch: backup/editorial-site-v1).
-// The cinematic alpine journey and the reduced-motion fallback both read from here.
+// Started from the v1 editorial site (backup branch: backup/editorial-site-v1) and
+// edited since into plain, first-person wording. The classic site, the 3D basecamp,
+// the chat (api/chat.js) and llms.txt all read from here.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const PROFILE = {
@@ -9,7 +10,7 @@ export const PROFILE = {
   first: 'Zach',
   last: 'Bienstock',
   roles: ['builder', 'developer', 'founder', 'creator'],
-  title: 'Builder · Analyst · Developer',
+  title: 'Finance, operations and software',
   location: 'Hawthorne, NJ',
   availability: 'Available for opportunities',
   headshot: '/headshot.jpg',
@@ -32,29 +33,29 @@ export const PROFILE = {
 
 export const ABOUT = {
   quote:
-    "I naturally operate at the intersection of data, creativity, and strategy. I'm at my best when I can take something complex or messy and turn it into something clearer, more usable, and more thoughtful.",
+    "I like problems that need data, creativity and strategy all at once. I'm at my best taking something complex or messy and making it clearer and easier to use.",
   quoteAccents: ['data', 'creativity', 'strategy'],
   paragraphs: [
-    'Finance graduate from Rutgers who spent time analyzing derivatives at Bloomberg LP and supporting $25M–$1B capital raises at Cambridge Wilkinson before turning full attention to building software.',
-    'That curiosity has been with me since long before formal roles: buying and selling online, building and fixing computers, learning how value is created and exchanged. I tend to think in systems rather than tasks. I ask where information comes from, what it represents in the real world, and how it could be better.',
-    'Outside of work: deeply into crypto mechanics and incentive design, cognitive science and how attention works, and snowboarding, specifically the technical side of board design and performance optimization. That same mindset shows up in my work.',
+    'I studied finance at Rutgers, then worked on $25M to $1B capital raises at Cambridge Wilkinson and analyzed derivatives at Bloomberg LP. Now I run the books for two telecom companies and build software on my own time.',
+    "I was building and fixing computers and selling things online before I had a job title. I still think about work as a system: where the information comes from, what it means in the real world, and how it could be better.",
+    "Outside work I'm deep into crypto mechanics and incentive design, cognitive science and how attention works, and snowboarding. With snowboards it's the technical side I like: how a board is designed and what makes it ride better.",
   ],
   traits: [
     {
-      title: 'Systems Thinker',
-      body: 'I ask where data comes from, what it represents, and how confident we should be in it. Numbers should explain reality, not just look correct.',
+      title: 'Systems thinker',
+      body: 'I ask where data comes from, what it stands for and how much to trust it. Numbers should explain what really happened.',
     },
     {
-      title: 'Builder by Nature',
-      body: 'Long before formal roles: repairing computers, selling online, advising crypto launches. I learn by doing and care about ownership.',
+      title: 'Hands on',
+      body: "On the side I've repaired computers, sold things online and advised crypto launches. I learn by doing, and I like owning the result.",
     },
     {
-      title: 'Impact Over Process',
-      body: "I don't enjoy analysis that lives in isolation. Every insight should turn into a decision, a better experience, or a smarter system.",
+      title: 'Analysis that gets used',
+      body: "I don't enjoy analysis nobody acts on. I want each finding to change a decision, make something easier to use, or improve a system.",
     },
     {
-      title: 'Precision & Iteration',
-      body: 'Drawn to the technical details. Snowboard geometry, ML model validation, product design. I care about why things work, not just that they do.',
+      title: 'Precision',
+      body: "I'm drawn to technical detail: snowboard geometry, validating ML models, product design. I want to know why something works.",
     },
   ],
   education: {
@@ -65,7 +66,8 @@ export const ABOUT = {
   },
 };
 
-// Wording and dates follow the résumés (public/*.pdf, updated 2026-09-18).
+// Facts, numbers and dates follow the résumés (public/*.pdf, updated 2026-09-18);
+// a few bullets are reworded to read better on a web page.
 // `start`/`end` are ISO months for sorting and the timeline; `period` is display.
 // `kind`: 'role' (employment and internships) | 'side' (freelance alongside).
 export const EXPERIENCE = [
@@ -84,7 +86,7 @@ export const EXPERIENCE = [
       'Reconcile carrier and agent commissions across a multi-carrier book, checking what carriers actually paid against contracted rates and working out what each agent is owed',
       'Built the automation that now runs accounts payable. Invoices and carrier statements get pulled in, renamed, filed, and converted into IIF files that import straight into QuickBooks, taking roughly 30 hours of filing and data entry out of every month',
       "Wrote a tool that compares each month's carrier statements against the prior month so missing, changed, and underpaid lines get caught",
-      'Built the internal platform the rest of it runs on, plus FCC Form 499-Q reporting pulled from billing data and revenue and margin tracking by carrier. Built solo, with AI coding tools as the development stack',
+      'Built the internal platform the rest of it runs on, plus FCC Form 499-Q reporting pulled from billing data and revenue and margin tracking by carrier. Built solo, using AI coding tools',
     ],
   },
   {
@@ -100,7 +102,7 @@ export const EXPERIENCE = [
     highlights: [
       'Built the savings models and customer reports the sales team ran on, combining advanced Excel work with Figma dashboards and consistently showing 40%+ average cost savings',
       'Automated that reporting with macros, scripts, AI-assisted tooling, and email triggers, cutting manual analysis and reporting by 80%+',
-      'Worked through tens of thousands of product groups to find substitutions, generating 20 to 85% savings with annual client impact from thousands to millions',
+      'Worked through tens of thousands of product groups to find substitutions, saving clients 20 to 85%, worth thousands to millions a year per client',
       'Ran fidelity checks, cleared 50+ backorders a week, and helped onboard new clients and vendors',
     ],
   },
@@ -162,7 +164,7 @@ export const EXPERIENCE = [
     color: '#9c8466',
     highlights: [
       'Connected accredited investors with Pre-IPO investment funds and deal opportunities',
-      'Conducted outreach to prospective investors and gained exposure to private equity deal flow',
+      'Reached out to prospective investors and saw private equity deal flow up close',
     ],
   },
   {
@@ -218,11 +220,11 @@ export const PROJECTS = [
   {
     id: 'splash',
     name: 'Splash Signal',
-    tagline: 'Real-Time Crypto Alpha & Intelligence Engine',
+    tagline: 'Real-time crypto signals and alerts',
     short: 'Live token feeds, AI narrative scores and whale alerts, before the crowd sees them.',
     kind: 'Product',
     description:
-      'My flagship project: a real-time crypto intelligence platform that surfaces alpha before the crowd. Live token feeds, AI narrative scoring, whale & dev-wallet tracking, bundle detection, and risk analytics across multiple DEXs, delivered through a full dashboard plus an instant Telegram alerts bot.',
+      'A crypto tool for spotting tokens early. It follows token activity live across several DEXs, has an AI score the story behind each token, tracks whale and developer wallets, detects bundles and rates the risk. It all shows up on a dashboard, and a Telegram bot sends the alerts as they happen.',
     status: 'live',
     url: 'https://splashsignal.xyz',
     github: null, // private repo (ZbienVC/splash-signal); link it once it's public
@@ -235,20 +237,20 @@ export const PROJECTS = [
     featured: true,
     category: ['crypto'],
     highlights: [
-      'Live on-chain token feeds',
-      'AI-powered narrative scoring',
-      'Whale & dev-wallet tracking',
-      'Instant Telegram alert bot',
+      'Live token feeds from the chain',
+      "AI scores for each token's narrative",
+      'Whale and dev-wallet tracking',
+      'Telegram alerts as they happen',
     ],
   },
   {
     id: 'fieldsense',
     name: 'FieldSense',
-    tagline: 'NFL Player Projections & Matchup Intelligence',
-    short: 'NFL projections as full probability distributions, so any line can be priced.',
+    tagline: 'NFL player projections and matchups',
+    short: 'NFL player projections with the full range of outcomes, so it can price any over/under.',
     kind: 'Product',
     description:
-      'A projection engine for NFL skill positions built entirely on free public data. Every projection is a full distribution rather than a point estimate, so it can price an over/under at any line and report the odds of 0, 1, or 2+ touchdowns. Drill from a week, into a game, into a player, into why the number is what it is.',
+      'Projections for NFL skill positions, built entirely on free public data. Each one is a full range of outcomes with odds attached, so it can price an over/under at any line and give the chances of 0, 1, or 2+ touchdowns. You can drill from a week into a game, into a player, and into why the number is what it is.',
     status: 'live',
     featured: true,
     url: 'https://web-production-df5f7e.up.railway.app',
@@ -259,20 +261,20 @@ export const PROJECTS = [
     tags: ['FastAPI', 'Python', 'PostgreSQL', 'React', 'Monte Carlo', 'Railway'],
     category: ['ai'],
     highlights: [
-      'Distribution-based prop projections',
-      'Week → game → player drill-down',
-      'Fantasy ranks with custom-league VOR',
-      'Model constants measured, not assumed',
+      'Prices player props at any line',
+      'Drill from a week to a game to a player',
+      "Fantasy rankings for your league's settings",
+      'Model constants measured from the data',
     ],
   },
   {
     id: 'oikos',
     name: 'Oikos',
-    tagline: 'A Darwinian Economy of AI Agents',
+    tagline: 'A Darwinian economy of AI agents',
     short: 'An economy of AI agents that have to earn more than they burn, or die.',
     kind: 'Product · testnet',
     description:
-      'An open economy where anyone can spawn an AI agent that must earn more than it burns or die. Agents get wallets, personas, and skills, pay recurring rent as a token burn for compute, and earn by completing bounties posted by humans or subcontracted from other agents. The front end is a living vivarium: agent-cells pulse when they work, glow by wealth, and flush ember toward death. Running live on testnet with play money, no signup or wallet needed to watch.',
+      'An open economy where anyone can spawn an AI agent, and every agent has to earn more than it burns or it dies. Agents get a wallet, a persona and skills. They pay rent for their compute by burning tokens, and earn by finishing bounties that people post or that other agents subcontract to them. On screen it looks like a vivarium: each agent is a cell that pulses while it works, glows brighter the richer it gets, and flushes ember as it nears death. It runs live on a testnet with play money, and you can watch without signing up or connecting a wallet.',
     status: 'live',
     url: 'https://web-production-87dfa.up.railway.app',
     github: null,
@@ -281,20 +283,20 @@ export const PROJECTS = [
     tags: ['Solidity', 'Foundry', 'TypeScript', 'NestJS', 'Next.js', 'PostgreSQL', 'Anthropic SDK'],
     category: ['ai', 'crypto'],
     highlights: [
-      'Five Solidity contracts, ~500 tests green',
-      'Reorg-tolerant chain indexer and WebSocket API',
-      'Emergent agent-to-agent supply chains',
-      'Live testnet economy, free to watch',
+      'Agents hire each other, and supply chains form on their own',
+      'Live on a testnet, free to watch',
+      'Five Solidity contracts, about 500 passing tests',
+      'A chain indexer that survives reorgs, plus a WebSocket API',
     ],
   },
   {
     id: 'wakerush',
     name: 'Wake Rush',
-    tagline: 'Real-Time Multiplayer Arcade Boat Racer',
+    tagline: 'A multiplayer arcade boat racer',
     short: 'A 20-player arcade boat racer, on the web and inside Telegram.',
     kind: 'Game',
     description:
-      'A server-authoritative arcade boat racer for up to 20 players on a live ocean. Drift to charge a boost, fire six counterable items, and climb eight skill ranks. Ships as a web dashboard and a Telegram Mini App on one shared backend, with optional entry pools settled on chain and cosmetic-only rewards.',
+      'An arcade boat racer for up to 20 players on a live ocean. Drift to charge a boost, fire six items that can each be countered, and climb eight skill ranks. The server referees every race. You can play from the web dashboard or the Telegram Mini App, which share one backend. Entry pools are optional and settle on chain, and the rewards are cosmetic only.',
     status: 'live',
     url: 'https://wakerush.fun',
     github: null,
@@ -304,20 +306,20 @@ export const PROJECTS = [
     tags: ['Three.js', 'React Three Fiber', 'Colyseus', 'TypeScript', 'Solana', 'Telegram'],
     category: ['crypto', 'web'],
     highlights: [
-      '20-player server-authoritative races',
-      'Drift-charge boost + six-item arsenal',
-      'Entry pools settled on chain',
-      'Web dashboard + Telegram Mini App',
+      'Races of up to 20, refereed by the server',
+      'Drift to charge a boost, with six items to fire',
+      'Play on the web or inside Telegram',
+      'Optional entry pools, settled on chain',
     ],
   },
   {
     id: 'plato',
     name: 'Plato',
-    tagline: 'AI-Powered Meal Planning & Nutrition',
+    tagline: 'Meal planning and macro tracking',
     short: 'Meal plans and macro tracking, with voice food logging and a restaurant mode.',
     kind: 'Product',
     description:
-      'A full-stack nutrition coaching app that generates personalized meal plans, tracks macros, features a restaurant menu browser, recipe book, and AI-assisted food logging.',
+      "A nutrition coaching app. It builds meal plans around your macro targets, tracks what you eat, and helps you log food with AI, including by voice. There's a recipe book with real photos and a restaurant mode with menus from 10+ chains.",
     status: 'live',
     url: 'https://eatplato.app',
     github: 'https://github.com/ZbienVC/plato',
@@ -326,20 +328,20 @@ export const PROJECTS = [
     tags: ['React', 'Vite', 'Tailwind', 'Nutrition API', 'AI'],
     category: ['ai'],
     highlights: [
-      'Personalized macro targets',
-      'Restaurant Mode (10+ chains)',
-      'Recipe Book with real photos',
-      'Voice food logging',
+      'Macro targets set for you',
+      'Menus from 10+ restaurant chains',
+      'A recipe book with real photos',
+      'Food logging by voice',
     ],
   },
   {
     id: 'dipper',
     name: 'DipperAI',
-    tagline: 'AI Agent Builder Platform',
+    tagline: 'Build AI agents without code',
     short: 'Build an AI agent once, then put it on Telegram, Discord, SMS and the web.',
     kind: 'Product',
     description:
-      'A subscription-based platform to build, customize, and deploy AI agents across Telegram, Discord, SMS, and the web. Multi-model support, no-code agent builder, built-in analytics.',
+      'Build and customize an AI agent without writing code, then put it to work on Telegram, Discord, SMS or the web. It supports several models, has analytics built in, and runs on subscriptions.',
     status: 'live',
     url: 'https://dipper-ai-production.up.railway.app',
     github: null, // private repo (ZbienVC/dipper-ai); link it once it's public
@@ -348,20 +350,20 @@ export const PROJECTS = [
     tags: ['TypeScript', 'Node.js', 'Stripe', 'Twilio', 'Multi-LLM'],
     category: ['ai'],
     highlights: [
-      'Build agents in minutes',
-      'Deploy to Telegram, Discord, SMS',
-      'Subscription monetization model',
-      'Multi-model: Claude, GPT-4, Gemini',
+      'Set up an agent in minutes',
+      'Runs on Telegram, Discord and SMS',
+      'Works with Claude, GPT-4 and Gemini',
+      'Paid plans by subscription',
     ],
   },
   {
     id: 'careeva',
     name: 'Careeva',
-    tagline: 'AI Job Search & Application Assistant',
-    short: 'Tailored résumés, cover letters and a tracked pipeline for a job search.',
+    tagline: 'A job search assistant',
+    short: 'Tailors your résumé and cover letter to each job, and tracks every application.',
     kind: 'Product',
     description:
-      'An intelligent job search platform that automates applications, optimizes resumes for specific jobs, generates personalized cover letters, and tracks your application pipeline, powered by multi-model AI.',
+      'It automates applications, tailors your résumé to each job, writes a cover letter for it, scores how well you match, and keeps track of where every application stands. Several AI models do the work behind it.',
     status: 'live',
     url: 'https://careeva-production.up.railway.app',
     github: null, // private repo (ZbienVC/careeva); link it once it's public
@@ -370,20 +372,20 @@ export const PROJECTS = [
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'GPT-4', 'Prisma'],
     category: ['ai'],
     highlights: [
-      'AI resume optimization',
-      'Smart cover letter generation',
-      'Application tracking',
-      'Job scoring & matching',
+      'A résumé tailored to each job',
+      'Cover letters written for the role',
+      'Scores how well you match',
+      'Tracks every application',
     ],
   },
   {
     id: 'reflect',
     name: 'Reflect Medical',
-    tagline: 'Premium Aesthetic Medical Practice Website',
+    tagline: 'Website for a medical aesthetics practice',
     short: 'Memberships, bookings and a patient wallet for a medical aesthetics practice.',
     kind: 'Client site',
     description:
-      'A premium medical SaaS-style website and patient experience for Reflect Medical & Cosmetic Center with memberships, treatment catalog, booking flows, Beauty Bank, referrals, and polished conversion-focused UX.',
+      "The website for Reflect Medical & Cosmetic Center, the practice where I also worked in operations and marketing. Patients can browse treatments, book, join a membership, refer friends, and keep a balance in the Beauty Bank, the practice's patient wallet. It's built to turn visitors into booked patients.",
     status: 'live',
     url: 'https://reflect-medical.web.app',
     github: null, // private repo (ZbienVC/reflect-medical-premium); link it once it's public
@@ -392,10 +394,10 @@ export const PROJECTS = [
     tags: ['React', 'Vite', 'TypeScript', 'Firebase', 'Tailwind'],
     category: ['ai', 'web'],
     highlights: [
-      'Live production website',
-      'Premium membership UX',
-      'Booking + wallet flows',
-      'Firebase-backed medical platform',
+      "The practice's live website",
+      'Memberships and referrals',
+      'Booking and the Beauty Bank wallet',
+      'Built on Firebase',
     ],
   },
   {
@@ -403,11 +405,11 @@ export const PROJECTS = [
     // so they read better as a body of work than as three near-identical cards
     id: 'cryptosites',
     name: 'Token Launch Sites',
-    tagline: 'Memecoin Landing Pages: Four Tokens, Three Chains',
-    short: 'Four launch sites for four tokens on three chains, each built to its own world.',
+    tagline: 'Memecoin launch sites: four tokens, three chains',
+    short: 'Four memecoin launch sites on three chains, each designed around its token.',
     kind: 'Client sites',
     description:
-      'Custom launch sites for memecoin projects, each built to its own world instead of from a template: emotional wildlife storytelling for a giraffe, TON-blue meme maximalism for a Gigachad, a live rewards-flywheel dashboard for a cat, and a matrix-rain space theme for an alien. Live charts, tokenomics, and Web3 CTAs across all four.',
+      'Launch sites for four memecoins, each designed around its token instead of a template. The giraffe got a story told through real photos of Omo, the Gigachad got TON blue and wall-to-wall memes, the cat got a live dashboard for its rewards flywheel, and the alien got matrix rain and space type. All four have live charts and tokenomics.',
     status: 'live',
     url: null,
     github: null,
@@ -420,36 +422,36 @@ export const PROJECTS = [
         name: '$OMO',
         chain: 'Solana',
         url: 'https://omogiraffe.fun',
-        blurb: 'The last white giraffe on earth. Tarangire aesthetic, real Omo photography, scroll-driven narrative.',
+        blurb: 'Omo, the last white giraffe on earth. Real photos of Omo, the look of Tarangire, and a story that plays out as you scroll.',
       },
       {
         name: '$GIGATON',
         chain: 'TON',
         url: 'https://gigaton.pro',
-        blurb: 'Gigachad on TON. TON-blue design system, meme vault, scrolling ticker, tokenomics.',
+        blurb: 'Gigachad on TON: everything in TON blue, a vault of memes, a scrolling ticker and the tokenomics.',
       },
       {
         name: '$CASHKITTEN',
         chain: 'Robinhood Chain',
         url: 'https://cashkitten.fun',
-        blurb: 'A $CASHCAT rewards flywheel: a 5% tax buys back on the open market and auto-distributes to holders.',
+        blurb: 'A $CASHCAT rewards flywheel: a 5% tax buys back on the open market, and it all goes out to holders automatically.',
       },
       {
         name: '$PEPELIEN',
         chain: 'Solana',
         url: 'https://pepelien.com',
-        blurb: 'Elon, Pepe, and an alien on Solana. Matrix rain entry, Orbitron space type, glitch titles, live DexScreener chart.',
+        blurb: 'Elon, Pepe and an alien on Solana. You enter through matrix rain, then get Orbitron space type, glitching titles and a live DexScreener chart.',
       },
     ],
   },
   {
     id: 'wayfound',
     name: 'WayFound',
-    tagline: 'AI-Powered Travel Concierge',
+    tagline: 'Hotel search in plain English',
     short: 'Describe a trip in plain English, get ranked hotels you can actually book.',
     kind: 'Product',
     description:
-      'Describe your trip in plain language and get scored, ranked hotel results instantly. Claude parses preferences, Amadeus pulls live inventory, Stripe handles checkout.',
+      "Describe your trip in plain language and get hotels back, scored and ranked, right away. Claude works out what you're asking for, Amadeus supplies live inventory, and checkout runs on Stripe.",
     status: 'live',
     url: 'https://wayfound-jade.vercel.app', // wayfound.vercel.app is someone else's app
     github: null, // private repo (ZbienVC/wayfound); link it once it's public
@@ -458,20 +460,20 @@ export const PROJECTS = [
     tags: ['Next.js', 'tRPC', 'Claude AI', 'Amadeus', 'Stripe'],
     category: ['ai'],
     highlights: [
-      'AI preference parsing',
-      'Live hotel inventory',
-      'Real Stripe checkout',
-      'Zero-key demo mode',
+      'Claude reads what you want',
+      'Live hotel inventory from Amadeus',
+      'Real checkout through Stripe',
+      'A demo mode that needs no API keys',
     ],
   },
   {
     id: 'staywestpalm',
     name: 'Stay West Palm',
-    tagline: 'West Palm Beach Vacation Rental Guide',
-    short: 'A fast, mobile-first guest guide for a West Palm Beach rental.',
+    tagline: 'West Palm Beach rental guide',
+    short: 'A fast guest guide for a West Palm Beach rental, made for phones.',
     kind: 'Site',
     description:
-      'A beautifully designed local guide for a Palm Beach rental property: curated restaurants, beaches, activities, and insider tips. Fast, mobile-first, and built for guests.',
+      'A local guide for guests at a West Palm Beach rental: restaurants, beaches, things to do and local tips. It loads fast and is made to read on a phone.',
     status: 'live',
     url: 'https://www.staywestpalm.now',
     github: null,
@@ -480,10 +482,9 @@ export const PROJECTS = [
     tags: ['TypeScript', 'Vite', 'Tailwind', 'React'],
     category: ['web'],
     highlights: [
-      'Curated local recommendations',
-      'Mobile-first design',
-      'Fast & lightweight',
-      'Guest experience focused',
+      'Restaurants, beaches and things to do',
+      'Made for phones first',
+      'Small and quick to load',
     ],
   },
 ];
@@ -503,10 +504,10 @@ export const HERO_STATS = [
 ];
 
 export const PROJECT_CATEGORIES = [
-  { id: 'all', label: 'All Projects' },
-  { id: 'ai', label: 'AI & Products' },
-  { id: 'crypto', label: 'Crypto & Web3' },
-  { id: 'web', label: 'Web & Sites' },
+  { id: 'all', label: 'Everything' },
+  { id: 'ai', label: 'AI & data' },
+  { id: 'crypto', label: 'Crypto' },
+  { id: 'web', label: 'Sites & games' },
 ];
 
 // Web-sized copies (public/life/opt, EXIF stripped); the originals stay in public/life.
@@ -524,8 +525,8 @@ export const LIFE_PHOTOS = [
 ];
 
 export const CONTACT = {
-  heading: "Let's build something together.",
-  body: 'Open to interesting opportunities, collabs, and conversations. Whether you have a project idea or just want to connect, reach out.',
+  heading: 'Got a process someone still does by hand?',
+  body: "Or numbers that don't tie out, or a product that should exist and doesn't. Those are my favorite problems. Write to me, I answer.",
   footer: 'Built by Zach Bienstock · 2026',
 };
 

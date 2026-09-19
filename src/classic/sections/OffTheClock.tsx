@@ -18,11 +18,8 @@ export function OffTheClock() {
             id="otc-title"
             label="Off the clock"
             title="Snowboards, incentives, and fifty-some PCs."
-            lede="Most winter weekends I'm on a board, and more interested in why one flexes better than another than I probably should be. Otherwise: crypto mechanics, incentive design and how attention works. Long before my first finance job, I built and sold fifty-plus custom desktops on eBay."
+            lede="Most winter weekends I'm on a board, and more interested in why one flexes better than another than I probably should be. Off the board it's crypto mechanics, incentive design and how attention works. Starting in 2019, I built and sold fifty-plus custom desktops on eBay."
           />
-          <p className="mt-6 max-w-[34rem] text-[15px] leading-relaxed text-ink-3">
-            Same habit every time: find out why a thing works, then make it work better.
-          </p>
         </div>
         <div className="lg:col-span-7">
           <PhotoPile />

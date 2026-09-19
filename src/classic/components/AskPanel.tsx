@@ -127,7 +127,7 @@ export function AskPanel({ onClose, initial }: { onClose: () => void; initial?: 
           </span>
           <div className="min-w-0">
             <p className="text-[14.5px] font-[620] text-ink">{mode === 'chat' ? 'Ask about my work' : 'Send me a message'}</p>
-            <p className="font-mono text-[11px] text-ink-3">{mode === 'chat' ? 'an AI, grounded in this site' : 'goes straight to my inbox'}</p>
+            <p className="font-mono text-[11px] text-ink-3">{mode === 'chat' ? 'an AI that has read this site' : 'goes straight to my inbox'}</p>
           </div>
           <button type="button" className="icon-btn ml-auto" onClick={onClose} aria-label="Close">
             <Icon name="close" />

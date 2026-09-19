@@ -54,7 +54,7 @@ export default function ExperiencePanel({ waypoint }) {
       </div>
 
       <div className="exp-cta reveal">
-        <a className="btn btn-primary" href={PROFILE.resumePdf} target="_blank" rel="noopener noreferrer">View Resume ↗</a>
+        <a className="btn btn-primary" href={PROFILE.resumePdf} target="_blank" rel="noopener noreferrer">Résumé ↗</a>
       </div>
     </SectionShell>
   );
