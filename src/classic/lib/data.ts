@@ -83,7 +83,8 @@ export const liveSites = (p: Project) => (p.status === 'live' ? (p.collection ? 
 /* ── Screenshots (public/work, captured from the live sites) ──────────────── */
 
 // A collection shows its first site on the card.
-const COVER_ID: Record<string, string> = { cryptosites: 'omo' };
+// the token sites lead with $CASHKITTEN, the one with a live dashboard
+const COVER_ID: Record<string, string> = { cryptosites: 'cashkitten' };
 export const shotId = (projectId: string) => COVER_ID[projectId] ?? projectId;
 
 // Captured but kept off the page: splash (the site was down, so there's no
