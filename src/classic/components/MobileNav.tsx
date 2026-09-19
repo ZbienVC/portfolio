@@ -31,14 +31,15 @@ export function Dock({ active, onOpen }: { active: SectionId | null; onOpen: () 
   const { scrollY, scrollYProgress } = useScroll();
   const [shown, setShown] = useState(false);
   const { on: showingWork } = useShowWork();
-  // sections run edge to edge, so past the hero there's always one on the reading line
+  // sections run edge to edge, so past the hero there's always one on the reading line; in the hero, the top bar does the job
   const current = active ?? 'work';
+  const visible = shown && active !== null;
 
   useMotionValueEvent(scrollY, 'change', (y) => setShown(y > window.innerHeight * 0.85));
 
   return (
     <AnimatePresence>
-      {shown && (
+      {visible && (
         <motion.button
           key="dock"
           type="button"

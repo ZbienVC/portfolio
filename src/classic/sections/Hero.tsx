@@ -7,6 +7,7 @@ import { Portrait } from '../components/Portrait';
 import { LIVE_COUNT, PROFILE } from '../lib/data';
 import { ease } from '../lib/motion';
 import { useTheme } from '../lib/theme';
+import { useMedia } from '../lib/hooks';
 import type { ShaderGradientOptions } from '../engines/shader-gradient.js';
 
 // The gradient re-glazed for this page: oxblood where the silk pools, vermilion
@@ -36,6 +37,8 @@ const rise = (delay: number, distance = 10) => ({
 
 export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void }) {
   const { theme } = useTheme();
+  // the board is a desktop piece: on a phone each project card carries its own live dot instead
+  const wide = useMedia('(min-width: 1024px)');
   const glaze = { ...GLAZE, ground: theme === 'dark' ? '#160c0a' : '#2a0d0f' };
   const words = PROFILE.headline.replace(/\.$/, '').split(' ');
   const split = 3; // "I build the" / "systems the work runs on."
@@ -98,7 +101,8 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
             Finance and operations by training, builder by habit. By day I run the books for two telecom companies, and I wrote
             the automation that now does most of the filing. On my own time I've shipped{' '}
             <strong className="font-[620] text-ink">{LIVE_COUNT} sites and products</strong>, from AI agents to a 20-player boat racer.
-            The status board is checking on every one of them, from your browser, right now.
+            <span className="max-lg:hidden">The status board is checking on every one of them, from your browser, right now.</span>
+            <span className="lg:hidden">The dot on each project below says whether it&apos;s up right now, checked from your browser.</span>
           </motion.p>
 
           <motion.div className="mt-9 flex flex-wrap items-center gap-3" {...rise(0.26)}>
@@ -118,14 +122,16 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
         </div>
 
         {/* the board overlaps the portrait's lower edge, the way a print gets tucked under a statement */}
-        <motion.div
-          className="relative z-10 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mt-[calc(160px*1.36-18px+40px)] xl:mt-[calc(160px*1.36-18px)]"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: ease.out, delay: 0.25 }}
-        >
-          <LiveBoard onOpenProject={onOpenProject} />
-        </motion.div>
+        {wide && (
+          <motion.div
+            className="relative z-10 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mt-[calc(160px*1.36-18px+40px)] xl:mt-[calc(160px*1.36-18px)]"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: ease.out, delay: 0.25 }}
+          >
+            <LiveBoard onOpenProject={onOpenProject} />
+          </motion.div>
+        )}
       </div>
     </section>
   );
