@@ -244,8 +244,9 @@
   padding-inline: var(--inset);
 }
 
+/* a phone gets 56px between sections, not 84: every section pays it twice */
 @utility section-y {
-  padding-block: clamp(84px, 10vw, 148px);
+  padding-block: clamp(56px, 10vw, 148px);
 }
 
 @layer components {

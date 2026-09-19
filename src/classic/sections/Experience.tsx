@@ -31,7 +31,7 @@ export function Experience() {
   return (
     <section id="experience" aria-labelledby="experience-title" className="section-y relative">
       <div className="guides" aria-hidden="true" />
-      <div className="container-x relative grid gap-x-12 gap-y-12 lg:grid-cols-12 [&>*]:min-w-0">
+      <div className="container-x relative grid gap-x-12 gap-y-10 lg:grid-cols-12 lg:gap-y-12 [&>*]:min-w-0">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-[calc(var(--nav-h)+48px)]">
             <SectionHead
@@ -40,7 +40,7 @@ export function Experience() {
               title="Five years with the numbers."
               lede="Financial services, telecom and startups: surveillance data at Bloomberg, capital raises in investment banking, savings models at Grapevine, and now the books for two telecom companies."
             />
-            <dl className="mt-10 grid gap-5 border-t border-rule pt-6">
+            <dl className="mt-8 grid gap-5 border-t border-rule pt-5 lg:mt-10 lg:pt-6">
               <div>
                 <dt className="label-type">Education</dt>
                 <dd className="mt-1.5 text-[15px] text-ink">
@@ -94,7 +94,7 @@ export function Experience() {
             ))}
           </ol>
 
-          <div className="mt-14 border-t border-rule pt-8">
+          <div className="mt-10 border-t border-rule pt-6 lg:mt-14 lg:pt-8">
             <h3 className="label-type">Alongside, the whole time</h3>
             <ul className="mt-4 grid gap-6 sm:grid-cols-2">
               {SIDE_WORK.map((r) => (
@@ -103,7 +103,7 @@ export function Experience() {
                   <p className="mt-0.5 font-mono text-[11.5px] text-ink-3">
                     {r.company} · {r.period}
                   </p>
-                  <p className="mt-2 text-[14.5px] leading-relaxed text-ink-2">{r.highlights[0]}.</p>
+                  <p className="mt-2 text-[14.5px] leading-relaxed text-ink-2 max-lg:line-clamp-2">{r.highlights[0]}.</p>
                 </li>
               ))}
             </ul>
@@ -122,7 +122,7 @@ function RoleEntry({ role: r, lit, first }: { role: Role; lit: boolean; first: b
   const months = monthsBetween(r.start, r.end);
   const rest = r.highlights.length - shown;
   return (
-    <li className="relative pb-10 pl-10 last:pb-0">
+    <li className="relative pb-8 pl-10 last:pb-0 lg:pb-10">
       {/* the mark: hollow until the rule reaches it */}
       <motion.span
         aria-hidden="true"
@@ -140,7 +140,7 @@ function RoleEntry({ role: r, lit, first }: { role: Role; lit: boolean; first: b
       </motion.span>
 
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-        <h3 className="text-[19px] font-[660] tracking-[-0.015em] text-ink [font-stretch:108%]">{r.role}</h3>
+        <h3 className="text-[17px] font-[660] tracking-[-0.015em] text-ink [font-stretch:108%] lg:text-[19px]">{r.role}</h3>
         <p className="font-mono text-[12px] text-ink-3 tabular-nums">
           {r.period} · {durationLabel(months)}
         </p>
@@ -151,7 +151,8 @@ function RoleEntry({ role: r, lit, first }: { role: Role; lit: boolean; first: b
 
       <ul className="mt-4 grid gap-2">
         {r.highlights.slice(0, shown).map((h) => (
-          <li key={h} className="text-[15px] leading-relaxed text-ink-2 [text-wrap:pretty]">
+          // closed on a phone, the one line shown stops at three; "more" opens it all
+          <li key={h} className={cn('text-[15px] leading-relaxed text-ink-2 [text-wrap:pretty]', !open && rest > 0 && 'max-lg:line-clamp-3')}>
             {h}.
           </li>
         ))}

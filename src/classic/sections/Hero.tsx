@@ -58,7 +58,7 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
         />
       </div>
 
-      <div className="container-x relative grid items-start gap-x-8 gap-y-12 lg:grid-cols-12 [&>*]:min-w-0">
+      <div className="container-x relative grid items-start gap-x-8 gap-y-10 lg:grid-cols-12 lg:gap-y-12 [&>*]:min-w-0">
         {/* who's talking: the first thing on a phone, on the glaze band; on a desktop, on the glaze above the board */}
         <motion.div
           className="grid h-[var(--band-h)] place-items-center lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:h-auto lg:justify-self-end lg:pr-[3%]"
@@ -116,7 +116,7 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
             </a>
           </motion.div>
 
-          <p className="label-type mt-12 max-w-[29rem] leading-relaxed">
+          <p className="label-type mt-9 max-w-[29rem] leading-relaxed lg:mt-12">
             Before this: surveillance data at Bloomberg LP, $25M to $1B raises at Cambridge Wilkinson, savings models at Grapevine.
           </p>
         </div>

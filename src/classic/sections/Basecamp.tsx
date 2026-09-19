@@ -79,7 +79,7 @@ export function Basecamp() {
           pen="red"
           target="box"
           place="above"
-          className="mt-12"
+          className="mt-8 lg:mt-12"
           noteClassName="!bottom-[calc(100%+14px)] !left-auto !right-0 !max-w-[360px] text-right"
           note="Its own document in an iframe: three.js, its stylesheet and its WebGL context load only when you walk in, and leave when you close it."
           spec="<iframe src='/?3d&embed'> · lazy · 0 bytes until asked"
@@ -106,7 +106,7 @@ export function Basecamp() {
               </span>
             </div>
 
-            <div ref={stage} className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[16/9] sm:max-h-[78vh]">
+            <div ref={stage} className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/9] sm:max-h-[78vh]">
               {open && fit.w > 0 && (
                 <iframe
                   ref={frame}

@@ -54,7 +54,7 @@ export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
         <motion.div
           ref={rail}
           layoutScroll
-          className="no-scrollbar mt-12 -mx-[calc(var(--gutter)+var(--inset))] flex snap-x snap-mandatory scroll-px-[calc(var(--gutter)+var(--inset))] gap-4 overflow-x-auto px-[calc(var(--gutter)+var(--inset))] pb-1 lg:mx-0 lg:mt-14 lg:grid lg:snap-none lg:grid-cols-12 lg:gap-x-8 lg:gap-y-16 lg:overflow-visible lg:px-0 lg:pb-0 [&>*]:min-w-0"
+          className="no-scrollbar mt-9 -mx-[calc(var(--gutter)+var(--inset))] flex snap-x snap-mandatory scroll-px-[calc(var(--gutter)+var(--inset))] gap-4 overflow-x-auto px-[calc(var(--gutter)+var(--inset))] pb-1 lg:mx-0 lg:mt-14 lg:grid lg:snap-none lg:grid-cols-12 lg:gap-x-8 lg:gap-y-16 lg:overflow-visible lg:px-0 lg:pb-0 [&>*]:min-w-0"
         >
           {FLAGSHIPS.map((p, i) => (
             <Flagship
@@ -235,7 +235,7 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
   };
 
   return (
-    <div id="ledger" className="mt-16 scroll-mt-28 lg:mt-28">
+    <div id="ledger" className="mt-12 scroll-mt-28 lg:mt-28">
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
         <div>
           <h3 className="h3-type text-ink">The whole ledger</h3>
@@ -375,7 +375,7 @@ function Filters({ filter, onFilter, toolLabel }: { filter: WorkFilter; onFilter
 function LedgerRow({ project: p, onOpen, onHover }: { project: Project; onOpen: () => void; onHover: (p: Project | null) => void }) {
   return (
     <div
-      className="group relative grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-1 py-4 transition-colors hover:bg-paper-2 sm:grid-cols-[minmax(0,15rem)_1fr_auto] md:grid-cols-[minmax(0,15rem)_1fr_8.5rem_auto] md:px-2"
+      className="group relative grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-0.5 py-3 transition-colors hover:bg-paper-2 sm:gap-y-1 sm:py-4 sm:grid-cols-[minmax(0,15rem)_1fr_auto] md:grid-cols-[minmax(0,15rem)_1fr_8.5rem_auto] md:px-2"
       onPointerEnter={() => onHover(p)}
     >
       <h4 className="col-start-1 row-start-1 text-[16px] font-[640] tracking-[-0.01em] text-ink [font-stretch:108%] sm:col-auto sm:row-auto">
@@ -383,7 +383,7 @@ function LedgerRow({ project: p, onOpen, onHover }: { project: Project; onOpen: 
           {p.name}
         </button>
       </h4>
-      <p className="col-span-2 row-start-2 text-[14px] text-ink-2 sm:col-span-1 sm:row-start-auto">{p.short}</p>
+      <p className="col-span-2 row-start-2 text-[14px] text-ink-2 max-sm:line-clamp-1 sm:col-span-1 sm:row-start-auto">{p.short}</p>
       <span className="hidden font-mono text-[11.5px] text-ink-3 md:block">{p.kind}</span>
       <span className="col-start-2 row-start-1 flex items-center justify-end gap-3 sm:col-auto sm:row-auto">
         {p.collection && <span className="font-mono text-[11.5px] text-ink-3">{p.collection.length} sites</span>}
