@@ -68,7 +68,7 @@ export function Basecamp() {
             lede="A 3D basecamp I built with React Three Fiber. A fox walks you between landmarks: the cabin, the monoliths, the cairn, the gear cache, the frozen lake and the signpost. Each one opens a part of this page."
           />
           <p className="font-mono text-[12px] leading-relaxed text-ink-3 lg:col-span-5 lg:pb-1.5">
-            Click a landmark and the fox walks there. Drag to look around. It&apos;s about 1.5 MB, so it stays shut until you open it.
+            About 1.5 MB of 3D, so it stays shut until you open it.
           </p>
         </div>
 
@@ -91,11 +91,11 @@ export function Basecamp() {
               <span className="hidden sm:inline">React Three Fiber · three.js</span>
               <span className="ml-auto flex items-center gap-1">
                 {open && (
-                  <button type="button" onClick={fullscreen} className="rounded-md px-2.5 py-1.5 transition-colors hover:bg-term-2 hover:text-term-ink">
+                  <button type="button" onClick={fullscreen} className="rounded-md px-2 py-1.5 whitespace-nowrap transition-colors hover:bg-term-2 hover:text-term-ink sm:px-2.5">
                     Full screen
                   </button>
                 )}
-                <a href="/?3d" className="rounded-md px-2.5 py-1.5 transition-colors hover:bg-term-2 hover:text-term-ink">
+                <a href="/?3d" className="rounded-md px-2 py-1.5 whitespace-nowrap transition-colors hover:bg-term-2 hover:text-term-ink sm:px-2.5">
                   Full page
                 </a>
                 {open && (

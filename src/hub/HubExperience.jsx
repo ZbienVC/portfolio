@@ -4,7 +4,6 @@ import { Loader } from '@react-three/drei';
 import * as THREE from 'three';
 import HubScene, { LANDMARKS } from './HubScene.jsx';
 import { PROFILE } from '../content/portfolio.js';
-import { useTypewriter, COARSE_POINTER } from '../journey/hooks.js';
 
 import AboutPanel from '../sections/AboutPanel.jsx';
 import ProjectsPanel from '../sections/ProjectsPanel.jsx';
@@ -57,37 +56,6 @@ function HubNav({ active, pending, onJump, onClassic }) {
   );
 }
 
-function HubIntro({ visible }) {
-  const role = useTypewriter(PROFILE.roles);
-  return (
-    <div className={`hub-intro${visible ? '' : ' gone'}`}>
-      <div className="eyebrow"><span className="live-dot" /> {PROFILE.availability}</div>
-      <h1 className="hub-name">
-        <span className="display">Zach</span> <span className="serif-italic">Bienstock</span>
-      </h1>
-      <div className="hub-role mono"><span className="slash">{'// '}</span>{role}<span className="caret" /></div>
-    </div>
-  );
-}
-
-// Tagline + hint share ONE bottom stack so they can never collide on narrow
-// screens, where both wrap to several lines. It's a sibling of .hub-intro, not
-// a child: the intro takes a transform when it hides, and a transformed
-// ancestor would re-anchor these fixed elements to it instead of the viewport.
-function HubFoot({ visible }) {
-  const tap = COARSE_POINTER;
-  return (
-    <div className={`hub-foot${visible ? '' : ' gone'}`}>
-      <p className="hub-tag">{PROFILE.tagline}</p>
-      <p className="hub-hint mono">
-        {tap ? 'Tap' : 'Click'} a landmark and the fox will take you
-        <span className="hint-more"> · {tap ? 'tap' : 'click'} the snow to send it exploring</span>
-        {' · '}drag to look around
-      </p>
-    </div>
-  );
-}
-
 function SectionPanel({ id, onClose }) {
   const entry = id ? SECTIONS[id] : null;
   return (
@@ -113,7 +81,10 @@ function ReadySignal({ onReady }) {
   return null;
 }
 
-export default function HubExperience({ onClassic }) {
+// The scene carries no title card or instructions: the classic site introduces
+// Zach, and the landmarks' own labels say what each one is. Inside the classic
+// site's window (`embedded`) it drops its nav too; the window has its own bar.
+export default function HubExperience({ onClassic, embedded = false }) {
   const [active, setActive] = useState(null); // panel open at this landmark
   const [pending, setPending] = useState(null); // fox is traveling to this landmark
   const [roam, setRoam] = useState(null); // free-roam point on the snow
@@ -153,7 +124,7 @@ export default function HubExperience({ onClassic }) {
   };
 
   return (
-    <div className="hub-root">
+    <div className={`hub-root${embedded ? ' embedded' : ''}`}>
       <Canvas
         shadows
         dpr={[1.5, 2]}
@@ -181,10 +152,7 @@ export default function HubExperience({ onClassic }) {
       </Canvas>
 
       <div className="vignette" aria-hidden="true" />
-      <div className={`hub-topscrim${active || pending ? ' dim' : ''}`} aria-hidden="true" />
-      <HubNav active={active} pending={pending} onJump={select} onClassic={onClassic} />
-      <HubIntro visible={!active && !pending} />
-      <HubFoot visible={!active && !pending} />
+      {!embedded && <HubNav active={active} pending={pending} onJump={select} onClassic={onClassic} />}
       {pending && (
         <div className="hub-status mono">
           ▸ THE FOX IS LEADING YOU TO {LANDMARKS.find((l) => l.id === pending)?.label.toUpperCase()}…
