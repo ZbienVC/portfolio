@@ -42,10 +42,12 @@ function llmsTxt() {
   };
 }
 
-// The classic page's two faces, asked for while the HTML is still parsing. They
-// otherwise start downloading only once the page's JS and CSS arrive, and the
-// headline swapped fonts mid-render (a layout shift). The 3D mode never uses
-// them, so the preload is skipped there.
+// The classic page's two faces and the headshot at the top of it, asked for
+// while the HTML is still parsing. Otherwise they start downloading only once
+// the page's JS and CSS arrive: the headline swapped fonts mid-render (a layout
+// shift) and the portrait came in late. The 3D mode uses none of them, so the
+// preload is skipped there.
+const HEADSHOT = '/me/headshot.webp';
 function preloadClassicFonts() {
   const faces = [/^assets\/mona-sans-latin-standard-normal-[\w-]+\.woff2$/, /^assets\/jetbrains-mono-latin-wght-normal-[\w-]+\.woff2$/];
   return {
@@ -59,7 +61,9 @@ function preloadClassicFonts() {
         const hrefs = JSON.stringify(files.map((f) => `/${f}`));
         const code =
           `(function(){var p=new URLSearchParams(location.search);if(p.has('3d')||p.has('embed'))return;` +
-          `${hrefs}.forEach(function(h){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.crossOrigin='anonymous';l.href=h;document.head.appendChild(l)})})()`;
+          `function pre(h,as,x){var l=document.createElement('link');l.rel='preload';l.as=as;l.href=h;for(var k in x)l[k]=x[k];document.head.appendChild(l)}` +
+          `${hrefs}.forEach(function(h){pre(h,'font',{type:'font/woff2',crossOrigin:'anonymous'})});` +
+          `pre('${HEADSHOT}','image',{type:'image/webp',fetchPriority:'high'})})()`;
         return [{ tag: 'script', children: code, injectTo: 'head-prepend' }];
       },
     },

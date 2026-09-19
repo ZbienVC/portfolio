@@ -3,6 +3,7 @@ import { GradientCanvas } from '../components/GradientCanvas';
 import { HoverArrow, Icon } from '../components/Icon';
 import { Ink, InkNote } from '../components/Ink';
 import { LiveBoard } from '../components/LiveBoard';
+import { Portrait } from '../components/Portrait';
 import { LIVE_COUNT, PROFILE } from '../lib/data';
 import { ease } from '../lib/motion';
 import { useTheme } from '../lib/theme';
@@ -40,10 +41,10 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
   const split = 3; // "I build the" / "systems the work runs on."
 
   return (
-    <section id="top" className="hero relative isolate overflow-hidden pt-[calc(var(--nav-h)+clamp(40px,7vw,96px))] pb-[clamp(72px,9vw,120px)]">
+    <section id="top" className="hero relative isolate overflow-hidden pt-[var(--nav-h)] pb-[clamp(72px,9vw,120px)] lg:pt-[calc(var(--nav-h)+clamp(40px,5vw,72px))]">
       <div className="guides" aria-hidden="true" />
 
-      {/* the glaze: a skewed slab behind the board, Stripe's move in this page's heat */}
+      {/* the glaze: a skewed slab behind the board, Stripe's move in this page's heat (on a phone, a band across the top) */}
       <div className="hero-glaze">
         <GradientCanvas options={glaze} className="size-full" />
         <InkNote
@@ -54,8 +55,16 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
         />
       </div>
 
-      <div className="container-x relative grid items-start gap-x-8 gap-y-14 lg:grid-cols-12 [&>*]:min-w-0">
-        <div className="lg:col-span-6 lg:pt-4">
+      <div className="container-x relative grid items-start gap-x-8 gap-y-12 lg:grid-cols-12 [&>*]:min-w-0">
+        {/* who's talking: the first thing on a phone, on the glaze band; on a desktop, on the glaze above the board */}
+        <motion.div
+          className="grid h-[var(--band-h)] place-items-center lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:h-auto lg:justify-self-end lg:pr-[3%]"
+          {...rise(0.1, 18)}
+        >
+          <Portrait className="lg:[--pw:160px] xl:flex-row xl:items-start xl:gap-4 xl:[&>div:first-of-type]:mt-5" />
+        </motion.div>
+
+        <div className="lg:col-span-6 lg:col-start-1 lg:row-start-1 lg:pt-4">
           <Ink
             id="headline"
             type="bracket"
@@ -108,8 +117,9 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
           </p>
         </div>
 
+        {/* the board overlaps the portrait's lower edge, the way a print gets tucked under a statement */}
         <motion.div
-          className="lg:col-span-6 lg:col-start-7"
+          className="relative z-10 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mt-[calc(160px*1.36-18px+40px)] xl:mt-[calc(160px*1.36-18px)]"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: ease.out, delay: 0.25 }}

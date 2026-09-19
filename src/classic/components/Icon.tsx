@@ -76,6 +76,7 @@ const PATHS = {
     </>
   ),
   play: <path d="M6.5 4.8v10.4L15 10Z" />,
+  pause: <path d="M7.5 5.5v9M12.5 5.5v9" />,
   github: (
     <path
       fill="currentColor"

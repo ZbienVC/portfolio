@@ -110,7 +110,7 @@ function Page() {
         Skip to the work
       </a>
 
-      <Nav onOpenPalette={openPalette} onOpenProject={(id) => openProject(id)} />
+      <Nav onOpenPalette={openPalette} onOpenProject={(id) => openProject(id)} onOpenAsk={() => setAsk({})} />
 
       <main id="main">
         <Hero onOpenProject={(id) => openProject(id)} />

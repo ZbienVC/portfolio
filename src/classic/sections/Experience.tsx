@@ -4,7 +4,7 @@ import { HoverArrow, Icon } from '../components/Icon';
 import { Ink } from '../components/Ink';
 import { SectionHead } from '../components/SectionHead';
 import { EDUCATION, PROFILE, ROLES, SIDE_WORK, durationLabel, monthsBetween, type Role } from '../lib/data';
-import { useReducedMotionPref } from '../lib/hooks';
+import { useMedia, useReducedMotionPref } from '../lib/hooks';
 import { ease, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
 
@@ -115,9 +115,12 @@ export function Experience() {
 }
 
 function RoleEntry({ role: r, lit, first }: { role: Role; lit: boolean; first: boolean }) {
-  const [open, setOpen] = useState(first);
+  // a phone shows one line per role and keeps the rest a tap away; a desktop shows two, and the current role in full
+  const wide = useMedia('(min-width: 1024px)');
+  const shown = wide ? 2 : 1;
+  const [open, setOpen] = useState(first && wide);
   const months = monthsBetween(r.start, r.end);
-  const rest = r.highlights.length - 2;
+  const rest = r.highlights.length - shown;
   return (
     <li className="relative pb-10 pl-10 last:pb-0">
       {/* the mark: hollow until the rule reaches it */}
@@ -147,14 +150,14 @@ function RoleEntry({ role: r, lit, first }: { role: Role; lit: boolean; first: b
       </p>
 
       <ul className="mt-4 grid gap-2">
-        {r.highlights.slice(0, 2).map((h) => (
+        {r.highlights.slice(0, shown).map((h) => (
           <li key={h} className="text-[15px] leading-relaxed text-ink-2 [text-wrap:pretty]">
             {h}.
           </li>
         ))}
         <AnimatePresence initial={false}>
           {open &&
-            r.highlights.slice(2).map((h) => (
+            r.highlights.slice(shown).map((h) => (
               <motion.li
                 key={h}
                 className="overflow-hidden text-[15px] leading-relaxed text-ink-2 [text-wrap:pretty]"
