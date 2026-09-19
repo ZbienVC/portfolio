@@ -28,8 +28,8 @@ export default defineConfig([
     },
   },
   {
-    // Vercel serverless functions run on Node.
-    files: ['api/**/*.js'],
+    // Vercel serverless functions, and their tests, run on Node.
+    files: ['api/**/*.js', 'test/**/*.js'],
     languageOptions: { globals: globals.node },
   },
   {

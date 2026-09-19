@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { PROFILE } from './content/portfolio.js';
 
 const SUGGESTED = [
   "What projects has Zach built?",
@@ -32,6 +33,7 @@ export default function ChatWidget() {
   const [showContact, setShowContact] = useState(false);
   const [contact, setContact] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [pulse, setPulse] = useState(true);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
@@ -62,10 +64,15 @@ export default function ChatWidget() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages.filter(m => m.role !== 'system') }),
+        // the api reads only the latest 12 turns
+        body: JSON.stringify({ messages: newMessages.filter(m => m.role !== 'system').slice(-12) }),
       });
-      const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.content || 'Something went wrong, try again.' }]);
+      const data = await res.json().catch(() => ({}));
+      // a 429 is the api's rate limit: a burst clears within a minute, the daily cap doesn't
+      const fallback = res.status !== 429 ? 'Something went wrong, try again.'
+        : Number(res.headers.get('Retry-After')) <= 60 ? `That's a lot of questions in a row. Give it a minute, or email Zach: ${PROFILE.email}`
+        : `You've asked a lot of questions today. Email Zach instead: ${PROFILE.email}`;
+      setMessages(prev => [...prev, { role: 'assistant', content: data.content || fallback }]);
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Connection issue, please try again.' }]);
     } finally {
@@ -75,15 +82,18 @@ export default function ChatWidget() {
 
   const sendContact = async () => {
     if (!contact.name || !contact.message) return;
+    setFailed(false);
     try {
-      await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...contact,
-          conversation: messages.slice(1), // exclude greeting
+          conversation: messages.slice(1).slice(-12), // exclude greeting; the api quotes the latest 12 turns
         }),
       });
+      // refused (rate limit, too long): say so instead of claiming it went
+      if (!res.ok) return setFailed(true);
       setSent(true);
     } catch {
       setSent(true); // optimistic
@@ -201,10 +211,10 @@ export default function ChatWidget() {
                     Drop a message and Zach gets it via email and SMS.
                   </p>
                   {[
-                    { key: 'name', placeholder: 'Your name *', type: 'text' },
-                    { key: 'email', placeholder: 'Your email (optional)', type: 'email' },
+                    { key: 'name', placeholder: 'Your name *', type: 'text', max: 100 },
+                    { key: 'email', placeholder: 'Your email (optional)', type: 'email', max: 254 },
                   ].map(f => (
-                    <input key={f.key} type={f.type} placeholder={f.placeholder}
+                    <input key={f.key} type={f.type} placeholder={f.placeholder} maxLength={f.max}
                       value={contact[f.key]}
                       onChange={e => setContact(c => ({ ...c, [f.key]: e.target.value }))}
                       className="chat-input"
@@ -215,7 +225,7 @@ export default function ChatWidget() {
                       }}
                     />
                   ))}
-                  <textarea placeholder="Your message *" rows={4}
+                  <textarea placeholder="Your message *" rows={4} maxLength={5000}
                     value={contact.message}
                     onChange={e => setContact(c => ({ ...c, message: e.target.value }))}
                     className="chat-input"
@@ -238,6 +248,11 @@ export default function ChatWidget() {
                     }}>
                     Send Message →
                   </button>
+                  {failed && (
+                    <p role="alert" style={{ color: 'var(--accent-bright)', fontSize: 12, margin: 0 }}>
+                      That didn&apos;t send. Email Zach instead: {PROFILE.email}
+                    </p>
+                  )}
                 </>
               )}
             </div>
@@ -283,7 +298,7 @@ export default function ChatWidget() {
                 borderTop: '1px solid rgba(255,255,255,0.06)',
                 display: 'flex', gap: 8, alignItems: 'flex-end',
               }}>
-                <input ref={inputRef}
+                <input ref={inputRef} maxLength={2000}
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}

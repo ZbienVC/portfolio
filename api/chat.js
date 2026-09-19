@@ -6,6 +6,36 @@
 // hand-written list it replaced was missing projects and had stale URLs).
 
 import { ABOUT, EXPERIENCE, PROFILE, PROJECTS } from '../src/content/portfolio.js';
+import { DAY, MINUTE, clientKey, clip, rateLimiter, readJson, tooMany } from './_lib/guard.js';
+
+// Per visitor IP, counted in this instance's memory (see _lib/guard.js for
+// how far that reaches). Each allowed request is one OpenAI call.
+const rateLimit = rateLimiter([
+  { limit: 10, windowMs: MINUTE },
+  { limit: 60, windowMs: DAY },
+]);
+const MAX_BODY_BYTES = 64 * 1024;
+const MAX_MESSAGES = 12; // the most recent turns the model sees
+const MAX_CHARS = 2000; // per message: a longer question is refused, longer history is clipped
+
+// The client resends the conversation every turn, so none of it is trusted.
+// Only user and assistant turns get through (a visitor can't add a system or
+// developer message of their own), each is rebuilt as { role, content } so no
+// other OpenAI field rides along (images, tool calls), and the newest turn has
+// to be the visitor's question.
+function parseMessages(raw) {
+  if (!Array.isArray(raw) || !raw.length) return { error: 'messages must be a non-empty array' };
+  if (!raw.every((m) => m && typeof m.role === 'string' && typeof m.content === 'string')) {
+    return { error: 'Each message needs a string role and content' };
+  }
+  const turns = raw.filter((m) => m.role === 'user' || m.role === 'assistant');
+  const question = turns.at(-1);
+  if (question?.role !== 'user' || !question.content.trim()) return { error: 'The last message must be a question' };
+  if (question.content.length > MAX_CHARS) return { error: `Questions are limited to ${MAX_CHARS} characters` };
+  return {
+    messages: turns.slice(-MAX_MESSAGES).map((m) => ({ role: m.role, content: clip(m.content, MAX_CHARS) })),
+  };
+}
 
 const projectLine = (p) => {
   const where = p.collection
@@ -61,11 +91,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { messages } = req.body;
+  const allowed = rateLimit(clientKey(req));
+  if (!allowed.ok) return tooMany(res, allowed.retryAfter);
 
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Messages required' });
-  }
+  const input = readJson(req, MAX_BODY_BYTES);
+  const convo = input.error ? input : parseMessages(input.body.messages);
+  if (convo.error) return res.status(400).json({ error: convo.error });
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -81,10 +112,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'gpt-4.1-mini',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...messages.slice(-10), // last 10 messages for context
-        ],
+        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...convo.messages],
         max_tokens: 500,
         temperature: 0.7,
         stream: false,
@@ -92,8 +120,10 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      const err = await response.json();
-      return res.status(500).json({ error: err.error?.message || 'OpenAI error' });
+      // logged, not passed on: OpenAI's error text can quote part of the key or
+      // say the quota is spent, which is nothing a visitor needs to see
+      console.error('OpenAI error:', response.status, await response.text());
+      return res.status(502).json({ error: 'The model is unavailable' });
     }
 
     const data = await response.json();
