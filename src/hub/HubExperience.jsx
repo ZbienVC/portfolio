@@ -39,7 +39,7 @@ function HubNav({ active, pending, onJump, onClassic }) {
             {l.label}
           </button>
         ))}
-        <button className="jnav-link mono jnav-mode" onClick={onClassic} title="View the classic website instead">Classic site</button>
+        {onClassic && <button className="jnav-link mono jnav-mode" onClick={onClassic} title="View the classic website instead">Classic site</button>}
         <a className="btn btn-ghost jnav-cta" href={PROFILE.socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       </div>
       <button className="jnav-burger" onClick={() => setOpen((v) => !v)} aria-label="Menu">{open ? '✕' : '☰'}</button>
@@ -49,7 +49,7 @@ function HubNav({ active, pending, onJump, onClassic }) {
           {LANDMARKS.map((l) => (
             <button key={l.id} className={`jnav-link mono${current === l.id ? ' active' : ''}`} onClick={() => go(l.id)}>{l.label}</button>
           ))}
-          <button className="jnav-link mono jnav-mode" onClick={onClassic}>Classic site</button>
+          {onClassic && <button className="jnav-link mono jnav-mode" onClick={onClassic}>Classic site</button>}
           <a className="btn btn-ghost" href={PROFILE.socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
       )}

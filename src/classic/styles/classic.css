@@ -1,0 +1,661 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Classic site — "The operating statement"
+   Ledger paper and statement ink, terminal amber as the one accent, the heat of
+   the gradient kept to the hero. Tokens are OKLCH; every text pair here was
+   checked for WCAG AA in both themes.
+   Tailwind scans the classic folder only (source(none) + @source below), so the
+   3D modes' components never reach this stylesheet.
+   ───────────────────────────────────────────────────────────────────────────── */
+@import "tailwindcss" source(none);
+@source "../";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ── Raw tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+
+  /* ledger paper, three shades for ground / section / inset */
+  --paper: oklch(0.988 0.003 85);
+  --paper-2: oklch(0.972 0.005 80);
+  --paper-3: oklch(0.955 0.006 78);
+  /* statement ink */
+  --ink: oklch(0.205 0.012 60);
+  --ink-2: oklch(0.43 0.012 60);
+  --ink-3: oklch(0.53 0.012 62);
+  /* hairlines: the ledger's rules */
+  --rule: oklch(0.905 0.006 75);
+  --rule-2: oklch(0.86 0.008 72);
+
+  /* terminal amber: the Bloomberg screen, and the brand's amber */
+  --amber: oklch(0.76 0.155 62);
+  --amber-ink: oklch(0.53 0.13 52);
+  --amber-wash: oklch(0.955 0.035 75);
+  /* the gradient's heat and depth (hero + closing band only) */
+  --vermilion: oklch(0.62 0.2 33);
+  --oxblood: oklch(0.33 0.09 18);
+
+  /* status: reserved, never decoration */
+  --tick: oklch(0.6 0.13 152);
+  --tick-ink: oklch(0.5 0.12 152);
+  --fault: oklch(0.53 0.19 27);
+  /* focus rings: 3:1 or better against every ground they land on */
+  --focus: var(--amber-ink);
+
+  /* the terminal panel stays dark in both themes */
+  --term: oklch(0.17 0.01 55);
+  --term-2: oklch(0.21 0.012 55);
+  --term-rule: oklch(0.29 0.014 55);
+  --term-ink: oklch(0.93 0.02 75);
+  --term-dim: oklch(0.66 0.03 70);
+  --term-amber: oklch(0.8 0.15 68);
+  --term-tick: oklch(0.78 0.15 150);
+
+  /* pencils for "Show the work" */
+  --pencil: oklch(0.42 0.01 60);
+  --pencil-red: oklch(0.56 0.18 28);
+  --pencil-note: oklch(0.45 0.09 40);
+
+  --shadow-tint: 40 25% 12%;
+  --gutter: clamp(16px, 4vw, 32px);
+  /* content sits inside the ledger rules, never on them */
+  --inset: clamp(10px, 3.4vw, 48px);
+  --nav-h: 64px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: oklch(0.165 0.008 60);
+  --paper-2: oklch(0.19 0.009 60);
+  --paper-3: oklch(0.225 0.01 60);
+  --ink: oklch(0.95 0.008 80);
+  --ink-2: oklch(0.8 0.01 75);
+  --ink-3: oklch(0.68 0.012 72);
+  --rule: oklch(0.275 0.01 60);
+  --rule-2: oklch(0.34 0.012 60);
+
+  --amber-ink: oklch(0.8 0.14 68);
+  --amber-wash: oklch(0.26 0.05 60);
+  --tick-ink: oklch(0.76 0.14 152);
+  --fault: oklch(0.72 0.16 28);
+  --focus: var(--amber);
+
+  --term: oklch(0.125 0.008 55);
+  --term-2: oklch(0.16 0.01 55);
+  --term-rule: oklch(0.27 0.012 55);
+
+  --pencil: oklch(0.82 0.01 75);
+  --pencil-red: oklch(0.72 0.15 32);
+  --pencil-note: oklch(0.8 0.08 60);
+
+  --shadow-tint: 30 30% 2%;
+}
+
+/* ── Tailwind theme ─────────────────────────────────────────────────────────── */
+@theme {
+  /* the page uses the tokens above, never Tailwind's stock palette */
+  --color-*: initial;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1.45;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-md: 1.0625rem;
+  --text-md--line-height: 1.6;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.5;
+  --text-xl: clamp(1.3125rem, 1.15rem + 0.5vw, 1.625rem);
+  --text-xl--line-height: 1.18;
+  --text-2xl: clamp(1.75rem, 1.3rem + 1.5vw, 2.5rem);
+  --text-2xl--line-height: 1.06;
+  --text-3xl: clamp(2.25rem, 1.45rem + 2.7vw, 3.625rem);
+  --text-3xl--line-height: 1.02;
+  --text-display: clamp(2.625rem, 1.4rem + 4vw, 4.875rem);
+  --text-display--line-height: 0.98;
+
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snap: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-xs: 30rem;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-amber: var(--amber);
+  --color-amber-ink: var(--amber-ink);
+  --color-amber-wash: var(--amber-wash);
+  --color-vermilion: var(--vermilion);
+  --color-oxblood: var(--oxblood);
+  --color-tick: var(--tick);
+  --color-tick-ink: var(--tick-ink);
+  --color-fault: var(--fault);
+  --color-term: var(--term);
+  --color-term-2: var(--term-2);
+  --color-term-rule: var(--term-rule);
+  --color-term-ink: var(--term-ink);
+  --color-term-dim: var(--term-dim);
+  --color-term-amber: var(--term-amber);
+  --color-term-tick: var(--term-tick);
+  --color-pencil: var(--pencil);
+  --color-pencil-red: var(--pencil-red);
+
+  --font-sans: "Mona Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --shadow-hairline: 0 0 0 1px var(--rule);
+  --shadow-panel: 0 1px 2px hsl(var(--shadow-tint) / 0.06), 0 12px 32px -12px hsl(var(--shadow-tint) / 0.18);
+  --shadow-float: 0 2px 4px hsl(var(--shadow-tint) / 0.06), 0 30px 60px -24px hsl(var(--shadow-tint) / 0.32), 0 18px 36px -18px hsl(var(--shadow-tint) / 0.22);
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--nav-h) + 24px);
+    /* overlays lock the page's scroll; the gutter stays, so nothing shifts sideways */
+    scrollbar-gutter: stable;
+    background: var(--paper);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection { background: color-mix(in oklch, var(--amber) 38%, transparent); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+}
+
+/* ── Type roles ─────────────────────────────────────────────────────────────── */
+@utility display-type {
+  font-size: var(--text-display);
+  line-height: var(--text-display--line-height);
+  font-weight: 720;
+  font-stretch: 116%;
+  letter-spacing: -0.038em;
+  text-wrap: balance;
+}
+@utility h2-type {
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl--line-height);
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+@utility h3-type {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
+  font-weight: 650;
+  font-stretch: 106%;
+  letter-spacing: -0.018em;
+}
+@utility wide {
+  font-stretch: 118%;
+}
+@utility label-type {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--ink-3);
+}
+@utility lede {
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+@utility container-x {
+  width: min(1180px, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--inset);
+}
+
+@utility section-y {
+  padding-block: clamp(84px, 10vw, 148px);
+}
+
+@layer components {
+/* ── Layout ─────────────────────────────────────────────────────────────────── */
+
+/* The ledger's column rules (the same idea as Stripe's guides): hairlines at the
+   container edges and quarter lines, behind everything, fading at the ends. */
+.guides {
+  position: absolute;
+  inset-block: 0;
+  left: 50%;
+  width: min(1180px, 100% - 2 * var(--gutter));
+  translate: -50% 0;
+  pointer-events: none;
+  z-index: 0;
+  --g: var(--rule);
+  /* the inner rules are fainter: paper ruling, never competing with text */
+  --d: repeating-linear-gradient(to bottom, color-mix(in oklch, var(--rule) 70%, transparent) 0 5px, transparent 5px 11px);
+  background:
+    linear-gradient(var(--g), var(--g)) 0 0 / 1px 100% no-repeat,
+    var(--d) 25% 0 / 1px 100% no-repeat,
+    var(--d) 50% 0 / 1px 100% no-repeat,
+    var(--d) 75% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--g), var(--g)) 100% 0 / 1px 100% no-repeat;
+  mask-image: linear-gradient(to bottom, transparent, #000 80px, #000 calc(100% - 80px), transparent);
+  opacity: 0.8;
+}
+@media (max-width: 767px) {
+  .guides {
+    background:
+      linear-gradient(var(--g), var(--g)) 0 0 / 1px 100% no-repeat,
+      linear-gradient(var(--g), var(--g)) 100% 0 / 1px 100% no-repeat;
+  }
+}
+
+/* ── Controls ───────────────────────────────────────────────────────────────── */
+.btn {
+  --btn-h: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--btn-h);
+  padding-inline: 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-stretch: 104%;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  transition: background-color 160ms var(--ease-snap), color 160ms var(--ease-snap),
+    border-color 160ms var(--ease-snap), box-shadow 200ms var(--ease-snap), translate 160ms var(--ease-snap);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { translate: 0 1px; }
+.btn-sm { --btn-h: 36px; padding-inline: 13px; font-size: 0.875rem; }
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 1px 0 0 color-mix(in oklch, var(--paper) 18%, transparent) inset, 0 6px 16px -8px hsl(var(--shadow-tint) / 0.5);
+}
+.btn-primary:hover { background: color-mix(in oklch, var(--ink) 86%, var(--amber)); }
+.btn-quiet {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--rule-2) inset;
+}
+.btn-quiet:hover { background: var(--paper-3); box-shadow: 0 0 0 1px var(--ink-3) inset; }
+.btn-ghost { background: transparent; color: var(--ink-2); padding-inline: 10px; }
+.btn-ghost:hover { color: var(--ink); background: var(--paper-3); }
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  color: var(--ink-2);
+  transition: background-color 160ms var(--ease-snap), color 160ms var(--ease-snap);
+}
+.icon-btn:hover { background: var(--paper-3); color: var(--ink); }
+.icon-btn[aria-pressed="true"] { color: var(--amber-ink); background: var(--amber-wash); }
+
+/* Stripe's arrow: the chevron slides and a stem draws in behind it on hover. */
+.hover-arrow { overflow: visible; flex: none; }
+.hover-arrow .ha-line { opacity: 0; transition: opacity 160ms var(--ease-snap); }
+.hover-arrow .ha-tip { transition: transform 160ms var(--ease-snap); }
+:where(a, button):hover > .hover-arrow .ha-line,
+:where(a, button):focus-visible > .hover-arrow .ha-line,
+.group:hover .hover-arrow .ha-line { opacity: 1; }
+:where(a, button):hover > .hover-arrow .ha-tip,
+:where(a, button):focus-visible > .hover-arrow .ha-tip,
+.group:hover .hover-arrow .ha-tip { transform: translateX(3px); }
+
+.text-link {
+  color: var(--amber-ink);
+  font-weight: 560;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 240ms var(--ease-out);
+}
+.text-link:hover, .text-link:focus-visible { background-size: 100% 1px; }
+
+.kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--ink-2);
+  background: var(--paper);
+  box-shadow: 0 0 0 1px var(--rule-2) inset, 0 1px 0 var(--rule-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding-inline: 8px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-2);
+  background: var(--paper-3);
+  box-shadow: 0 0 0 1px var(--rule) inset;
+  white-space: nowrap;
+}
+
+/* status dot: the only place green lives */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ink-3);
+  flex: none;
+}
+.dot[data-state="up"] { background: var(--tick); box-shadow: 0 0 0 3px color-mix(in oklch, var(--tick) 22%, transparent); }
+.dot[data-state="down"] { background: var(--fault); }
+.dot[data-state="pending"] { background: var(--ink-3); animation: dot-wait 1.1s var(--ease-in-out) infinite; }
+@keyframes dot-wait { 50% { opacity: 0.25; } }
+
+/* ── Screenshot frame ───────────────────────────────────────────────────────── */
+.shot {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--paper-3);
+  box-shadow: 0 0 0 1px var(--rule) , var(--shadow-panel);
+  isolation: isolate;
+}
+.shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 1px hsl(var(--shadow-tint) / 0.08) inset;
+  pointer-events: none;
+}
+
+/* ── Split-flap (ported from Atelier's typography/split-flap) ─────────────────
+   top/bot are the two resting halves; .leaf is the ONE flap in motion: its face
+   is the top of the current character, its back the bottom of the next. */
+.flap-row { display: inline-flex; gap: 0.07em; }
+.flap {
+  --flap: oklch(0.215 0.012 55);
+  --flap-hi: oklch(0.245 0.013 55);
+  --flap-lo: oklch(0.19 0.011 55);
+  position: relative;
+  flex: none;
+  display: inline-block;
+  width: 0.74em;
+  height: 1.2em;
+  perspective: 5em;
+  border-radius: 0.09em;
+  background: #000;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--term-ink);
+  contain: layout style;
+}
+.flap .half { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; }
+.flap .half.top { top: 0; border-radius: 0.09em 0.09em 0 0; background: linear-gradient(var(--flap-hi), var(--flap)); }
+.flap .half.bot { top: 50%; border-radius: 0 0 0.09em 0.09em; background: linear-gradient(var(--flap-lo), var(--flap)); }
+.flap .glyph {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: block;
+  text-align: center;
+  white-space: pre;
+  transform: translateY(-50%);
+  text-box: trim-both cap alphabetic;
+}
+.flap .top > .glyph { top: 100%; }
+.flap .bot > .glyph { top: 0; }
+.flap .leaf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  display: none;
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+}
+.flap.run .leaf { display: block; }
+.flap .leaf .half { top: 0; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flap .leaf .back { transform: rotateX(180deg); }
+.flap .shade { position: absolute; inset: 0; opacity: 0; }
+.flap .front .shade { background: linear-gradient(rgb(4 3 2 / 0.96), rgb(4 3 2 / 0.62)); }
+.flap .back .shade { background: linear-gradient(rgb(4 3 2 / 0.62), rgb(4 3 2 / 0.96)); }
+.flap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  margin-top: -0.5px;
+  background: rgb(0 0 0 / 0.9);
+  box-shadow: 0 1px 0 rgb(255 236 208 / 0.04);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flap .leaf { display: none !important; }
+}
+
+}
+
+/* ── Utilities that don't fit Tailwind's grammar ───────────────────────────── */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* View-transition theme switch: the new theme opens as a circle from the
+   switch (the JS sets --vt-x / --vt-y). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0%));
+  animation: vt-reveal 620ms var(--ease-in-out) forwards;
+}
+@keyframes vt-reveal {
+  to { clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 0%)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@layer components {
+/* ── "Show the work": pencil marks + margin notes (engines/ink.ts) ─────────── */
+.ink-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  z-index: 20;
+  mix-blend-mode: multiply;
+}
+:root[data-theme="dark"] .ink-layer { mix-blend-mode: screen; }
+.ink-stroke { stroke-linecap: round; stroke-linejoin: round; opacity: 0.92; }
+.ink-stroke[data-pen="graphite"] { stroke: var(--pencil); }
+.ink-stroke[data-pen="red"] { stroke: var(--pencil-red); }
+.ink-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.ink-note {
+  position: absolute;
+  z-index: 21;
+  width: max-content;
+  max-width: 236px;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--pencil-note);
+  rotate: -1.4deg;
+  text-align: left;
+}
+.ink-note-text {
+  display: block;
+  font-family: "Caveat Variable", "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0;
+  text-wrap: pretty;
+}
+.ink-note-spec {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  white-space: pre-wrap;
+  rotate: 1.4deg;
+}
+.ink-note[data-place="right"] { left: calc(100% + 34px); top: -2px; }
+.ink-note[data-place="left"] { right: calc(100% + 34px); top: -2px; }
+.ink-note[data-place="below"] { left: 4px; top: calc(100% + 16px); }
+.ink-note[data-place="above"] { left: 4px; bottom: calc(100% + 14px); }
+/* no margins to write in: the note drops into the flow under the thing it explains */
+@media (max-width: 1099px) {
+  .ink-note,
+  .ink-note[data-place] {
+    position: static;
+    display: block;
+    width: auto;
+    max-width: 34rem;
+    margin-top: 14px;
+    rotate: none;
+    inset: auto;
+  }
+}
+
+}
+
+/* ── The hero's glaze: a skewed slab of the WebGL gradient behind the board ── */
+.hero-glaze {
+  position: absolute;
+  z-index: -1;
+  top: var(--nav-h);
+  right: 0;
+  bottom: 0;
+  width: 57%;
+  clip-path: polygon(30% 0, 100% 0, 100% 84%, 9% 100%);
+  background:
+    radial-gradient(120% 80% at 70% 20%, #ffb347 0%, transparent 55%),
+    linear-gradient(160deg, #d8432a 0%, #7a1f24 55%, #2a0d0f 100%);
+}
+.hero-glaze canvas { position: absolute; inset: 0; display: block; }
+/* the board's note sits on the glaze: pale pencil on dark silk */
+.hero-glaze .ink-note {
+  /* wider than a margin note: the chip's padding comes out of the width, and it has to clear the board */
+  max-width: 330px;
+  color: oklch(0.95 0.03 80);
+  background: oklch(0.2 0.035 30 / 0.86);
+  padding: 10px 14px 12px;
+  border-radius: 8px;
+}
+.hero-glaze .ink-note-spec { color: oklch(0.86 0.04 70); }
+@media (max-width: 1023px) {
+  .hero-glaze {
+    top: auto;
+    width: 100%;
+    height: min(640px, 150vw);
+    clip-path: polygon(0 16%, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* the closing band's top edge: the glaze again, as a rule */
+.closing-glaze {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2a0d0f, #d8432a 30%, #ffb347 55%, #d8432a 80%, #2a0d0f);
+}
+
+/* in the hero the glaze sits over the ledger rules, the way Stripe's gradient covers its guides */
+.hero .guides { z-index: -2; }
+
+/* "Show the work" opens the margins: the hero drops to make room for its notes */
+.hero { transition: padding 480ms var(--ease-out); }
+:root[data-show-work] .hero { padding-top: calc(var(--nav-h) + clamp(150px, 14vw, 200px)); }
+/* and at the bottom, for the board's note, which hangs below it on the glaze */
+@media (min-width: 1100px) {
+  :root[data-show-work] .hero { padding-bottom: clamp(150px, 12vw, 180px); }
+}
+@media (max-width: 1099px) {
+  :root[data-show-work] .hero { padding-top: calc(var(--nav-h) + clamp(40px, 7vw, 96px)); }
+}
+@layer components {
+  /* over the glaze the silk runs from oxblood to gold, so pale pencil gets a dark ground of its own */
+  .ink-note--pale {
+    color: oklch(0.96 0.03 80);
+    background: oklch(0.2 0.035 30 / 0.86);
+    padding: 10px 14px 12px;
+    border-radius: 8px;
+  }
+  .ink-note--pale .ink-note-spec { color: oklch(0.88 0.04 70); }
+  @media (max-width: 1099px) {
+    .ink-note--pale { color: var(--pencil-note); background: none; padding: 0; }
+    .ink-note--pale .ink-note-spec { color: var(--ink-3); }
+  }
+}

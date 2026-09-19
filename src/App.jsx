@@ -1,70 +1,31 @@
 import { lazy, Suspense } from 'react';
-import { REDUCED_MOTION, hasWebGL } from './journey/hooks.js';
-import HubExperience from './hub/HubExperience.jsx';
-import ChatWidget from './ChatWidget.jsx';
+import { canUseHub, isEmbedded, resolveMode } from './mode.js';
 
-// Classic = the original editorial site, loaded lazily so its stylesheet only
-// ever enters the page in classic mode (mode switches reload the page).
-const ClassicSite = lazy(() => import('./classic/ClassicSite.jsx'));
+// Each mode is its own chunk carrying its own stylesheet, so only one design
+// system is ever live in a document. The chosen chunk starts downloading as
+// soon as this module runs, before React renders.
+const interactive = resolveMode() === 'interactive' && canUseHub();
+// the basecamp window never nests the classic site inside itself
+const embeddedWithoutWebGL = isEmbedded() && !interactive;
+const chunk = interactive
+  ? import('./hub/InteractiveMode.jsx')
+  : embeddedWithoutWebGL
+    ? null
+    : import('./classic/ClassicApp.tsx');
+const Mode = chunk ? lazy(() => chunk) : NoWebGL;
 
-// 'interactive' (3D basecamp) | 'classic' (the original site).
-// Priority: explicit URL param → remembered choice → default interactive.
-function resolveMode() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has('3d')) return 'interactive';
-  if (params.has('classic') || params.has('flat')) return 'classic';
-  const stored = localStorage.getItem('zb-mode');
-  if (stored === 'classic' || stored === 'interactive') return stored;
-  return 'interactive';
-}
-
-// switching modes reloads the page so only one design system's CSS is live.
-// The explicit param makes the switch work even where localStorage is blocked;
-// the stored value makes the choice stick for future visits.
-export function switchMode(mode) {
-  try { localStorage.setItem('zb-mode', mode); } catch {}
-  const url = new URL(window.location.href);
-  url.search = mode === 'classic' ? '?classic' : '?3d';
-  window.location.href = url.toString();
-}
-
-function InteractiveChip() {
+function NoWebGL() {
   return (
-    <button
-      onClick={() => switchMode('interactive')}
-      style={{
-        position: 'fixed', left: 20, bottom: 20, zIndex: 1000,
-        display: 'inline-flex', alignItems: 'center', gap: 8,
-        padding: '11px 18px', borderRadius: 100, cursor: 'pointer',
-        background: 'rgba(224,161,85,0.12)', border: '1px solid rgba(224,161,85,0.4)',
-        color: '#e0a155', fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-        fontSize: 12, fontWeight: 600, letterSpacing: '0.08em',
-        backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
-        boxShadow: '0 8px 28px rgba(0,0,0,0.4)',
-      }}
-      title="Explore the interactive 3D basecamp"
-    >
-      ✦ INTERACTIVE MODE
-    </button>
+    <p style={{ font: '15px/1.5 system-ui, sans-serif', padding: 24, color: '#8a7f72' }}>
+      The 3D basecamp needs WebGL, which this browser has turned off.
+    </p>
   );
 }
 
 export default function App() {
-  const canHub = hasWebGL() && !REDUCED_MOTION;
-  const mode = resolveMode();
-  const useHub = mode === 'interactive' && canHub;
-
   return (
-    <>
-      {useHub ? (
-        <HubExperience onClassic={() => switchMode('classic')} />
-      ) : (
-        <Suspense fallback={null}>
-          <ClassicSite />
-          {canHub && <InteractiveChip />}
-        </Suspense>
-      )}
-      <ChatWidget />
-    </>
+    <Suspense fallback={null}>
+      <Mode />
+    </Suspense>
   );
 }

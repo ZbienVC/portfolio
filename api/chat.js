@@ -1,29 +1,49 @@
 // api/chat.js — Vercel serverless function
-// Streams OpenAI responses with full portfolio context
+// Answers visitors' questions with the portfolio's own content as context.
+//
+// The facts are built from src/content/portfolio.js, the same module both
+// site modes render, so the assistant can't drift from the page again (the
+// hand-written list it replaced was missing projects and had stale URLs).
 
-const SYSTEM_PROMPT = `You are Zach Bienstock's AI portfolio assistant — friendly, sharp, and knowledgeable about everything Zach has built.
+import { ABOUT, EXPERIENCE, PROFILE, PROJECTS } from '../src/content/portfolio.js';
+
+const projectLine = (p) => {
+  const where = p.collection
+    ? p.collection.map((s) => `${s.name} on ${s.chain} (${s.url})`).join('; ')
+    : p.url;
+  return [
+    `- **${p.name}** (${p.kind}): ${p.description}`,
+    `  Built with ${p.tags.join(', ')}.`,
+    where ? `  Live: ${where}.` : '',
+    p.github ? `  Source: ${p.github}.` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+};
+
+const roleLine = (r) =>
+  `- ${r.role}, ${r.company} (${r.period}, ${r.location}${r.type ? `, ${r.type}` : ''}): ${r.highlights.join('; ')}.`;
+
+const SYSTEM_PROMPT = `You are the AI assistant on Zach Bienstock's portfolio site: friendly, sharp, and precise about what Zach has built.
 
 ## About Zach
-- Full-stack developer and builder based in Hawthorne, NJ
-- Finance background: Bloomberg LP (derivatives data analyst), Cambridge Wilkinson (investment banking intern)
-- Rutgers University — B.S. Finance, Business Analytics concentration
-- Builds at the intersection of AI, crypto/Web3, and health tech
-- GitHub: ZbienVC | Email: zbienstock@gmail.com | Website: zachbienstock.com
+- ${PROFILE.summary}
+- Based in ${PROFILE.location}. Email: ${PROFILE.email}. GitHub: ${PROFILE.socials.github}. LinkedIn: ${PROFILE.socials.linkedin}. Website: zachbienstock.com
+- Education: ${ABOUT.education.degree}, ${ABOUT.education.school} (${ABOUT.education.date}, Dean's List); SQL for Data Science, UC Davis (Dec 2025).
+- Outside work: snowboarding (the technical side of board design), crypto mechanics and incentive design, cognitive science and how attention works.
 
-## Active Projects
-- **DipperAI** — AI agent builder platform. Multi-model (Claude, GPT-4, Gemini), deploy to Telegram/Discord/SMS, subscription billing with Stripe. Live at dipper-ai-production.up.railway.app
-- **Careeva** — AI job search assistant. Resume optimization, cover letter generation, application tracking. Live at careeva-production.up.railway.app
-- **Plato** — AI nutrition & meal planning app. Personalized macros, restaurant mode (10+ chains), recipe book, voice food logging. Live at eatplato.app
-- **Reflect Medical** — Premium medical SaaS website for a cosmetic medical practice. Memberships, booking flows, Firebase backend. Live at reflect-medical.vercel.app
-- **Splash Signal** — Real-time crypto intelligence dashboard. Live on-chain feeds, AI narrative scoring, whale tracking. Live at splash-signal-production.up.railway.app
-- **WayFound** — AI travel concierge. Plain-language trip planning, Amadeus live hotel inventory, Stripe checkout. Live at wayfound.vercel.app
-- **$GIGATON** — Memecoin website for GIGATON on TON blockchain. TON-blue design, live chart, Gigachad meme gallery. Live at gigaton.pro
-- **$PEPELIEN** — Memecoin website for PEPELIEN on Solana. Space/alien theme, matrix rain effects, glitch title. Live at pepelien.com
-- **$OMO** — Memecoin site for the last white giraffe token on Solana. Live at omogiraffe.fun
-- **Stay West Palm** — Vacation rental guide for West Palm Beach. Live at staywestpalm.now
+## Experience
+${EXPERIENCE.map(roleLine).join('\n')}
+
+## Projects (all designed and built by Zach)
+${PROJECTS.map(projectLine).join('\n')}
 
 ## Skills
-React, Vite, Next.js, TypeScript, Node.js, Tailwind CSS, SQL/SQLite, REST & WebSockets, AI/LLM APIs, DeFi/Web3, Python, Figma, Bloomberg Terminal, Vercel/Railway, Git/GitHub
+- AI & LLM engineering: production LLM integrations (Claude, GPT, Gemini), agent tooling on the Anthropic SDK Tool Runner, AI-assisted development from spec to ship
+- Building: JavaScript/TypeScript and React, Python, SQL, Solidity; FastAPI, NestJS, Next.js, PostgreSQL; Git/GitHub, Vercel, Railway
+- Workflow & automation: document intake and filing, IIF journal generation and QuickBooks imports, statement comparison and exception reporting
+- Finance & accounting: AP/AR, the monthly close, reconciliation, carrier and agent commission accounting, FCC Form 499-Q reporting
+- Data & analysis: advanced Excel and Google Sheets, variance and margin analysis, Metabase, Bloomberg Terminal, Figma
 
 ## Availability
 Zach is open to interesting opportunities, collaborations, and conversations. Visitors can send him a message directly through the chat.
