@@ -14,10 +14,13 @@ npm install
 npm run dev        # http://localhost:5173
 npm run typecheck  # the classic site is TypeScript
 npm run lint
+npm test           # the api's rate limits and input caps (no keys needed)
 npm run build
 ```
 
 `api/` holds two Vercel functions: `chat` (the AI assistant, context built from `src/content/portfolio.js`) and `contact` (email + SMS). They need `OPENAI_API_KEY`, `RESEND_API_KEY` and the Twilio variables in `.env.example`; under `vite dev` they 404 and the UI says so.
+
+Both are rate-limited per visitor IP: chat allows 10 questions a minute and 60 a day, contact 3 messages per 10 minutes and 10 a day. Past that they answer 429 and the chat panel suggests email instead; oversized or malformed input gets a 400. The counts live in each function instance's memory, so they slow a script down rather than stop a determined one. `api/_lib/guard.js` explains what would make them hard limits.
 
 ## Where things live
 

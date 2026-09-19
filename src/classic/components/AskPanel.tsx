@@ -17,6 +17,20 @@ const GREETING: Message = {
 };
 const SUGGESTED = ['What did he automate at his current job?', 'How does FieldSense price a line?', 'Which projects use AI agents?', 'Is he open to new roles?'];
 
+// The api's input caps, mirrored so nobody trips them by accident: chat reads
+// only the latest turns and refuses a longer question, contact refuses longer fields.
+const HISTORY = 12;
+const MAX_QUESTION = 2000;
+const MAX_FIELD = { name: 100, email: 254, message: 5000 };
+
+// A 429 is the chat's rate limit. A burst clears within a minute; the daily cap doesn't.
+function unavailable(res: Response) {
+  if (res.status !== 429) return `I can't reach my model right now. The fastest route is email: ${PROFILE.email}.`;
+  return Number(res.headers.get('Retry-After')) <= 60
+    ? `That's a lot of questions in a row. Give it a minute, or email me: ${PROFILE.email}.`
+    : `You've asked a lot of questions today. Email me instead: ${PROFILE.email}.`;
+}
+
 /**
  * The AI assistant (api/chat), dressed for this site: a side panel instead of a
  * floating bubble. It opens from ⌘K or the contact band, optionally with the
@@ -46,16 +60,10 @@ export function AskPanel({ onClose, initial }: { onClose: () => void; initial?: 
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next.slice(1) }),
+        body: JSON.stringify({ messages: next.slice(1).slice(-HISTORY) }),
       });
       const data = res.ok ? await res.json() : null;
-      setMessages((m) => [
-        ...m,
-        {
-          role: 'assistant',
-          content: data?.content ?? `I can't reach my model right now. The fastest route is email: ${PROFILE.email}.`,
-        },
-      ]);
+      setMessages((m) => [...m, { role: 'assistant', content: data?.content ?? unavailable(res) }]);
     } catch {
       setMessages((m) => [...m, { role: 'assistant', content: `The connection dropped. Try again, or email ${PROFILE.email}.` }]);
     } finally {
@@ -189,6 +197,7 @@ export function AskPanel({ onClose, initial }: { onClose: () => void; initial?: 
                     id="ask-input"
                     ref={field}
                     rows={1}
+                    maxLength={MAX_QUESTION}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -233,7 +242,7 @@ function MessageForm({ conversation, onBack }: { conversation: Message[]; onBack
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, conversation }),
+        body: JSON.stringify({ ...form, conversation: conversation.slice(-HISTORY) }),
       });
       setState(res.ok ? 'sent' : 'failed');
     } catch {
@@ -264,19 +273,19 @@ function MessageForm({ conversation, onBack }: { conversation: Message[]; onBack
         <label htmlFor="m-name" className="label-type">
           Your name
         </label>
-        <input id="m-name" required autoComplete="name" className={cn(input, 'mt-1.5')} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <input id="m-name" required maxLength={MAX_FIELD.name} autoComplete="name" className={cn(input, 'mt-1.5')} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
       </div>
       <div>
         <label htmlFor="m-email" className="label-type">
           Your email, so I can reply
         </label>
-        <input id="m-email" type="email" autoComplete="email" className={cn(input, 'mt-1.5')} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        <input id="m-email" type="email" maxLength={MAX_FIELD.email} autoComplete="email" className={cn(input, 'mt-1.5')} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
       </div>
       <div>
         <label htmlFor="m-msg" className="label-type">
           Message
         </label>
-        <textarea id="m-msg" required rows={6} className={cn(input, 'mt-1.5 resize-y')} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+        <textarea id="m-msg" required rows={6} maxLength={MAX_FIELD.message} className={cn(input, 'mt-1.5 resize-y')} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
       </div>
       {conversation.length > 0 && <p className="text-[12.5px] text-ink-3">Your chat with the AI comes along, so you don&apos;t have to repeat yourself.</p>}
       {state === 'failed' && (
