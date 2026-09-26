@@ -510,7 +510,8 @@ export const PROJECT_CATEGORIES = [
   { id: 'web', label: 'Sites & games' },
 ];
 
-// Web-sized copies (public/life/opt, EXIF stripped); the originals stay in public/life.
+// Web-sized copies (public/life/opt, EXIF stripped). The full-size originals were
+// removed from public/ because they carried GPS metadata; they remain in git history.
 export const LIFE_PHOTOS = [
   { src: '/life/opt/photo1.webp', thumb: '/life/opt/photo1-sm.webp', w: 1400, h: 1050, label: 'Giants game, Foxborough' },
   { src: '/life/opt/photo2.webp', thumb: '/life/opt/photo2-sm.webp', w: 1400, h: 788, label: 'Fog day, still riding' },

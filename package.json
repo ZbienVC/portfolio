@@ -2,6 +2,7 @@
   "name": "portfolio",
   "private": true,
   "version": "0.0.0",
+  "description": "Zach Bienstock's portfolio site (zachbienstock.com): a classic React site and a 3D basecamp over one content file, with an AI chat assistant.",
   "type": "module",
   "scripts": {
     "dev": "vite",
