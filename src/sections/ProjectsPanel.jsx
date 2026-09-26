@@ -88,7 +88,7 @@ export default function ProjectsPanel({ waypoint }) {
       altitude={waypoint?.altitude || '2,180 m'}
       wide
       title={<>Things I've <span className="serif-italic">shipped</span></>}
-      intro={`${LIVE_COUNT} projects live in production. Every signal at basecamp is lit. Warm one up.`}
+      intro={`${LIVE_COUNT} live sites and products, all designed and built by me.`}
     >
       <div className="proj-tabs reveal d2">
         {PROJECT_CATEGORIES.map((c) => {

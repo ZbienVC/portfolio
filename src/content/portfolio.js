@@ -15,9 +15,9 @@ export const PROFILE = {
   availability: 'Available for opportunities',
   headshot: '/headshot.jpg',
   tagline:
-    "I don't just want to know how things work. I want to make them work better.",
+    'I want to know how things work so I can make them work better.',
   intro:
-    'Finance background from Bloomberg & Investment Banking, now building at the intersection of data, product, and AI.',
+    'I started in finance at Bloomberg and in investment banking. Now I build data and AI products.',
   // the résumé's own positioning line (2026-09), used by the classic site's hero
   headline: 'I build the systems the work runs on.',
   summary:
