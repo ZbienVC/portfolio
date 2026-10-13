@@ -35,7 +35,7 @@ Caveat only for the handwritten notes in "Show the work".
 - `typography/hand-annotation` — "Show the work": seeded pencil marks and margin notes (`engines/ink.ts`)
 - plus `motion/spring-presets` as the motion language (`lib/motion.ts`), not a visible signature
 
-**Moment:** The status board. The visitor's browser sends each of the 14 live sites a
+**Moment:** The status board. The visitor's browser sends each of the 15 live sites a
 HEAD request as the page loads; rows tick green with real response times and the
 split-flap counter turns forward one flap per answer. A site that's down says so.
 

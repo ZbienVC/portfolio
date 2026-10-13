@@ -313,6 +313,28 @@ export const PROJECTS = [
     ],
   },
   {
+    id: 'unearth',
+    name: 'Unearth',
+    tagline: 'Drop in a spreadsheet, get the story',
+    short: 'Drop in a spreadsheet and it finds what matters: price creep, double payments, skipped months.',
+    kind: 'Product · free test',
+    description:
+      "A tool for anyone who lives in spreadsheets. Drop in an Excel file, a CSV, a PDF statement or a Google Sheet, and it works out what each column means, then digs for what deserves your attention: a vendor creeping up a little every month, an invoice paid twice, a client who skipped a month, lines that ran over budget, and who drove a change. Every find shows the exact rows behind it, and the results export to Excel, PowerPoint or a one-page brief. All the math runs in your browser, so the file never leaves your computer.",
+    status: 'live',
+    url: 'https://unearth-pi.vercel.app',
+    github: null, // private repo (ZbienVC/unearth)
+    color: '#d6a24c',
+    colorEnd: '#a9782c',
+    tags: ['Next.js', 'TypeScript', 'React', 'Web Workers', 'PWA'],
+    category: ['ai'],
+    highlights: [
+      '19 finders, from price creep to double payments',
+      'Files never leave your browser',
+      'Exports to Excel, PowerPoint and a one-page brief',
+      'Ties invoices to bank deposits, name by name',
+    ],
+  },
+  {
     id: 'plato',
     name: 'Plato',
     tagline: 'Meal planning and macro tracking',
