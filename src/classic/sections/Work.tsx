@@ -46,7 +46,7 @@ export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
         <SectionHead
           id="work-title"
           label={`Work · ${LIVE_COUNT} live sites`}
-          title="I've shipped fourteen. Start with these four."
+          title="I've shipped fifteen. Start with these four."
           lede="I designed and built every one of them myself, from the database to the last button. Open any of them for the long version."
         />
 
