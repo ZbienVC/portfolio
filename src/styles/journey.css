@@ -1,0 +1,165 @@
+/* ==========================================================================
+   Alpine Journey — canvas layering, nav, HUD, hero, waypoint panels, fallback
+   z ladder:  canvas 1 · vignette 11 · grain 12 · hero 20 · panels 25 · hud 30 · nav 40
+   ========================================================================== */
+
+.journey-root { position: relative; }
+
+.canvas-host { position: fixed; inset: 0; z-index: 1; }
+.journey-canvas {
+  position: fixed; inset: 0; width: 100vw; height: 100vh; display: block;
+  touch-action: pan-y; z-index: 1;
+}
+.track { position: relative; width: 100%; z-index: 0; pointer-events: none; }
+
+/* grain/vignette sit over the world but under the UI */
+.grain { z-index: 12; }
+.vignette { z-index: 11; }
+
+/* ── Nav ──────────────────────────────────────────────────────────────────── */
+.jnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 26px;
+  background: linear-gradient(to bottom, rgba(8,13,22,0.6), transparent);
+}
+.jnav-logo { background: none; border: none; cursor: pointer; padding: 0; color: var(--snow); }
+.jnav-logo .display { font-size: 22px; font-weight: 820; letter-spacing: -0.02em; }
+.jnav-logo .serif-italic { color: var(--amber); font-size: 1.05em; }
+.jnav-links { display: flex; align-items: center; gap: 4px; }
+.jnav-link {
+  background: none; border: none; cursor: pointer;
+  font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--snow-3); padding: 8px 12px; border-radius: 3px;
+  transition: color 0.2s, background 0.2s; position: relative;
+}
+.jnav-link:hover { color: var(--snow); }
+.jnav-link.active { color: var(--amber); }
+.jnav-link.active::after {
+  content: ''; position: absolute; left: 12px; right: 12px; bottom: 3px; height: 1px;
+  background: var(--amber);
+}
+.jnav-cta { margin-left: 10px; padding: 9px 16px !important; }
+.jnav-burger { display: none; background: none; border: none; color: var(--amber); font-size: 22px; cursor: pointer; }
+.jnav-mobile { display: none; }
+
+@media (max-width: 880px) {
+  .jnav-links { display: none; }
+  .jnav-burger { display: block; }
+  .jnav-mobile {
+    display: flex; flex-direction: column; gap: 4px;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(8,13,22,0.94); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border); padding: 14px;
+  }
+  .jnav-mobile .jnav-link { display: flex; align-items: center; gap: 10px; padding: 12px 8px; font-size: 13px; }
+  .jnav-mobile .jnav-alt { margin-left: auto; }
+  .jnav-mobile .wp-no { color: var(--amber); }
+}
+
+/* ── Descent HUD ──────────────────────────────────────────────────────────── */
+.hud {
+  position: fixed; right: 26px; top: 50%; transform: translateY(-50%);
+  z-index: 30; display: flex; align-items: center; gap: 14px;
+  opacity: 0; transition: opacity 0.8s var(--ease) 0.3s; pointer-events: none;
+}
+.hud.in { opacity: 1; }
+.hud-alt { text-align: right; display: flex; flex-direction: column; gap: 2px; }
+.hud-label { font-size: 9px; letter-spacing: 0.24em; color: var(--snow-4); }
+.hud-value { font-size: 13px; color: var(--amber); letter-spacing: 0.08em; }
+.descent-rail { position: relative; width: 2px; height: 210px; background: rgba(147,164,193,0.14); border-radius: 2px; }
+.rail-tick { position: absolute; left: 50%; transform: translate(-50%, -50%); width: 5px; height: 5px; border-radius: 50%; background: var(--frost-2); }
+.rail-fill { position: absolute; top: 0; left: 0; right: 0; height: 0%; background: linear-gradient(to bottom, var(--amber-bright), var(--amber)); border-radius: 2px; box-shadow: 0 0 8px var(--amber-glow); }
+
+@media (max-width: 880px) { .hud { display: none; } }
+
+/* ── Summit hero ──────────────────────────────────────────────────────────── */
+.waypoint-hero {
+  position: fixed; inset: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  padding: 100px 24px 60px; text-align: center; pointer-events: none;
+}
+.summit-inner { max-width: 780px; pointer-events: auto; }
+.summit-eyebrow { justify-content: center; margin-bottom: 26px; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px var(--amber-glow); animation: livePulse 2.4s infinite; }
+@keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.summit-name { font-family: var(--display); font-weight: 840; font-stretch: 125%;
+  font-size: clamp(54px, 10vw, 122px); line-height: 0.94; letter-spacing: -0.04em;
+  margin: 0 0 18px; color: var(--snow); }
+.summit-name .line { display: block; overflow: hidden; }
+.summit-name .serif-italic { color: var(--amber-bright); font-weight: 480; font-stretch: normal; }
+.rise { display: inline-block; animation: riseUp 0.9s var(--ease) both; }
+.rise.d1 { animation-delay: 0.12s; }
+@keyframes riseUp { from { opacity: 0; transform: translateY(0.5em); filter: blur(8px); } to { opacity: 1; transform: none; filter: none; } }
+
+.summit-role { font-size: clamp(15px, 2vw, 20px); display: flex; align-items: center; justify-content: center; height: 30px; margin-bottom: 22px; color: var(--snow-2); }
+.summit-role .slash { color: var(--snow-4); margin-right: 6px; }
+.caret { width: 9px; height: 1.1em; background: var(--amber); margin-left: 5px; display: inline-block; animation: blink 1s step-end infinite; vertical-align: middle; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.summit-tag { font-family: var(--serif); font-style: italic; font-size: clamp(16px, 2.2vw, 22px); line-height: 1.55; color: var(--snow-2); max-width: 620px; margin: 0 auto 40px; }
+.summit-stats { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+.stat { text-align: center; }
+.stat-num { font-size: 46px; line-height: 1; color: var(--snow); font-weight: 820; }
+.stat-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--snow-4); margin-top: 8px; }
+.summit-cta { font-size: 13px; }
+.summit-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.scroll-cue { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }
+.scroll-cue .mono { font-size: 10px; letter-spacing: 0.28em; color: var(--snow-4); }
+.cue-line { width: 1px; height: 34px; background: linear-gradient(to bottom, var(--amber), transparent); animation: cueDrop 1.8s var(--ease) infinite; }
+@keyframes cueDrop { 0% { transform: scaleY(0.3); transform-origin: top; opacity: 0.3; } 50% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(0.3); transform-origin: bottom; opacity: 0.3; } }
+
+/* ── Waypoint panels (over the live world) ────────────────────────────────── */
+.waypoint-panel {
+  position: fixed; inset: 0; z-index: 25;
+  display: flex; align-items: center; justify-content: center;
+  padding: 88px 24px 40px; opacity: 0; pointer-events: none;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.waypoint-panel::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(120% 80% at 50% 50%, transparent 40%, rgba(6,10,18,0.5) 100%);
+  pointer-events: none;
+}
+.panel-card {
+  position: relative; width: min(960px, 92vw); max-height: 84vh;
+  overflow: hidden; display: flex;
+}
+.panel-scroll {
+  width: 100%; max-height: 86vh; overflow-y: auto; overscroll-behavior: contain;
+  padding: clamp(24px, 4vw, 46px);
+}
+.panel-scroll::-webkit-scrollbar { width: 8px; }
+.panel-scroll::-webkit-scrollbar-thumb { background: var(--frost); border-radius: 4px; }
+
+/* stagger the section content in when a panel opens */
+.waypoint-panel .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.waypoint-panel.revealed .reveal { opacity: 1; transform: none; }
+
+/* ── Fallback (reduced-motion / no engine) ────────────────────────────────── */
+.fallback { position: relative; }
+.fallback-bg {
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(90% 60% at 20% 0%, rgba(95,214,196,0.06), transparent 60%),
+    radial-gradient(70% 50% at 80% 10%, rgba(224,161,85,0.05), transparent 60%),
+    linear-gradient(180deg, #0b1220 0%, var(--bg) 55%);
+}
+.fallback-hero { min-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 60px; }
+.fallback-hero .summit-name { font-size: clamp(48px, 9vw, 104px); margin-bottom: 22px; }
+.fallback-hero .summit-tag { margin-bottom: 34px; }
+.fallback-section { max-width: 1180px; margin: 0 auto; padding: 80px 24px; scroll-margin-top: 80px; }
+.fallback-section .reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise, .caret, .live-dot, .cue-line { animation: none; }
+  .waypoint-panel, .waypoint-panel .reveal { transition: none; }
+}
+
+@media (max-width: 620px) {
+  .panel-scroll { padding: 20px 16px; }
+  .summit-stats { gap: 30px; }
+  .stat-num { font-size: 36px; }
+}
