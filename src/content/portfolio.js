@@ -335,6 +335,28 @@ export const PROJECTS = [
     ],
   },
   {
+    id: 'specimen-atlas',
+    name: 'Specimen Atlas',
+    tagline: 'A living field guide to generative art',
+    short: 'Over 80 generative art styles, each one running live in the browser, named and explained.',
+    kind: 'Reference library',
+    description:
+      "A field guide to generative art that I use as my own style reference. Every specimen is drawn by code, live: raymarched fractals, a stirrable fluid simulation, risograph and halftone print, kinetic type, flocking swarms, cloth and jelly physics, glitch art, paper cutouts, PS1-era 3D and UI looks like glassmorphism and neo-brutalism. Each one is named, explains how it works in plain words and says where it fits in a real product. Star the ones you like, copy the recipe, and walk the whole collection in theater mode.",
+    status: 'live',
+    url: '__ATLAS_URL__',
+    github: null, // private repo (ZbienVC/specimen-atlas)
+    color: '#c98a5e',
+    colorEnd: '#9a6240',
+    tags: ['WebGL', 'GLSL', 'Three.js', 'Canvas', 'Matter.js'],
+    category: ['web'],
+    highlights: [
+      'Over 80 styles across 12 families, all running live',
+      'Shaders, physics, particles, print, glitch and 3D scenes',
+      'Star favorites and copy a style recipe for the next build',
+      'Built in one sitting with a crew of AI agents',
+    ],
+  },
+  {
     id: 'plato',
     name: 'Plato',
     tagline: 'Meal planning and macro tracking',
