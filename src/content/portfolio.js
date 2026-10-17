@@ -343,7 +343,7 @@ export const PROJECTS = [
     description:
       "A field guide to generative art that I use as my own style reference. Every specimen is drawn by code, live: raymarched fractals, a stirrable fluid simulation, risograph and halftone print, kinetic type, flocking swarms, cloth and jelly physics, glitch art, paper cutouts, PS1-era 3D and UI looks like glassmorphism and neo-brutalism. Each one is named, explains how it works in plain words and says where it fits in a real product. Star the ones you like, copy the recipe, and walk the whole collection in theater mode.",
     status: 'live',
-    url: '__ATLAS_URL__',
+    url: 'https://specimen-atlas.vercel.app',
     github: null, // private repo (ZbienVC/specimen-atlas)
     color: '#c98a5e',
     colorEnd: '#9a6240',
