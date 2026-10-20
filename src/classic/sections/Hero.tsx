@@ -98,10 +98,10 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
           </Ink>
 
           <motion.p className="lede mt-7 max-w-[34rem]" {...rise(0.18)}>
-            I&apos;m Zach. By day I run the books for two telecom companies, and I built the automation that now does most of the
-            filing. On my own time I&apos;ve shipped <strong className="font-[620] text-ink">{LIVE_COUNT} sites and products</strong>, from
-            AI agents to a 20-player boat racer.{' '}
-            <span className="max-lg:hidden">The board on the right checks that each one is up, live from your browser.</span>
+            I&apos;m Zach. By day I run the books for two telecom companies and built the automation that does most of the filing. On my
+            own time I&apos;ve shipped <strong className="font-[620] text-ink">{LIVE_COUNT} sites and products</strong> with a crew of AI
+            agents I set up to research, build and review beside me.{' '}
+            <span className="max-lg:hidden">The board checks each one live; pick one to watch it run.</span>
             <span className="lg:hidden">A green dot next to a project below means it&apos;s up right now.</span>
           </motion.p>
 
@@ -110,7 +110,10 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
               See the work
               <HoverArrow />
             </a>
-            <a href={PROFILE.resumePdfNamed} target="_blank" rel="noopener" className="btn btn-quiet">
+            <a href="#how" className="btn btn-quiet">
+              How I build with AI
+            </a>
+            <a href={PROFILE.resumePdfNamed} target="_blank" rel="noopener" className="btn btn-ghost">
               <Icon name="file" size={16} />
               Résumé
             </a>

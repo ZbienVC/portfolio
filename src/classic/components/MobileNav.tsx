@@ -10,13 +10,13 @@ import { cn } from '../lib/cn';
 import { HoverArrow, Icon, type IconName } from './Icon';
 
 export const SECTION_LABELS = {
-  new: 'New work',
   work: 'Work',
+  how: 'How I build',
+  shipped: 'Shipped',
+  toolkit: 'Toolkit',
   'day-job': 'The day job',
   experience: 'Experience',
-  toolkit: 'Toolkit',
   'off-the-clock': 'Off the clock',
-  basecamp: '3D basecamp',
   contact: 'Contact',
 } as const;
 export type SectionId = keyof typeof SECTION_LABELS;

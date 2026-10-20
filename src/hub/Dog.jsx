@@ -75,13 +75,13 @@ function shepherdCoat(mesh) {
   mesh.material = mat;
 }
 
-function Footprints({ api }) {
+function Footprints({ stampRef }) {
   const tex = useMemo(() => makeSoftDisc('26,34,54'), []);
   const meshes = useRef([]);
   // expose a stamp() the dog calls while moving
   useEffect(() => {
     let next = 0;
-    api.current = (x, z, heading, side) => {
+    stampRef.current = (x, z, heading, side) => {
       const m = meshes.current[next];
       if (!m) return;
       next = (next + 1) % FOOTPRINTS;
@@ -91,12 +91,14 @@ function Footprints({ api }) {
       m.userData.t0 = performance.now();
       m.visible = true;
     };
-  }, [api]);
+  }, [stampRef]);
   useFrame(() => {
     const now = performance.now();
     for (const m of meshes.current) {
       if (!m || !m.visible) continue;
       const age = (now - m.userData.t0) / 1000;
+      // three.js objects are meant to be changed in place every frame; React never renders from them
+      // eslint-disable-next-line react-hooks/immutability
       if (age > 9) { m.visible = false; continue; }
       m.material.opacity = 0.4 * Math.max(0, 1 - age / 9);
     }
@@ -156,6 +158,8 @@ export default function Dog({ target, lookAt = null, onArrive, wander = false })
   const setClip = (want, timeScale = 1) => {
     if (want === state.current) {
       const a = actions[CLIP[want]];
+      // an animation action is a live three.js object, steered in place
+      // eslint-disable-next-line react-hooks/immutability
       if (a) a.timeScale = timeScale;
       return;
     }
@@ -246,7 +250,7 @@ export default function Dog({ target, lookAt = null, onArrive, wander = false })
           <meshBasicMaterial color="#0c1424" transparent opacity={0.32} depthWrite={false} />
         </mesh>
       </group>
-      <Footprints api={stamp} />
+      <Footprints stampRef={stamp} />
     </>
   );
 }

@@ -6,7 +6,6 @@ import { runPings } from '../lib/pings';
 import { fade, spring } from '../lib/motion';
 import { useShowWork } from '../lib/show-work';
 import { useTheme } from '../lib/theme';
-import { openBasecamp } from '../lib/basecamp';
 import { cn } from '../lib/cn';
 import { Icon, type IconName } from './Icon';
 
@@ -67,9 +66,9 @@ export function CommandPalette({ onClose, onOpenProject, onAsk, onCopyEmail }: P
 
   const items = useMemo<Item[]>(
     () => [
-      { id: 'j-new', group: 'Jump to', label: 'New work', hint: 'the latest builds', icon: 'arrowRight', keywords: 'latest recent hookline feast league unearth specimen atlas', run: jump('#new') },
-      { id: 'j-work', group: 'Jump to', label: 'Work', icon: 'arrowRight', run: jump('#work') },
-      { id: 'j-ledger', group: 'Jump to', label: 'Everything I’ve shipped', hint: 'every project', icon: 'arrowRight', keywords: 'ledger all projects list', run: jump('#ledger') },
+      { id: 'j-work', group: 'Jump to', label: 'Work', hint: 'the standouts, running on a laptop', icon: 'arrowRight', keywords: 'demos stage latest hookline feast league unearth specimen atlas', run: jump('#work') },
+      { id: 'j-ledger', group: 'Jump to', label: 'Everything I’ve shipped', hint: 'the stack, in order', icon: 'arrowRight', keywords: 'ledger all projects list stack blocks timeline', run: jump('#shipped') },
+      { id: 'j-how', group: 'Jump to', label: 'How I build', hint: 'the AI crew behind the work', icon: 'arrowRight', keywords: 'ai agents crucible nightshift switchyard canopy atelier claude skills', run: jump('#how') },
       { id: 'j-day', group: 'Jump to', label: 'The day job', hint: 'the books and the automation', icon: 'arrowRight', keywords: 'accounts payable quickbooks iif telecom finance', run: jump('#day-job') },
       { id: 'j-exp', group: 'Jump to', label: 'Experience', hint: 'Bloomberg, banking, Grapevine', icon: 'arrowRight', keywords: 'resume career jobs', run: jump('#experience') },
       { id: 'j-tools', group: 'Jump to', label: 'Toolkit', icon: 'arrowRight', keywords: 'skills stack', run: jump('#toolkit') },
@@ -91,7 +90,6 @@ export function CommandPalette({ onClose, onOpenProject, onAsk, onCopyEmail }: P
       { id: 'd-work', group: 'Do', label: showing ? 'Hide the work' : 'Show the work', hint: 'W', icon: 'pencil', keywords: 'annotations how built notes', run: toggleWork },
       { id: 'd-theme', group: 'Do', label: theme === 'dark' ? 'Switch to daylight' : 'Switch to after hours', icon: theme === 'dark' ? 'sun' : 'moon', keywords: 'theme dark light mode', run: () => toggleTheme() },
       { id: 'd-ping', group: 'Do', label: 'Check every site again', icon: 'refresh', keywords: 'status ping live', run: () => { jump('#top')(); runPings(); } },
-      { id: 'd-3d', group: 'Do', label: 'Walk the 3D basecamp', icon: 'cube', keywords: 'interactive three webgl mode fox', run: openBasecamp },
       { id: 'd-src', group: 'Do', label: 'Read this site’s source', icon: 'github', keywords: 'code github', run: () => window.open('https://github.com/ZbienVC/portfolio', '_blank', 'noopener') },
     ],
     [onOpenProject, onCopyEmail, showing, toggleWork, theme, toggleTheme],

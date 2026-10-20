@@ -1,9 +1,11 @@
 # Design
 
 The site has two modes that share one content file (`src/content/portfolio.js`) and
-nothing else. Classic is the home page; the 3D basecamp opens in a window on it (an
-iframe, loaded on request) or full page at `/?3d`. Each mode is its own chunk with its
-own stylesheet, so the two design systems never share a document.
+nothing else. Classic is the home page. The 3D basecamp is kept but off the page since
+2026-10-20 (Zach: it took space without earning it): nothing links to it, `/?3d` still
+opens it full page, and `sections/Basecamp.tsx` is ready to put back in `ClassicApp.tsx`.
+Each mode is its own chunk with its own stylesheet, so the two design systems never share
+a document.
 
 ---
 
@@ -35,7 +37,28 @@ Caveat only for the handwritten notes in "Show the work".
 - `typography/hand-annotation` — "Show the work": seeded pencil marks and margin notes (`engines/ink.ts`)
 - plus `motion/spring-presets` as the motion language (`lib/motion.ts`), not a visible signature
 
-**Moment:** The status board. The visitor's browser sends each of the 15 live sites a
+**Physics and material, each with a job (2026-10-20 rework):**
+- The showroom (`sections/Showroom.tsx`) is the Work section. On wide screens it pins, and the
+  scroll opens a CSS 3D laptop: the lid swings up from lying shut while the view comes round
+  from above. Once open, the screen plays the current project's recorded visit
+  (`public/demos`, MP4 with a WebM copy, recorded by `scripts/capture`), and arrows, the
+  ← → keys, a swipe on the screen or the strip underneath slide the screen sideways to the
+  next site. It opens on the Standouts (the eight with the best demos); AI & data, Crypto,
+  Sites & games and Everything are tabs on the strip. Clicking the screen of a site that
+  allows framing (`EMBEDDABLE` in `lib/data.ts`) runs the live site in it. On a phone it's a
+  phone that tips up as it scrolls in. Reduced motion: the laptop is simply open.
+- The stack (`stack/`, shown by `sections/Shipped.tsx` right after How I build as its
+  output): one block per live site in a tray, oldest at the bottom, so height is the count
+  and order is the timeline. three.js + cannon-es, loaded only near the screen.
+- The hanging résumé (`cloth/`): a stiff verlet sheet on two clips; pull it down and the PDF
+  opens on release. "Open the résumé" is its button twin.
+- Specimen Atlas, in the scroll story rather than behind every project: retinted copies of two
+  styles in `specimens/modules`, fed the page's colours and a scroll value. Contour lines are
+  the desk under the laptop and slide as you scroll (travel); the slime-mold agents behind
+  How I build multiply as you read it (a crew of small agents building a network).
+- The status board launches: a row opens the laptop on that project (`lib/launch.ts`); so do the Work menu and the palette.
+
+**Moment:** The status board. The visitor's browser sends each of the live sites a
 HEAD request as the page loads; rows tick green with real response times and the
 split-flap counter turns forward one flap per answer. A site that's down says so.
 
@@ -52,8 +75,8 @@ and with reduced motion.
 **On a phone:** the glaze becomes a band across the top with the portrait on it, so the
 first screen has color and a face. Navigation moves to the thumb: a dock at the bottom
 names the section you're in and fills with the glaze as you read. It opens a sheet with
-every section, search, the AI, the résumé and the two switches. The four flagships become
-a row you swipe, and roles open one line at a time.
+every section, search, the AI, the résumé and the two switches. The laptop becomes a phone
+that tips up, the strip scrolls sideways, and roles open one line at a time.
 
 **We refuse:** purple/blue gradients · glass cards · glow blobs · floating mockups ·
 centered label + italic-serif headers · "∞ problems left to solve" stats · typewriter

@@ -17,6 +17,7 @@ export interface SiteLink {
   chain: string;
   url: string;
   blurb: string;
+  launched?: string;
 }
 
 export interface Project {
@@ -38,6 +39,8 @@ export interface Project {
   highlights?: string[];
   collection?: SiteLink[];
   featured?: boolean;
+  /** first deployed, ISO date (from the hosting provider's creation date) */
+  launched?: string;
 }
 
 export interface Role {
@@ -67,26 +70,27 @@ export const FLAGSHIP_IDS = ['fieldsense', 'oikos', 'splash', 'wakerush'] as con
 export const FLAGSHIPS = FLAGSHIP_IDS.map((id) => projectById(id)!);
 export const ALSO_SHIPPED = PROJECTS.filter((p) => !(FLAGSHIP_IDS as readonly string[]).includes(p.id));
 
-/* ── New work: the latest builds, shown in their own section above the flagships ── */
+/* ── The stage: eight projects with recorded demos, shown running ─────────── */
 
-// Each one gets a different "how it works" strip, so the four don't read as one card repeated.
+// Each one gets a different "how it works" strip, so the eight don't read as one card repeated.
 export type Signature =
-  | { kind: 'chain'; steps: string[] }
+  | { kind: 'chain'; label: string; steps: string[]; end?: string }
   | { kind: 'split'; left: { k: string; v: string }; right: { k: string; v: string }; link: string }
   | { kind: 'figures'; items: { n: string; label: string }[] };
 
-export interface NewWork {
+export interface StageItem {
   id: string;
-  /** one line on what makes it different, shown under the name */
+  /** one line on what makes it different */
   hook: string;
   signature: Signature;
 }
 
-export const NEW_WORK: NewWork[] = [
+// newest first: the four latest builds, then the four the résumé leads with
+export const STAGE: StageItem[] = [
   {
     id: 'hookline',
     hook: 'Six AI agents in a row turn a rising trend into a finished vertical video, and a trust ladder decides how much they post on their own.',
-    signature: { kind: 'chain', steps: ['Scout', 'Analyst', 'Strategist', 'Writer', 'Critic', 'Director'] },
+    signature: { kind: 'chain', label: 'How a video gets made', steps: ['Scout', 'Analyst', 'Strategist', 'Writer', 'Critic', 'Director'], end: '1080×1920 MP4' },
   },
   {
     id: 'feast',
@@ -122,23 +126,104 @@ export const NEW_WORK: NewWork[] = [
       ],
     },
   },
+  {
+    id: 'fieldsense',
+    hook: 'NFL projections built only on free public data. Every number is a full range of outcomes, so it can price an over/under at any line.',
+    signature: { kind: 'chain', label: 'How a projection is made', steps: ['Public data', 'Simulate', 'Range of outcomes'], end: 'Price any line' },
+  },
+  {
+    id: 'oikos',
+    hook: 'An economy of AI agents: each one pays rent for its compute and has to earn it back from bounties, or it dies.',
+    signature: {
+      kind: 'figures',
+      items: [
+        { n: '5', label: 'smart contracts' },
+        { n: '~500', label: 'passing tests' },
+        { n: '0', label: 'sign-ups to watch' },
+      ],
+    },
+  },
+  {
+    id: 'wakerush',
+    hook: 'A 20-player arcade boat racer that the server referees, playable on the web or inside Telegram.',
+    signature: {
+      kind: 'split',
+      left: { k: 'On the web', v: 'Full 3D dashboard' },
+      right: { k: 'In Telegram', v: 'Mini App, same race' },
+      link: 'One server',
+    },
+  },
+  {
+    id: 'splash',
+    hook: 'Live token feeds, an AI score for the story behind each token, and wallet alerts sent to Telegram as they happen.',
+    signature: { kind: 'chain', label: 'How an alert goes out', steps: ['DEX feeds', 'AI narrative score', 'Wallet tracking'], end: 'Telegram alert' },
+  },
 ];
-export const NEW_IDS = NEW_WORK.map((n) => n.id);
-/** The rest of the also-shipped list, once the new work is pulled out of it. */
-export const OLDER_SHIPPED = ALSO_SHIPPED.filter((p) => !NEW_IDS.includes(p.id));
+export const STAGE_IDS = STAGE.map((n) => n.id);
 
+// Projects with a recorded demo in public/demos (<id>-laptop.mp4 and <id>-phone.mp4).
+// Left out on purpose: Reflect opens on a sign-in screen, and Feast League's 3D board won't load in
+// the recorder's software renderer; their screenshots say more.
+export const DEMO_IDS = new Set<string>(['hookline', 'unearth', 'specimen', 'fieldsense', 'oikos', 'wakerush', 'splash', 'plato', 'dipper', 'careeva', 'cryptosites', 'wayfound', 'staywestpalm']);
+
+// Sites that allow being shown inside another page (no X-Frame-Options or
+// frame-ancestors block), checked by scripts/capture/probe.mjs. The rest open in a new tab.
+// checked 2026-10-20; the four that refuse (Hookline, Unearth, Feast League, Splash Signal) open in a new tab
+const EMBEDDABLE = new Set<string>(['fieldsense', 'oikos', 'wakerush', 'specimen', 'plato', 'dipper', 'careeva', 'reflect', 'wayfound', 'staywestpalm']);
+export const embeds = (projectId: string) => EMBEDDABLE.has(projectId);
+
+// The laptop opens on the standouts (the eight with the best demos); the rest are a tab away.
 export const FILTERS = [
-  { id: 'all', label: 'Everything' },
+  { id: 'best', label: 'Standouts' },
   { id: 'ai', label: 'AI & data' },
   { id: 'crypto', label: 'Crypto' },
   { id: 'web', label: 'Sites & games' },
+  { id: 'all', label: 'Everything' },
 ] as const;
 export type FilterId = (typeof FILTERS)[number]['id'];
 
-export const inFilter = (p: Project, f: FilterId) => f === 'all' || p.category.includes(f);
+export const inFilter = (p: Project, f: FilterId) => (f === 'best' ? STAGE_IDS.includes(p.id) : f === 'all' || p.category.includes(f));
 
 /** Live sites a project accounts for (a collection card holds several). */
 export const liveSites = (p: Project) => (p.status === 'live' ? (p.collection ? p.collection.length : 1) : 0);
+
+/* ── Units: one per live site, oldest first (the Stack is built from these) ── */
+
+export interface Unit {
+  key: string;
+  /** what the block says */
+  name: string;
+  projectId: string;
+  launched: string;
+  url: string;
+  color: string;
+  category: string[];
+  tags: string[];
+}
+
+export const UNITS: Unit[] = PROJECTS.flatMap((p) => {
+  if (p.status !== 'live') return [];
+  if (p.collection)
+    return p.collection.map((s) => ({
+      key: s.url,
+      name: s.name,
+      projectId: p.id,
+      launched: s.launched ?? p.launched ?? '2026-01-01',
+      url: s.url,
+      color: p.color,
+      category: p.category,
+      tags: p.tags,
+    }));
+  return p.url
+    ? [{ key: p.url, name: p.name, projectId: p.id, launched: p.launched ?? '2026-01-01', url: p.url, color: p.color, category: p.category, tags: p.tags }]
+    : [];
+}).sort((a, b) => a.launched.localeCompare(b.launched));
+
+/** "2026-03-12" → "Mar 2026" */
+export const launchLabel = (iso: string) => {
+  const [y, m] = iso.split('-').map(Number);
+  return `${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1]} ${y}`;
+};
 
 /* ── Screenshots (public/work, captured from the live sites) ──────────────── */
 

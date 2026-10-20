@@ -10,6 +10,7 @@
  * halo strength). Tone mapping + exposure from the look. UMD three (global
  * THREE), zero external fetches.
  */
+/* global THREE -- set by ../three-global.js before this file runs */
 (function () {
   "use strict";
   const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
@@ -337,7 +338,7 @@
     const pgRgb = hexBytes(P.propGlow).join(",");
     const glowSpriteTex = glowTexture(`rgba(${pgRgb},0.6)`, `rgba(${pgRgb},0)`);
     const propViews = new Map();
-    function makeLantern(p) {
+    function makeLantern(_p) {
       const g = new THREE.Group();
       const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 2.4, 6), litMat("#241a18", {}));
       pole.position.y = 1.2; pole.castShadow = true; g.add(pole);
@@ -378,7 +379,7 @@
       g.add(new THREE.Points(bg, new THREE.PointsMaterial({ size: 0.09, vertexColors: true })));
       return { group: g };
     }
-    function makeTorii(p) {
+    function makeTorii(_p) {
       const g = new THREE.Group();
       const mat = litMat(P.torii, {});
       const mkBox = (w, h, d, x, y, z, rz) => {
@@ -393,7 +394,7 @@
       mkBox(0.16, 0.7, 0.18, 0, 2.95, 0, 0);
       return { group: g };
     }
-    function makeRock(p) {
+    function makeRock(_p) {
       const r = new THREE.Mesh(new THREE.DodecahedronGeometry(0.34, 0), litMat(P.rock || "#2c2338", {}));   // palette-driven (E3)
       r.scale.y = 0.62; r.position.y = 0.16; r.castShadow = true;
       const g = new THREE.Group(); g.add(r);
@@ -453,7 +454,7 @@
       halo.position.set(0, 0.5, 0); halo.scale.set(0.001, 0.001, 1); g.add(halo);
       return { group: g, paperMat: flameMat, halo, lightAnchor: new THREE.Vector3(0, 0.5, 0) };
     }
-    function makeSkull(p) {
+    function makeSkull(_p) {
       const g = new THREE.Group();
       const boneMat = litMat(P.bone || "#e8ddc4", {}), hornMat = litMat(P.boneShade || "#b6a888", {});
       const cranium = new THREE.Mesh(new THREE.SphereGeometry(0.3, 10, 8), boneMat);
@@ -473,7 +474,7 @@
       });
       return { group: g };
     }
-    function makeArch(p) {
+    function makeArch(_p) {
       const g = new THREE.Group();
       const mat = litMat(P.arch || "#c0895a", {});
       const legGeo = new THREE.BoxGeometry(0.5, 3.2, 0.55);
@@ -484,7 +485,7 @@
       return { group: g };
     }
     // ---- alpine prop TYPES (§6.4 seam: one factory per adapter per new type) ----
-    function makePine(p) {
+    function makePine(_p) {
       const g = new THREE.Group();
       const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.13, 1.1, 7), litMat(P.trunk, {}));
       trunk.position.y = 0.55; trunk.castShadow = true; g.add(trunk);
@@ -501,7 +502,7 @@
     }
     // cabin — LIGHTABLE: amber windows latch on as the shepherd passes. Shares
     // ONE winMat + ONE halo so the generic emissive loop (§3b) drives both windows.
-    function makeCabin(p) {
+    function makeCabin(_p) {
       const g = new THREE.Group();
       const walls = new THREE.Mesh(new THREE.BoxGeometry(2.4, 1.8, 2.0), litMat(P.cabin, {}));
       walls.position.y = 0.9; walls.castShadow = true; walls.receiveShadow = true; g.add(walls);
@@ -527,7 +528,7 @@
     }
     // chairlift — LIGHTABLE: A-frame tower + cable stub + hanging chair + amber
     // tower lamp that latches lit (same emissive/pool contract as the lantern)
-    function makeChairlift(p) {
+    function makeChairlift(_p) {
       const g = new THREE.Group();
       const steelMat = litMat(P.trunk, {});
       [-1, 1].forEach((side) => {                              // splayed A-frame legs
@@ -558,7 +559,7 @@
     }
     // frozen lake — a RAW (non-litMat) high-metalness plane so setLook never
     // overwrites its metalness; takes moon + point-light specular as ice sheen
-    function makeFrozenLake(p) {
+    function makeFrozenLake(_p) {
       const g = new THREE.Group();
       const iceMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(P.lakeIce), metalness: 0.8, roughness: 0.12 });
       const ice = new THREE.Mesh(new THREE.PlaneGeometry(9, 5), iceMat);
@@ -707,7 +708,7 @@
             studio.ready = true;
             setLook(LOOK);                          // grade the new materials immediately
           }
-        }, (err) => { /* parse failed → procedural fox stays (fail-open to the artifact path) */ });
+        }, () => { /* parse failed → procedural fox stays (fail-open to the artifact path) */ });
       } catch (e) { /* malformed asset → procedural fox stays */ }
     }
 

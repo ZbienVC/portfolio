@@ -1,13 +1,16 @@
 import { AnimatePresence, motion, useDragControls, type PanInfo } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { FLAGSHIPS, ALSO_SHIPPED, projectById, showsShot, type Project, type SiteLink } from '../lib/data';
+import { DEMO_IDS, PROJECTS, STAGE_IDS, embeds, projectById, showsShot, type Project, type SiteLink } from '../lib/data';
 import { restoreFocus, useInertPage, useMedia, useReducedMotionPref } from '../lib/hooks';
 import { ease, fade, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
+import { canPlayClips } from '../lib/video';
+import { Laptop } from './Devices';
 import { HoverArrow, Icon } from './Icon';
 import { Shot } from './Shot';
 
-const ORDER = [...FLAGSHIPS, ...ALSO_SHIPPED].map((p) => p.id);
+// next and previous follow the page: the stage's eight, then everything else
+const ORDER = [...STAGE_IDS, ...PROJECTS.map((p) => p.id).filter((id) => !STAGE_IDS.includes(id))];
 const neighbour = (id: string, step: 1 | -1) => ORDER[(ORDER.indexOf(id) + step + ORDER.length) % ORDER.length];
 
 interface SheetProps {
@@ -78,6 +81,9 @@ export function ProjectSheet({ id, sharedId, onClose, onNavigate }: SheetProps) 
     return () => window.removeEventListener('keydown', onKey);
   }, [id, onClose, onNavigate]);
 
+  // the laptop shows the live site instead of the demo
+  const [liveFor, setLiveFor] = useState<string | null>(null);
+  const live = liveFor === id;
   // a new project scrolls back to its top
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
@@ -162,14 +168,14 @@ export function ProjectSheet({ id, sharedId, onClose, onNavigate }: SheetProps) 
               transition={{ ...spring.crisp, opacity: fade }}
               className="px-4 pt-6 pb-16 sm:px-8 sm:pt-8"
             >
-              <Shot projectId={p.id} layoutId={p.id === sharedId ? `shot-${p.id}` : undefined} loading="eager" className="aspect-[16/10]" alt={`${p.name}, the live site`} />
+              <SheetStage project={p} sharedId={sharedId} live={live} />
 
               <h2 id="sheet-title" className="h2-type mt-9 text-ink">
                 {p.name}
               </h2>
               <p className="mt-3 text-[17px] text-ink-2">{p.tagline}</p>
 
-              <Links project={p} />
+              <Links project={p} live={live} onLive={() => setLiveFor(live ? null : id)} />
 
               <div className="mt-10 grid gap-10 md:grid-cols-[1fr_12.5rem]">
                 <div>
@@ -233,9 +239,50 @@ export function ProjectSheet({ id, sharedId, onClose, onNavigate }: SheetProps) 
   );
 }
 
-function Links({ project: p }: { project: Project }) {
+/** The top of the sheet: a laptop that plays the project's recorded visit (or shows the live site). */
+function SheetStage({ project: p, sharedId, live }: { project: Project; sharedId?: string | null; live: boolean }) {
+  const [noClip, setNoClip] = useState(() => !canPlayClips());
+  const hasDemo = DEMO_IDS.has(p.id) && !noClip;
+  return (
+    <div className="relative overflow-hidden rounded-xl bg-paper-2 shadow-[inset_0_0_0_1px_var(--rule)]">
+      <div className="relative px-[7%] pt-[6%] pb-[8%]">
+        <Laptop label={`${p.name} at laptop size`}>
+          {live && p.url ? (
+            <iframe
+              src={p.url}
+              title={`${p.name}, the live site`}
+              className="absolute inset-0 size-full border-0 bg-white"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock"
+              allow="fullscreen; autoplay"
+            />
+          ) : hasDemo ? (
+            <>
+            <img src={`/demos/${p.id}-laptop.webp`} alt="" className="absolute inset-0 size-full object-cover object-top" />
+            <video
+              key={p.id}
+              className="absolute inset-0 size-full object-cover object-top"
+              autoPlay
+              loop
+              muted
+              playsInline
+              aria-label={`${p.name}, a recorded visit`}
+            >
+              <source src={`/demos/${p.id}-laptop.mp4`} type="video/mp4" />
+              <source src={`/demos/${p.id}-laptop.webm`} type="video/webm" onError={() => setNoClip(true)} />
+            </video>
+            </>
+          ) : (
+            <Shot projectId={p.id} layoutId={p.id === sharedId ? `shot-${p.id}` : undefined} loading="eager" className="absolute inset-0 rounded-none" alt={`${p.name}, the live site`} />
+          )}
+        </Laptop>
+      </div>
+    </div>
+  );
+}
+
+function Links({ project: p, live, onLive }: { project: Project; live: boolean; onLive: () => void }) {
   const links = [
-    p.url && { href: p.url, label: 'Visit the live site', primary: true },
+    p.url && { href: p.url, label: 'Visit the live site', primary: !embeds(p.id) },
     p.telegram && { href: p.telegram, label: 'Telegram bot' },
     p.twitter && { href: p.twitter, label: 'On X' },
     p.github && { href: p.github, label: 'Source on GitHub' },
@@ -243,6 +290,12 @@ function Links({ project: p }: { project: Project }) {
   if (!links.length) return null;
   return (
     <div className="mt-7 flex flex-wrap gap-2.5">
+      {embeds(p.id) && p.url && (
+        <button type="button" onClick={onLive} className="btn btn-sm btn-primary">
+          {live ? 'Back to the demo' : 'Try it here'}
+          {!live && <HoverArrow />}
+        </button>
+      )}
       {links.map((l) => (
         <a key={l.href} href={l.href} target="_blank" rel="noopener" className={cn('btn btn-sm', l.primary ? 'btn-primary' : 'btn-quiet')}>
           {l.label}

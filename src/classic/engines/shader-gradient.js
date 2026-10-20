@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars -- vendored as-is from Atelier */
 /* Vendored from Atelier (ZbienVC/atelier, scenes/shader-gradient/engine.js, motion lab)
    as an ES module: the IIFE returns the factory instead of writing window.ShaderGradient.
    Changed here (worth taking back upstream): the program compiles without blocking

@@ -12,6 +12,7 @@ import { Nav } from './components/Nav';
 import { ProjectSheet } from './components/ProjectSheet';
 import { projectById, PROFILE } from './lib/data';
 import { useCopy } from './lib/hooks';
+import { launchProject, revealShowroom } from './lib/launch';
 import { fade, spring } from './lib/motion';
 import { ShowWorkProvider, useShowWork } from './lib/show-work';
 import { ThemeProvider } from './lib/theme';
@@ -20,11 +21,11 @@ import { Contact } from './sections/Contact';
 import { DayJob } from './sections/DayJob';
 import { Experience } from './sections/Experience';
 import { Hero } from './sections/Hero';
-import { NewWork } from './sections/NewWork';
-import { Basecamp } from './sections/Basecamp';
+import { HowIBuild } from './sections/HowIBuild';
+import { Shipped } from './sections/Shipped';
 import { OffTheClock } from './sections/OffTheClock';
 import { Toolkit } from './sections/Toolkit';
-import { Work, type WorkFilter } from './sections/Work';
+import { Showroom, type WorkFilter } from './sections/Showroom';
 
 // Theme before the first paint of this chunk, so dark-mode visitors never see a flash of paper.
 applyTheme(initialTheme());
@@ -60,7 +61,7 @@ function Page() {
   });
   const [palette, setPalette] = useState(false);
   const [ask, setAsk] = useState<{ question?: string } | null>(null);
-  const [workFilter, setWorkFilter] = useState<WorkFilter>({ kind: 'category', id: 'all' });
+  const [workFilter, setWorkFilter] = useState<WorkFilter>({ kind: 'category', id: 'best' });
   const { copy, copied } = useCopy();
 
   // the sheet lives in the URL: shareable, and the back button closes it
@@ -93,9 +94,7 @@ function Page() {
 
   const filterByTool = useCallback((toolId: string) => {
     setWorkFilter({ kind: 'tool', id: toolId });
-    requestAnimationFrame(() =>
-      document.getElementById('ledger')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }),
-    );
+    requestAnimationFrame(revealShowroom);
   }, []);
 
   const openPalette = useCallback(() => setPalette(true), []);
@@ -111,17 +110,17 @@ function Page() {
         Skip to the work
       </a>
 
-      <Nav onOpenPalette={openPalette} onOpenProject={(id) => openProject(id)} onOpenAsk={() => setAsk({})} />
+      <Nav onOpenPalette={openPalette} onOpenProject={(id) => launchProject(id, openProject)} onOpenAsk={() => setAsk({})} />
 
       <main id="main">
-        <Hero onOpenProject={(id) => openProject(id)} />
-        <NewWork onOpenProject={openProject} />
-        <Work filter={workFilter} onFilter={setWorkFilter} onOpenProject={openProject} />
+        <Hero onOpenProject={(id) => launchProject(id, openProject)} />
+        <Showroom filter={workFilter} onFilter={setWorkFilter} onOpenProject={openProject} />
+        <HowIBuild />
+        <Shipped onOpenProject={(id) => openProject(id)} />
+        <Toolkit onFilterTool={filterByTool} />
         <DayJob />
         <Experience />
-        <Toolkit onFilterTool={filterByTool} />
         <OffTheClock />
-        <Basecamp />
       </main>
 
       <Contact onAsk={() => setAsk({})} />

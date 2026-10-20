@@ -4,24 +4,14 @@ import { EffectComposer, Bloom, Vignette, Noise, N8AO } from '@react-three/postp
 import * as THREE from 'three';
 import Environment3D from './Environment3D.jsx';
 import Dog from './Dog.jsx';
-import { Landmark, GEOM } from './landmarks.jsx';
-import { LIVE_COUNT } from '../content/portfolio.js';
+import { Landmark, LandmarkGeometry } from './landmarks.jsx';
+import { LANDMARKS } from './places.js';
 
-// Arranged so the front-center corridor (camera → fox) stays clear.
-export const LANDMARKS = [
-  { id: 'projects', label: 'Projects', hint: `${LIVE_COUNT} live`, kind: 'monoliths', accent: '#e0a155', pos: [-2.4, 0, -9.5], labelY: 3.55 },
-  { id: 'about', label: 'About', hint: 'who I am', kind: 'cabin', accent: '#f0b978', pos: [-7.2, 0, -3.5], labelY: 3.7 },
-  { id: 'experience', label: 'Experience', hint: 'the climb', kind: 'cairn', accent: '#c9a25e', pos: [7.2, 0, -3.5], labelY: 3.9 },
-  { id: 'life', label: 'Life', hint: 'off the clock', kind: 'lake', accent: '#5fd6c4', pos: [-7.4, 0, 3.2], labelY: 2.7 },
-  { id: 'skills', label: 'Skills', hint: 'the kit', kind: 'cache', accent: '#d8b07a', pos: [7.6, 0, 1.5], labelY: 2.7 },
-  { id: 'contact', label: 'Contact', hint: 'say hi', kind: 'signpost', accent: '#f0b978', pos: [3.4, 0, 6.5], labelY: 3.4 },
-];
-
-export const HOME = [0.6, 0, 1.6];
+const HOME = [0.6, 0, 1.6];
 const OVERVIEW = { pos: [0, 5.4, 16], look: [0, 1.2, -1] };
 
 // where the fox stands when visiting a landmark (just outside its ring)
-export function approachPoint(lm) {
+function approachPoint(lm) {
   const P = new THREE.Vector3(...lm.pos);
   const inward = P.clone().setY(0).normalize();
   return P.clone().sub(inward.multiplyScalar(2.1));
@@ -115,7 +105,6 @@ export default function HubScene({ active, pending, roam, hovered, onHover, onSe
       <Dog target={dogTarget} lookAt={dogLookAt} onArrive={onArrive} wander={!lm && !roam} />
 
       {LANDMARKS.map((l) => {
-        const Geom = GEOM[l.kind];
         return (
           <Landmark
             key={l.id}
@@ -125,7 +114,7 @@ export default function HubScene({ active, pending, roam, hovered, onHover, onSe
             onHover={onHover}
             onSelect={onSelect}
           >
-            {(props) => <Geom {...props} />}
+            {(props) => <LandmarkGeometry kind={l.kind} {...props} />}
           </Landmark>
         );
       })}

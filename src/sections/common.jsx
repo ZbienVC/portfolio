@@ -1,7 +1,7 @@
 import PlatoMark from '../PlatoMark.jsx';
 
 // Two-letter mark from a name, used where a project has no logo asset.
-export function mono(name) {
+function mono(name) {
   const cleaned = String(name).replace(/[$]/g, '').trim();
   const words = cleaned.split(/\s+/).filter(Boolean);
   if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();

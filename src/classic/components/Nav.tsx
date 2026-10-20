@@ -1,16 +1,19 @@
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { FLAGSHIPS, NEW_IDS, OLDER_SHIPPED, PROFILE, LIVE_COUNT, projectById, shotId, shotSrc, showsShot } from '../lib/data';
+import { PROFILE, LIVE_COUNT, PROJECTS, STAGE_IDS, projectById, shotId, shotSrc, showsShot } from '../lib/data';
+
+// the menu mirrors the page: the eight on the stage, then everything else
+const STAGED = STAGE_IDS.map((id) => projectById(id)!).filter(Boolean);
+const OFF_STAGE = PROJECTS.filter((p) => !STAGE_IDS.includes(p.id));
 import { modKey, useActiveSection } from '../lib/hooks';
 import { fade, spring } from '../lib/motion';
 import { useShowWork } from '../lib/show-work';
 import { useTheme } from '../lib/theme';
-import { openBasecamp } from '../lib/basecamp';
 import { cn } from '../lib/cn';
 import { HoverArrow, Icon } from './Icon';
 import { Dock, MenuSheet, type SectionId } from './MobileNav';
 
-export const SECTIONS = ['new', 'work', 'day-job', 'experience', 'toolkit', 'off-the-clock', 'basecamp', 'contact'] as const;
+export const SECTIONS = ['work', 'how', 'shipped', 'toolkit', 'day-job', 'experience', 'off-the-clock', 'contact'] as const;
 
 type MenuId = 'work' | 'about';
 interface NavProps {
@@ -91,7 +94,7 @@ export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
     };
   }, [menu, close]);
 
-  const aboutActive = active === 'day-job' || active === 'experience' || active === 'toolkit' || active === 'off-the-clock' || active === 'basecamp';
+  const aboutActive = active === 'day-job' || active === 'experience' || active === 'off-the-clock';
 
   return (
     <header
@@ -120,7 +123,7 @@ export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
                   <MenuTrigger
                     label="Work"
                     open={menu === 'work'}
-                    current={active === 'work' || active === 'new'}
+                    current={active === 'work'}
                     controls={menuId}
                     ref={(el) => {
                       triggers.current.work = el;
@@ -128,6 +131,11 @@ export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
                     onOpen={() => open('work')}
                     onToggle={(kb) => (menu === 'work' ? close() : open('work', kb))}
                   />
+                </li>
+                <li>
+                  <NavLink href="#how" current={active === 'how' || active === 'shipped' || active === 'toolkit'} onPointerEnter={close}>
+                    How I build
+                  </NavLink>
                 </li>
                 <li>
                   <MenuTrigger
@@ -390,11 +398,13 @@ function MenuPanel({ id, menu, caretX, onPointerEnter, onNavigate, onOpenProject
 
 function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpenProject: (id: string) => void }) {
   return (
-    <div className="grid grid-cols-[1.35fr_1fr]">
+    <div className="grid grid-cols-[1.6fr_1fr]">
       <div className="p-3">
-        <p className="label-type px-3 pt-2 pb-1.5">Start with these</p>
-        <ul>
-          {FLAGSHIPS.map((p) => (
+        <a href="#work" onClick={onNavigate} className="label-type flex items-center gap-1.5 px-3 pt-2 pb-1.5 hover:text-ink">
+          The standouts, on the laptop <HoverArrow size={9} />
+        </a>
+        <ul className="grid grid-cols-2">
+          {STAGED.map((p) => (
             <li key={p.id}>
               <button
                 type="button"
@@ -420,7 +430,7 @@ function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpe
                     {p.name}
                     <HoverArrow size={9} />
                   </span>
-                  <span className="block truncate text-[13px] text-ink-3">{p.tagline}</span>
+                  <span className="block truncate text-[12.5px] text-ink-3">{p.kind}</span>
                 </span>
               </button>
             </li>
@@ -428,26 +438,9 @@ function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpe
         </ul>
       </div>
       <div className="border-l border-rule bg-paper-2 p-3">
-        <a href="#new" onClick={onNavigate} className="label-type flex items-center gap-1.5 px-3 pt-2 pb-1.5 hover:text-ink">
-          New <HoverArrow size={9} />
-        </a>
+        <p className="label-type px-3 pt-2 pb-1.5">Also shipped</p>
         <ul className="grid">
-          {NEW_IDS.map((id) => projectById(id)!).map((p) => (
-            <li key={p.id}>
-              <button
-                type="button"
-                onClick={() => onOpenProject(p.id)}
-                className="flex w-full items-baseline justify-between gap-3 rounded-md px-3 py-[7px] text-left text-[14px] text-ink transition-colors hover:bg-paper-3"
-              >
-                <span className="truncate font-[560]">{p.name}</span>
-                <span className="font-mono text-[11px] text-ink-3">{p.kind}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-        <p className="label-type mt-2 border-t border-rule px-3 pt-3 pb-1.5">Also shipped</p>
-        <ul className="grid">
-          {OLDER_SHIPPED.map((p) => (
+          {OFF_STAGE.map((p) => (
             <li key={p.id}>
               <button
                 type="button"
@@ -461,11 +454,11 @@ function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpe
           ))}
         </ul>
         <a
-          href="#work"
+          href="#shipped"
           onClick={onNavigate}
           className="mt-2 flex items-center gap-1.5 px-3 py-2 text-[13.5px] font-[600] text-amber-ink"
         >
-          All {LIVE_COUNT} live sites
+          All {LIVE_COUNT} live sites, stacked
           <HoverArrow />
         </a>
       </div>
@@ -476,7 +469,6 @@ function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpe
 const ABOUT_LINKS = [
   { href: '#day-job', title: 'The day job', sub: 'Books for two telecom companies, and the automation that runs them' },
   { href: '#experience', title: 'Experience', sub: 'Bloomberg, investment banking, Grapevine, and now telecom' },
-  { href: '#toolkit', title: 'Toolkit', sub: 'Which tools went into which projects' },
   { href: '#off-the-clock', title: 'Off the clock', sub: 'Snowboards, incentive design, fifty-some PCs' },
 ];
 
@@ -504,16 +496,6 @@ function AboutMenu({ onNavigate }: { onNavigate: () => void }) {
         <a href={PROFILE.resumePdf} target="_blank" rel="noopener" className="flex items-center gap-2.5 rounded-md px-3 py-2 text-[14px] text-ink-2 hover:bg-paper-3 hover:text-ink">
           <Icon name="file" size={16} /> Finance first
         </a>
-        <button
-          type="button"
-          onClick={() => {
-            onNavigate();
-            openBasecamp();
-          }}
-          className="mt-auto flex items-center gap-2.5 rounded-md px-3 py-2 text-left text-[14px] text-ink-2 hover:bg-paper-3 hover:text-ink"
-        >
-          <Icon name="cube" size={16} /> Walk the 3D basecamp
-        </button>
       </div>
     </div>
   );
