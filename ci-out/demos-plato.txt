@@ -1,0 +1,2 @@
+  plato laptop: 91 KB, trimmed 2.46s
+  plato phone: 52 KB, trimmed 2.35s
