@@ -30,6 +30,17 @@ async function section(page, sel, file) {
   await el.screenshot({ path: `${OUT}/${file}`, animations: 'disabled' });
 }
 
+// the section's opening, as a visitor scrolling down from the hero sees it
+await shoot('scroll', { width: 1440, height: 900 }, async (page) => {
+  for (let i = 0; i < 6; i++) {
+    await page.mouse.wheel(0, 250);
+    await page.waitForTimeout(200);
+  }
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: `${OUT}/review-new-scroll.png` });
+  const op = await page.evaluate(() => getComputedStyle(document.querySelector('#new header')).opacity);
+  errors.push(`new header opacity after scroll: ${op}`);
+});
 await shoot('desktop', { width: 1440, height: 900 }, async (page) => {
   await section(page, '#new', 'review-new-desktop.png');
   await page.locator('#work header').screenshot({ path: `${OUT}/review-work-head.png` });

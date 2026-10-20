@@ -17,11 +17,12 @@ import { cn } from '../lib/cn';
  * lg grid (12 columns):  [ Hookline 8 ][ Feast 4, tall ]
  *                        [ Unearth 5 ][ Specimen 7     ]
  */
-const LAYOUT: Record<string, { span: string; frame: string; variant: 'cover' | 'mobile' }> = {
-  hookline: { span: 'lg:col-span-8', frame: 'aspect-[16/10]', variant: 'cover' },
-  feast: { span: 'lg:col-span-4', frame: 'aspect-[16/10] lg:aspect-auto lg:h-[min(31rem,58vh)]', variant: 'mobile' },
-  unearth: { span: 'lg:col-span-5', frame: 'aspect-[16/10]', variant: 'cover' },
-  specimen: { span: 'lg:col-span-7', frame: 'aspect-[16/10] lg:aspect-[16/9]', variant: 'cover' },
+// Feast's tall frame matches Hookline's height and centers on the board, past the lobby panels.
+const LAYOUT: Record<string, { span: string; frame: string; img?: string }> = {
+  hookline: { span: 'lg:col-span-8', frame: 'aspect-[16/10]' },
+  feast: { span: 'lg:col-span-4', frame: 'aspect-[16/10] lg:aspect-[3/4]', img: 'object-center' },
+  unearth: { span: 'lg:col-span-5', frame: 'aspect-[16/10]' },
+  specimen: { span: 'lg:col-span-7', frame: 'aspect-[16/10] lg:aspect-[16/9]' },
 };
 
 interface NewWorkProps {
@@ -74,8 +75,8 @@ function Tile({ item, project: p, index, onOpen }: { item: NewWorkItem; project:
         <Shot
           projectId={p.id}
           layoutId={`shot-${p.id}`}
-          pan
-          variant={look.variant}
+          pan={!look.img}
+          imgClassName={look.img}
           className={cn(look.frame, 'transition-shadow duration-300 group-hover:shadow-[0_0_0_1px_var(--rule-2),var(--shadow-float)]')}
           alt={`${p.name}, the live site`}
         />
@@ -141,7 +142,7 @@ function Chain({ steps }: { steps: string[] }) {
       {steps.map((step, i) => (
         <li key={step} className="flex items-center">
           {i > 0 && (
-            <span className="px-2 text-term-rule" aria-hidden="true">
+            <span className="px-2 text-term-amber/70" aria-hidden="true">
               →
             </span>
           )}
