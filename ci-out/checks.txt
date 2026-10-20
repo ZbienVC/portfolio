@@ -1,0 +1,439 @@
+## typecheck
+
+> portfolio@0.0.0 typecheck
+> tsc -p tsconfig.json
+
+exit 0
+## lint
+
+> portfolio@0.0.0 lint
+> eslint .
+
+
+/home/runner/work/portfolio/portfolio/fix.cjs
+  8:8  error  Parsing error: Unexpected token ', '
+
+/home/runner/work/portfolio/portfolio/src/hub/Dog.jsx
+   84:5   error  Error: This value cannot be modified
+
+Modifying component props or hook arguments is not allowed. Consider using a local variable instead.
+
+  82 |   useEffect(() => {
+  83 |     let next = 0;
+> 84 |     api.current = (x, z, heading, side) => {
+     |     ^^^ `api` cannot be modified
+  85 |       const m = meshes.current[next];
+  86 |       if (!m) return;
+  87 |       next = (next + 1) % FOOTPRINTS;
+
+Hint: If this value is a Ref (value returned by `useRef()`), rename the variable to end in "Ref"                react-hooks/immutability
+  100:22  error  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+   98 |       if (!m || !m.visible) continue;
+   99 |       const age = (now - m.userData.t0) / 1000;
+> 100 |       if (age > 9) { m.visible = false; continue; }
+      |                      ^ `meshes` cannot be modified
+  101 |       m.material.opacity = 0.4 * Math.max(0, 1 - age / 9);
+  102 |     }
+  103 |   });  react-hooks/immutability
+  159:14  error  Error: This value cannot be modified
+
+Modifying a value returned from a hook is not allowed. Consider moving the modification into the hook where the value is constructed.
+
+  157 |     if (want === state.current) {
+  158 |       const a = actions[CLIP[want]];
+> 159 |       if (a) a.timeScale = timeScale;
+      |              ^ `actions` cannot be modified
+  160 |       return;
+  161 |     }
+  162 |     actions[CLIP[state.current]]?.fadeOut(0.22);                                                                  react-hooks/immutability
+
+/home/runner/work/portfolio/portfolio/src/hub/HubExperience.jsx
+  94:3  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  92 |   const [ready, setReady] = useState(false);
+  93 |   const pendingRef = useRef(null);
+> 94 |   pendingRef.current = pending;
+     |   ^^^^^^^^^^^^^^^^^^ Cannot update ref during render
+  95 |
+  96 |   useEffect(() => {
+  97 |     const prev = document.body.style.overflow;  react-hooks/refs
+
+/home/runner/work/portfolio/portfolio/src/hub/HubScene.jsx
+  11:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  20:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  24:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/home/runner/work/portfolio/portfolio/src/hub/landmarks.jsx
+  104:20  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  102 |   const g = useRef();
+  103 |   const isHot = hovered || active;
+> 104 |   const t = useRef(Math.random() * 10);
+      |                    ^^^^^^^^^^^^^ Cannot call impure function
+  105 |
+  106 |   useFrame((_, dt) => {
+  107 |     t.current += dt;  react-hooks/purity
+  185:30  error  'accent' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    no-unused-vars
+  448:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-refresh/only-export-components
+
+/home/runner/work/portfolio/portfolio/src/journey/AlpineJourney.jsx
+  106:14  error  'e' is defined but never used                                                             no-unused-vars
+  110:15  error  Empty block statement                                                                     no-empty
+  190:11  error  'onScroll' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  221:40  error  Empty block statement                                                                     no-empty
+
+/home/runner/work/portfolio/portfolio/src/journey/engine/adapters/three3d.js
+   26:21   error  'THREE' is not defined           no-undef
+   27:22   error  'THREE' is not defined           no-undef
+   37:21   error  'THREE' is not defined           no-undef
+   38:37   error  'THREE' is not defined           no-undef
+   53:26   error  'THREE' is not defined           no-undef
+   55:31   error  'THREE' is not defined           no-undef
+   56:33   error  'THREE' is not defined           no-undef
+   64:23   error  'THREE' is not defined           no-undef
+   80:23   error  'THREE' is not defined           no-undef
+   81:24   error  'THREE' is not defined           no-undef
+   84:21   error  'THREE' is not defined           no-undef
+   84:39   error  'THREE' is not defined           no-undef
+   86:24   error  'THREE' is not defined           no-undef
+   94:76   error  'THREE' is not defined           no-undef
+  102:31   error  'THREE' is not defined           no-undef
+  107:16   error  'e' is defined but never used    no-unused-vars
+  117:21   error  'THREE' is not defined           no-undef
+  124:22   error  'THREE' is not defined           no-undef
+  124:48   error  'THREE' is not defined           no-undef
+  124:76   error  'THREE' is not defined           no-undef
+  124:111  error  'THREE' is not defined           no-undef
+  126:25   error  'THREE' is not defined           no-undef
+  128:25   error  'THREE' is not defined           no-undef
+  128:52   error  'THREE' is not defined           no-undef
+  136:28   error  'THREE' is not defined           no-undef
+  140:21   error  'THREE' is not defined           no-undef
+  140:48   error  'THREE' is not defined           no-undef
+  146:21   error  'THREE' is not defined           no-undef
+  146:42   error  'THREE' is not defined           no-undef
+  151:26   error  'THREE' is not defined           no-undef
+  152:26   error  'THREE' is not defined           no-undef
+  152:41   error  'THREE' is not defined           no-undef
+  153:11   error  'THREE' is not defined           no-undef
+  156:26   error  'THREE' is not defined           no-undef
+  156:43   error  'THREE' is not defined           no-undef
+  157:31   error  'THREE' is not defined           no-undef
+  187:23   error  'THREE' is not defined           no-undef
+  188:19   error  'THREE' is not defined           no-undef
+  188:53   error  'THREE' is not defined           no-undef
+  189:24   error  'THREE' is not defined           no-undef
+  197:23   error  'THREE' is not defined           no-undef
+  198:68   error  'THREE' is not defined           no-undef
+  199:46   error  'THREE' is not defined           no-undef
+  202:30   error  'THREE' is not defined           no-undef
+  202:45   error  'THREE' is not defined           no-undef
+  211:21   error  'THREE' is not defined           no-undef
+  212:38   error  'THREE' is not defined           no-undef
+  213:22   error  'THREE' is not defined           no-undef
+  213:42   error  'THREE' is not defined           no-undef
+  273:23   error  'THREE' is not defined           no-undef
+  274:31   error  'THREE' is not defined           no-undef
+  276:24   error  'THREE' is not defined           no-undef
+  282:23   error  'THREE' is not defined           no-undef
+  295:24   error  'THREE' is not defined           no-undef
+  305:25   error  'THREE' is not defined           no-undef
+  309:24   error  'THREE' is not defined           no-undef
+  309:39   error  'THREE' is not defined           no-undef
+  310:13   error  'THREE' is not defined           no-undef
+  319:23   error  'THREE' is not defined           no-undef
+  321:21   error  'THREE' is not defined           no-undef
+  322:21   error  'THREE' is not defined           no-undef
+  322:46   error  'THREE' is not defined           no-undef
+  322:74   error  'THREE' is not defined           no-undef
+  322:97   error  'THREE' is not defined           no-undef
+  326:23   error  'THREE' is not defined           no-undef
+  340:26   error  'p' is defined but never used    no-unused-vars
+  341:21   error  'THREE' is not defined           no-undef
+  342:24   error  'THREE' is not defined           no-undef
+  342:39   error  'THREE' is not defined           no-undef
+  344:23   error  'THREE' is not defined           no-undef
+  344:38   error  'THREE' is not defined           no-undef
+  346:28   error  'THREE' is not defined           no-undef
+  347:43   error  'THREE' is not defined           no-undef
+  348:25   error  'THREE' is not defined           no-undef
+  348:40   error  'THREE' is not defined           no-undef
+  350:24   error  'THREE' is not defined           no-undef
+  350:41   error  'THREE' is not defined           no-undef
+  351:39   error  'THREE' is not defined           no-undef
+  356:21   error  'THREE' is not defined           no-undef
+  357:25   error  'THREE' is not defined           no-undef
+  357:40   error  'THREE' is not defined           no-undef
+  361:23   error  'THREE' is not defined           no-undef
+  361:38   error  'THREE' is not defined           no-undef
+  372:23   error  'THREE' is not defined           no-undef
+  375:22   error  'THREE' is not defined           no-undef
+  376:39   error  'THREE' is not defined           no-undef
+  377:36   error  'THREE' is not defined           no-undef
+  378:17   error  'THREE' is not defined           no-undef
+  378:38   error  'THREE' is not defined           no-undef
+  381:24   error  'p' is defined but never used    no-unused-vars
+  382:21   error  'THREE' is not defined           no-undef
+  385:23   error  'THREE' is not defined           no-undef
+  385:38   error  'THREE' is not defined           no-undef
+  396:23   error  'p' is defined but never used    no-unused-vars
+  397:21   error  'THREE' is not defined           no-undef
+  397:36   error  'THREE' is not defined           no-undef
+  399:21   error  'THREE' is not defined           no-undef
+  404:21   error  'THREE' is not defined           no-undef
+  406:25   error  'THREE' is not defined           no-undef
+  406:40   error  'THREE' is not defined           no-undef
+  408:23   error  'THREE' is not defined           no-undef
+  408:38   error  'THREE' is not defined           no-undef
+  411:27   error  'THREE' is not defined           no-undef
+  411:42   error  'THREE' is not defined           no-undef
+  415:24   error  'THREE' is not defined           no-undef
+  415:39   error  'THREE' is not defined           no-undef
+  417:25   error  'THREE' is not defined           no-undef
+  417:40   error  'THREE' is not defined           no-undef
+  424:23   error  'THREE' is not defined           no-undef
+  426:22   error  'THREE' is not defined           no-undef
+  427:39   error  'THREE' is not defined           no-undef
+  428:36   error  'THREE' is not defined           no-undef
+  429:17   error  'THREE' is not defined           no-undef
+  429:38   error  'THREE' is not defined           no-undef
+  433:21   error  'THREE' is not defined           no-undef
+  436:50   error  'THREE' is not defined           no-undef
+  436:65   error  'THREE' is not defined           no-undef
+  440:25   error  'THREE' is not defined           no-undef
+  440:40   error  'THREE' is not defined           no-undef
+  447:28   error  'THREE' is not defined           no-undef
+  448:41   error  'THREE' is not defined           no-undef
+  449:25   error  'THREE' is not defined           no-undef
+  449:40   error  'THREE' is not defined           no-undef
+  451:24   error  'THREE' is not defined           no-undef
+  451:41   error  'THREE' is not defined           no-undef
+  452:39   error  'THREE' is not defined           no-undef
+  454:69   error  'THREE' is not defined           no-undef
+  456:24   error  'p' is defined but never used    no-unused-vars
+  457:21   error  'THREE' is not defined           no-undef
+  459:27   error  'THREE' is not defined           no-undef
+  459:42   error  'THREE' is not defined           no-undef
+  461:25   error  'THREE' is not defined           no-undef
+  461:40   error  'THREE' is not defined           no-undef
+  466:26   error  'THREE' is not defined           no-undef
+  466:41   error  'THREE' is not defined           no-undef
+  471:23   error  'THREE' is not defined           no-undef
+  471:38   error  'THREE' is not defined           no-undef
+  476:23   error  'p' is defined but never used    no-unused-vars
+  477:21   error  'THREE' is not defined           no-undef
+  479:26   error  'THREE' is not defined           no-undef
+  480:21   error  'THREE' is not defined           no-undef
+  481:22   error  'THREE' is not defined           no-undef
+  482:24   error  'THREE' is not defined           no-undef
+  482:39   error  'THREE' is not defined           no-undef
+  487:23   error  'p' is defined but never used    no-unused-vars
+  488:21   error  'THREE' is not defined           no-undef
+  489:25   error  'THREE' is not defined           no-undef
+  489:40   error  'THREE' is not defined           no-undef
+  494:26   error  'THREE' is not defined           no-undef
+  494:41   error  'THREE' is not defined           no-undef
+  498:23   error  'THREE' is not defined           no-undef
+  498:38   error  'THREE' is not defined           no-undef
+  504:24   error  'p' is defined but never used    no-unused-vars
+  505:21   error  'THREE' is not defined           no-undef
+  506:25   error  'THREE' is not defined           no-undef
+  506:40   error  'THREE' is not defined           no-undef
+  509:24   error  'THREE' is not defined           no-undef
+  509:39   error  'THREE' is not defined           no-undef
+  511:28   error  'THREE' is not defined           no-undef
+  511:43   error  'THREE' is not defined           no-undef
+  515:26   error  'THREE' is not defined           no-undef
+  516:41   error  'THREE' is not defined           no-undef
+  518:25   error  'THREE' is not defined           no-undef
+  518:40   error  'THREE' is not defined           no-undef
+  521:31   error  'THREE' is not defined           no-undef
+  521:46   error  'THREE' is not defined           no-undef
+  523:24   error  'THREE' is not defined           no-undef
+  523:41   error  'THREE' is not defined           no-undef
+  524:39   error  'THREE' is not defined           no-undef
+  526:67   error  'THREE' is not defined           no-undef
+  530:28   error  'p' is defined but never used    no-unused-vars
+  531:21   error  'THREE' is not defined           no-undef
+  534:25   error  'THREE' is not defined           no-undef
+  534:40   error  'THREE' is not defined           no-undef
+  537:25   error  'THREE' is not defined           no-undef
+  537:40   error  'THREE' is not defined           no-undef
+  539:24   error  'THREE' is not defined           no-undef
+  539:39   error  'THREE' is not defined           no-undef
+  541:25   error  'THREE' is not defined           no-undef
+  541:40   error  'THREE' is not defined           no-undef
+  544:26   error  'THREE' is not defined           no-undef
+  544:41   error  'THREE' is not defined           no-undef
+  546:25   error  'THREE' is not defined           no-undef
+  546:40   error  'THREE' is not defined           no-undef
+  548:24   error  'THREE' is not defined           no-undef
+  548:39   error  'THREE' is not defined           no-undef
+  550:27   error  'THREE' is not defined           no-undef
+  551:41   error  'THREE' is not defined           no-undef
+  552:24   error  'THREE' is not defined           no-undef
+  552:39   error  'THREE' is not defined           no-undef
+  554:24   error  'THREE' is not defined           no-undef
+  554:41   error  'THREE' is not defined           no-undef
+  555:39   error  'THREE' is not defined           no-undef
+  561:29   error  'p' is defined but never used    no-unused-vars
+  562:21   error  'THREE' is not defined           no-undef
+  563:26   error  'THREE' is not defined           no-undef
+  563:66   error  'THREE' is not defined           no-undef
+  564:23   error  'THREE' is not defined           no-undef
+  564:38   error  'THREE' is not defined           no-undef
+  576:26   error  'THREE' is not defined           no-undef
+  577:26   error  'THREE' is not defined           no-undef
+  577:79   error  'THREE' is not defined           no-undef
+  579:21   error  'THREE' is not defined           no-undef
+  587:23   error  'THREE' is not defined           no-undef
+  587:40   error  'THREE' is not defined           no-undef
+  588:34   error  'THREE' is not defined           no-undef
+  594:21   error  'THREE' is not defined           no-undef
+  601:21   error  'THREE' is not defined           no-undef
+  601:36   error  'THREE' is not defined           no-undef
+  615:22   error  'THREE' is not defined           no-undef
+  615:37   error  'THREE' is not defined           no-undef
+  618:24   error  'THREE' is not defined           no-undef
+  618:39   error  'THREE' is not defined           no-undef
+  620:23   error  'THREE' is not defined           no-undef
+  620:38   error  'THREE' is not defined           no-undef
+  622:24   error  'THREE' is not defined           no-undef
+  622:39   error  'THREE' is not defined           no-undef
+  626:22   error  'THREE' is not defined           no-undef
+  626:37   error  'THREE' is not defined           no-undef
+  629:22   error  'THREE' is not defined           no-undef
+  630:23   error  'THREE' is not defined           no-undef
+  630:38   error  'THREE' is not defined           no-undef
+  633:23   error  'THREE' is not defined           no-undef
+  633:38   error  'THREE' is not defined           no-undef
+  635:22   error  'THREE' is not defined           no-undef
+  635:37   error  'THREE' is not defined           no-undef
+  637:21   error  'THREE' is not defined           no-undef
+  637:36   error  'THREE' is not defined           no-undef
+  642:23   error  'THREE' is not defined           no-undef
+  642:38   error  'THREE' is not defined           no-undef
+  644:23   error  'THREE' is not defined           no-undef
+  644:38   error  'THREE' is not defined           no-undef
+  646:23   error  'THREE' is not defined           no-undef
+  646:38   error  'THREE' is not defined           no-undef
+  653:21   error  'THREE' is not defined           no-undef
+  653:36   error  'THREE' is not defined           no-undef
+  657:25   error  'THREE' is not defined           no-undef
+  657:40   error  'THREE' is not defined           no-undef
+  658:11   error  'THREE' is not defined           no-undef
+  675:67   error  'THREE' is not defined           no-undef
+  679:13   error  'THREE' is not defined           no-undef
+  685:28   error  'THREE' is not defined           no-undef
+  700:30   error  'THREE' is not defined           no-undef
+  701:31   error  'THREE' is not defined           no-undef
+  710:13   error  'err' is defined but never used  no-unused-vars
+  711:16   error  'e' is defined but never used    no-unused-vars
+  714:24   error  'THREE' is not defined           no-undef
+  714:48   error  'THREE' is not defined           no-undef
+  714:73   error  'THREE' is not defined           no-undef
+  727:27   error  'THREE' is not defined           no-undef
+  727:55   error  'THREE' is not defined           no-undef
+  728:30   error  'THREE' is not defined           no-undef
+  728:65   error  'THREE' is not defined           no-undef
+  729:31   error  'THREE' is not defined           no-undef
+  729:62   error  'THREE' is not defined           no-undef
+  730:45   error  'THREE' is not defined           no-undef
+  733:46   error  'THREE' is not defined           no-undef
+  768:27   error  'THREE' is not defined           no-undef
+  863:26   error  'THREE' is not defined           no-undef
+  868:29   error  'THREE' is not defined           no-undef
+  876:30   error  'THREE' is not defined           no-undef
+
+/home/runner/work/portfolio/portfolio/src/journey/hooks.js
+  98:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+   96 |   useEffect(() => {
+   97 |     if (prefersReduced()) {
+>  98 |       setText(words[0]);
+      |       ^^^^^^^ Avoid calling setState() directly within an effect
+   99 |       return;
+  100 |     }
+  101 |     const current = words[i % words.length];  react-hooks/set-state-in-effect
+
+/home/runner/work/portfolio/portfolio/src/sections/FallbackSite.jsx
+  73:25  error  'Panel' is defined but never used  no-unused-vars
+
+/home/runner/work/portfolio/portfolio/src/sections/common.jsx
+  4:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+✖ 279 problems (279 errors, 0 warnings)
+
+exit 1
+## test
+      ---
+      duration_ms: 0.36389
+      type: 'test'
+      ...
+    # Subtest: puts a multi-line name on one line in the subject
+    ok 6 - puts a multi-line name on one line in the subject
+      ---
+      duration_ms: 0.246352
+      type: 'test'
+      ...
+    1..6
+ok 4 - api/contact
+  ---
+  duration_ms: 6.351928
+  type: 'suite'
+  ...
+1..4
+# tests 22
+# suites 4
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 133.971011
+exit 0
+## build
+[2mdist/[22m[2massets/[22m[32mfraunces-vietnamese-wght-normal-CnvboYUG.woff2        [39m[1m[2m   11.57 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mjetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2    [39m[1m[2m   12.11 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32marchivo-vietnamese-wght-normal-XAtsl5Q_.woff2         [39m[1m[2m   13.24 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mmona-sans-vietnamese-standard-normal-Rd0aZl9c.woff2   [39m[1m[2m   13.81 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mjetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2   [39m[1m[2m   15.20 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mcaveat-latin-ext-wght-normal-Byk3UhVp.woff2           [39m[1m[2m   29.47 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32marchivo-latin-ext-wght-normal-C4zznr8T.woff2          [39m[1m[2m   32.61 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mmona-sans-latin-ext-standard-normal-CQ1tG6In.woff2    [39m[1m[2m   32.80 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mfraunces-latin-ext-wght-normal-Ca2vKHc0.woff2         [39m[1m[2m   33.58 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32marchivo-latin-wght-normal-E0tuGl4L.woff2              [39m[1m[2m   34.93 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mfraunces-latin-wght-normal-ukD16Tqj.woff2             [39m[1m[2m   36.62 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mjetbrains-mono-latin-wght-normal-B9CIFXIH.woff2       [39m[1m[2m   40.40 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mcaveat-cyrillic-ext-wght-normal-DiMfzA-V.woff2        [39m[1m[2m   42.86 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mcaveat-latin-wght-normal-C1hSzPvX.woff2               [39m[1m[2m   74.93 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mcaveat-cyrillic-wght-normal-D5lnP6kL.woff2            [39m[1m[2m   77.22 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[32mmona-sans-latin-standard-normal-BMVx8nn_.woff2        [39m[1m[2m   98.12 kB[22m[1m[22m
+[2mdist/[22m[2massets/[22m[35mindex-BxLZyHsB.css                                    [39m[1m[2m    1.24 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
+[2mdist/[22m[2massets/[22m[35mInteractiveMode-Dm6VxVPd.css                          [39m[1m[2m   32.55 kB[22m[1m[22m[2m │ gzip:   9.41 kB[22m
+[2mdist/[22m[2massets/[22m[35mClassicApp-B8mNKgq8.css                               [39m[1m[2m   71.80 kB[22m[1m[22m[2m │ gzip:  17.42 kB[22m
+[2mdist/[22m[2massets/[22m[36mportfolio-DWrkRx_1.js                                 [39m[1m[2m   23.22 kB[22m[1m[22m[2m │ gzip:   9.10 kB[22m
+[2mdist/[22m[2massets/[22m[36mshader-gradient-D-6PkuWd.js                           [39m[1m[2m   23.45 kB[22m[1m[22m[2m │ gzip:  10.14 kB[22m
+[2mdist/[22m[2massets/[22m[36mindex-BN6XMxcZ.js                                     [39m[1m[2m  196.55 kB[22m[1m[22m[2m │ gzip:  62.13 kB[22m
+[2mdist/[22m[2massets/[22m[36mClassicApp-LXzfp8Gy.js                                [39m[1m[2m  335.65 kB[22m[1m[22m[2m │ gzip: 107.33 kB[22m
+[2mdist/[22m[2massets/[22m[36mInteractiveMode-DBTmhlxR.js                           [39m[1m[33m1,485.70 kB[39m[22m[2m │ gzip: 455.68 kB[22m
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 6.12s[39m
+exit 0

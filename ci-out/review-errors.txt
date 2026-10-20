@@ -1,0 +1,3 @@
+desktop console: Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin
+dark console: Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin
+phone console: Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin
