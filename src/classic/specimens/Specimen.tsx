@@ -57,6 +57,8 @@ interface SpecimenProps {
   palette?: Record<string, string>;
   /** a 0..1 motion value the style can follow, like a section's scroll progress */
   drive?: MotionValue<number>;
+  /** draw at most this many frames a second (a slow background needs far fewer than 60) */
+  fps?: number;
 }
 
 /** Any CSS colour, oklch or a var() included, as 0-255 RGB. */
@@ -75,7 +77,7 @@ function toRgb(css: string): [number, number, number] {
   return [r, gg, b];
 }
 
-export function Specimen({ file, id, className, fallback, paused = false, palette, drive }: SpecimenProps) {
+export function Specimen({ file, id, className, fallback, paused = false, palette, drive, fps = 60 }: SpecimenProps) {
   const host = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<'idle' | 'running' | 'failed'>('idle');
   const pausedRef = useRef(paused);
@@ -117,9 +119,15 @@ export function Specimen({ file, id, className, fallback, paused = false, palett
     window.addEventListener('pointerup', onUp);
     el.addEventListener('click', onClick);
 
+    const minGap = 1000 / fps - 2;
     const loop = (now: number) => {
       raf = 0;
       if (dead || !inst) return;
+      // under the frame cap: skip this one, ask for the next
+      if (last && now - last < minGap) {
+        schedule();
+        return;
+      }
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
       last = now;
       t += dt;

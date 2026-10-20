@@ -44,6 +44,7 @@ export function HowIBuild() {
           className="absolute inset-0 opacity-55"
           palette={{ bg: 'var(--term)', mid: 'color-mix(in oklch, var(--term) 62%, var(--term-amber))', accent: 'var(--term-amber)', hi: 'var(--term-ink)' }}
           drive={scrollYProgress}
+          fps={30}
         />
       </div>
       <div className="container-x relative">

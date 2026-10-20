@@ -25,7 +25,7 @@ uniform vec2 res;uniform float time;uniform float drive;uniform vec3 bg;uniform 
 float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}
-float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<4;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}
+float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<3;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}
 float height(vec2 p){
  vec2 q=vec2(fbm(p+vec2(3.1,time*.02)),fbm(p+vec2(5.2,1.3-time*.018)));
  return fbm(p*0.8+q*0.9);}
@@ -60,7 +60,7 @@ void main(){
       function resize(w, h) {
         W = Math.max(1, w); H = Math.max(1, h);
         const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-        scale = W * H > 600000 ? 0.55 : 0.8;
+        scale = W * H > 600000 ? 0.4 : 0.6;
         cv.width = Math.round(W * dpr * scale); cv.height = Math.round(H * dpr * scale);
         if (gl) gl.viewport(0, 0, cv.width, cv.height);
       }

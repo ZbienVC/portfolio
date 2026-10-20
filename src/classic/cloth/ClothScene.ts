@@ -55,6 +55,14 @@ export class ClothScene {
   private falling = false;
   private wind = 0;
   private disposed = false;
+  private rehangTimer = 0;
+  // coming back to the tab (the PDF opens in a new one) picks the motion back up
+  private onVisible = () => {
+    if (!document.hidden) {
+      this.last = 0;
+      this.schedule();
+    }
+  };
 
   constructor(
     private canvas: HTMLCanvasElement,
@@ -138,6 +146,7 @@ export class ClothScene {
     // a gentle first sway so it reads as hanging, not printed
     for (let i = 0; i < n; i++) this.prev[i * 3 + 2] = this.pos[i * 3 + 2] - 0.012 * (this.rest[i * 3 + 1] < 0 ? 1 : 0.3);
     this.writeGeometry();
+    document.addEventListener('visibilitychange', this.onVisible);
   }
 
   /** Keep simulating for at least `ms` more. */
@@ -296,13 +305,25 @@ export class ClothScene {
   /** The button twin, and the end of a pull: off the clips, down and away. */
   drop() {
     if (this.falling) return;
+    this.grab = null;
+    this.cb.onTension(0);
     this.cb.onPulled();
     if (this.reduced) return;
     this.falling = true;
     this.wake();
+    // it always comes back, even if the fall was paused in a background tab
+    window.clearTimeout(this.rehangTimer);
+    this.rehangTimer = window.setTimeout(() => {
+      if (this.falling) {
+        this.rehang();
+        this.writeGeometry();
+        this.renderer.render(this.scene, this.camera);
+      }
+    }, 1800);
   }
 
   private rehang() {
+    window.clearTimeout(this.rehangTimer);
     this.falling = false;
     this.pos.set(this.rest);
     this.prev.set(this.rest);
@@ -335,6 +356,8 @@ export class ClothScene {
 
   dispose() {
     this.disposed = true;
+    window.clearTimeout(this.rehangTimer);
+    document.removeEventListener('visibilitychange', this.onVisible);
     cancelAnimationFrame(this.raf);
     this.geo.dispose();
     const mat = this.mesh.material as THREE.MeshStandardMaterial;

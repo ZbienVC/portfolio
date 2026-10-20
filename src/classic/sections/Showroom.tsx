@@ -223,6 +223,7 @@ export function Showroom({ filter, onFilter, onOpenProject }: ShowroomProps) {
             className="absolute inset-0"
             palette={{ bg: 'var(--paper)', ink: 'var(--ink)', accent: 'var(--amber)' }}
             drive={pinned ? pinProgress : entryProgress}
+            fps={24}
           />
         </div>
 
@@ -241,17 +242,7 @@ export function Showroom({ filter, onFilter, onOpenProject }: ShowroomProps) {
               ) : (
                 <TiltPhone open={open}>{screen}</TiltPhone>
               )}
-              <Controls
-                open={open}
-                index={index}
-                count={items.length}
-                touring={touring && !reduce}
-                reduce={reduce}
-                progress={progress}
-                onPrev={() => go(index - 1, true)}
-                onNext={() => go(index + 1, true)}
-                onTour={() => setTouring((t) => !t)}
-              />
+              <Arrows open={open} onPrev={() => go(index - 1, true)} onNext={() => go(index + 1, true)} />
             </div>
 
             {/* what's on the screen, and what to do with it */}
@@ -285,6 +276,9 @@ export function Showroom({ filter, onFilter, onOpenProject }: ShowroomProps) {
             onFilter={onFilter}
             onPick={(i) => go(i, true)}
             interactive={isOpen}
+            touring={touring && !reduce}
+            canTour={!reduce}
+            onTour={() => setTouring((t) => !t)}
           />
         </motion.div>
       </div>
@@ -506,46 +500,20 @@ function StillWithTimer({ src, alt, timed, onProgress, onDone }: { src: string; 
   return <img src={src} alt={alt} draggable={false} className="pointer-events-none absolute inset-0 size-full object-cover object-top" />;
 }
 
-/* ── the controls under the device ───────────────────────────────────────────── */
+/* ── the arrows, on the device's two sides ──────────────────────────────────── */
 
-interface ControlsProps {
-  open: MotionValue<number>;
-  index: number;
-  count: number;
-  touring: boolean;
-  reduce: boolean;
-  progress: number;
-  onPrev: () => void;
-  onNext: () => void;
-  onTour: () => void;
-}
-
-function Controls({ open, index, count, touring, reduce, onPrev, onNext, onTour }: ControlsProps) {
-  const opacity = useTransform(open, [0.65, 1], [0, 1]);
+function Arrows({ open, onPrev, onNext }: { open: MotionValue<number>; onPrev: () => void; onNext: () => void }) {
+  const opacity = useTransform(open, [0.7, 1], [0, 1]);
   const btn =
-    'grid size-10 place-items-center rounded-lg bg-paper text-ink shadow-[inset_0_0_0_1px_var(--rule-2),0_1px_2px_hsl(var(--shadow-tint)/0.1)] transition-colors hover:bg-paper-3 active:translate-y-px';
+    'pointer-events-auto grid size-11 place-items-center rounded-xl bg-paper/90 text-ink shadow-[0_0_0_1px_var(--rule-2),var(--shadow-float)] backdrop-blur-sm transition-[background-color,transform] hover:bg-paper active:scale-95';
   return (
-    <motion.div className="relative z-10 mt-6 flex items-center justify-center gap-3" style={{ opacity }}>
-      <button type="button" onClick={onPrev} className={btn} aria-label="Previous project">
-        <Icon name="arrowRight" size={17} className="rotate-180" />
+    <motion.div className="pointer-events-none absolute inset-x-0 top-[38%] z-10 flex -translate-y-1/2 justify-between max-lg:inset-x-[-6px] lg:-inset-x-6" style={{ opacity }}>
+      <button type="button" onClick={onPrev} className={btn} aria-label="Previous project" title="Previous (← key)">
+        <Icon name="arrowRight" size={18} className="rotate-180" />
       </button>
-      <span className="min-w-[4.5rem] text-center font-mono text-[12.5px] text-ink-2 tabular-nums" aria-live="polite">
-        {pad2(index + 1)} / {pad2(count)}
-      </span>
-      <button type="button" onClick={onNext} className={btn} aria-label="Next project">
-        <Icon name="arrowRight" size={17} />
+      <button type="button" onClick={onNext} className={btn} aria-label="Next project" title="Next (→ key)">
+        <Icon name="arrowRight" size={18} />
       </button>
-      <button
-        type="button"
-        onClick={onTour}
-        disabled={reduce}
-        aria-pressed={touring}
-        className="ml-2 inline-flex h-10 items-center gap-2 rounded-lg px-3 font-mono text-[11.5px] text-ink-2 shadow-[inset_0_0_0_1px_var(--rule-2)] transition-colors hover:bg-paper-3 hover:text-ink disabled:opacity-50"
-      >
-        <Icon name={touring ? 'pause' : 'play'} size={13} />
-        {touring ? 'Auto-play on' : 'Auto-play off'}
-      </button>
-      <span className="hidden font-mono text-[12px] text-ink-2 xl:inline">or the ← → keys, or swipe the screen</span>
     </motion.div>
   );
 }
@@ -632,6 +600,9 @@ function Status({ project }: { project: Project }) {
 /* ── the strip: every project in a row you scroll sideways ───────────────────── */
 
 interface RailProps {
+  touring: boolean;
+  canTour: boolean;
+  onTour: () => void;
   items: Item[];
   index: number;
   progress: number;
@@ -642,7 +613,7 @@ interface RailProps {
   interactive: boolean;
 }
 
-function Rail({ items, index, progress, filter, toolLabel, onFilter, onPick, interactive }: RailProps) {
+function Rail({ items, index, progress, filter, toolLabel, onFilter, onPick, interactive, touring, canTour, onTour }: RailProps) {
   const strip = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotionPref();
   // keep the current project in view as the tour moves along
@@ -675,7 +646,23 @@ function Rail({ items, index, progress, filter, toolLabel, onFilter, onPick, int
             </button>
           );
         })}
-        <span className="ml-auto hidden text-[12.5px] text-ink-3 md:inline">{FILTER_NOTE[filter.kind === 'category' ? filter.id : 'tool']}</span>
+        <span className="ml-auto hidden text-[12.5px] text-ink-3 xl:inline">{FILTER_NOTE[filter.kind === 'category' ? filter.id : 'tool']}</span>
+        <span className="flex items-center gap-2 max-xl:ml-auto xl:ml-4">
+          <span className="font-mono text-[12px] text-ink-2 tabular-nums" aria-live="polite">
+            {pad2(index + 1)} / {pad2(items.length)}
+          </span>
+          <button
+            type="button"
+            onClick={onTour}
+            disabled={!canTour}
+            aria-pressed={touring}
+            aria-label={touring ? 'Pause the auto-play' : 'Start the auto-play'}
+            title={touring ? 'Pause the auto-play' : 'Start the auto-play'}
+            className="grid size-8 place-items-center rounded-md text-ink-2 shadow-[inset_0_0_0_1px_var(--rule-2)] transition-colors hover:bg-paper-3 hover:text-ink disabled:opacity-40"
+          >
+            <Icon name={touring ? 'pause' : 'play'} size={13} />
+          </button>
+        </span>
         {toolLabel && (
           <button
             type="button"

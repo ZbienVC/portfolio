@@ -1,6 +1,7 @@
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from 'motion/react';
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useFinePointer, useReducedMotionPref } from '../lib/hooks';
+import { useTheme } from '../lib/theme';
 
 /**
  * A laptop built as real boxes in CSS 3D, measured from its width so the parts
@@ -41,6 +42,50 @@ const ROWS: number[][] = [
   [1, 1, 1, 1.25, 5.5, 1.25, 1, 1, 1, 1],
 ];
 
+/**
+ * The keyboard as one picture, drawn once per size and theme. Seventy shaded
+ * key elements inside a moving 3D layer cost the browser a redraw each; one
+ * image costs nothing to move.
+ */
+function keyboardImage(w: number, h: number, dark: boolean) {
+  const k = Math.min(2, window.devicePixelRatio || 1) * 1.25;
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(w * k));
+  c.height = Math.max(1, Math.round(h * k));
+  const g = c.getContext('2d');
+  if (!g) return '';
+  g.scale(k, k);
+  const [hi, lo] = dark ? ['oklch(0.27 0.006 55)', 'oklch(0.17 0.005 55)'] : ['oklch(0.34 0.006 55)', 'oklch(0.22 0.005 55)'];
+  const pad = w * 0.012;
+  const gap = w * 0.0105;
+  const rowH = (h - pad * 2 - gap * (ROWS.length - 1)) / ROWS.length;
+  const r = Math.max(1.5, w * 0.005);
+  ROWS.forEach((row, ri) => {
+    const total = row.reduce((a, b) => a + b, 0);
+    const unit = (w - pad * 2 - gap * (row.length - 1)) / total;
+    let x = pad;
+    const y = pad + ri * (rowH + gap);
+    for (const kw of row) {
+      const kwPx = kw * unit;
+      const grad = g.createLinearGradient(0, y, 0, y + rowH);
+      grad.addColorStop(0, hi);
+      grad.addColorStop(0.55, lo);
+      g.fillStyle = 'rgba(0,0,0,0.55)';
+      g.beginPath();
+      g.roundRect(x, y + 1, kwPx, rowH, r);
+      g.fill();
+      g.fillStyle = grad;
+      g.beginPath();
+      g.roundRect(x, y, kwPx, rowH, r);
+      g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.1)';
+      g.fillRect(x + r, y + 0.5, kwPx - r * 2, 1);
+      x += kwPx + gap;
+    }
+  });
+  return c.toDataURL('image/png');
+}
+
 export function Laptop3D({ open, maxWidth, children }: { open: MotionValue<number>; maxWidth: string; children: ReactNode }) {
   const box = useRef<HTMLDivElement>(null);
   const [W, setW] = useState(0);
@@ -53,6 +98,11 @@ export function Laptop3D({ open, maxWidth, children }: { open: MotionValue<numbe
     return () => ro.disconnect();
   }, []);
   const g = geometry(W || 800);
+  const { theme } = useTheme();
+  // the keyboard well's size, rounded so small resizes reuse the same picture
+  const kw = Math.round(g.W * 0.81);
+  const kh = Math.round(g.D * 0.45);
+  const keys = useMemo(() => (W ? keyboardImage(kw, kh, theme === 'dark') : ''), [W, kw, kh, theme]);
 
   // the pointer tips it a few degrees; springs keep it soft
   const fine = useFinePointer();
@@ -74,7 +124,6 @@ export function Laptop3D({ open, maxWidth, children }: { open: MotionValue<numbe
   const lid = useTransform(open, [0, 1], [-90, 13]);
   const tilt = useTransform(() => -66 + 57 * open.get() + py.get() * -4 * open.get());
   const yaw = useTransform(() => -22 + 15 * open.get() + px.get() * 7 * open.get());
-  const scale = useTransform(open, [0, 1], [0.82, 1]);
   const lift = useTransform(open, [0, 1], [-g.H * 0.2, 0]);
   const screenOn = useTransform(open, [0.45, 0.85], [0, 1]);
   const lidShade = useTransform(open, [0, 0.55], [0.5, 0]);
@@ -90,7 +139,7 @@ export function Laptop3D({ open, maxWidth, children }: { open: MotionValue<numbe
       aria-roledescription="laptop"
       aria-label="A laptop showing the selected project"
     >
-      <motion.div className="absolute inset-0 [transform-style:preserve-3d]" style={{ rotateX: tilt, rotateY: yaw, scale, y: lift }}>
+      <motion.div className="absolute inset-0 [transform-style:preserve-3d] will-change-transform" style={{ rotateX: tilt, rotateY: yaw, y: lift }}>
         {/* ── the deck: a slab lying flat behind the hinge, its top face up ── */}
         <div
           className="lt-face"
@@ -115,15 +164,10 @@ export function Laptop3D({ open, maxWidth, children }: { open: MotionValue<numbe
             <div className="lt-face lt-grille" style={{ left: '2.6%', top: '6%', width: '5.4%', height: '44%' }} />
             <div className="lt-face lt-grille" style={{ right: '2.6%', top: '6%', width: '5.4%', height: '44%' }} />
             {/* the keyboard, sunk into its well */}
-            <div className="lt-face lt-well flex flex-col" style={{ left: '9.5%', right: '9.5%', top: '5.5%', height: '45%', borderRadius: g.W * 0.006, padding: g.W * 0.007, gap: g.W * 0.0055 }}>
-              {ROWS.map((row, r) => (
-                <div key={r} className="flex flex-1" style={{ gap: g.W * 0.0055 }}>
-                  {row.map((w, k) => (
-                    <span key={k} className="lt-key" style={{ flex: `${w} 1 0`, borderRadius: Math.max(1.5, g.W * 0.0025) }} />
-                  ))}
-                </div>
-              ))}
-            </div>
+            <div
+              className="lt-face lt-well"
+              style={{ left: '9.5%', right: '9.5%', top: '5.5%', height: '45%', borderRadius: g.W * 0.006, backgroundImage: keys ? `url(${keys})` : undefined, backgroundSize: '100% 100%' }}
+            />
             {/* trackpad */}
             <div className="lt-face lt-pad" style={{ left: '50%', top: '57%', width: '38%', height: '36%', transform: 'translateX(-50%)', borderRadius: g.W * 0.01 }} />
           </div>

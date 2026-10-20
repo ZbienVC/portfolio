@@ -41,13 +41,13 @@
     }
     function setup(w, h) {
       w0 = w; h0 = h;
-      var scale = Math.min(1, Math.sqrt(70000 / Math.max(1, w * h)));
+      var scale = Math.min(1, Math.sqrt(42000 / Math.max(1, w * h)));
       GW = Math.max(80, Math.round(w * scale)); GH = Math.max(60, Math.round(h * scale));
       off.width = GW; off.height = GH;
       cv.width = Math.round(w); cv.height = Math.round(h);
       trail = new Float32Array(GW * GH); tmp = new Float32Array(GW * GH);
       img = octx.createImageData(GW, GH);
-      N = Math.min(18000, Math.round(GW * GH * 0.22));
+      N = Math.min(8000, Math.round(GW * GH * 0.2));
       bl.width = Math.max(8, GW >> 2); bl.height = Math.max(8, GH >> 2);
       ax = new Float32Array(N); ay = new Float32Array(N); aa = new Float32Array(N);
       seed();
