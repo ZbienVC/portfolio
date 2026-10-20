@@ -20,6 +20,7 @@ import { Contact } from './sections/Contact';
 import { DayJob } from './sections/DayJob';
 import { Experience } from './sections/Experience';
 import { Hero } from './sections/Hero';
+import { NewWork } from './sections/NewWork';
 import { Basecamp } from './sections/Basecamp';
 import { OffTheClock } from './sections/OffTheClock';
 import { Toolkit } from './sections/Toolkit';
@@ -114,6 +115,7 @@ function Page() {
 
       <main id="main">
         <Hero onOpenProject={(id) => openProject(id)} />
+        <NewWork onOpenProject={openProject} />
         <Work filter={workFilter} onFilter={setWorkFilter} onOpenProject={openProject} />
         <DayJob />
         <Experience />

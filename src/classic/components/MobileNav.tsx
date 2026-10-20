@@ -10,6 +10,7 @@ import { cn } from '../lib/cn';
 import { HoverArrow, Icon, type IconName } from './Icon';
 
 export const SECTION_LABELS = {
+  new: 'New work',
   work: 'Work',
   'day-job': 'The day job',
   experience: 'Experience',

@@ -67,6 +67,66 @@ export const FLAGSHIP_IDS = ['fieldsense', 'oikos', 'splash', 'wakerush'] as con
 export const FLAGSHIPS = FLAGSHIP_IDS.map((id) => projectById(id)!);
 export const ALSO_SHIPPED = PROJECTS.filter((p) => !(FLAGSHIP_IDS as readonly string[]).includes(p.id));
 
+/* ── New work: the latest builds, shown in their own section above the flagships ── */
+
+// Each one gets a different "how it works" strip, so the four don't read as one card repeated.
+export type Signature =
+  | { kind: 'chain'; steps: string[] }
+  | { kind: 'split'; left: { k: string; v: string }; right: { k: string; v: string }; link: string }
+  | { kind: 'figures'; items: { n: string; label: string }[] };
+
+export interface NewWork {
+  id: string;
+  /** one line on what makes it different, shown under the name */
+  hook: string;
+  signature: Signature;
+}
+
+export const NEW_WORK: NewWork[] = [
+  {
+    id: 'hookline',
+    hook: 'Six AI agents in a row turn a rising trend into a finished vertical video, and a trust ladder decides how much they post on their own.',
+    signature: { kind: 'chain', steps: ['Scout', 'Analyst', 'Strategist', 'Writer', 'Critic', 'Director'] },
+  },
+  {
+    id: 'feast',
+    hook: 'A full board game in the browser: the TV runs the 3D world, and every phone in the room becomes a controller.',
+    signature: {
+      kind: 'split',
+      left: { k: 'The TV', v: '3D board, dice, announcer' },
+      right: { k: 'The phones', v: 'Moves, bluffs, minigames' },
+      link: 'One room code',
+    },
+  },
+  {
+    id: 'unearth',
+    hook: 'Drop in a spreadsheet and it finds what a busy person misses, with the exact rows to prove each find.',
+    signature: {
+      kind: 'figures',
+      items: [
+        { n: '19', label: 'finders' },
+        { n: '0', label: 'uploads' },
+        { n: '3', label: 'export formats' },
+      ],
+    },
+  },
+  {
+    id: 'specimen',
+    hook: 'A reference shelf for generative art, where every specimen is running code instead of a picture of one.',
+    signature: {
+      kind: 'figures',
+      items: [
+        { n: '85', label: 'styles' },
+        { n: '12', label: 'families' },
+        { n: '0', label: 'images' },
+      ],
+    },
+  },
+];
+export const NEW_IDS = NEW_WORK.map((n) => n.id);
+/** The rest of the also-shipped list, once the new work is pulled out of it. */
+export const OLDER_SHIPPED = ALSO_SHIPPED.filter((p) => !NEW_IDS.includes(p.id));
+
 export const FILTERS = [
   { id: 'all', label: 'Everything' },
   { id: 'ai', label: 'AI & data' },

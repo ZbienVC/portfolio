@@ -67,6 +67,7 @@ export function CommandPalette({ onClose, onOpenProject, onAsk, onCopyEmail }: P
 
   const items = useMemo<Item[]>(
     () => [
+      { id: 'j-new', group: 'Jump to', label: 'New work', hint: 'the latest builds', icon: 'arrowRight', keywords: 'latest recent hookline feast league unearth specimen atlas', run: jump('#new') },
       { id: 'j-work', group: 'Jump to', label: 'Work', icon: 'arrowRight', run: jump('#work') },
       { id: 'j-ledger', group: 'Jump to', label: 'Everything I’ve shipped', hint: 'every project', icon: 'arrowRight', keywords: 'ledger all projects list', run: jump('#ledger') },
       { id: 'j-day', group: 'Jump to', label: 'The day job', hint: 'the books and the automation', icon: 'arrowRight', keywords: 'accounts payable quickbooks iif telecom finance', run: jump('#day-job') },

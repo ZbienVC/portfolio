@@ -313,6 +313,72 @@ export const PROJECTS = [
     ],
   },
   {
+    id: 'hookline',
+    name: 'Hookline',
+    tagline: 'An AI crew that makes short videos',
+    short: 'A crew of AI agents spots what is rising on social, writes the scripts and renders finished short videos.',
+    kind: 'Product',
+    description:
+      "A content engine for short video. A crew of AI agents watches TikTok, YouTube, Google Trends, Hacker News and Product Hunt in the niches you pick, scores every post from 0 to 100 on how far it beat its creator's normal, works out why it's winning, and pitches original ideas. A writer and a critic go back and forth on each script, then a director renders the finished 1080x1920 video with animated type, a voice with word-timed captions and an original music bed. No paid video service is involved: every frame is drawn on a canvas and put together with ffmpeg. An autopilot earns trust from your thumbs up and down, from research only all the way to posting on its own, with spending caps on every paid call.",
+    status: 'live',
+    url: 'https://hookline-production-c636.up.railway.app',
+    github: null, // private repo (ZbienVC/hookline)
+    color: '#e8a44a',
+    colorEnd: '#c4762a',
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Multi-LLM', 'Three.js', 'ffmpeg'],
+    category: ['ai'],
+    highlights: [
+      'Six AI agents, from scout to director',
+      'A 0 to 100 Heat Score for every post',
+      'Renders its own videos, no paid video service',
+      'An autopilot that earns trust from your reviews',
+    ],
+  },
+  {
+    id: 'feast',
+    name: 'Feast League',
+    tagline: 'A 3D party board game, played from your phones',
+    short: 'A 3D party board game on the TV that friends play from their phones. No app, no account.',
+    kind: 'Game',
+    description:
+      "Mario Party meets Jackbox. The TV shows a 3D candy board with real physics dice, and everyone plays from their own phone after scanning a QR code: no app to install and no account. Each round ends with a 30 second minigame on the phones, there's a coin economy and toll bridges to fight over, and a hidden Saboteur at four players or more who everyone has to sniff out. Vorbl, a giant candy monster, calls the action like a sports announcer, and a League table remembers each friend group across game nights. There's a horror look too, for later in the night.",
+    status: 'live',
+    url: 'https://feast-league-production.up.railway.app',
+    github: null, // private repo (ZbienVC/feast-league)
+    color: '#e98a4e',
+    colorEnd: '#c2612c',
+    tags: ['Three.js', 'WebGL', 'WebSocket', 'Node.js', 'Physics'],
+    category: ['web'],
+    highlights: [
+      'The TV is the board, the phones are the controllers',
+      'Seven phone minigames, one every round',
+      'A hidden Saboteur and secret dice to bluff with',
+      'Bots that play to win, tuned with simulated games',
+    ],
+  },
+  {
+    id: 'specimen',
+    name: 'Specimen Atlas',
+    tagline: 'A living field guide to generative art',
+    short: '85 generative art styles, each drawn live by code, with how it works and where it fits.',
+    kind: 'Gallery',
+    description:
+      'A field guide to generative art where every specimen is drawn live in the browser. Nothing on the page is a photo or a video. There are 85 styles across 12 families, from shaders and fluids to print, glitch and physics. Each one says what it is, how it works in plain words, and where it fits in a real product. Star the ones you like, open any of them full size in Theater mode, and copy a recipe that is ready to paste into a build prompt.',
+    status: 'live',
+    url: 'https://specimen-atlas.vercel.app',
+    github: null, // private repo (ZbienVC/specimen-atlas)
+    color: '#dba45e',
+    colorEnd: '#a8753a',
+    tags: ['WebGL', 'Three.js', 'Canvas', 'Matter.js', 'Vercel'],
+    category: ['web'],
+    highlights: [
+      '85 styles in 12 families, all drawn live',
+      'How each one works, in plain words',
+      'Theater mode and a copyable recipe for each',
+      'One file, no build step',
+    ],
+  },
+  {
     id: 'unearth',
     name: 'Unearth',
     tagline: 'Drop in a spreadsheet, get the story',

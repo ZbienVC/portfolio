@@ -1,0 +1,50 @@
+# Temporary: runs only on the ci-shots branch. Checks the build, captures the
+# new projects' screenshots from their live sites, photographs the page for
+# review, and commits everything back to the branch.
+name: shots
+on:
+  push:
+    branches: [ci-shots]
+permissions:
+  contents: write
+jobs:
+  shots:
+    if: "!contains(github.event.head_commit.message, '[shots]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Checks
+        run: |
+          mkdir -p ci-out
+          { echo "## typecheck"; npm run typecheck 2>&1; echo "exit $?";
+            echo "## lint"; npm run lint 2>&1; echo "exit $?";
+            echo "## test"; npm test 2>&1 | tail -25; echo "exit ${PIPESTATUS[0]}";
+            echo "## build"; npm run build 2>&1 | tail -30; echo "exit ${PIPESTATUS[0]}"; } > ci-out/checks.txt || true
+          cat ci-out/checks.txt
+      - name: Browser
+        run: |
+          mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i --no-audit --no-fund playwright@1.48.2 sharp
+          npx playwright install --with-deps chromium
+      - name: Capture the live sites
+        run: |
+          cp .github/shots/*.mjs /tmp/pw/
+          cd /tmp/pw && OUT=$GITHUB_WORKSPACE/public/work node shoot.mjs 2>&1 | tee $GITHUB_WORKSPACE/ci-out/shoot.txt
+      - name: Review the page
+        run: |
+          npm run build >/dev/null 2>&1 || true
+          (npx vite preview --port 4173 --strictPort > /tmp/preview.log 2>&1 &)
+          sleep 4
+          cd /tmp/pw && OUT=$GITHUB_WORKSPACE/ci-out node review.mjs 2>&1 | tee $GITHUB_WORKSPACE/ci-out/review.txt
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -f public/work ci-out
+          git commit -m "[shots] screenshots and review" || echo "nothing to commit"
+          git push
