@@ -28,3 +28,45 @@ jobs:
           ls -la /tmp/deps
           cd /tmp/deps && git init -q -b ci-deps && git add . && git -c user.name=bot -c user.email=bot@users.noreply.github.com commit -qm "node_modules"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-deps
+
+  browser:
+    if: contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[demos]') || contains(github.event.head_commit.message, '[review]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Playwright
+        run: |
+          mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i --no-audit --no-fund playwright@1.48.2 sharp
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y ffmpeg >/dev/null
+          cp $GITHUB_WORKSPACE/scripts/capture/*.mjs /tmp/pw/
+      - name: Probe
+        if: contains(github.event.head_commit.message, '[probe]')
+        run: |
+          mkdir -p ci-out && cd /tmp/pw
+          SITES="$(cat $GITHUB_WORKSPACE/scripts/capture/sites.json)" OUT=$GITHUB_WORKSPACE/ci-out node probe.mjs
+      - name: Demos
+        if: contains(github.event.head_commit.message, '[demos]')
+        run: |
+          mkdir -p ci-out public/demos && cd /tmp/pw
+          OUT=$GITHUB_WORKSPACE/public/demos node demos.mjs 2>&1 | tee $GITHUB_WORKSPACE/ci-out/demos.txt
+      - name: Review
+        if: contains(github.event.head_commit.message, '[review]')
+        run: |
+          mkdir -p ci-out
+          npm ci --no-audit --no-fund >/dev/null 2>&1
+          npm run build >/dev/null 2>&1
+          (npx vite preview --port 4173 --strictPort > /tmp/preview.log 2>&1 &)
+          sleep 4
+          cd /tmp/pw && OUT=$GITHUB_WORKSPACE/ci-out node review.mjs 2>&1 | tee $GITHUB_WORKSPACE/ci-out/review.txt
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-out public/demos 2>/dev/null || true
+          git commit -m "[bot] results" || echo "nothing to commit"
+          git pull --rebase -q || true
+          git push
