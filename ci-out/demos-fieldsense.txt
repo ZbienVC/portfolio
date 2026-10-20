@@ -1,0 +1,2 @@
+  fieldsense laptop: 318 KB, trimmed 2.35s
+  fieldsense phone: 156 KB, trimmed 2.31s
