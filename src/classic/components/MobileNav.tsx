@@ -12,7 +12,6 @@ import { HoverArrow, Icon, type IconName } from './Icon';
 export const SECTION_LABELS = {
   work: 'Work',
   how: 'How I build',
-  shipped: 'Shipped',
   toolkit: 'Toolkit',
   'day-job': 'The day job',
   experience: 'Experience',

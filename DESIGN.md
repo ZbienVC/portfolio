@@ -47,20 +47,22 @@ Caveat only for the handwritten notes in "Show the work".
   Sites & games and Everything are tabs on the strip. Clicking the screen of a site that
   allows framing (`EMBEDDABLE` in `lib/data.ts`) runs the live site in it. On a phone it's a
   phone that tips up as it scrolls in. Reduced motion: the laptop is simply open.
-- The stack (`stack/`, shown by `sections/Shipped.tsx` right after How I build as its
-  output): one block per live site in a tray, oldest at the bottom, so height is the count
-  and order is the timeline. three.js + cannon-es, loaded only near the screen.
+- The stack (`stack/`, `sections/Shipped.tsx`): one block per live site in a tray, oldest
+  at the bottom. Kept but off the page since 2026-10-20 (Zach: too much project
+  repetition); add `<Shipped />` back in `ClassicApp.tsx` to show it.
 - The hanging résumé (`cloth/`): a stiff verlet sheet on two clips; pull it down and the PDF
   opens on release. "Open the résumé" is its button twin.
 - Specimen Atlas, in the scroll story rather than behind every project: retinted copies of two
   styles in `specimens/modules`, fed the page's colours and a scroll value. Contour lines are
   the desk under the laptop and slide as you scroll (travel); the slime-mold agents behind
   How I build multiply as you read it (a crew of small agents building a network).
-- The status board launches: a row opens the laptop on that project (`lib/launch.ts`); so do the Work menu and the palette.
+- The Work menu and the palette open the laptop on a project (`lib/launch.ts`).
 
-**Moment:** The status board. The visitor's browser sends each of the live sites a
-HEAD request as the page loads; rows tick green with real response times and the
-split-flap counter turns forward one flap per answer. A site that's down says so.
+**Moment:** The live line. Under the hero's buttons, the visitor's browser sends each
+live site a HEAD request as the page loads, and the split-flap counter turns forward one
+flap per answer. The per-site dots and times live on the Work strip, with a hover
+preview of each site (the old full status board was retired on 2026-10-20: it repeated
+the project list and made the hero tall).
 
 **Interaction set:** one morphing nav panel (Work / About) · ⌘K / Ctrl K palette that falls back
 to the AI · shared-element project sheets with drag-to-dismiss and `#work/<id>` links ·

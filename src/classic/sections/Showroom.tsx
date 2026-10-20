@@ -23,7 +23,7 @@ import {
   type Project,
   type Signature,
 } from '../lib/data';
-import { isTypingTarget, useMedia, useReducedMotionPref } from '../lib/hooks';
+import { isTypingTarget, useFinePointer, useMedia, useReducedMotionPref } from '../lib/hooks';
 import { registerReveal, registerStage } from '../lib/launch';
 import { useBoard } from '../lib/pings';
 import { ease, spring } from '../lib/motion';
@@ -616,6 +616,14 @@ interface RailProps {
 function Rail({ items, index, progress, filter, toolLabel, onFilter, onPick, interactive, touring, canTour, onTour }: RailProps) {
   const strip = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotionPref();
+  const fine = useFinePointer();
+  const board = useBoard();
+  // the card under the pointer, and where it sits on screen: the preview floats above it
+  const [peek, setPeek] = useState<{ item: Item; x: number; y: number } | null>(null);
+  const resultFor = (p: Project) => {
+    const t = PING_TARGETS.find((x) => x.projectId === p.id);
+    return t ? board.results[t.key] : undefined;
+  };
   // keep the current project in view as the tour moves along
   useEffect(() => {
     const el = strip.current?.children[index] as HTMLElement | undefined;
@@ -690,9 +698,18 @@ function Rail({ items, index, progress, filter, toolLabel, onFilter, onPick, int
               role="listitem"
               aria-current={on ? 'true' : undefined}
               onClick={() => onPick(i)}
+              onPointerEnter={(e) => {
+                if (!fine || e.pointerType !== 'mouse') return;
+                const r = e.currentTarget.getBoundingClientRect();
+                setPeek({ item: it, x: r.left + r.width / 2, y: r.top });
+              }}
+              onPointerLeave={() => setPeek(null)}
               className={cn('group relative w-[10.5rem] shrink-0 snap-start rounded-md px-3 pt-2.5 pb-3 text-left transition-colors', on ? 'bg-paper-2' : 'hover:bg-paper-2/70')}
             >
-              <span className="block font-mono text-[10.5px] text-ink-3 tabular-nums">{pad2(i + 1)}</span>
+              <span className="flex items-center justify-between font-mono text-[10.5px] text-ink-3 tabular-nums">
+                {pad2(i + 1)}
+                <span className="dot" data-state={resultFor(it.p)?.state ?? 'pending'} aria-hidden="true" />
+              </span>
               <span className={cn('mt-0.5 block truncate text-[14px] font-[620] tracking-[-0.01em] [font-stretch:106%]', on ? 'text-ink' : 'text-ink-2 group-hover:text-ink')}>
                 {it.p.name}
               </span>
@@ -704,6 +721,31 @@ function Rail({ items, index, progress, filter, toolLabel, onFilter, onPick, int
           );
         })}
       </div>
+
+      {/* the preview: what the site looks like, and how fast it just answered your browser */}
+      <AnimatePresence>
+        {peek && (
+          <motion.div
+            key="peek"
+            aria-hidden="true"
+            className="pointer-events-none fixed z-40 w-[264px] overflow-hidden rounded-lg bg-paper shadow-[0_0_0_1px_var(--rule),var(--shadow-float)]"
+            style={{ left: peek.x, top: peek.y, x: '-50%', y: 'calc(-100% - 12px)' }}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.1 } }}
+            transition={{ ...spring.crisp, opacity: { duration: 0.14 } }}
+          >
+            <img src={still(peek.item.p.id, 'laptop')} alt="" className="aspect-[16/10] w-full object-cover object-top" />
+            <div className="flex items-center justify-between gap-2 px-3 py-2">
+              <span className="truncate text-[13px] font-[620] text-ink">{peek.item.p.name}</span>
+              <span className="flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-ink-3">
+                {peek.item.p.url && hostOf(peek.item.p.url)}
+                {resultFor(peek.item.p)?.state === 'up' && <span className="text-ink-2">· {resultFor(peek.item.p)?.ms} ms</span>}
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -2,12 +2,11 @@ import { motion } from 'motion/react';
 import { GradientCanvas } from '../components/GradientCanvas';
 import { HoverArrow, Icon } from '../components/Icon';
 import { Ink, InkNote } from '../components/Ink';
-import { LiveBoard } from '../components/LiveBoard';
+import { LiveLine } from '../components/LiveLine';
 import { Portrait } from '../components/Portrait';
 import { LIVE_COUNT, PROFILE } from '../lib/data';
 import { ease } from '../lib/motion';
 import { useTheme } from '../lib/theme';
-import { useMedia } from '../lib/hooks';
 import type { ShaderGradientOptions } from '../engines/shader-gradient.js';
 
 // The gradient re-glazed for this page: oxblood where the silk pools, vermilion
@@ -35,10 +34,8 @@ const rise = (delay: number, distance = 10) => ({
   transition: { duration: 0.8, ease: ease.out, delay },
 });
 
-export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void }) {
+export function Hero() {
   const { theme } = useTheme();
-  // the board is a desktop piece: on a phone each project card carries its own live dot instead
-  const wide = useMedia('(min-width: 1024px)');
   const glaze = { ...GLAZE, ground: theme === 'dark' ? '#160c0a' : '#2a0d0f' };
   const words = PROFILE.headline.replace(/\.$/, '').split(' ');
   const split = 3; // "I build the" / "systems the work runs on."
@@ -61,10 +58,10 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
       <div className="container-x relative grid items-start gap-x-8 gap-y-10 lg:grid-cols-12 lg:gap-y-12 [&>*]:min-w-0">
         {/* who's talking: the first thing on a phone, on the glaze band; on a desktop, on the glaze above the board */}
         <motion.div
-          className="grid h-[var(--band-h)] place-items-center lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:h-auto lg:justify-self-end lg:pr-[3%]"
+          className="grid h-[var(--band-h)] place-items-center lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:h-full lg:justify-self-center"
           {...rise(0.1, 18)}
         >
-          <Portrait className="lg:[--pw:160px] xl:flex-row xl:items-start xl:gap-4 xl:[&>div:first-of-type]:mt-5" />
+          <Portrait className="lg:[--pw:220px] xl:[--pw:250px]" />
         </motion.div>
 
         <div className="lg:col-span-6 lg:col-start-1 lg:row-start-1 lg:pt-4">
@@ -101,8 +98,7 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
             I&apos;m Zach. By day I run the books for two telecom companies and built the automation that does most of the filing. On my
             own time I&apos;ve shipped <strong className="font-[620] text-ink">{LIVE_COUNT} sites and products</strong> with a crew of AI
             agents I set up to research, build and review beside me.{' '}
-            <span className="max-lg:hidden">The board checks each one live; pick one to watch it run.</span>
-            <span className="lg:hidden">A green dot next to a project below means it&apos;s up right now.</span>
+
           </motion.p>
 
           <motion.div className="mt-9 flex flex-wrap items-center gap-3" {...rise(0.26)}>
@@ -119,23 +115,14 @@ export function Hero({ onOpenProject }: { onOpenProject: (id: string) => void })
             </a>
           </motion.div>
 
+          <LiveLine className="mt-7" />
+
           {/* a sentence, so it's set as one: body type, not the small mono labels */}
           <p className="mt-9 max-w-[31rem] text-[15px] leading-relaxed text-ink-2 lg:mt-12">
             Before this: surveillance data at Bloomberg LP, $25M to $1B raises at Cambridge Wilkinson, and savings models at Grapevine.
           </p>
         </div>
 
-        {/* the board overlaps the portrait's lower edge, the way a print gets tucked under a statement */}
-        {wide && (
-          <motion.div
-            className="relative z-10 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mt-[calc(160px*1.36-18px+40px)] xl:mt-[calc(160px*1.36-18px)]"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: ease.out, delay: 0.25 }}
-          >
-            <LiveBoard onOpenProject={onOpenProject} />
-          </motion.div>
-        )}
       </div>
     </section>
   );

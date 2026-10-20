@@ -22,7 +22,6 @@ import { DayJob } from './sections/DayJob';
 import { Experience } from './sections/Experience';
 import { Hero } from './sections/Hero';
 import { HowIBuild } from './sections/HowIBuild';
-import { Shipped } from './sections/Shipped';
 import { OffTheClock } from './sections/OffTheClock';
 import { Toolkit } from './sections/Toolkit';
 import { Showroom, type WorkFilter } from './sections/Showroom';
@@ -113,10 +112,9 @@ function Page() {
       <Nav onOpenPalette={openPalette} onOpenProject={(id) => launchProject(id, openProject)} onOpenAsk={() => setAsk({})} />
 
       <main id="main">
-        <Hero onOpenProject={(id) => launchProject(id, openProject)} />
+        <Hero />
         <Showroom filter={workFilter} onFilter={setWorkFilter} onOpenProject={openProject} />
         <HowIBuild />
-        <Shipped onOpenProject={(id) => openProject(id)} />
         <Toolkit onFilterTool={filterByTool} />
         <DayJob />
         <Experience />

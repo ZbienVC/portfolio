@@ -13,7 +13,7 @@ import { cn } from '../lib/cn';
 import { HoverArrow, Icon } from './Icon';
 import { Dock, MenuSheet, type SectionId } from './MobileNav';
 
-export const SECTIONS = ['work', 'how', 'shipped', 'toolkit', 'day-job', 'experience', 'off-the-clock', 'contact'] as const;
+export const SECTIONS = ['work', 'how', 'toolkit', 'day-job', 'experience', 'off-the-clock', 'contact'] as const;
 
 type MenuId = 'work' | 'about';
 interface NavProps {
@@ -133,7 +133,7 @@ export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
                   />
                 </li>
                 <li>
-                  <NavLink href="#how" current={active === 'how' || active === 'shipped' || active === 'toolkit'} onPointerEnter={close}>
+                  <NavLink href="#how" current={active === 'how' || active === 'toolkit'} onPointerEnter={close}>
                     How I build
                   </NavLink>
                 </li>
@@ -454,11 +454,11 @@ function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpe
           ))}
         </ul>
         <a
-          href="#shipped"
+          href="#work"
           onClick={onNavigate}
           className="mt-2 flex items-center gap-1.5 px-3 py-2 text-[13.5px] font-[600] text-amber-ink"
         >
-          All {LIVE_COUNT} live sites, stacked
+          All {LIVE_COUNT} live sites, on the laptop
           <HoverArrow />
         </a>
       </div>
