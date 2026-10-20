@@ -676,3 +676,68 @@
     .ink-note--pale .ink-note-spec { color: var(--ink-3); }
   }
 }
+
+/* ── The laptop (components/Laptop3D.tsx): brushed aluminium, glass and keys ──────
+   Silver by day, space grey after hours. Every surface is a token so the two themes
+   stay one object. The brushing is an SVG noise stretched sideways, laid over a
+   gradient; edges are a shade darker than the faces they bound. */
+.lt {
+  --lt-alu-hi: oklch(0.93 0.004 80);
+  --lt-alu: oklch(0.84 0.006 75);
+  --lt-alu-lo: oklch(0.72 0.008 70);
+  --lt-edge: oklch(0.76 0.007 72);
+  --lt-edge-lo: oklch(0.6 0.009 66);
+  --lt-well: oklch(0.12 0.004 55);
+  --lt-key: oklch(0.22 0.005 55);
+  --lt-key-hi: oklch(0.34 0.006 55);
+  --lt-bezel: oklch(0.12 0.004 55);
+  --lt-pad: oklch(0.8 0.006 75);
+  --lt-grille: oklch(0.42 0.008 62);
+  --lt-mark: oklch(0.95 0.004 80);
+  --lt-shadow: oklch(0.22 0.03 45 / 0.38);
+  --lt-brush: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.85' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] .lt {
+  --lt-alu-hi: oklch(0.52 0.008 60);
+  --lt-alu: oklch(0.42 0.008 60);
+  --lt-alu-lo: oklch(0.33 0.008 58);
+  --lt-edge: oklch(0.36 0.008 60);
+  --lt-edge-lo: oklch(0.26 0.008 58);
+  --lt-well: oklch(0.09 0.004 55);
+  --lt-key: oklch(0.17 0.005 55);
+  --lt-key-hi: oklch(0.27 0.006 55);
+  --lt-pad: oklch(0.39 0.008 60);
+  --lt-grille: oklch(0.24 0.006 58);
+  --lt-mark: oklch(0.62 0.008 60);
+  --lt-shadow: oklch(0.05 0.01 45 / 0.7);
+}
+.lt-face { position: absolute; transform-style: preserve-3d; }
+.lt-alu {
+  background-image: var(--lt-brush), linear-gradient(168deg, var(--lt-alu-hi), var(--lt-alu) 45%, var(--lt-alu-lo));
+  background-size: 600px 600px, 100% 100%;
+}
+.lt-edge { background: linear-gradient(to bottom, var(--lt-edge), var(--lt-edge-lo)); }
+.lt-bezel {
+  background: var(--lt-bezel);
+  box-shadow: inset 0 0 0 1px oklch(0.3 0.006 55), inset 0 1px 0 oklch(0.45 0.006 55 / 0.6);
+}
+.lt-glare {
+  background: linear-gradient(118deg, oklch(1 0 0 / 0.13), oklch(1 0 0 / 0.04) 26%, transparent 42%, transparent 78%, oklch(1 0 0 / 0.05));
+  pointer-events: none;
+}
+.lt-well {
+  background: var(--lt-well);
+  box-shadow: inset 0 2px 3px oklch(0 0 0 / 0.45), inset 0 -1px 0 oklch(1 0 0 / 0.08);
+}
+.lt-key {
+  background: linear-gradient(to bottom, var(--lt-key-hi), var(--lt-key) 55%);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.12), 0 1px 0 oklch(0 0 0 / 0.6);
+}
+.lt-pad {
+  background: linear-gradient(170deg, var(--lt-alu-hi), var(--lt-pad));
+  box-shadow: inset 0 0 0 1px var(--lt-edge-lo), inset 0 1px 2px oklch(1 0 0 / 0.25);
+}
+.lt-grille {
+  background-image: radial-gradient(circle, var(--lt-grille) 0.9px, transparent 1.2px);
+  background-size: 5px 5px;
+}

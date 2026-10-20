@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'motion/react';
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { Phone } from '../components/Devices';
+import { Laptop3D } from '../components/Laptop3D';
 import { HoverArrow, Icon } from '../components/Icon';
 import { SignatureStrip } from '../components/Signature';
 import {
@@ -234,7 +235,7 @@ export function Showroom({ filter, onFilter, onOpenProject }: ShowroomProps) {
             {/* the device and its arrows */}
             <div ref={device} className="relative lg:col-span-8">
               {kind === 'laptop' ? (
-                <Laptop3D open={open} pinned={pinned}>
+                <Laptop3D open={open} maxWidth={pinned ? 'min(100%, calc((100svh - var(--nav-h) - 410px) * 1.42))' : '100%'}>
                   {screen}
                 </Laptop3D>
               ) : (
@@ -314,77 +315,6 @@ function Header({ open, pinned }: { open: MotionValue<number>; pinned: boolean }
     </div>
   );
 }
-
-/* ── the laptop, built in CSS 3D: a lid hinged to a deck ─────────────────────── */
-
-function Laptop3D({ open, pinned, children }: { open: MotionValue<number>; pinned: boolean; children: React.ReactNode }) {
-  // closed: the lid lies on the deck, seen from above; open: lid up and tipped back a touch, seen from the front
-  const lid = useTransform(open, [0, 1], [-89, 12]);
-  const tilt = useTransform(open, [0, 1], [-62, -4]);
-  const scale = useTransform(open, [0, 1], [0.8, 1]);
-  const y = useTransform(open, [0, 1], ['-18%', '0%']);
-  const glow = useTransform(open, [0.45, 0.85], [0, 1]);
-  const shade = useTransform(open, [0, 0.6], [0.55, 0]);
-  return (
-    <div
-      className="relative mx-auto mb-[7%] [perspective:2600px] [perspective-origin:50%_92%]"
-      style={{ width: pinned ? 'min(100%, calc((100svh - var(--nav-h) - 330px) * 1.5))' : '100%' } as CSSProperties}
-      role="group"
-      aria-roledescription="laptop"
-      aria-label="A laptop showing the selected project"
-    >
-      <motion.div className="relative [transform-style:preserve-3d]" style={{ rotateX: tilt, scale, y }}>
-        {/* the lid: screen on the front, the shell on the back */}
-        <motion.div className="relative [transform-style:preserve-3d]" style={{ rotateX: lid, transformOrigin: '50% 100%' }}>
-          <div className="relative rounded-[14px] bg-[oklch(0.2_0.012_55)] px-[1.3%] pt-[1.8%] pb-[1.3%] shadow-[inset_0_0_0_1px_oklch(0.32_0.012_55)] [backface-visibility:hidden] dark:bg-[oklch(0.15_0.01_55)]">
-            <span className="absolute top-[0.75%] left-1/2 size-[5px] -translate-x-1/2 rounded-full bg-[oklch(0.32_0.01_55)]" aria-hidden="true" />
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[3px] bg-black">
-              <motion.div className="absolute inset-0" style={{ opacity: glow }}>
-                {children}
-              </motion.div>
-              {/* the glass: a faint reflection that stays put while the pictures slide */}
-              <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgb(255_255_255/0.07),transparent_38%)]" aria-hidden="true" />
-            </div>
-          </div>
-          <div
-            className="absolute inset-0 grid place-items-center rounded-[14px] bg-[linear-gradient(160deg,oklch(0.82_0.008_70),oklch(0.66_0.01_65))] shadow-[inset_0_0_0_1px_oklch(0.6_0.01_65)] [backface-visibility:hidden] [transform:rotateX(180deg)] dark:bg-[linear-gradient(160deg,oklch(0.42_0.01_60),oklch(0.3_0.01_60))]"
-            aria-hidden="true"
-          >
-            <span className="grid size-[9%] place-items-center rounded-[22%] bg-[oklch(0.2_0.012_55)/0.8] font-[760] text-[clamp(10px,1.6vw,22px)] tracking-[-0.04em] text-[oklch(0.86_0.01_70)] [aspect-ratio:1] [transform:rotateX(180deg)]">
-              ZB
-            </span>
-          </div>
-        </motion.div>
-
-        {/* the deck: keyboard and trackpad, lying flat behind the hinge */}
-        <div
-          className="absolute top-full left-[-4.5%] w-[109%] [transform-style:preserve-3d] [transform-origin:50%_0] [transform:translateY(3px)_rotateX(90deg)]"
-          style={{ height: 'calc(min(100%, 100vw) * 0)' } as CSSProperties}
-          aria-hidden="true"
-        >
-          <div className="relative aspect-[16/9.4] w-full rounded-[12px] bg-[linear-gradient(to_bottom,oklch(0.8_0.008_70),oklch(0.7_0.01_65))] shadow-[inset_0_0_0_1px_oklch(0.62_0.01_65),0_40px_80px_-30px_oklch(0.2_0.02_50/0.6)] dark:bg-[linear-gradient(to_bottom,oklch(0.4_0.01_60),oklch(0.32_0.01_60))]">
-            {/* keys */}
-            <div className="absolute inset-x-[9%] top-[7%] grid h-[47%] grid-cols-[repeat(14,1fr)] grid-rows-5 gap-[3px] rounded-[6px] bg-[oklch(0.22_0.012_55)] p-[0.9%] dark:bg-[oklch(0.14_0.01_55)]">
-              {KEYS.map((span, i) => (
-                <span key={i} className="rounded-[2px] bg-[oklch(0.3_0.01_55)] dark:bg-[oklch(0.22_0.01_55)]" style={{ gridColumn: `span ${span}` }} />
-              ))}
-            </div>
-            {/* trackpad */}
-            <div className="absolute top-[60%] left-1/2 h-[32%] w-[36%] -translate-x-1/2 rounded-[8px] bg-[oklch(0.76_0.008_70)] shadow-[inset_0_0_0_1px_oklch(0.66_0.01_65)] dark:bg-[oklch(0.36_0.01_60)] dark:shadow-[inset_0_0_0_1px_oklch(0.28_0.01_60)]" />
-            {/* the front edge, hanging down so the deck has thickness */}
-            <div className="absolute bottom-0 left-0 h-[3.2%] w-full origin-bottom rounded-b-[12px] bg-[oklch(0.6_0.01_65)] [transform:rotateX(-90deg)] dark:bg-[oklch(0.26_0.01_60)]" />
-          </div>
-        </div>
-
-        {/* the shade the closed lid casts on itself, gone once it's up */}
-        <motion.span className="pointer-events-none absolute inset-0 rounded-[14px] bg-black" style={{ opacity: shade }} aria-hidden="true" />
-      </motion.div>
-    </div>
-  );
-}
-
-// a keyboard's rows, as key widths on a 14-column grid: four full rows, then the space bar row
-const KEYS = [...Array(14).fill(1), ...Array(14).fill(1), ...Array(12).fill(1), 2, ...Array(11).fill(1), 3, 2, 1, 1, 6, 1, 1, 2];
 
 // On a phone it's a phone, tipping up from lying flat as it scrolls in
 function TiltPhone({ open, children }: { open: MotionValue<number>; children: React.ReactNode }) {
