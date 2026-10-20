@@ -52,7 +52,7 @@ jobs:
         if: contains(github.event.head_commit.message, '[demos]')
         run: |
           mkdir -p ci-out public/demos && cd /tmp/pw
-          OUT=$GITHUB_WORKSPACE/public/demos node demos.mjs 2>&1 | tee $GITHUB_WORKSPACE/ci-out/demos.txt
+          DEMOS="$(cat $GITHUB_WORKSPACE/scripts/capture/demos.json)" OUT=$GITHUB_WORKSPACE/public/demos node demos.mjs 2>&1 | tee $GITHUB_WORKSPACE/ci-out/demos.txt
       - name: Review
         if: contains(github.event.head_commit.message, '[review]')
         run: |

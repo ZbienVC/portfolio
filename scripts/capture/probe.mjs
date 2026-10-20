@@ -10,7 +10,7 @@ const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=sw
 for (const [id, url] of SITES) {
   const row = { id, url };
   try {
-    const res = await fetch(url, { redirect: 'follow' });
+    const res = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(15000) });
     row.status = res.status;
     row.finalUrl = res.url;
     row.xfo = res.headers.get('x-frame-options');
@@ -21,7 +21,7 @@ for (const [id, url] of SITES) {
   try {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     const page = await ctx.newPage();
-    await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 }).catch(() => {});
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => {});
     await page.waitForTimeout(3000);
     row.title = await page.title();
     row.height = await page.evaluate(() => document.documentElement.scrollHeight);
