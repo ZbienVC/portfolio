@@ -90,14 +90,11 @@ export function useMagnetic(strength = 0.32) {
 
 // Rotating typewriter for the hero role line.
 export function useTypewriter(words, { type = 90, wait = 1700, del = 45 } = {}) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(() => (prefersReduced() ? words[0] : ''));
   const [i, setI] = useState(0);
   const [deleting, setDeleting] = useState(false);
   useEffect(() => {
-    if (prefersReduced()) {
-      setText(words[0]);
-      return;
-    }
+    if (prefersReduced()) return;
     const current = words[i % words.length];
     let to;
     if (!deleting && text.length < current.length) {
@@ -107,8 +104,10 @@ export function useTypewriter(words, { type = 90, wait = 1700, del = 45 } = {}) 
     } else if (deleting && text.length > 0) {
       to = setTimeout(() => setText(text.slice(0, -1)), del);
     } else {
-      setDeleting(false);
-      setI((v) => (v + 1) % words.length);
+      to = setTimeout(() => {
+        setDeleting(false);
+        setI((v) => (v + 1) % words.length);
+      }, 0);
     }
     return () => clearTimeout(to);
   }, [text, deleting, i, words, type, wait, del]);

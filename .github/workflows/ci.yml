@@ -29,8 +29,52 @@ jobs:
           cd /tmp/deps && git init -q -b ci-deps && git add . && git -c user.name=bot -c user.email=bot@users.noreply.github.com commit -qm "node_modules"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-deps
 
+  demos:
+    # one job per site, in parallel, each saving its own clips as soon as they're made
+    if: contains(github.event.head_commit.message, '[demos]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        site:
+          - feast
+          - unearth
+          - fieldsense
+          - oikos
+          - plato
+          - dipper
+          - careeva
+          - reflect
+          - cryptosites
+          - wayfound
+          - staywestpalm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Playwright
+        run: |
+          mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i --no-audit --no-fund playwright@1.48.2 sharp
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y ffmpeg >/dev/null
+          cp $GITHUB_WORKSPACE/scripts/capture/*.mjs /tmp/pw/
+      - name: Record
+        run: |
+          mkdir -p public/demos ci-out && cd /tmp/pw
+          DEMOS="$(cat $GITHUB_WORKSPACE/scripts/capture/demos.json)" OUT=$GITHUB_WORKSPACE/public/demos timeout 900 node demos.mjs ${{ matrix.site }} 2>&1 | tee $GITHUB_WORKSPACE/ci-out/demos-${{ matrix.site }}.txt
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -f public/demos ci-out
+          git commit -m "[bot] demos ${{ matrix.site }}" || exit 0
+          for i in 1 2 3 4 5 6; do git pull --rebase -q && git push && exit 0; sleep $((RANDOM % 9 + 3)); done
+          exit 1
+
   browser:
-    if: contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[demos]') || contains(github.event.head_commit.message, '[review]')
+    if: contains(github.event.head_commit.message, '[probe]') || contains(github.event.head_commit.message, '[review]')
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:

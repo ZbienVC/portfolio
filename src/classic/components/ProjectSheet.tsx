@@ -83,11 +83,11 @@ export function ProjectSheet({ id, sharedId, onClose, onNavigate }: SheetProps) 
   }, [id, onClose, onNavigate]);
 
   // the laptop shows the live site instead of the demo
-  const [live, setLive] = useState(false);
-  // a new project scrolls back to its top, back on its demo
+  const [liveFor, setLiveFor] = useState<string | null>(null);
+  const live = liveFor === id;
+  // a new project scrolls back to its top
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
-    setLive(false);
   }, [id]);
 
   if (!p) return null;
@@ -176,7 +176,7 @@ export function ProjectSheet({ id, sharedId, onClose, onNavigate }: SheetProps) 
               </h2>
               <p className="mt-3 text-[17px] text-ink-2">{p.tagline}</p>
 
-              <Links project={p} live={live} onLive={() => setLive((v) => !v)} />
+              <Links project={p} live={live} onLive={() => setLiveFor(live ? null : id)} />
 
               <div className="mt-10 grid gap-10 md:grid-cols-[1fr_12.5rem]">
                 <div>

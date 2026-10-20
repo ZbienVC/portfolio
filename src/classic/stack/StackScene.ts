@@ -99,7 +99,7 @@ export class StackScene {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.05;
@@ -223,14 +223,40 @@ export class StackScene {
       g.fillRect(Math.random() * W, Math.random() * H, 1.2, 1.2);
     }
     if (side === 'front') {
-      g.fillStyle = this.colors.ink;
-      g.font = `640 ${Math.round(H * 0.46)}px "Mona Sans Variable", "Mona Sans", system-ui, sans-serif`;
+      const pad = H * 0.42;
+      const month = monthOf(unit.launched);
       g.textBaseline = 'middle';
-      g.fillText(unit.name, H * 0.42, H * 0.53, W * 0.68);
+      g.font = `500 ${Math.round(H * 0.3)}px "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace`;
+      const monthW = g.measureText(month).width;
+      // the name gets what the month leaves; long names step the size down rather than squeezing
+      // (a squeezed "$" reads as an "S")
+      const room = W - pad * 2 - monthW - H * 0.35;
+      let size = Math.round(H * 0.46);
+      const nameFont = (px: number) => `640 ${px}px "Mona Sans Variable", "Mona Sans", system-ui, sans-serif`;
+      // a token's "$" is set in the mono face, where its stroke stays clear at block size
+      const ticker = unit.name.startsWith('$');
+      const word = ticker ? unit.name.slice(1) : unit.name;
+      const monoFont = (px: number) => `600 ${px}px "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace`;
+      const widthAt = (px: number) => {
+        g.font = monoFont(px);
+        const lead = ticker ? g.measureText('$').width + px * 0.06 : 0;
+        g.font = nameFont(px);
+        return lead + g.measureText(word).width;
+      };
+      while (size > H * 0.3 && widthAt(size) > room) size--;
+      g.fillStyle = this.colors.ink;
+      let x = pad;
+      if (ticker) {
+        g.font = monoFont(size);
+        g.fillText('$', x, H * 0.53);
+        x += g.measureText('$').width + size * 0.06;
+      }
+      g.font = nameFont(size);
+      g.fillText(word, x, H * 0.53, room - (x - pad));
       g.font = `500 ${Math.round(H * 0.3)}px "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, monospace`;
       g.textAlign = 'right';
       g.globalAlpha = 0.62;
-      g.fillText(monthOf(unit.launched), W - H * 0.42, H * 0.55);
+      g.fillText(month, W - pad, H * 0.55);
     }
     const tex = new THREE.CanvasTexture(c);
     tex.colorSpace = THREE.SRGBColorSpace;
@@ -381,7 +407,7 @@ export class StackScene {
 
   private startTween(drop: boolean) {
     const from = this.blocks.map((b) => ({
-      pos: drop ? new CANNON.Vec3(b.slot.pos.x, b.slot.pos.y + 9, b.slot.pos.z) : b.body.position.clone(),
+      pos: drop ? new CANNON.Vec3(b.slot.pos.x, b.slot.pos.y + 3.2, b.slot.pos.z) : b.body.position.clone(),
       quat: drop ? b.slot.quat.clone() : b.body.quaternion.clone(),
     }));
     for (const b of this.blocks) {
@@ -389,14 +415,14 @@ export class StackScene {
       b.body.velocity.setZero();
       b.body.angularVelocity.setZero();
     }
-    this.tween = { start: performance.now(), dur: this.reduced ? 1 : drop ? 1400 : 1100, from, drop };
+    this.tween = { start: performance.now(), dur: this.reduced ? 1 : drop ? 650 : 1100, from, drop };
     if (drop) this.blocks.forEach((b, i) => b.body.position.copy(from[i].pos));
     this.kick();
   }
 
   private stepTween(now: number) {
     const tw = this.tween!;
-    const stagger = tw.drop ? 55 : 32;
+    const stagger = tw.drop ? 26 : 32;
     let done = true;
     this.blocks.forEach((b, i) => {
       const t0 = tw.start + i * stagger;

@@ -43,8 +43,8 @@ export const SYSTEMS: System[] = [
     what: 'I connect a codebase and say what I want. The crew reads the code, researches, proposes ideas, argues about them, builds the best ones on separate branches, runs the tests and writes me a short briefing. Every night its Chief of Staff plans up to three runs from my goals and the budget left.',
     figures: [
       { n: '72', label: 'specialist agents' },
-      { n: '16', label: 'teams it can send' },
-      { n: '868', label: 'head-to-head rankings judged' },
+      { n: '16', label: 'teams, each for one kind of job' },
+      { n: '868', label: 'ideas compared two at a time' },
       { n: '561', label: 'code reviews written' },
     ],
     detail: {
@@ -56,9 +56,9 @@ export const SYSTEMS: System[] = [
         { name: 'Design', note: '12' },
         { name: 'Build', note: '5' },
         { name: 'Review', note: '5' },
-        { name: 'Outsiders', note: '6' },
-        { name: 'Idea check', note: '5' },
-        { name: 'The brain', note: '7' },
+        { name: 'Outsiders who never see the code', note: '6' },
+        { name: 'Is it worth building', note: '5' },
+        { name: 'Planning', note: '7' },
       ],
     },
     honest:

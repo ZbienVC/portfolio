@@ -1,9 +1,11 @@
 # Design
 
 The site has two modes that share one content file (`src/content/portfolio.js`) and
-nothing else. Classic is the home page; the 3D basecamp opens in a window on it (an
-iframe, loaded on request) or full page at `/?3d`. Each mode is its own chunk with its
-own stylesheet, so the two design systems never share a document.
+nothing else. Classic is the home page. The 3D basecamp is kept but off the page since
+2026-10-20 (Zach: it took space without earning it): nothing links to it, `/?3d` still
+opens it full page, and `sections/Basecamp.tsx` is ready to put back in `ClassicApp.tsx`.
+Each mode is its own chunk with its own stylesheet, so the two design systems never share
+a document.
 
 ---
 
@@ -35,7 +37,23 @@ Caveat only for the handwritten notes in "Show the work".
 - `typography/hand-annotation` — "Show the work": seeded pencil marks and margin notes (`engines/ink.ts`)
 - plus `motion/spring-presets` as the motion language (`lib/motion.ts`), not a visible signature
 
-**Moment:** The status board. The visitor's browser sends each of the 15 live sites a
+**Physics and material, each with a job (2026-10-20 rework):**
+- The stage (`sections/Stage.tsx`): eight projects as recorded demos on a drawn laptop and
+  phone (`components/Devices.tsx`, clips in `public/demos`, recorded by `scripts/capture`).
+  Shows the product working without leaving; "Try it here" swaps in the live site where it
+  allows framing (`EMBEDDABLE` in `lib/data.ts`). The tab underline is the clip's progress.
+- The stack (`stack/`): one block per live site in a tray, oldest at the bottom, so height is
+  the count and order is the timeline. Knock it over, throw blocks, click one to open it.
+  three.js + cannon-es, loaded only near the screen; the List view is its flat twin and
+  leads on phones.
+- The hanging résumé (`cloth/`): a stiff verlet sheet on two clips; pull it down and the PDF
+  opens on release. "Open the résumé" is its button twin.
+- Signature materials (`specimens/`): each project's sheet runs one Specimen Atlas style
+  behind its laptop, chosen for what the project is about (`specimens/registry.ts`). One
+  runs at a time, only on screen.
+- The status board launches: a row plays that project on the stage (`lib/launch.ts`).
+
+**Moment:** The status board. The visitor's browser sends each of the live sites a
 HEAD request as the page loads; rows tick green with real response times and the
 split-flap counter turns forward one flap per answer. A site that's down says so.
 
@@ -52,8 +70,8 @@ and with reduced motion.
 **On a phone:** the glaze becomes a band across the top with the portrait on it, so the
 first screen has color and a face. Navigation moves to the thumb: a dock at the bottom
 names the section you're in and fills with the glaze as you read. It opens a sheet with
-every section, search, the AI, the résumé and the two switches. The four flagships become
-a row you swipe, and roles open one line at a time.
+every section, search, the AI, the résumé and the two switches. The stage's tabs become
+a row you swipe, the phone demo leads, and roles open one line at a time.
 
 **We refuse:** purple/blue gradients · glass cards · glow blobs · floating mockups ·
 centered label + italic-serif headers · "∞ problems left to solve" stats · typewriter

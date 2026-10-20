@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { HoverArrow } from '../components/Icon';
 import { PROFILE } from '../lib/data';
@@ -105,6 +106,17 @@ export function HangingResume() {
             onPointerCancel={() => scene.current?.release()}
             onClick={reduce ? open : undefined}
           />
+        )}
+        {/* the handle: says it's pullable before anyone tries; it steps aside once the pull starts */}
+        {!flat && ready && !reduce && tension < 0.04 && (
+          <motion.span
+            className="pointer-events-none absolute bottom-[9%] left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-md bg-term-amber px-2.5 py-1 font-mono text-[11px] font-[600] text-term shadow-[0_8px_18px_-8px_var(--term-amber)]"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            aria-hidden="true"
+          >
+            ↓ Pull
+          </motion.span>
         )}
         {/* how far there is to go: a line that fills as you pull */}
         {!flat && (

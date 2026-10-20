@@ -2,7 +2,8 @@ import { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Loader } from '@react-three/drei';
 import * as THREE from 'three';
-import HubScene, { LANDMARKS } from './HubScene.jsx';
+import HubScene from './HubScene.jsx';
+import { LANDMARKS } from './places.js';
 import { PROFILE } from '../content/portfolio.js';
 
 import AboutPanel from '../sections/AboutPanel.jsx';
@@ -91,7 +92,9 @@ export default function HubExperience({ onClassic, embedded = false }) {
   const [hovered, setHovered] = useState(null);
   const [ready, setReady] = useState(false);
   const pendingRef = useRef(null);
-  pendingRef.current = pending;
+  useEffect(() => {
+    pendingRef.current = pending;
+  }, [pending]);
 
   useEffect(() => {
     const prev = document.body.style.overflow;

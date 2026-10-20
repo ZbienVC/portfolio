@@ -173,7 +173,10 @@ function Panel({ system: s }: { system: System }) {
       )}
 
       {s.honest && (
-        <p className="mt-6 border-l-2 border-term-amber pl-4 text-[14.5px] leading-relaxed text-term-ink/90">{s.honest}</p>
+        <div className="mt-6 border-t border-term-rule pt-5">
+          <p className="font-mono text-[11.5px] text-term-amber">The honest part</p>
+          <p className="mt-2 max-w-[40rem] text-[14.5px] leading-relaxed text-term-ink/90 [text-wrap:pretty]">{s.honest}</p>
+        </div>
       )}
     </motion.div>
   );

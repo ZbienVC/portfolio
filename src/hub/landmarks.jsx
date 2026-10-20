@@ -97,11 +97,14 @@ export function Snowboard({ color = '#e0a155', stripe = '#f0b978', bindings = tr
   );
 }
 
+// a steady 0 to 10 phase from an id, so landmarks idle out of step but the same way every visit
+const phaseOf = (id) => [...String(id)].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) % 1000, 7) / 100;
+
 // ── the interactive wrapper ─────────────────────────────────────────────────
 export function Landmark({ data, hovered, active, onHover, onSelect, children }) {
   const g = useRef();
   const isHot = hovered || active;
-  const t = useRef(Math.random() * 10);
+  const t = useRef(phaseOf(data.id));
 
   useFrame((_, dt) => {
     t.current += dt;
@@ -182,7 +185,7 @@ function ChimneySmoke({ position }) {
   );
 }
 
-export function Cabin({ lit, accent, t }) {
+export function Cabin({ lit, t }) {
   const wood = useMemo(() => woodMaps(), []);
   const win = useRef();
   useFrame(() => { if (win.current) win.current.material.emissiveIntensity = pulse(t, lit ? 2.8 : 1.6, 0.5, 1.2); });
@@ -445,7 +448,7 @@ export function Signpost({ lit, accent, t }) {
   );
 }
 
-export const GEOM = {
+const GEOM = {
   cabin: Cabin,
   monoliths: Monoliths,
   cairn: Cairn,
@@ -453,3 +456,9 @@ export const GEOM = {
   lake: FrozenLake,
   signpost: Signpost,
 };
+
+/** The landmark's model, by kind (cabin, monoliths, cairn, cache, lake, signpost). */
+export function LandmarkGeometry({ kind, ...props }) {
+  const Geom = GEOM[kind];
+  return Geom ? <Geom {...props} /> : null;
+}

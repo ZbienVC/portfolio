@@ -107,7 +107,9 @@ export default function AlpineJourney() {
       // WebGL construction can fail even when probed OK — fall back to 2.5D.
       try {
         canvas.remove();
-      } catch {}
+      } catch {
+        /* already detached */
+      }
       const c2 = document.createElement('canvas');
       c2.className = 'journey-canvas';
       host.appendChild(c2);
@@ -187,7 +189,6 @@ export default function AlpineJourney() {
 
     let raf = 0;
     let renderOnce = null;
-    const onScroll = () => { if (renderOnce) renderOnce(); };
     const onPointer = (e) => {
       pointer.x = e.clientX / window.innerWidth;
       pointer.y = e.clientY / window.innerHeight;
@@ -218,7 +219,7 @@ export default function AlpineJourney() {
       document.removeEventListener('visibilitychange', size);
       window.removeEventListener('pointermove', onPointer);
       if (renderOnce) window.removeEventListener('scroll', renderOnce);
-      try { adapter.dispose(); } catch {}
+      try { adapter.dispose(); } catch { /* nothing left to free */ }
       if (host) host.innerHTML = '';
       engineRef.current = null;
     };

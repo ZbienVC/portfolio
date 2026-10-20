@@ -85,7 +85,7 @@ export function Contact({ onAsk }: { onAsk: () => void }) {
 
       {/* on a phone the dock floats over the bottom of the page, so the footer leaves it room */}
       <footer className="container-x relative flex flex-wrap items-center justify-between gap-4 border-t border-term-rule py-7 font-mono text-[11.5px] text-term-dim max-lg:pb-24">
-        <p>Designed and built by {PROFILE.name}, {PROFILE.location}. React, Motion, and a WebGL shader.</p>
+        <p>Designed and built by {PROFILE.name}, {PROFILE.location}. React, Motion, three.js and a WebGL shader.</p>
         <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <span>
             Press <kbd className="kbd bg-term-2 text-term-ink shadow-[inset_0_0_0_1px_var(--term-rule)]">W</kbd> for notes on how it&apos;s built

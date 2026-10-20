@@ -69,7 +69,8 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
   const sites = items.reduce((n, p) => n + liveSites(p), 0);
 
   // the stack is the default; the list is one click away, and takes over if the stack can't draw
-  const [view, setView] = useState<'stack' | 'list'>('stack');
+  // on a phone the tower is too small to read, so the list leads there
+  const [view, setView] = useState<'stack' | 'list'>(() => (window.matchMedia('(min-width: 768px)').matches ? 'stack' : 'list'));
   const [stackless, setStackless] = useState(false);
   const shown = stackless ? 'list' : view;
   // the stack greys out what the filter leaves out; a stable function so the scene isn't re-filtered every render

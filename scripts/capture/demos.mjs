@@ -181,8 +181,9 @@ for (const [id, url] of SITES) {
     const page = await ctx.newPage();
     let loaded = 0;
     try {
-      await page.goto(url, { waitUntil: 'networkidle', timeout: 40000 }).catch(() => {});
-      await sleep(1200);
+      // 'load', not 'networkidle': apps with live connections never go quiet
+      await page.goto(url, { waitUntil: 'load', timeout: 30000 }).catch(() => {});
+      await sleep(2200);
       loaded = (Date.now() - t0) / 1000;
       await (SCRIPTS[id] ?? generic)(page, v);
     } catch (e) {

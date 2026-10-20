@@ -129,12 +129,12 @@ export function Stage({ onOpenProject }: StageProps) {
         <button
           type="button"
           onClick={() => setTouring((t) => !t)}
-          className="icon-btn hidden shrink-0 lg:grid"
-          aria-label={touring ? 'Stop the tour' : 'Play the tour'}
-          title={touring ? 'Stop the tour' : 'Play the tour'}
+          className="hidden h-9 shrink-0 items-center gap-2 rounded-md px-2.5 font-mono text-[11.5px] text-ink-2 shadow-[inset_0_0_0_1px_var(--rule-2)] transition-colors hover:bg-paper-3 hover:text-ink disabled:opacity-50 lg:inline-flex"
+          aria-pressed={touring && !reduce}
           disabled={reduce}
         >
-          <Icon name={touring && !reduce ? 'pause' : 'play'} size={16} />
+          <Icon name={touring && !reduce ? 'pause' : 'play'} size={14} />
+          {touring && !reduce ? 'Auto-play on' : 'Auto-play off'}
         </button>
       </div>
 
@@ -329,7 +329,9 @@ function Status({ project }: { project: Project }) {
   if (!target) return null;
   const r = board.results[target.key];
   const state = r?.state ?? 'pending';
-  const said = state === 'up' ? `up · ${r?.ms} ms` : state === 'down' ? 'not answering' : 'checking';
+  // a slow wake-up isn't a verdict: the stage only reports a site that answered
+  if (state !== 'up') return null;
+  const said = `up · ${r?.ms} ms`;
   return (
     <span className="ml-auto flex items-center gap-2">
       <span className="dot" data-state={state} aria-hidden="true" />
