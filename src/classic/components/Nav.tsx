@@ -1,6 +1,6 @@
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { ALSO_SHIPPED, FLAGSHIPS, PROFILE, LIVE_COUNT, shotId, shotSrc, showsShot } from '../lib/data';
+import { FLAGSHIPS, NEW_IDS, OLDER_SHIPPED, PROFILE, LIVE_COUNT, projectById, shotId, shotSrc, showsShot } from '../lib/data';
 import { modKey, useActiveSection } from '../lib/hooks';
 import { fade, spring } from '../lib/motion';
 import { useShowWork } from '../lib/show-work';
@@ -10,7 +10,7 @@ import { cn } from '../lib/cn';
 import { HoverArrow, Icon } from './Icon';
 import { Dock, MenuSheet, type SectionId } from './MobileNav';
 
-export const SECTIONS = ['work', 'day-job', 'experience', 'toolkit', 'off-the-clock', 'basecamp', 'contact'] as const;
+export const SECTIONS = ['new', 'work', 'day-job', 'experience', 'toolkit', 'off-the-clock', 'basecamp', 'contact'] as const;
 
 type MenuId = 'work' | 'about';
 interface NavProps {
@@ -120,7 +120,7 @@ export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
                   <MenuTrigger
                     label="Work"
                     open={menu === 'work'}
-                    current={active === 'work'}
+                    current={active === 'work' || active === 'new'}
                     controls={menuId}
                     ref={(el) => {
                       triggers.current.work = el;
@@ -428,9 +428,26 @@ function WorkMenu({ onNavigate, onOpenProject }: { onNavigate: () => void; onOpe
         </ul>
       </div>
       <div className="border-l border-rule bg-paper-2 p-3">
-        <p className="label-type px-3 pt-2 pb-1.5">Also shipped</p>
+        <a href="#new" onClick={onNavigate} className="label-type flex items-center gap-1.5 px-3 pt-2 pb-1.5 hover:text-ink">
+          New <HoverArrow size={9} />
+        </a>
         <ul className="grid">
-          {ALSO_SHIPPED.map((p) => (
+          {NEW_IDS.map((id) => projectById(id)!).map((p) => (
+            <li key={p.id}>
+              <button
+                type="button"
+                onClick={() => onOpenProject(p.id)}
+                className="flex w-full items-baseline justify-between gap-3 rounded-md px-3 py-[7px] text-left text-[14px] text-ink transition-colors hover:bg-paper-3"
+              >
+                <span className="truncate font-[560]">{p.name}</span>
+                <span className="font-mono text-[11px] text-ink-3">{p.kind}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <p className="label-type mt-2 border-t border-rule px-3 pt-3 pb-1.5">Also shipped</p>
+        <ul className="grid">
+          {OLDER_SHIPPED.map((p) => (
             <li key={p.id}>
               <button
                 type="button"

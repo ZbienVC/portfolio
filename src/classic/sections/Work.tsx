@@ -33,6 +33,15 @@ interface WorkProps {
   onOpenProject: (id: string, fromCard?: boolean) => void;
 }
 
+// "fifteen" reads better than "15" in a heading; numbers past the list fall back to digits
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+const TENS: Record<number, string> = { 2: 'twenty', 3: 'thirty', 4: 'forty' };
+function countWord(n: number) {
+  if (n < WORDS.length) return WORDS[n];
+  const t = TENS[Math.floor(n / 10)];
+  return t ? (n % 10 ? `${t}-${WORDS[n % 10]}` : t) : String(n);
+}
+
 const SPANS = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7'];
 
 export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
@@ -46,7 +55,7 @@ export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
         <SectionHead
           id="work-title"
           label={`Work · ${LIVE_COUNT} live sites`}
-          title="I've shipped fifteen. Start with these four."
+          title={`I've shipped ${countWord(LIVE_COUNT)}. Start with these four.`}
           lede="I designed and built every one of them myself, from the database to the last button. Open any of them for the long version."
         />
 

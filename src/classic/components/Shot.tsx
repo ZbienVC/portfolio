@@ -17,13 +17,15 @@ interface ShotProps {
   imgClassName?: string;
   loading?: 'lazy' | 'eager';
   alt?: string;
+  /** which capture fills the frame: the desktop cover (default) or the phone capture, for tall frames */
+  variant?: 'cover' | 'mobile';
 }
 
 /**
  * A live site's screenshot in a hairline frame. With `pan`, hovering scrolls
  * through the whole page capture at reading speed and springs back on leave.
  */
-export function Shot({ projectId, shot, layoutId, pan = false, className, imgClassName, loading = 'lazy', alt = '' }: ShotProps) {
+export function Shot({ projectId, shot, layoutId, pan = false, className, imgClassName, loading = 'lazy', alt = '', variant = 'cover' }: ShotProps) {
   const id = shot ?? shotId(projectId);
   const [missing, setMissing] = useState(!showsShot(id));
   const fine = useFinePointer();
@@ -31,7 +33,7 @@ export function Shot({ projectId, shot, layoutId, pan = false, className, imgCla
   const frame = useRef<HTMLDivElement>(null);
   const [travel, setTravel] = useState(0); // px the full capture can scroll inside the frame
   const [panning, setPanning] = useState(false);
-  const canPan = pan && fine && !reduce && !missing;
+  const canPan = pan && fine && !reduce && !missing && variant === 'cover';
 
   const measure = (img: HTMLImageElement) => {
     const f = frame.current;
@@ -54,7 +56,7 @@ export function Shot({ projectId, shot, layoutId, pan = false, className, imgCla
       ) : (
         <>
           <img
-            src={shotSrc(id)}
+            src={shotSrc(id, variant)}
             alt={alt}
             loading={loading}
             decoding="async"
