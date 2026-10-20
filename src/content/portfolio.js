@@ -219,6 +219,7 @@ export const SKILLS = [
 export const PROJECTS = [
   {
     id: 'splash',
+    launched: '2026-03-12', // first deployed (hosting creation date)
     name: 'Splash Signal',
     tagline: 'Real-time crypto signals and alerts',
     short: 'Live token feeds, AI narrative scores and whale alerts, before the crowd sees them.',
@@ -245,6 +246,7 @@ export const PROJECTS = [
   },
   {
     id: 'fieldsense',
+    launched: '2026-08-05', // first deployed (hosting creation date)
     name: 'FieldSense',
     tagline: 'NFL player projections and matchups',
     short: 'NFL player projections with the full range of outcomes, so it can price any over/under.',
@@ -269,6 +271,7 @@ export const PROJECTS = [
   },
   {
     id: 'oikos',
+    launched: '2026-07-18', // first deployed (hosting creation date)
     name: 'Oikos',
     tagline: 'A Darwinian economy of AI agents',
     short: 'An economy of AI agents that have to earn more than they burn, or die.',
@@ -291,6 +294,7 @@ export const PROJECTS = [
   },
   {
     id: 'wakerush',
+    launched: '2026-06-15', // first deployed (hosting creation date)
     name: 'Wake Rush',
     tagline: 'A multiplayer arcade boat racer',
     short: 'A 20-player arcade boat racer, on the web and inside Telegram.',
@@ -314,6 +318,7 @@ export const PROJECTS = [
   },
   {
     id: 'hookline',
+    launched: '2026-09-26', // first deployed (hosting creation date)
     name: 'Hookline',
     tagline: 'An AI crew that makes short videos',
     short: 'A crew of AI agents spots what is rising on social, writes the scripts and renders finished short videos.',
@@ -336,6 +341,7 @@ export const PROJECTS = [
   },
   {
     id: 'feast',
+    launched: '2026-10-17', // first deployed (hosting creation date)
     name: 'Feast League',
     tagline: 'A 3D party board game, played from your phones',
     short: 'A 3D party board game on the TV that friends play from their phones. No app, no account.',
@@ -358,6 +364,7 @@ export const PROJECTS = [
   },
   {
     id: 'specimen',
+    launched: '2026-10-18', // first deployed (hosting creation date)
     name: 'Specimen Atlas',
     tagline: 'A living field guide to generative art',
     short: '85 generative art styles, each drawn live by code, with how it works and where it fits.',
@@ -380,6 +387,7 @@ export const PROJECTS = [
   },
   {
     id: 'unearth',
+    launched: '2026-10-13', // first deployed (hosting creation date)
     name: 'Unearth',
     tagline: 'Drop in a spreadsheet, get the story',
     short: 'Drop in a spreadsheet and it finds what matters: price creep, double payments, skipped months.',
@@ -402,6 +410,7 @@ export const PROJECTS = [
   },
   {
     id: 'plato',
+    launched: '2026-03-17', // first deployed (hosting creation date)
     name: 'Plato',
     tagline: 'Meal planning and macro tracking',
     short: 'Meal plans and macro tracking, with voice food logging and a restaurant mode.',
@@ -424,6 +433,7 @@ export const PROJECTS = [
   },
   {
     id: 'dipper',
+    launched: '2026-03-12', // first deployed (hosting creation date)
     name: 'DipperAI',
     tagline: 'Build AI agents without code',
     short: 'Build an AI agent once, then put it on Telegram, Discord, SMS and the web.',
@@ -446,6 +456,7 @@ export const PROJECTS = [
   },
   {
     id: 'careeva',
+    launched: '2026-03-22', // first deployed (hosting creation date)
     name: 'Careeva',
     tagline: 'A job search assistant',
     short: 'Tailors your résumé and cover letter to each job, and tracks every application.',
@@ -468,6 +479,7 @@ export const PROJECTS = [
   },
   {
     id: 'reflect',
+    launched: '2026-03-25', // first deployed (hosting creation date)
     name: 'Reflect Medical',
     tagline: 'Website for a medical aesthetics practice',
     short: 'Memberships, bookings and a patient wallet for a medical aesthetics practice.',
@@ -492,6 +504,7 @@ export const PROJECTS = [
     // one card, three shipped sites — these are the same job done three times,
     // so they read better as a body of work than as three near-identical cards
     id: 'cryptosites',
+    launched: '2026-03-28', // first deployed (hosting creation date)
     name: 'Token Launch Sites',
     tagline: 'Memecoin launch sites: four tokens, three chains',
     short: 'Four memecoin launch sites on three chains, each designed around its token.',
@@ -508,24 +521,28 @@ export const PROJECTS = [
     collection: [
       {
         name: '$OMO',
+        launched: '2026-03-28',
         chain: 'Solana',
         url: 'https://omogiraffe.fun',
         blurb: 'Omo, the last white giraffe on earth. Real photos of Omo, the look of Tarangire, and a story that plays out as you scroll.',
       },
       {
         name: '$GIGATON',
+        launched: '2026-05-07',
         chain: 'TON',
         url: 'https://gigaton.pro',
         blurb: 'Gigachad on TON: everything in TON blue, a vault of memes, a scrolling ticker and the tokenomics.',
       },
       {
         name: '$CASHKITTEN',
+        launched: '2026-08-06',
         chain: 'Robinhood Chain',
         url: 'https://cashkitten.fun',
         blurb: 'A $CASHCAT rewards flywheel: a 5% tax buys back on the open market, and it all goes out to holders automatically.',
       },
       {
         name: '$PEPELIEN',
+        launched: '2026-05-09',
         chain: 'Solana',
         url: 'https://pepelien.com',
         blurb: 'Elon, Pepe and an alien on Solana. You enter through matrix rain, then get Orbitron space type, glitching titles and a live DexScreener chart.',
@@ -534,6 +551,7 @@ export const PROJECTS = [
   },
   {
     id: 'wayfound',
+    launched: '2026-04-16', // first deployed (hosting creation date)
     name: 'WayFound',
     tagline: 'Hotel search in plain English',
     short: 'Describe a trip in plain English, get ranked hotels you can actually book.',
@@ -556,6 +574,7 @@ export const PROJECTS = [
   },
   {
     id: 'staywestpalm',
+    launched: '2026-04-12', // first deployed (hosting creation date)
     name: 'Stay West Palm',
     tagline: 'West Palm Beach rental guide',
     short: 'A fast guest guide for a West Palm Beach rental, made for phones.',

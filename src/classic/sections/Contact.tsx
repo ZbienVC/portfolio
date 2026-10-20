@@ -2,15 +2,16 @@ import { AnimatePresence, motion } from 'motion/react';
 import { HoverArrow, Icon } from '../components/Icon';
 import { PROFILE } from '../lib/data';
 import { useCopy } from '../lib/hooks';
+import { HangingResume } from '../cloth/HangingResume';
 import { spring } from '../lib/motion';
-import { openBasecamp } from '../lib/basecamp';
 
 export function Contact({ onAsk }: { onAsk: () => void }) {
   const { copied, copy } = useCopy();
   return (
     <section id="contact" aria-labelledby="contact-title" className="relative overflow-hidden bg-term text-term-ink">
       <div className="closing-glaze" aria-hidden="true" />
-      <div className="container-x relative py-[clamp(88px,11vw,160px)]">
+      <div className="container-x relative grid gap-x-12 gap-y-14 py-[clamp(88px,11vw,160px)] lg:grid-cols-12 lg:items-center">
+        <div className="lg:col-span-7">
         <p className="flex items-center gap-2 font-mono text-[12px] text-term-dim">
           <span className="h-px w-5 bg-term-amber" aria-hidden="true" />
           Contact
@@ -75,6 +76,11 @@ export function Contact({ onAsk }: { onAsk: () => void }) {
             </li>
           ))}
         </ul>
+        </div>
+
+        <div className="lg:col-span-5">
+          <HangingResume />
+        </div>
       </div>
 
       {/* on a phone the dock floats over the bottom of the page, so the footer leaves it room */}
@@ -84,9 +90,6 @@ export function Contact({ onAsk }: { onAsk: () => void }) {
           <span>
             Press <kbd className="kbd bg-term-2 text-term-ink shadow-[inset_0_0_0_1px_var(--term-rule)]">W</kbd> for notes on how it&apos;s built
           </span>
-          <button type="button" onClick={openBasecamp} className="inline-flex items-center gap-1.5 hover:text-term-ink">
-            <Icon name="cube" size={14} /> Walk the 3D basecamp
-          </button>
           <a href="https://github.com/ZbienVC/portfolio" target="_blank" rel="noopener" className="hover:text-term-ink">
             Source
           </a>

@@ -13,8 +13,27 @@ const LENGTH = 15; // seconds kept per clip
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** Scroll by `dy` over `ms` with an ease-in-out, the way a person scrolls a page they're reading. */
+/**
+ * Scroll by `dy` over `ms` with an ease-in-out, the way a person scrolls a page
+ * they're reading. It turns the mouse wheel over the middle of the screen, so
+ * pages that scroll inside a panel (app shells) move too, not just the window.
+ */
 async function glide(page, dy, ms = 1800) {
+  const vp = page.viewportSize();
+  await page.mouse.move(vp.width * 0.5, vp.height * 0.55);
+  const steps = Math.max(8, Math.round(ms / 40));
+  const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+  let done = 0;
+  for (let i = 1; i <= steps; i++) {
+    const want = dy * ease(i / steps);
+    await page.mouse.wheel(0, want - done).catch(() => {});
+    done = want;
+    await sleep(ms / steps);
+  }
+}
+
+/** The old window-only scroll, kept for pages that ignore synthetic wheels. */
+async function glideWindow(page, dy, ms = 1800) {
   await page.evaluate(
     ([dy, ms]) =>
       new Promise((done) => {
@@ -61,8 +80,10 @@ async function generic(page, { w, h, phone }) {
 
 const SCRIPTS = {
   async feast(page, v) {
+    // the 3D board takes a while to bake in a software renderer: wait out the loading screen
+    await page.waitForFunction(() => !document.body.innerText.includes('Frosting the donut'), null, { timeout: 60000 }).catch(() => {});
+    await sleep(2500);
     if (v.phone) return generic(page, v);
-    await sleep(2000);
     try {
       await clickText(page, /add bot/i);
       await sleep(700);
@@ -95,14 +116,40 @@ const SCRIPTS = {
     await sleep(1500);
   },
   async unearth(page, v) {
-    await sleep(1800);
+    await sleep(1500);
     try {
-      await clickText(page, /sample|example|try it|demo/i);
-      await sleep(5500);
-      await glide(page, v.h * 0.6, 1800);
-      await sleep(2500);
+      const sample = page.locator('section[aria-label="Try a sample"] button.sample').first();
+      await sample.scrollIntoViewIfNeeded({ timeout: 4000 });
+      await sleep(700);
+      await sample.click({ timeout: 4000 });
+      await sleep(4500);
+      if (!v.phone) {
+        await wander(page, v.w, v.h);
+        await page.keyboard.press('ArrowRight');
+        await sleep(1600);
+        await page.keyboard.press('ArrowRight');
+        await sleep(1600);
+      } else {
+        await glide(page, v.h * 0.8, 2000);
+        await sleep(2000);
+      }
     } catch {
       await generic(page, v);
+    }
+  },
+  // FieldSense is an app shell: walk its pages from the sidebar
+  async fieldsense(page, v) {
+    await sleep(1500);
+    if (v.phone) return generic(page, v);
+    for (const name of [/^board$/i, /^rankings$/i, /^props$/i]) {
+      try {
+        await clickText(page, name, 3000);
+        await sleep(1200);
+        await glide(page, v.h * 0.6, 1600);
+        await sleep(900);
+      } catch {
+        /* that page isn't there: try the next */
+      }
     }
   },
 };

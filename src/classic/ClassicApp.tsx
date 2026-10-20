@@ -12,6 +12,7 @@ import { Nav } from './components/Nav';
 import { ProjectSheet } from './components/ProjectSheet';
 import { projectById, PROFILE } from './lib/data';
 import { useCopy } from './lib/hooks';
+import { launchProject } from './lib/launch';
 import { fade, spring } from './lib/motion';
 import { ShowWorkProvider, useShowWork } from './lib/show-work';
 import { ThemeProvider } from './lib/theme';
@@ -20,8 +21,7 @@ import { Contact } from './sections/Contact';
 import { DayJob } from './sections/DayJob';
 import { Experience } from './sections/Experience';
 import { Hero } from './sections/Hero';
-import { NewWork } from './sections/NewWork';
-import { Basecamp } from './sections/Basecamp';
+import { HowIBuild } from './sections/HowIBuild';
 import { OffTheClock } from './sections/OffTheClock';
 import { Toolkit } from './sections/Toolkit';
 import { Work, type WorkFilter } from './sections/Work';
@@ -114,14 +114,13 @@ function Page() {
       <Nav onOpenPalette={openPalette} onOpenProject={(id) => openProject(id)} onOpenAsk={() => setAsk({})} />
 
       <main id="main">
-        <Hero onOpenProject={(id) => openProject(id)} />
-        <NewWork onOpenProject={openProject} />
+        <Hero onOpenProject={(id) => launchProject(id, openProject)} />
         <Work filter={workFilter} onFilter={setWorkFilter} onOpenProject={openProject} />
+        <HowIBuild />
+        <Toolkit onFilterTool={filterByTool} />
         <DayJob />
         <Experience />
-        <Toolkit onFilterTool={filterByTool} />
         <OffTheClock />
-        <Basecamp />
       </main>
 
       <Contact onAsk={() => setAsk({})} />

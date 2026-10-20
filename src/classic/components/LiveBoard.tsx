@@ -104,7 +104,8 @@ export function LiveBoard({ onOpenProject }: { onOpenProject: (id: string) => vo
             <span>Checking every site from your browser…</span>
           ) : failed.length === 0 ? (
             <span>
-              All {PING_TARGETS.length} are up as of {clock}. Median reply <b className="font-mono font-medium text-term-ink">{board.medianMs} ms</b>.
+              All {PING_TARGETS.length} are up as of {clock}. Median reply <b className="font-mono font-medium text-term-ink">{board.medianMs} ms</b>.{' '}
+              <span className="text-term-ink">Pick one to watch it run.</span>
             </span>
           ) : (
             <span>
@@ -182,7 +183,7 @@ function Row({ target, result, active, onHover, onOpen }: RowProps) {
         >
           <span className="dot" data-state={state} aria-hidden="true" />
           <span className="truncate">{target.name}</span>
-          <Icon name="arrowRight" size={13} className="shrink-0 -translate-x-1 text-term-dim opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
+          <Icon name="arrowRight" size={13} className="shrink-0 -translate-x-0.5 text-term-dim opacity-45 transition-all duration-200 group-hover:translate-x-0 group-hover:text-term-amber group-hover:opacity-100" />
         </button>
       </th>
       <td className="hidden font-mono text-[11.5px] text-term-dim xs:table-cell">{target.host}</td>

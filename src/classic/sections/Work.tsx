@@ -1,29 +1,18 @@
 import { AnimatePresence, LayoutGroup, motion, useMotionValue, useSpring } from 'motion/react';
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type RefObject } from 'react';
-import { HoverArrow, Icon } from '../components/Icon';
+import { useEffect, useMemo, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { Icon } from '../components/Icon';
 import { Ink } from '../components/Ink';
 import { SectionHead } from '../components/SectionHead';
-import { Shot } from '../components/Shot';
-import {
-  ALSO_SHIPPED,
-  FILTERS,
-  PING_TARGETS,
-  FLAGSHIPS,
-  LIVE_COUNT,
-  PROJECTS,
-  TOOLS,
-  inFilter,
-  liveSites,
-  shotId,
-  shotSrc,
-  showsShot,
-  type FilterId,
-  type Project,
-} from '../lib/data';
+import { FILTERS, LIVE_COUNT, PROJECTS, STAGE_IDS, TOOLS, inFilter, liveSites, shotId, shotSrc, showsShot, type FilterId, type Project, type Unit } from '../lib/data';
 import { useFinePointer, useReducedMotionPref } from '../lib/hooks';
-import { startPingsOnce, useBoard } from '../lib/pings';
+import { startPingsOnce } from '../lib/pings';
+import { Stack } from '../stack/Stack';
+import { Stage } from './Stage';
 import { ease, fade, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
+
+// the list reads in the page's order: the stage's eight first, then the rest
+const ORDERED = [...STAGE_IDS.map((id) => PROJECTS.find((p) => p.id === id)!).filter(Boolean), ...PROJECTS.filter((p) => !STAGE_IDS.includes(p.id))];
 
 export type WorkFilter = { kind: 'category'; id: FilterId } | { kind: 'tool'; id: string };
 
@@ -42,11 +31,8 @@ function countWord(n: number) {
   return t ? (n % 10 ? `${t}-${WORDS[n % 10]}` : t) : String(n);
 }
 
-const SPANS = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-5', 'lg:col-span-7'];
-
 export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
-  const rail = useRef<HTMLDivElement>(null);
-  // the checks the desktop board makes; on a phone the cards' dots are what shows them
+  // the stage's live dots and the board share one set of checks
   useEffect(() => startPingsOnce(), []);
   return (
     <section id="work" aria-labelledby="work-title" className="section-y relative">
@@ -55,169 +41,13 @@ export function Work({ filter, onFilter, onOpenProject }: WorkProps) {
         <SectionHead
           id="work-title"
           label={`Work · ${LIVE_COUNT} live sites`}
-          title={`I've shipped ${countWord(LIVE_COUNT)}. Start with these four.`}
-          lede="I designed and built every one of them myself, from the database to the last button. Open any of them for the long version."
+          title={`I've shipped ${countWord(LIVE_COUNT)}. Here are eight, running.`}
+          lede="Each one plays a short recorded visit, on a laptop and on a phone. Pick one to take over the tour, or try the live site right here. Everything else is stacked below, oldest at the bottom."
         />
-
-        {/* on a phone the four are a row you swipe through, the next one peeking in; on a desktop, a grid */}
-        <motion.div
-          ref={rail}
-          layoutScroll
-          className="no-scrollbar mt-9 -mx-[calc(var(--gutter)+var(--inset))] flex snap-x snap-mandatory scroll-px-[calc(var(--gutter)+var(--inset))] gap-4 overflow-x-auto px-[calc(var(--gutter)+var(--inset))] pb-1 lg:mx-0 lg:mt-14 lg:grid lg:snap-none lg:grid-cols-12 lg:gap-x-8 lg:gap-y-16 lg:overflow-visible lg:px-0 lg:pb-0 [&>*]:min-w-0"
-        >
-          {FLAGSHIPS.map((p, i) => (
-            <Flagship
-              key={p.id}
-              project={p}
-              index={i}
-              className={cn(SPANS[i], 'w-[84%] shrink-0 snap-start sm:w-[62%] lg:w-auto')}
-              onOpen={() => onOpenProject(p.id, true)}
-            />
-          ))}
-        </motion.div>
-        <RailDots rail={rail} />
-
+        <Stage onOpenProject={onOpenProject} />
         <Ledger filter={filter} onFilter={onFilter} onOpenProject={onOpenProject} />
       </div>
     </section>
-  );
-}
-
-function Flagship({ project: p, index, className, onOpen }: { project: Project; index: number; className?: string; onOpen: () => void }) {
-  const card = (
-    <>
-      {/* above the card's stretched link, so hovering it can pan the capture; a click still opens the sheet */}
-      <div className="relative z-20 cursor-pointer" onClick={onOpen}>
-        <Shot
-          projectId={p.id}
-          layoutId={`shot-${p.id}`}
-          pan
-          className="aspect-[16/10] transition-shadow duration-300 group-hover:shadow-[0_0_0_1px_var(--rule-2),var(--shadow-float)]"
-          alt={`${p.name}, the live site`}
-        />
-      </div>
-      {/* the kind sits on the name's line, so the description gets the card's full width */}
-      <div className="mt-6 flex items-center justify-between gap-4">
-        <span className="flex min-w-0 items-center gap-3">
-          <LiveDot project={p} />
-          <h3 className="h3-type min-w-0 text-ink">
-            <button type="button" onClick={onOpen} data-project-card={p.id} className="text-left after:absolute after:inset-0 after:z-10 after:content-['']">
-              {p.name}
-            </button>
-          </h3>
-        </span>
-        <span className="chip shrink-0">{p.kind}</span>
-      </div>
-      <p className="mt-2 max-w-[34rem] text-[15.5px] leading-relaxed text-ink-2 max-lg:line-clamp-3">{p.short}</p>
-      <ul className="mt-5 border-t border-rule max-lg:hidden">
-        {(p.highlights ?? []).slice(0, 3).map((h, i) => (
-          <li key={h} className="flex gap-4 border-b border-rule py-2.5 text-[14px] text-ink-2">
-            <span className="font-mono text-[11px] leading-[22px] text-ink-3 tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-            {h}
-          </li>
-        ))}
-      </ul>
-      <div className="relative z-20 mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-        <span className="flex flex-wrap gap-1.5 max-sm:hidden">
-          {p.tags.slice(0, 4).map((t) => (
-            <span key={t} className="chip">
-              {t}
-            </span>
-          ))}
-        </span>
-        <span className="ml-auto flex items-center gap-4">
-          <button type="button" onClick={onOpen} className="text-link inline-flex items-center gap-1.5 text-[14px]">
-            The long version <HoverArrow />
-          </button>
-          {p.url && (
-            <a href={p.url} target="_blank" rel="noopener" className="inline-flex items-center gap-1 text-[14px] font-[560] text-ink-2 hover:text-ink">
-              Visit <Icon name="external" size={15} />
-            </a>
-          )}
-        </span>
-      </div>
-    </>
-  );
-
-  return (
-    <motion.article
-      className={cn('group relative', className)}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-      transition={{ duration: 0.8, ease: ease.out, delay: (index % 2) * 0.08 }}
-    >
-      {index === 0 ? (
-        <Ink
-          id="flagship-card"
-          type="box"
-          pen="red"
-          target="box"
-          place="above"
-          noteClassName="!bottom-[calc(100%+34px)] !left-[calc(100%+48px)] !max-w-[330px]"
-          note="Hover the screenshot and it scrolls the whole page. Click and it becomes the sheet: the same element, animated to its new place."
-          spec="<motion.div layoutId={`shot-${id}`}>"
-        >
-          {card}
-        </Ink>
-      ) : (
-        card
-      )}
-    </motion.article>
-  );
-}
-
-/** On a phone, a project's live check from this visit: green when its site answered, red when it didn't. */
-function LiveDot({ project }: { project: Project }) {
-  const board = useBoard();
-  const target = PING_TARGETS.find((t) => t.projectId === project.id);
-  if (!target) return null;
-  const result = board.results[target.key];
-  const state = result?.state ?? 'pending';
-  const said =
-    state === 'up' ? `Up right now (answered in ${result?.ms} ms)` : state === 'down' ? 'Not answering right now' : 'Checking whether it’s up';
-  return <span className="dot shrink-0 lg:hidden" data-state={state} role="img" aria-label={said} title={said} />;
-}
-
-/** Where you are in the phone's row of four: tap a mark to go straight to that project. */
-function RailDots({ rail }: { rail: RefObject<HTMLDivElement | null> }) {
-  const [active, setActive] = useState(0);
-  const reduce = useReducedMotionPref();
-
-  useEffect(() => {
-    const el = rail.current;
-    if (!el) return;
-    const cards = [...el.children] as HTMLElement[];
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) if (e.isIntersecting) setActive(cards.indexOf(e.target as HTMLElement));
-      },
-      { root: el, threshold: 0.6 },
-    );
-    cards.forEach((c) => io.observe(c));
-    return () => io.disconnect();
-  }, [rail]);
-
-  return (
-    <div className="mt-5 flex items-center gap-4 lg:hidden">
-      <div className="flex items-center">
-        {FLAGSHIPS.map((p, i) => (
-          <button
-            key={p.id}
-            type="button"
-            aria-label={`${p.name}, ${i + 1} of ${FLAGSHIPS.length}`}
-            aria-current={i === active ? 'true' : undefined}
-            onClick={() => rail.current?.children[i]?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'start', block: 'nearest' })}
-            className="grid h-8 min-w-7 place-items-center px-1.5"
-          >
-            <span className={cn('block h-1 rounded-full transition-[width,background-color] duration-300', i === active ? 'w-7 bg-amber' : 'w-2.5 bg-rule-2')} />
-          </button>
-        ))}
-      </div>
-      <span className="font-mono text-[11.5px] text-ink-3 tabular-nums">
-        {active + 1} / {FLAGSHIPS.length} · swipe for more
-      </span>
-    </div>
   );
 }
 
@@ -233,10 +63,19 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
   const sy = useSpring(y, { stiffness: 500, damping: 40, mass: 0.6 });
 
   const tool = filter.kind === 'tool' ? TOOLS.find((t) => t.id === filter.id) : undefined;
-  const items = [...FLAGSHIPS, ...ALSO_SHIPPED].filter((p) =>
-    filter.kind === 'tool' ? !!tool && p.tags.some((t) => tool.aliases.includes(t)) : inFilter(p, filter.id),
-  );
+  const keep = (tags: string[], category: string[]) =>
+    filter.kind === 'tool' ? !!tool && tags.some((t) => tool.aliases.includes(t)) : filter.id === 'all' || category.includes(filter.id);
+  const items = ORDERED.filter((p) => keep(p.tags, p.category));
   const sites = items.reduce((n, p) => n + liveSites(p), 0);
+
+  // the stack is the default; the list is one click away, and takes over if the stack can't draw
+  const [view, setView] = useState<'stack' | 'list'>('stack');
+  const [stackless, setStackless] = useState(false);
+  const shown = stackless ? 'list' : view;
+  // the stack greys out what the filter leaves out; a stable function so the scene isn't re-filtered every render
+  const filterKey = filter.kind + ':' + filter.id;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const match = useMemo(() => (filterKey === 'category:all' ? null : (u: Unit) => keep(u.tags, u.category)), [filterKey]);
 
   const track = (e: ReactPointerEvent) => {
     x.set(e.clientX);
@@ -247,7 +86,7 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
     <div id="ledger" className="mt-12 scroll-mt-28 lg:mt-28">
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
         <div>
-          <h3 className="h3-type text-ink">Everything I&apos;ve shipped</h3>
+          <h3 className="h3-type text-ink">Everything I&apos;ve shipped, stacked</h3>
           <p className="mt-1.5 font-mono text-[12.5px] text-ink-3" aria-live="polite">
             {items.length} project{items.length === 1 ? '' : 's'} · {sites} live site{sites === 1 ? '' : 's'}
             {tool && <> · built with {tool.label}</>}
@@ -262,12 +101,22 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
           note="Filter it. Rows that stay slide to their new places; the rest step out of the way."
           spec="<AnimatePresence mode='popLayout'> + layout"
         >
-          <Filters filter={filter} onFilter={onFilter} toolLabel={tool?.label} />
+          <div className="flex flex-wrap items-center gap-2">
+            <Filters filter={filter} onFilter={onFilter} toolLabel={tool?.label} />
+            {!stackless && <ViewSwitch view={view} onView={setView} />}
+          </div>
         </Ink>
       </div>
 
+      {shown === 'stack' && (
+        <div className="mt-6">
+          <Stack match={match} onOpenProject={onOpenProject} onUnavailable={() => setStackless(true)} />
+        </div>
+      )}
+
       <motion.ul
         layout
+        hidden={shown !== 'list'}
         className="relative mt-6 border-t border-rule-2 bg-paper"
         onPointerMove={fine && !reduce ? track : undefined}
         onPointerLeave={() => setHover(null)}
@@ -299,7 +148,7 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
 
       {/* a preview that trails the pointer down the rows */}
       <AnimatePresence>
-        {fine && !reduce && hover && showsShot(shotId(hover.id)) && (
+        {shown === 'list' && fine && !reduce && hover && showsShot(shotId(hover.id)) && (
           <motion.div
             key="preview"
             aria-hidden="true"
@@ -325,6 +174,27 @@ function Ledger({ filter, onFilter, onOpenProject }: WorkProps) {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function ViewSwitch({ view, onView }: { view: 'stack' | 'list'; onView: (v: 'stack' | 'list') => void }) {
+  return (
+    <div role="group" aria-label="Show the projects as" className="flex items-center gap-1 rounded-lg bg-paper-3 p-1 shadow-[inset_0_0_0_1px_var(--rule)]">
+      {(['stack', 'list'] as const).map((v) => (
+        <button
+          key={v}
+          type="button"
+          aria-pressed={view === v}
+          onClick={() => onView(v)}
+          className={cn(
+            'h-8 rounded-md px-3 text-[13.5px] font-[560] transition-colors',
+            view === v ? 'bg-paper text-ink shadow-[0_0_0_1px_var(--rule-2),0_1px_2px_hsl(var(--shadow-tint)/0.12)]' : 'text-ink-2 hover:text-ink',
+          )}
+        >
+          {v === 'stack' ? 'Stack' : 'List'}
+        </button>
+      ))}
     </div>
   );
 }
