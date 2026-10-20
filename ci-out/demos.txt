@@ -1,0 +1,16 @@
+  hookline laptop: 1219 KB, trimmed 2.11s
+  hookline phone: 166 KB, trimmed 1.99s
+  feast laptop: 44 KB, trimmed 11.76s
+  feast phone: 45 KB, trimmed 20.05s
+  unearth laptop: 153 KB, trimmed 7.03s
+  unearth phone: 59 KB, trimmed 3.05s
+  specimen laptop: 951 KB, trimmed 2.32s
+  specimen phone: 136 KB, trimmed 2.22s
+  fieldsense laptop: 120 KB, trimmed 10.42s
+  fieldsense phone: 48 KB, trimmed 9.95s
+  oikos laptop: 255 KB, trimmed 8.58s
+  oikos phone: 169 KB, trimmed 7.39s
+  wakerush laptop: 441 KB, trimmed 3.05s
+  wakerush phone: 125 KB, trimmed 2.43s
+  splash laptop: 534 KB, trimmed 11.41s
+  splash phone: 145 KB, trimmed 2.35s
