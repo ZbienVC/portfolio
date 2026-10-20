@@ -1,0 +1,2 @@
+  oikos laptop: 261 KB, trimmed 2.31s
+  oikos phone: 123 KB, trimmed 2.23s
