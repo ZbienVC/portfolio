@@ -1,0 +1,2 @@
+  staywestpalm laptop: 472 KB, trimmed 2.27s
+  staywestpalm phone: 151 KB, trimmed 2.15s
