@@ -1,0 +1,2 @@
+  dipper laptop: 385 KB, trimmed 4.76s
+  dipper phone: 148 KB, trimmed 2.10s
