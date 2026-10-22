@@ -30,5 +30,5 @@ export function registerReveal(fn: () => void) {
   };
 }
 
-/** Bring the open laptop into view (the toolkit uses it after filtering by a tool). */
+/** Bring the open laptop into view. */
 export const revealShowroom = () => reveal?.();

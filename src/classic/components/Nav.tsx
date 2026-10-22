@@ -13,7 +13,7 @@ import { cn } from '../lib/cn';
 import { HoverArrow, Icon } from './Icon';
 import { Dock, MenuSheet, type SectionId } from './MobileNav';
 
-export const SECTIONS = ['work', 'how', 'toolkit', 'day-job', 'experience', 'off-the-clock', 'contact'] as const;
+export const SECTIONS = ['work', 'how', 'day-job', 'experience', 'off-the-clock', 'contact'] as const;
 
 type MenuId = 'work' | 'about';
 interface NavProps {
@@ -133,7 +133,7 @@ export function Nav({ onOpenPalette, onOpenProject, onOpenAsk }: NavProps) {
                   />
                 </li>
                 <li>
-                  <NavLink href="#how" current={active === 'how' || active === 'toolkit'} onPointerEnter={close}>
+                  <NavLink href="#how" current={active === 'how'} onPointerEnter={close}>
                     How I build
                   </NavLink>
                 </li>

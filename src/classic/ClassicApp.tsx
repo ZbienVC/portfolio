@@ -12,7 +12,7 @@ import { Nav } from './components/Nav';
 import { ProjectSheet } from './components/ProjectSheet';
 import { projectById, PROFILE } from './lib/data';
 import { useCopy } from './lib/hooks';
-import { launchProject, revealShowroom } from './lib/launch';
+import { launchProject } from './lib/launch';
 import { fade, spring } from './lib/motion';
 import { ShowWorkProvider, useShowWork } from './lib/show-work';
 import { ThemeProvider } from './lib/theme';
@@ -23,7 +23,6 @@ import { Experience } from './sections/Experience';
 import { Hero } from './sections/Hero';
 import { HowIBuild } from './sections/HowIBuild';
 import { OffTheClock } from './sections/OffTheClock';
-import { Toolkit } from './sections/Toolkit';
 import { Showroom, type WorkFilter } from './sections/Showroom';
 
 // Theme before the first paint of this chunk, so dark-mode visitors never see a flash of paper.
@@ -91,11 +90,6 @@ function Page() {
     }
   }, []);
 
-  const filterByTool = useCallback((toolId: string) => {
-    setWorkFilter({ kind: 'tool', id: toolId });
-    requestAnimationFrame(revealShowroom);
-  }, []);
-
   const openPalette = useCallback(() => setPalette(true), []);
   usePaletteShortcut(openPalette);
 
@@ -115,7 +109,6 @@ function Page() {
         <Hero />
         <Showroom filter={workFilter} onFilter={setWorkFilter} onOpenProject={openProject} />
         <HowIBuild />
-        <Toolkit onFilterTool={filterByTool} />
         <DayJob />
         <Experience />
         <OffTheClock />

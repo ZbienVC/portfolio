@@ -6,6 +6,7 @@ import { SectionHead } from '../components/SectionHead';
 import { useReducedMotionPref } from '../lib/hooks';
 import { ease, fade, spring } from '../lib/motion';
 import { cn } from '../lib/cn';
+import { PRACTICE } from '../lib/data';
 
 /*
  * The day job, shown rather than claimed: a toy of the accounts-payable
@@ -123,7 +124,33 @@ export function DayJob() {
               </AnimatePresence>
             </div>
           </Ink>
+
+          {/* the skills that never fit a grid of tools, in the space under the toy (clear of its note);
+              on a phone they fold into one line you can open */}
+          <details className="group mt-20 rounded-xl bg-paper shadow-[0_0_0_1px_var(--rule)] sm:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3.5 font-mono text-[12px] text-amber-ink">
+              Skills beyond code
+              <Icon name="arrowDown" size={14} className="transition-transform group-open:rotate-180" />
+            </summary>
+            <dl className="grid gap-3 border-t border-rule px-4 py-3.5">
+              {PRACTICE.map((g) => (
+                <div key={g.title}>
+                  <dt className="font-mono text-[11px] text-ink-3">{g.title}</dt>
+                  <dd className="mt-1 text-[13.5px] leading-snug text-ink-2">{g.items.join(' · ')}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+          <dl className="mt-24 grid-cols-3 gap-px overflow-hidden rounded-xl bg-rule shadow-[0_0_0_1px_var(--rule)] max-sm:hidden sm:grid lg:mt-20">
+            {PRACTICE.map((g) => (
+              <div key={g.title} className="bg-paper px-4 py-3.5">
+                <dt className="font-mono text-[11.5px] text-amber-ink">{g.title}</dt>
+                <dd className="mt-1.5 text-[13.5px] leading-snug text-ink-2">{g.items.join(' · ')}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
+
       </div>
     </section>
   );

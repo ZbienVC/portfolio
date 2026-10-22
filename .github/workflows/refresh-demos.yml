@@ -4,6 +4,10 @@
 name: Refresh demo clips
 on:
   workflow_dispatch:
+    inputs:
+      site:
+        description: "One site to re-record (its id, like hookline), or all"
+        default: all
 permissions:
   contents: write
 jobs:
@@ -13,20 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        site:
-          - hookline
-          - unearth
-          - specimen
-          - fieldsense
-          - oikos
-          - wakerush
-          - splash
-          - plato
-          - dipper
-          - careeva
-          - cryptosites
-          - wayfound
-          - staywestpalm
+        # every site, or just the one named when the workflow was started
+        site: ${{ fromJSON((inputs.site == '' || inputs.site == 'all') && '["hookline","unearth","specimen","fieldsense","oikos","wakerush","splash","plato","dipper","careeva","cryptosites","wayfound","staywestpalm"]' || format('["{0}"]', inputs.site)) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
