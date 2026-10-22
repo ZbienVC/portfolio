@@ -288,7 +288,7 @@ export const durationLabel = (months: number) => {
   return [y ? `${y} yr` : '', m ? `${m} mo` : ''].filter(Boolean).join(' ');
 };
 
-/* ── Toolkit: which tools each project used, derived from its tags ────────── */
+/* ── Tools: lets the Work section filter projects by a tool, from their tags ── */
 
 export interface Tool {
   id: string;
@@ -314,32 +314,8 @@ export const TOOLS: Tool[] = [
   { id: 'stripe', label: 'Stripe', aliases: ['Stripe'] },
 ];
 
-export interface MatrixColumn {
-  id: string;
-  name: string;
-  tags: string[];
-  self?: boolean;
-}
-
-// This page is a column too: it is built with the same tools.
-export const MATRIX_COLUMNS: MatrixColumn[] = [
-  ...[...FLAGSHIPS, ...ALSO_SHIPPED].map((p) => ({ id: p.id, name: p.name, tags: p.tags })),
-  { id: 'this-site', name: 'This site', tags: ['React', 'TypeScript', 'Tailwind', 'Motion', 'WebGL'], self: true },
-];
-
-export const uses = (tool: Tool, column: MatrixColumn) => column.tags.some((t) => tool.aliases.includes(t));
-
-export const TOOL_USAGE = TOOLS.map((tool) => ({
-  tool,
-  columns: MATRIX_COLUMNS.filter((c) => uses(tool, c)).map((c) => c.id),
-})).sort((a, b) => b.columns.length - a.columns.length);
-
-// The résumé's skills that aren't a tool in the matrix (public/Zachary_Bienstock_Resume.pdf, Skills).
+// The résumé's skills beyond code, shown in the day job (public/Zachary_Bienstock_Resume.pdf, Skills).
 export const PRACTICE = [
-  {
-    title: 'AI and LLMs',
-    items: ['Claude, GPT and Gemini inside live products', "Agents on the Anthropic SDK's Tool Runner", 'AI coding tools, from spec to launch'],
-  },
   {
     title: 'Automation',
     items: ['Getting documents in and filed', 'QuickBooks imports (IIF journals)', "Comparing statements and flagging what's off"],

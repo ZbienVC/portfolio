@@ -67,10 +67,9 @@ export function CommandPalette({ onClose, onOpenProject, onAsk, onCopyEmail }: P
   const items = useMemo<Item[]>(
     () => [
       { id: 'j-work', group: 'Jump to', label: 'Work', hint: 'the standouts, running on a laptop', icon: 'arrowRight', keywords: 'demos stage latest hookline feast league unearth specimen atlas', run: jump('#work') },
-      { id: 'j-how', group: 'Jump to', label: 'How I build', hint: 'the AI crew behind the work', icon: 'arrowRight', keywords: 'ai agents crucible nightshift switchyard canopy atelier claude skills', run: jump('#how') },
+      { id: 'j-how', group: 'Jump to', label: 'How I build', hint: 'the stack behind the work', icon: 'arrowRight', keywords: 'ai agents claude skills connectors models crucible nightshift switchyard canopy atelier', run: jump('#how') },
       { id: 'j-day', group: 'Jump to', label: 'The day job', hint: 'the books and the automation', icon: 'arrowRight', keywords: 'accounts payable quickbooks iif telecom finance', run: jump('#day-job') },
       { id: 'j-exp', group: 'Jump to', label: 'Experience', hint: 'Bloomberg, banking, Grapevine', icon: 'arrowRight', keywords: 'resume career jobs', run: jump('#experience') },
-      { id: 'j-tools', group: 'Jump to', label: 'Toolkit', icon: 'arrowRight', keywords: 'skills stack', run: jump('#toolkit') },
       { id: 'j-life', group: 'Jump to', label: 'Off the clock', icon: 'arrowRight', keywords: 'photos life snowboarding', run: jump('#off-the-clock') },
       { id: 'j-contact', group: 'Jump to', label: 'Contact', icon: 'arrowRight', keywords: 'email hire', run: jump('#contact') },
       ...PROJECTS.map<Item>((p) => ({

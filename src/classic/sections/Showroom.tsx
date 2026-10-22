@@ -234,9 +234,10 @@ export function Showroom({ filter, onFilter, onOpenProject }: ShowroomProps) {
         <div className={cn('container-x relative', pinned ? 'flex min-h-0 flex-1 items-center' : 'mt-10')}>
           <div className="grid w-full items-center gap-x-10 gap-y-8 lg:grid-cols-12">
             {/* the device and its arrows */}
-            <div ref={device} className="relative lg:col-span-8">
+            {/* on wide screens the laptop reaches into the empty margin on its left, while the words keep the page's grid */}
+            <div ref={device} className="relative lg:col-span-8 lg:ml-[calc(-1*clamp(0px,(100vw-1180px)/2-96px,260px))]">
               {kind === 'laptop' ? (
-                <Laptop3D open={open} maxWidth={pinned ? 'min(100%, calc((100svh - var(--nav-h) - 410px) * 1.42))' : '100%'}>
+                <Laptop3D open={open} maxWidth={pinned ? 'min(100%, calc((100svh - var(--nav-h) - 400px) * 1.4))' : '100%'}>
                   {screen}
                 </Laptop3D>
               ) : (
