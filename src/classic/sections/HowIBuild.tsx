@@ -2,230 +2,219 @@ import { useScroll } from 'motion/react';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Specimen } from '../specimens/Specimen';
 import { useTheme } from '../lib/theme';
-import { useInViewOnce, useReducedMotionPref } from '../lib/hooks';
+import { useFinePointer, useInViewOnce, useReducedMotionPref } from '../lib/hooks';
 import { cn } from '../lib/cn';
 import { BUILT, CREW, FACTS, LAYERS, NEVER_LIST, ROUTES, SHIPS, type Layer } from '../lib/how';
 
 /**
- * How I build: four layers stacked like cards, models at the bottom, what
- * ships on top. Hover (or tap) a layer and its card slides out of the stack,
- * turns to face you and shows its proof; the next one plays the same path in
- * reverse. "Ship a new model" drops a new model in at the bottom and sends a
- * glint up through every layer, which is the whole argument of the section.
+ * How I build: four layers stacked like a deck, models at the bottom, what
+ * ships on top. Pick a layer and its card slides out of the deck sideways,
+ * then stands up to face you beside the stack (never on top of it). Pick
+ * another and the first one lies back down and slides home along the same
+ * path while the next one comes out. A dashed outline holds each empty slot.
  *
- * How the swing works:
- * - Each card sits in its own 3D space (a "slot" carrying the stack's tilt), so
- *   cards never slice through each other; which one draws on top is set by
- *   z-index, switched at the moment a card is out to the side of the stack.
- * - Each card has one Web Animations timeline: resting, slid out sideways,
- *   facing you. The facing pose undoes the stack's tilt exactly (rotateZ then
- *   rotateX, reversed) and the slide is solved so the card's centre lands on one
- *   spot in front of the stack. Closing plays the same timeline backwards from
- *   wherever it is, so a change of mind never jumps.
- * - Hover targets are fixed bands over the stack, so a card sliding under a
- *   still cursor never steals the selection.
+ * How the motion works:
+ * - Every card lives in ONE 3D space, so the browser sorts depth itself and no
+ *   card ever pops in front of another. The path is built so cards never pass
+ *   through each other: they slide out flat at their own level (parallel to the
+ *   rest of the deck), and only turn once they are clear of it.
+ * - Each card has one Web Animations timeline sampled from that path. Opening
+ *   plays it forward; closing plays it backwards from wherever it is, so a
+ *   change of mind never jumps. A new card waits until every other card has
+ *   finished turning back and is only sliding home.
+ * - Hover only lifts a card a little (a preview). Click or tap opens it, so
+ *   moving the mouse across the deck never reshuffles it.
+ * - Opening a layer sends a light up from the models through every layer
+ *   under it: each layer runs on the ones below.
  */
 
-const GAP = 92; // depth between layers, px
-const DUR = 1150; // one full swing, ms
-const MID = 0.36; // where on the timeline a card sits out to the side
+const DUR = 900; // one full trip, slot to facing you, ms
+const SPLIT = 0.36; // where on that trip the slide ends and the turn begins
+const BACK = 1.55; // closing runs faster than opening
+const STEP = 120; // ms between layers as the light climbs
+const SAMPLES = 48;
+
+type V2 = { x: number; y: number };
+interface Geo {
+  W: number; H: number; tilt: number; turn: number; gap: number; ks: number;
+  S: V2; B: V2; F: V2; lift: number;
+}
+
+/** where everything sits, for a scene this size */
+function geometry(SW: number, SH: number, small: boolean): Geo {
+  if (small) {
+    const W = Math.min(420, SW - 6);
+    const H = Math.round(W * 0.62);
+    const ks = 0.7;
+    const tilt = 56;
+    const c = Math.cos((tilt * Math.PI) / 180);
+    return {
+      W, H, tilt, turn: 0, gap: 40, ks, lift: 50,
+      S: { x: 0, y: SH / 2 - (H * ks * c) / 2 - 10 },
+      B: { x: 0, y: -(H * ks + 34) },
+      F: { x: 0, y: -SH / 2 + H / 2 + 2 },
+    };
+  }
+  const W = Math.min(390, SW * 0.5);
+  const H = Math.round(W * 0.62);
+  const ks = 0.8;
+  return {
+    W, H, tilt: 54, turn: -9, gap: 58, ks, lift: 80,
+    S: { x: -SW / 2 + (W * ks) / 2 + 12, y: SH * 0.1 },
+    B: { x: W * ks + 40, y: 0 },
+    F: { x: SW / 2 - W / 2 - 2, y: -SH * 0.05 },
+  };
+}
+
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+const f = (n: number) => n.toFixed(2);
+
+/** the card's pose at point p of its trip (0 in its slot, 1 facing you) */
+function pose(g: Geo, level: number, p: number) {
+  const base = `translate3d(${f(g.S.x)}px,${f(g.S.y)}px,0px) rotateX(${g.tilt}deg) rotateZ(${g.turn}deg)`;
+  if (p <= SPLIT) {
+    const e = ease(p / SPLIT);
+    return `${base} translate3d(${f(g.B.x * e)}px,${f(g.B.y * e)}px,${f(level * g.gap)}px) scale(${g.ks})`;
+  }
+  const out = new DOMMatrix()
+    .translate(g.S.x, g.S.y, 0)
+    .rotate(g.tilt, 0, 0)
+    .rotate(0, 0, g.turn)
+    .translate(g.B.x, g.B.y, level * g.gap)
+    .transformPoint(new DOMPoint(0, 0, 0));
+  const e = ease((p - SPLIT) / (1 - SPLIT));
+  const x = out.x + (g.F.x - out.x) * e;
+  const y = out.y + (g.F.y - out.y) * e;
+  // lifted toward you on the way, like picking a card up
+  const z = out.z * (1 - e) + Math.sin(Math.PI * e) * g.lift;
+  return `translate3d(${f(x)}px,${f(y)}px,${f(z)}px) rotateX(${f(g.tilt * (1 - e))}deg) rotateZ(${f(g.turn * (1 - e))}deg) scale(${f(g.ks + (1 - g.ks) * e)})`;
+}
 
 export function HowIBuild() {
   const { theme } = useTheme();
   const reduce = useReducedMotionPref();
+  const fine = useFinePointer();
   const root = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: root, offset: ['start 85%', 'center 40%'] });
 
   const scene = useRef<HTMLDivElement>(null);
-  const slots = useRef<(HTMLDivElement | null)[]>([]);
-  const slabs = useRef<(HTMLDivElement | null)[]>([]);
+  const cards = useRef<(HTMLDivElement | null)[]>([]);
+  const ghosts = useRef<(HTMLDivElement | null)[]>([]);
   const anims = useRef<Animation[]>([]);
-  const zRaf = useRef<number[]>([]);
-  const openTimer = useRef(0);
-  const hoverTimer = useRef(0);
-  const onRef = useRef(-1);
-  const busy = useRef(false);
+  const wait = useRef(0);
+  const cur = useRef(-1);
 
-  const [on, setOn] = useState(1);
-  const [open, setOpen] = useState(-1);
-  const [releasing, setReleasing] = useState<'idle' | 'landing' | 'carried'>('idle');
-  const [shipped, setShipped] = useState(false);
-  const [zapping, setZapping] = useState(-1);
+  const [on, setOn] = useState(-1);
+  const [peek, setPeek] = useState(-1);
+  const [pulse, setPulse] = useState({ key: 0, to: -1 });
   const [stageRef, seen] = useInViewOnce<HTMLDivElement>('0px 0px -30% 0px');
 
   const N = LAYERS.length;
-  const restZ = useCallback((i: number) => {
-    const s = slots.current[i];
-    if (s) s.style.zIndex = String(N - i);
-  }, [N]);
+  const level = (i: number) => N - 1 - i;
 
   /* build (or rebuild, on resize) every card's timeline, keeping where each one is */
   const build = useCallback(() => {
-    const first = slots.current[0];
-    if (!first) return;
-    const pm = new DOMMatrix(getComputedStyle(first).transform);
-    const W = first.offsetWidth;
-    const H = first.offsetHeight;
-    const small = window.innerWidth < 1024;
-    // the lift brings a card toward you, so it scales back down; it still ends up larger than in the stack
-    const target = { x: small ? 0 : W * 0.02, y: -H * (small ? 0.06 : 0.08), z: small ? 360 : 420 };
-    const sc = small ? 0.95 : 1;
-    const out = small ? { x: -70, y: 50 } : { x: -150, y: 90 };
-    slabs.current.forEach((s, i) => {
-      if (!s) return;
-      const z = (N - 1 - i) * GAP;
-      const c = pm.transformPoint(new DOMPoint(s.offsetLeft + s.offsetWidth / 2 - W / 2, s.offsetTop + s.offsetHeight / 2 - H / 2, z));
-      const t = { x: target.x - c.x, y: target.y - c.y, z: target.z - c.z };
-      const k = (sx: number, sy: number, sz: number, rz: number, rx: number, f: number, m: number) =>
-        `translate3d(0px,0px,${z}px) translate3d(${sx}px,${sy}px,${sz}px) rotateZ(${rz}deg) rotateX(${rx}deg) translate3d(${t.x * f}px,${t.y * f}px,${t.z * f}px) scale(${m})`;
-      const frames: Keyframe[] = [
-        { transform: k(0, 0, 0, 0, 0, 0, 1), easing: 'cubic-bezier(.45,.05,.55,.95)' },
-        { transform: k(out.x, out.y, 40, 3, -4, 0.06, 0.97), offset: MID, easing: 'cubic-bezier(.33,.12,.15,1)' },
-        { transform: k(0, 0, 0, 28, -60, 1, sc) },
-      ];
+    const el = scene.current;
+    if (!el) return;
+    const g = geometry(el.offsetWidth, el.offsetHeight, window.innerWidth < 1024);
+    cards.current.forEach((c, i) => {
+      if (!c) return;
+      Object.assign(c.style, { width: `${g.W}px`, height: `${g.H}px`, left: `${-g.W / 2}px`, top: `${-g.H / 2}px` });
+      const gh = ghosts.current[i];
+      if (gh) {
+        Object.assign(gh.style, { width: `${g.W}px`, height: `${g.H}px`, left: `${-g.W / 2}px`, top: `${-g.H / 2}px` });
+        gh.style.transform = pose(g, level(i), 0);
+      }
+      const frames: Keyframe[] = Array.from({ length: SAMPLES + 1 }, (_, k) => ({ transform: pose(g, level(i), k / SAMPLES) }));
       const old = anims.current[i];
       const time = Number(old?.currentTime ?? 0);
       const rate = old?.playbackRate ?? 1;
       const running = old?.playState === 'running';
       old?.cancel();
-      const a = s.animate(frames, { duration: DUR, fill: 'both' });
+      const a = c.animate(frames, { duration: DUR, fill: 'both' });
       a.pause();
       a.currentTime = time;
       a.playbackRate = rate;
       if (running) a.play();
       anims.current[i] = a;
     });
-  }, [N]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useLayoutEffect(() => {
-    slots.current.forEach((_, i) => restZ(i));
     build();
     const el = scene.current;
     if (!el) return;
     let t = 0;
     const ro = new ResizeObserver(() => {
       window.clearTimeout(t);
-      t = window.setTimeout(build, 120);
+      t = window.setTimeout(build, 100);
     });
     ro.observe(el);
-    const anim = anims.current;
+    const list = anims.current;
     return () => {
       ro.disconnect();
       window.clearTimeout(t);
-      anim.forEach((a) => a.cancel());
+      cancelAnimationFrame(wait.current);
+      list.forEach((a) => a.cancel());
     };
-  }, [build, restZ]);
+  }, [build]);
 
-  /* run fn when a card's timeline crosses the point where it sits out to the side */
-  const atMid = useCallback((i: number, fn: () => void) => {
-    cancelAnimationFrame(zRaf.current[i]);
-    const a = anims.current[i];
-    if (!a) return fn();
-    const m = DUR * MID;
-    const tick = () => {
-      const time = Number(a.currentTime ?? 0);
-      const r = a.playbackRate;
-      if ((r > 0 && time >= m) || (r < 0 && time <= m) || a.playState !== 'running') return fn();
-      zRaf.current[i] = requestAnimationFrame(tick);
-    };
-    tick();
-  }, []);
+  const pick = useCallback(
+    (i: number) => {
+      if (i === cur.current) return;
+      const prev = cur.current;
+      cur.current = i;
+      setOn(i);
+      setPeek(-1);
+      setPulse((p) => ({ key: p.key + 1, to: i }));
 
-  const closeCard = useCallback((i: number) => {
-    const a = anims.current[i];
-    if (i < 0 || !a) return;
-    const s = slots.current[i];
-    if (s) s.style.zIndex = '15';
-    a.playbackRate = reduce ? -100 : -1.3;
-    a.play();
-    atMid(i, () => restZ(i));
-  }, [atMid, reduce, restZ]);
+      const prevAnim = anims.current[prev];
+      if (prevAnim) {
+        prevAnim.playbackRate = reduce ? -100 : -BACK;
+        prevAnim.play();
+      }
+      // the new card leaves once every other card has turned back and is only sliding home
+      cancelAnimationFrame(wait.current);
+      const turnEnd = DUR * SPLIT;
+      const go = () => {
+        if (cur.current !== i) return;
+        const clear = anims.current.every((a, k) => k === i || !a || Number(a.currentTime ?? 0) <= turnEnd + 1);
+        if (!clear && !reduce) {
+          wait.current = requestAnimationFrame(go);
+          return;
+        }
+        const a = anims.current[i];
+        if (!a) return;
+        a.playbackRate = reduce ? 100 : 1;
+        a.play();
+      };
+      go();
+    },
+    [reduce],
+  );
 
-  const openCard = useCallback((i: number, delay: number) => {
-    window.clearTimeout(openTimer.current);
-    openTimer.current = window.setTimeout(() => {
-      const a = anims.current[i];
-      if (!a || onRef.current !== i) return;
-      setOpen(i);
-      a.playbackRate = reduce ? 100 : 1;
-      a.play();
-      atMid(i, () => {
-        const s = slots.current[i];
-        if (s && onRef.current === i) s.style.zIndex = '20';
-      });
-    }, reduce ? 0 : delay);
-  }, [atMid, reduce]);
-
-  const pick = useCallback((i: number, force = false) => {
-    if ((i === onRef.current && !force) || busy.current) return;
-    const prev = onRef.current;
-    onRef.current = i;
-    setOn(i);
-    setOpen(-1);
-    // the open card heads home first; the next one leaves once the way is clearing
-    closeCard(prev);
-    openCard(i, prev < 0 ? 0 : 230);
-  }, [closeCard, openCard]);
-
-  // the first card comes out once the section is on screen
+  // my layer comes out once the section is on screen
   useEffect(() => {
-    if (!seen || onRef.current >= 0) return;
+    if (!seen || cur.current >= 0) return;
     const raf = requestAnimationFrame(() => pick(1));
     return () => cancelAnimationFrame(raf);
   }, [seen, pick]);
 
-  /* a model release: tuck the open card in, glint up the stack, swing it back out */
-  const ship = useCallback(async () => {
-    if (busy.current) return;
-    busy.current = true;
-    const wait = (ms: number) => new Promise((r) => window.setTimeout(r, reduce ? 0 : ms));
-    const was = onRef.current;
-    if (was >= 0) {
-      closeCard(was);
-      setOpen(-1);
-      await wait(720);
-    }
-    setReleasing('landing');
-    setShipped(true);
-    for (let i = N - 1; i >= 0; i--) {
-      setZapping(i);
-      await wait(240);
-    }
-    setZapping(-1);
-    setReleasing('carried');
-    await wait(900);
-    busy.current = false;
-    if (was >= 0) {
-      onRef.current = -1;
-      pick(was);
-    }
-    await wait(2000);
-    setShipped(false);
-    setReleasing('idle');
-  }, [N, closeCard, pick, reduce]);
-
-  // play the release once by itself, a beat after the stack first opens
-  const autoShipped = useRef(false);
-  useEffect(() => {
-    if (!seen || autoShipped.current || reduce) return;
-    autoShipped.current = true;
-    const t = window.setTimeout(ship, 2200);
-    return () => window.clearTimeout(t);
-  }, [seen, ship, reduce]);
-
-  // the open card leans a few degrees toward the pointer
-  const lean = (e: React.PointerEvent) => {
-    if (e.pointerType !== 'mouse' || reduce || !scene.current) return;
-    const r = scene.current.getBoundingClientRect();
-    scene.current.style.setProperty('--hb-ry', `${(((e.clientX - r.left) / r.width - 0.5) * 9).toFixed(2)}deg`);
-    scene.current.style.setProperty('--hb-rx', `${(-((e.clientY - r.top) / r.height - 0.5) * 7).toFixed(2)}deg`);
-  };
-  const unlean = () => {
-    scene.current?.style.setProperty('--hb-ry', '0deg');
-    scene.current?.style.setProperty('--hb-rx', '0deg');
-  };
+  // the light climbs from the bottom layer to the one you opened
+  const delay = (i: number) => (N - 1 - i) * STEP;
 
   const layer = LAYERS[Math.max(0, on)];
+  const order = [...LAYERS.keys()].reverse(); // 01 first, for the index
+
+  const onKey = (e: React.KeyboardEvent) => {
+    const at = order.indexOf(Math.max(0, on));
+    const to = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? at + 1 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? at - 1 : -1;
+    if (to < 0 || to >= N) return;
+    e.preventDefault();
+    pick(order[to]);
+    (e.currentTarget.querySelectorAll('button')[to] as HTMLButtonElement | undefined)?.focus();
+  };
 
   return (
     <section ref={root} id="how" aria-labelledby="how-title" className="section-y relative overflow-hidden bg-term text-term-ink">
@@ -257,107 +246,108 @@ export function HowIBuild() {
               Every new model makes my setup better.
             </h2>
             <p className="mt-5 max-w-[36rem] text-[17px] leading-relaxed text-term-dim [text-wrap:pretty]">
-              I’m a finance ops analyst who taught himself to ship with Claude. I build on what the labs release and put my time into the one layer they can’t hand me:{' '}
-              <span className="text-term-ink">my taste, my rules, and the problems I know from real work.</span> And I keep it simple. If someone needs a manual to use what I made, it isn’t finished.
+              I’m a finance ops analyst who taught himself to ship software with Claude. A homemade agent framework would be outdated by the next model release, so I build on what the labs ship and spend my time on the part they can’t hand me:{' '}
+              <span className="text-term-ink">my taste, my rules, and problems I know from real work.</span> If someone needs a manual to use what I made, I’m not done yet.
             </p>
           </header>
           <ul className="hb-facts lg:col-span-5">
-            {FACTS.map((f) => (
-              <li key={f.k}>
-                <span>{f.k}</span>
-                <b>{f.v}</b>
+            {FACTS.map((x) => (
+              <li key={x.k}>
+                <span>{x.k}</span>
+                <b>{x.v}</b>
               </li>
             ))}
           </ul>
         </div>
 
-        <div ref={stageRef} className="mt-8 grid items-center gap-x-10 gap-y-6 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <div ref={scene} className="hb-scene" onPointerMove={lean} onPointerLeave={unlean}>
+        <div ref={stageRef} className="mt-10 grid items-center gap-x-10 gap-y-6 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <div ref={scene} className="hb-scene" onPointerLeave={() => setPeek(-1)}>
               <div className="hb-floor" aria-hidden="true" />
-              {LAYERS.map((l, i) => (
-                <div key={l.id} ref={(el) => { slots.current[i] = el; }} className="hb-slot" aria-hidden="true">
+              <div className="hb-world">
+                {LAYERS.map((l, i) => (
                   <div
-                    ref={(el) => { slabs.current[i] = el; }}
-                    className={cn('hb-slab', l.mine && 'mine', open === i && 'open', zapping === i && 'zap')}
+                    key={l.id}
+                    ref={(el) => { ghosts.current[i] = el; }}
+                    className={cn('hb-ghost', l.mine && 'mine', on === i && 'show')}
+                    aria-hidden="true"
                   >
-                    <div className="hb-inner">
-                      <div className="hb-plate p3" />
-                      <div className="hb-plate p2" />
-                      <div className="hb-plate p1" />
-                      <div className="hb-face">
-                        <div className="hb-rich">
-                          <Rich layer={l} />
-                        </div>
-                        <div>
-                          <p className="hb-lbl">{l.kicker}</p>
-                          <p className="hb-name">{l.name}</p>
-                          <div className="hb-chips">
-                            {l.chips.map((c, ci) => (
-                              <span key={c} className={cn(l.id === 'models' && ci === 0 && shipped && 'new')}>
-                                {l.id === 'models' && ci === 0 && shipped ? 'Opus, next' : c}
-                              </span>
-                            ))}
+                    {pulse.to === i && <span key={pulse.key} className="hb-zap" style={{ animationDelay: `${delay(i)}ms` }} />}
+                  </div>
+                ))}
+                {LAYERS.map((l, i) => {
+                  const lit = pulse.to >= 0 && i >= pulse.to;
+                  return (
+                    <div
+                      key={l.id}
+                      ref={(el) => { cards.current[i] = el; }}
+                      className={cn('hb-card', l.mine && 'mine', on === i && 'open', peek === i && 'peek')}
+                      aria-hidden="true"
+                      onPointerEnter={(e) => { if (e.pointerType === 'mouse' && on !== i) setPeek(i); }}
+                      onPointerLeave={() => setPeek((p) => (p === i ? -1 : p))}
+                      onClick={() => pick(i)}
+                    >
+                      <div className="hb-lift">
+                        <div className="hb-plate p3" />
+                        <div className="hb-plate p2" />
+                        <div className="hb-plate p1" />
+                        <div className="hb-face">
+                          <span className="hb-num">{l.no}</span>
+                          <div className="hb-rich">
+                            <Rich layer={l} />
                           </div>
+                          <div>
+                            <p className="hb-lbl">
+                              {l.no} · {l.kicker}
+                            </p>
+                            <p className="hb-name">{l.name}</p>
+                          </div>
+                          {lit && (
+                            <span
+                              key={pulse.key}
+                              className="hb-zap"
+                              style={{ animationDelay: `${on === i ? Math.max(delay(i), DUR * 0.95) : delay(i)}ms` }}
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-              {/* fixed hover bands, one per layer, in stack order */}
-              <div className="hb-bands">
-                {LAYERS.map((l, i) => (
-                  <button
-                    key={l.id}
-                    type="button"
-                    aria-label={`Open ${l.name}`}
-                    aria-pressed={on === i}
-                    onPointerEnter={(e) => {
-                      if (e.pointerType !== 'mouse') return;
-                      window.clearTimeout(hoverTimer.current);
-                      hoverTimer.current = window.setTimeout(() => pick(i), 110);
-                    }}
-                    onPointerLeave={() => window.clearTimeout(hoverTimer.current)}
-                    onClick={() => {
-                      window.clearTimeout(hoverTimer.current);
-                      pick(i);
-                    }}
-                    onFocus={() => pick(i)}
-                  />
-                ))}
+                  );
+                })}
               </div>
             </div>
-            <div className="hb-release">
-              <button type="button" onClick={ship} disabled={releasing !== 'idle'}>
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                  <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" />
-                </svg>
-                Ship a new model
-              </button>
-              <p aria-live="polite">
-                {releasing === 'landing' ? 'A new model lands at the bottom...' : releasing === 'carried' ? 'My skills, memory and rules carried straight over.' : 'Press it. Watch what changes.'}
+            <div className="hb-hint">
+              <p>
+                <b>01</b> and <b>02</b> come from the labs. <b className="mine">03</b> is mine. <b>04</b> is what you see.
               </p>
+              <p className="hb-how">{fine ? 'Click a layer to pull it out' : 'Tap a layer to pull it out'}</p>
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div key={layer.id} className="hb-copy" aria-live="polite">
-              <p className="font-mono text-[11.5px] text-term-amber">{layer.kicker}</p>
-              <h3 className="mt-3 text-[clamp(25px,1rem+1.2vw,32px)] leading-[1.08] font-[720] tracking-[-0.02em] text-term-ink [font-stretch:114%]">{layer.title}</h3>
-              <p className="mt-3.5 max-w-[31rem] text-[16.5px] leading-[1.65] text-term-ink/88 [text-wrap:pretty]">{layer.body}</p>
+          <div className="flex flex-col lg:col-span-4">
+            <Copy key={layer.id} layer={layer} reduce={reduce} live={on >= 0} />
+            <div className="hb-steps max-lg:order-first" role="tablist" aria-label="The layers, bottom up" onKeyDown={onKey}>
+              {order.map((i) => {
+                const l = LAYERS[i];
+                return (
+                  <button
+                    key={l.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={on === i}
+                    tabIndex={on === i || (on < 0 && i === 1) ? 0 : -1}
+                    className={cn(on === i && 'on', l.mine && 'mine')}
+                    onClick={() => pick(i)}
+                  >
+                    <span className="hb-rail" aria-hidden="true">
+                      {pulse.to >= 0 && i >= pulse.to && <i key={pulse.key} style={{ animationDelay: `${delay(i)}ms` }} />}
+                    </span>
+                    <small>{l.no}</small>
+                    <span>{l.name}</span>
+                  </button>
+                );
+              })}
             </div>
-            <div className="hb-steps" role="tablist" aria-label="The layers">
-              {LAYERS.map((l, i) => (
-                <button key={l.id} type="button" role="tab" aria-selected={on === i} className={cn(on === i && 'on')} onClick={() => pick(i)}>
-                  <small>0{N - i}</small>
-                  <span>{l.name}</span>
-                </button>
-              ))}
-            </div>
-            <p className={cn('mt-3 font-mono text-[11.5px] text-term-amber transition-opacity duration-300', releasing === 'carried' ? 'opacity-100' : 'opacity-0')}>
-              Everything above the models got better. Nothing needed a rewrite.
-            </p>
           </div>
         </div>
 
@@ -386,6 +376,80 @@ export function HowIBuild() {
   );
 }
 
+/**
+ * The words next to the stack. They arrive in reading order: the kicker
+ * decodes like a terminal, the title's words rise into place, the sentences
+ * follow one after another, and last the phrase worth remembering gets
+ * underlined, so a skim still catches the point.
+ */
+function Copy({ layer, reduce, live }: { layer: Layer; reduce: boolean; live: boolean }) {
+  const kicker = useDecode(`${layer.no} · ${layer.kicker}`, live && !reduce);
+  const words = layer.title.split(' ');
+  const sentences = layer.body.split(/(?<=[.!?])\s+/);
+  const titleEnd = 140 + words.length * 45;
+  const bodyEnd = titleEnd + 120 + sentences.length * 90;
+  return (
+    <div className={cn('hb-copy', live && 'live')} aria-live="polite">
+      <p className={cn('hb-kick', layer.mine && 'mine')}>{kicker}</p>
+      <h3 className="hb-title">
+        {words.map((w, k) => (
+          <span key={k}>
+            <span className="hb-w">
+              <span style={{ animationDelay: `${140 + k * 45}ms` }}>{w}</span>
+            </span>{' '}
+          </span>
+        ))}
+      </h3>
+      <p className="hb-body">
+        {sentences.map((s, k) => {
+          const at = s.indexOf(layer.em);
+          return (
+            <span key={k} className="hb-s" style={{ animationDelay: `${titleEnd + 60 + k * 90}ms` }}>
+              {at < 0 ? (
+                s
+              ) : (
+                <>
+                  {s.slice(0, at)}
+                  <mark className="hb-em" style={{ animationDelay: `${bodyEnd + 150}ms` }}>
+                    {layer.em}
+                  </mark>
+                  {s.slice(at + layer.em.length)}
+                </>
+              )}{' '}
+            </span>
+          );
+        })}
+      </p>
+    </div>
+  );
+}
+
+/** a mono line that settles out of scrambled characters, left to right */
+function useDecode(text: string, run: boolean) {
+  const [out, setOut] = useState(text);
+  useEffect(() => {
+    if (!run) return;
+    const glyphs = '01<>/[]#=+*';
+    const start = performance.now();
+    const span = 380;
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / span);
+      const settled = Math.floor(t * text.length);
+      setOut(
+        text
+          .split('')
+          .map((ch, k) => (k < settled || ch === ' ' ? ch : glyphs[(k * 7 + Math.floor(now / 40)) % glyphs.length]))
+          .join(''),
+      );
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [text, run]);
+  return run ? out : text;
+}
+
 /** What a card shows once it faces you: the proof for that layer. */
 function Rich({ layer }: { layer: Layer }) {
   switch (layer.id) {
@@ -405,14 +469,9 @@ function Rich({ layer }: { layer: Layer }) {
         <div className="hb-code">
           {NEVER_LIST.map((r) => (
             <div key={r.rule}>
-              <span className="a">{r.key}:</span>
-              {' '}
-              {r.rule}
+              <span className="a">{r.key}:</span> {r.rule}
             </div>
           ))}
-          <div className="hb-tick">
-            <span className="g">✓</span> <span className="d">applied to every build, unasked</span>
-          </div>
         </div>
       );
     case 'harness':
