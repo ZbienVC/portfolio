@@ -42,6 +42,27 @@ function llmsTxt() {
   };
 }
 
+// sitemap.xml: the list of real pages Google and AI tools should read. The
+// site is one page (the #work/... links are views of it, not pages), plus the
+// résumé PDF, which search engines index on its own. robots.txt points here.
+function sitemapXml() {
+  const today = new Date().toISOString().slice(0, 10);
+  const urls = ['/', PROFILE.resumePdfNamed];
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...urls.map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${today}</lastmod></url>`),
+    '</urlset>',
+    '',
+  ].join('\n');
+  return {
+    name: 'sitemap-xml',
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: xml });
+    },
+  };
+}
+
 // The classic page's two faces and the headshot at the top of it, asked for
 // while the HTML is still parsing. Otherwise they start downloading only once
 // the page's JS and CSS arrive: the headline swapped fonts mid-render (a layout
@@ -74,7 +95,7 @@ function preloadClassicFonts() {
 export default defineConfig({
   // Tailwind only reaches the classic site: its stylesheet opts in with
   // `@import "tailwindcss"`, and the 3D modes keep their own plain CSS.
-  plugins: [react(), tailwindcss(), llmsTxt(), preloadClassicFonts()],
+  plugins: [react(), tailwindcss(), llmsTxt(), sitemapXml(), preloadClassicFonts()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
