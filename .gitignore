@@ -28,3 +28,7 @@ dist-ssr
 .env.local
 .env.production
 *.env
+
+# Full-size photo originals can carry GPS location. Only the stripped copies in public/life/opt ship.
+public/life/*.jpg
+public/life/*.jpeg
