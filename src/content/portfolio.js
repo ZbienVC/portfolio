@@ -363,6 +363,29 @@ export const PROJECTS = [
     ],
   },
   {
+    id: 'wanderfall',
+    // no launched date: it's a private test build, not a public launch yet
+    name: 'Wanderfall',
+    tagline: 'A hand-painted online adventure game',
+    short: 'An open world adventure with a hand-painted look. Play the story alone or explore one shared world with friends.',
+    kind: 'Game · private beta',
+    description:
+      "An open world adventure game with a soft, hand-painted look. You make a Wanderer, pick one of four fight styles and the element at its heart, then explore green hills, the village of Mossbrook and a spirit forest. The story asks you to free the Keepers a villain named Vesper locked away, and mend the broken sky. Online, friends share one world with parties, chat, shared monsters and boss loot, and the server checks every hit so nobody can cheat. It's in a private test right now, in the browser or as a Windows app that updates itself, with Steam as the goal.",
+    status: 'beta',
+    url: null, // the test build sits behind a passcode, so there's no public link yet
+    github: null, // private repo (ZbienVC/wanderfall)
+    color: '#d99a5b',
+    colorEnd: '#a96a33',
+    tags: ['Three.js', 'TypeScript', 'Colyseus', 'Node.js', 'Electron'],
+    category: ['web'],
+    highlights: [
+      'Four fight styles and eight elements to grow',
+      'One shared online world with parties and boss loot',
+      'The server checks every hit, so nobody can cheat',
+      'Plays in the browser or as a Windows app',
+    ],
+  },
+  {
     id: 'specimen',
     launched: '2026-10-18', // first deployed (hosting creation date)
     name: 'Specimen Atlas',

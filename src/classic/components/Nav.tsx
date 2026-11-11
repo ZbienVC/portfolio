@@ -2,7 +2,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { PROFILE, LIVE_COUNT, PROJECTS, STAGE_IDS, projectById, shotId, shotSrc, showsShot } from '../lib/data';
 
-// the menu mirrors the page: the eight on the stage, then everything else
+// the menu mirrors the page: the picks on the stage, then everything else
 const STAGED = STAGE_IDS.map((id) => projectById(id)!).filter(Boolean);
 const OFF_STAGE = PROJECTS.filter((p) => !STAGE_IDS.includes(p.id));
 import { modKey, useActiveSection } from '../lib/hooks';

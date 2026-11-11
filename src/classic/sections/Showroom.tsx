@@ -61,21 +61,22 @@ const ALL: Item[] = [
 const demo = (id: string, device: 'laptop' | 'phone', ext: 'mp4' | 'webp') => `/demos/${id}-${device}.${ext}`;
 const still = (id: string, device: 'laptop' | 'phone') =>
   DEMO_IDS.has(id) ? demo(id, device, 'webp') : shotSrc(shotId(id), device === 'phone' ? 'mobile' : 'cover');
-// one plain sentence beside the tabs, so the counts (8 picks, 15 projects, 18 sites) add up
+// "fifteen" reads better than "15" in a heading
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+const countWord = (n: number) => (n < WORDS.length ? WORDS[n] : String(n));
+
+// one plain sentence beside the tabs, so the counts (picks, projects, live sites) add up.
+// The counts come from the content, so adding a project can't leave a stale number here.
 const FILTER_NOTE: Record<string, string> = {
-  best: 'My eight best. Everything else is one tab over.',
+  best: `My ${countWord(STAGE.length)} best. Everything else is one tab over.`,
   ai: 'Products built on AI models and data.',
   crypto: 'On-chain products and token launch sites.',
   web: 'Games, guides and client sites.',
-  all: `All 15 projects. The four token sites share one card, so ${LIVE_COUNT} live sites in all.`,
+  all: `All ${PROJECTS.length} projects. The four token sites share one card, so ${LIVE_COUNT} live sites in all.`,
   tool: 'Only the projects built with this tool.',
 };
 const pad2 = (n: number) => String(n).padStart(2, '0');
 const FALLBACK_MS = 8000; // a site without a clip still moves the tour on
-
-// "fifteen" reads better than "15" in a heading
-const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
-const countWord = (n: number) => (n < WORDS.length ? WORDS[n] : String(n));
 
 interface ShowroomProps {
   filter: WorkFilter;

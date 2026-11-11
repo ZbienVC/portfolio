@@ -9,7 +9,7 @@ import { Laptop } from './Devices';
 import { HoverArrow, Icon } from './Icon';
 import { Shot } from './Shot';
 
-// next and previous follow the page: the stage's eight, then everything else
+// next and previous follow the page: the stage's picks, then everything else
 const ORDER = [...STAGE_IDS, ...PROJECTS.map((p) => p.id).filter((id) => !STAGE_IDS.includes(id))];
 const neighbour = (id: string, step: 1 | -1) => ORDER[(ORDER.indexOf(id) + step + ORDER.length) % ORDER.length];
 

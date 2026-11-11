@@ -70,9 +70,9 @@ export const FLAGSHIP_IDS = ['fieldsense', 'oikos', 'splash', 'wakerush'] as con
 export const FLAGSHIPS = FLAGSHIP_IDS.map((id) => projectById(id)!);
 export const ALSO_SHIPPED = PROJECTS.filter((p) => !(FLAGSHIP_IDS as readonly string[]).includes(p.id));
 
-/* ── The stage: eight projects with recorded demos, shown running ─────────── */
+/* ── The stage: the standouts, shown running ──────────────────────────────── */
 
-// Each one gets a different "how it works" strip, so the eight don't read as one card repeated.
+// Each one gets a different "how it works" strip, so the standouts don't read as one card repeated.
 export type Signature =
   | { kind: 'chain'; label: string; steps: string[]; end?: string }
   | { kind: 'split'; left: { k: string; v: string }; right: { k: string; v: string }; link: string }
@@ -85,8 +85,18 @@ export interface StageItem {
   signature: Signature;
 }
 
-// newest first: the four latest builds, then the four the résumé leads with
+// newest first: the latest builds, then the four the résumé leads with
 export const STAGE: StageItem[] = [
+  {
+    id: 'wanderfall',
+    hook: 'A hand-painted open world adventure. Play the story on your own, or team up with friends in one shared online world.',
+    signature: {
+      kind: 'split',
+      left: { k: 'On your own', v: 'Story, quests, skill tree' },
+      right: { k: 'With friends', v: 'Parties, bosses, shared loot' },
+      link: 'One world',
+    },
+  },
   {
     id: 'hookline',
     hook: 'Six AI agents in a row turn a rising trend into a finished vertical video, and a trust ladder decides how much they post on their own.',
